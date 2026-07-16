@@ -102,8 +102,8 @@ export default function App() {
 
       {/* 2. Main Portal Application Header (Fixed/Sticky Glassmorphism with Smooth Scroll Transitions) */}
       <header className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-[0.16,1,0.3,1] ${scrolled
-          ? 'bg-theme-base/80 backdrop-blur-xl border-b border-theme-border/80 shadow-lg shadow-black/5 py-3'
-          : 'bg-transparent border-b border-transparent py-5'
+        ? 'bg-theme-base/80 backdrop-blur-xl border-b border-theme-border/80 shadow-lg shadow-black/5 py-3'
+        : 'bg-transparent border-b border-transparent py-5'
         }`}>
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between gap-4 transition-all duration-300">
 
@@ -113,11 +113,11 @@ export default function App() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             id="logo-header-trigger"
           >
-            <div className="w-8 h-8 rounded-lg bg-theme-accent flex items-center justify-center text-white shadow-sm hover:scale-105 transition-transform duration-200">
-              <span className="font-display font-black text-sm">S</span>
+            <div className="h-7 w-auto hover:scale-105 transition-transform duration-200 flex items-center justify-center">
+              <img src="/logo.svg" alt="SejatiDimedia Logo" className="h-full w-auto object-contain" />
             </div>
-            <span className="font-display font-bold text-base tracking-tight text-theme-fore">
-              SejatiDi<span className="text-theme-fore-muted font-normal">media</span>
+            <span className="font-display font-bold text-base tracking-wider text-theme-accent">
+              SEJATIDI<span className="text-theme-accent/80 font-normal">MEDIA</span>
             </span>
           </div>
 
@@ -183,6 +183,9 @@ export default function App() {
 
             {/* Left Block: Tagline and Contact */}
             <div className="md:col-span-7 space-y-6">
+              <div className="h-7 w-auto flex items-center justify-start">
+                <img src="/logo.svg" alt="SejatiDimedia Logo" className="h-full w-auto object-contain" />
+              </div>
               <h3 className="text-xl sm:text-2xl font-sans font-extrabold tracking-tight text-theme-fore max-w-lg leading-snug">
                 Embrace the future of digital engineering with our high-fidelity product software craftsmanship.
               </h3>
@@ -194,7 +197,7 @@ export default function App() {
                   sejatidimedia@gmail.com
                 </a>
                 <span className="text-theme-border/60">•</span>
-                <span>+1 (38) 3847-498</span>
+                <span>+62 895 0843 6275</span>
               </div>
             </div>
 
@@ -269,7 +272,7 @@ export default function App() {
 
           {/* Middle Row: Massive Stylized Background Wordmark matching "DOZE" in Reference Image */}
           <div className="relative py-6 select-none border-t border-b border-theme-border/20 overflow-hidden flex items-center justify-center">
-            <h2 className="text-[9vw] sm:text-[10vw] md:text-[10.5vw] lg:text-[105px] xl:text-[115px] font-sans font-black tracking-tighter uppercase leading-none bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent text-center select-none w-full transition-all duration-300 opacity-90 dark:opacity-85 py-3 px-6 whitespace-nowrap">
+            <h2 className="text-[9vw] sm:text-[10vw] md:text-[10.5vw] lg:text-[105px] xl:text-[115px] font-sans font-black tracking-tighter uppercase leading-none bg-gradient-to-b from-theme-accent to-transparent bg-clip-text text-transparent text-center select-none w-full transition-all duration-300 opacity-90 dark:opacity-85 py-3 px-6 whitespace-nowrap">
               SEJATIDIMEDIA
             </h2>
           </div>
