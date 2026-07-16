@@ -1,0 +1,8 @@
+{
+  "name": "SejatiDimedia Console",
+  "description": "A premium dual-theme design system and media command center designed in a Linear/Modern style.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
