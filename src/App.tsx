@@ -16,6 +16,22 @@ export default function App() {
   });
 
   const [scrolled, setScrolled] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          setTimeout(() => setLoading(false), 200);
+          return 100;
+        }
+        return prev + 2;
+      });
+    }, 25);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,7 +53,93 @@ export default function App() {
   }, [theme]);
 
   return (
-    <div className="min-h-screen relative w-full flex flex-col font-sans overflow-x-hidden bg-theme-deep text-theme-fore transition-colors duration-300">
+    <>
+      {/* 0. Premium Minimalist Loading Screen Overlay */}
+      <AnimatePresence mode="wait">
+        {loading && (
+          <motion.div
+            key="loader"
+            initial={{ opacity: 1 }}
+            exit={{ 
+              opacity: 0,
+              transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] } 
+            }}
+            className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-theme-deep text-theme-fore transition-colors duration-300"
+          >
+            {/* Very soft ambient accent glow behind the logo */}
+            <div className="absolute w-[300px] h-[300px] rounded-full bg-theme-accent/5 blur-[80px] pointer-events-none transition-colors duration-300" />
+
+            {/* Central Circle Progress & Logo */}
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              className="z-10 flex flex-col items-center gap-6"
+            >
+              <div className="relative w-36 h-36 flex items-center justify-center">
+                {/* SVG Progress Circle */}
+                <svg className="absolute w-full h-full -rotate-90" viewBox="0 0 144 144">
+                  <defs>
+                    <linearGradient id="circle-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#2E54A2" />
+                      <stop offset="50%" stopColor="#4A85D9" />
+                      <stop offset="100%" stopColor="#6AA0F2" />
+                    </linearGradient>
+                  </defs>
+                  {/* Track circle */}
+                  <circle
+                    cx="72"
+                    cy="72"
+                    r="60"
+                    fill="none"
+                    stroke="var(--border-default)"
+                    strokeWidth="1.5"
+                  />
+                  {/* Animated Progress circle */}
+                  <motion.circle
+                    cx="72"
+                    cy="72"
+                    r="60"
+                    fill="none"
+                    stroke="url(#circle-grad)"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeDasharray={376.99}
+                    animate={{ strokeDashoffset: 376.99 - (progress / 100) * 376.99 }}
+                    transition={{ ease: "easeOut", duration: 0.2 }}
+                  />
+                </svg>
+
+                {/* Central Logo with breathing scale animation */}
+                <motion.div
+                  animate={{ 
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="absolute flex items-center justify-center w-20 h-10"
+                >
+                  <img 
+                    src="/logo.svg" 
+                    alt="SEJATIDIMEDIA Logo" 
+                    className="h-10 w-auto object-contain" 
+                  />
+                </motion.div>
+              </div>
+
+              {/* Minimal percentage counter */}
+              <span className="font-mono text-xs text-theme-accent/80 tracking-widest transition-colors duration-300">
+                {progress}%
+              </span>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <div className="min-h-screen relative w-full flex flex-col font-sans overflow-x-hidden bg-theme-deep text-theme-fore transition-colors duration-300">
 
       {/* 1. Multi-Layer Background System (Linear/Modern Spec) */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
@@ -300,5 +402,6 @@ export default function App() {
       </footer>
 
     </div>
+    </>
   );
 }
