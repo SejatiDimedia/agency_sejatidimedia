@@ -10,20 +10,20 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Project } from '../lib/api/glio-projects';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Laptop, 
-  Smartphone, 
-  Cpu, 
-  ArrowRight, 
-  Sparkles, 
-  Check, 
-  Send, 
-  CheckCircle, 
-  ChevronRight, 
-  Terminal, 
-  Zap, 
-  Database, 
-  Layers, 
+import {
+  Laptop,
+  Smartphone,
+  Cpu,
+  ArrowRight,
+  Sparkles,
+  Check,
+  Send,
+  CheckCircle,
+  ChevronRight,
+  Terminal,
+  Zap,
+  Database,
+  Layers,
   Code2,
   Lock,
   Workflow,
@@ -81,30 +81,65 @@ const TECH_ITEMS = [
 const FEATURE_ITEMS = [
   {
     num: '01',
-    title: 'Easily scalable team',
-    description: 'Experience the flexibility and seamless growth of our easily scalable team, adapting to your evolving project requirements effortlessly.'
+    title: 'Kode 100% Milik Anda',
+    description: 'Setelah proyek selesai dan lunas, seluruh source code, hak cipta, dan aset digital diserahkan sepenuhnya kepada Anda — tanpa lisensi berulang, tanpa vendor lock-in.'
   },
   {
     num: '02',
-    title: 'Recruitment is done for you',
-    description: 'Streamline your recruitment process with our expert team, ensuring efficient and hassle-free hiring to meet your talent acquisition needs.'
+    title: 'Komunikasi Langsung Tanpa Perantara',
+    description: 'Anda berkomunikasi langsung dengan developer yang menulis kode, bukan dengan manajer proyek atau tim sales. Setiap keputusan teknis dibahas transparan dan cepat.'
   },
   {
     num: '03',
-    title: 'No need to worry about insurance',
-    description: 'Enjoy the advantage of not bearing insurance costs when partnering with us, relieving you of financial obligations and administrative burdens.'
+    title: 'Kode Bersih & Terstruktur',
+    description: 'Setiap baris kode ditulis manual dengan konvensi industri — mudah dibaca, mudah di-debug, dan siap dikembangkan oleh tim Anda di masa depan.'
   },
   {
     num: '04',
-    title: 'Operational relief',
-    description: 'Simplify your operations by entrusting the management of employee benefits to us, freeing up your time and resources for core business priorities.'
+    title: 'Harga Transparan, Tanpa Biaya Tersembunyi',
+    description: 'Estimasi biaya diberikan di awal berdasarkan scope yang disepakati. Tidak ada invoice dadakan atau biaya tambahan yang muncul tiba-tiba di tengah pengerjaan.'
   },
   {
     num: '05',
-    title: 'No paying for holidays',
-    description: 'Maximize cost savings as you eliminate holiday pay expenses by collaborating with us, allowing you to optimize your budget and resources.'
+    title: 'Pendampingan Pasca-Launch',
+    description: 'Proyek tidak berhenti di deployment. Saya menyediakan masa maintenance dan perbaikan bug setelah peluncuran, memastikan sistem Anda berjalan stabil di dunia nyata.'
   }
 ];
+
+const sectionFadeIn = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.16, 1, 0.3, 1] as const
+    }
+  }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15
+    }
+  }
+};
+
+const cardSlideUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring" as const,
+      stiffness: 80,
+      damping: 15
+    }
+  }
+};
 
 export default function AgencyLanding({ copy, projects }: { copy?: any; projects?: Project[] }) {
   const scrollToId = (id: string) => {
@@ -143,50 +178,50 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
     {
       step: '01',
       title: 'Discovery',
-      tag: 'Phase 1: Specs & Discovery',
-      description: 'Our design and engineering services combine creativity and functionality to deliver visually stunning and user-centric solutions that effectively communicate your brand message and align with target metrics.',
-      deliverables: ['High-level specification sheets', 'System architecture maps', 'Feasibility reports'],
-      codePreview: `{\n  "stage": "DISCOVERY",\n  "status": "COMPLETED",\n  "objectives": ["BRAND_ALIGNMENT", "USER_FLOW_MAPPING"],\n  "metrics": "DEFINED"\n}`
+      tag: 'Fase 1: Analisis & Kebutuhan',
+      description: 'Memahami kebutuhan bisnis, target pengguna, dan tujuan proyek Anda secara mendalam sebelum menulis satu baris kode pun.',
+      deliverables: ['Dokumen Spesifikasi Teknis', 'Skema Logika Bisnis', 'Estimasi Timeline & Biaya'],
+      codePreview: `{\n  "tahap": "DISCOVERY",\n  "status": "SELESAI",\n  "tujuan": ["KONSULTASI_BISNIS", "PEMETAAN_ALUR"],\n  "parameter": "DITETAPKAN"\n}`
     },
     {
       step: '02',
       title: 'Design',
-      tag: 'Phase 2: UI/UX & Prototypes',
-      description: 'We translate strategic concepts into interactive Figma prototypes, detailing custom design tokens, typography pairing, unified margin grids, and motion styles for frictionless usage.',
-      deliverables: ['Responsive design systems', 'Interactive high-fidelity layouts', 'Motion-style spec sheets'],
-      codePreview: `{\n  "stage": "DESIGN",\n  "designTokens": {\n    "fontDisplay": "Space Grotesk",\n    "fontSerif": "Playfair Display",\n    "spacingScale": "Fluid Grid"\n  }\n}`
+      tag: 'Fase 2: Arsitektur UI/UX',
+      description: 'Merancang rancangan UI/UX dan memetakan arsitektur sistem (database & API) agar alur navigasi produk terasa natural dan performa terjamin.',
+      deliverables: ['Desain Figma Interaktif', 'Skema Struktur Database', 'Peta Alur Kerja Data'],
+      codePreview: `{\n  "tahap": "DESIGN",\n  "arsitektur": {\n    "desain": "Figma Wireframes",\n    "database": "PostgreSQL relational",\n    "skema": "Drizzle Schema"\n  }\n}`
     },
     {
       step: '03',
       title: 'Development',
-      tag: 'Phase 3: Front-End & Core App',
-      description: 'We transition design assets into production-ready React/Vite/TypeScript systems. No template generators—we author clean, modern, scalable code tailored for maximum speed.',
-      deliverables: ['Sleek functional frontends', 'Custom React hooks & store states', 'Dynamic responsive view shells'],
-      codePreview: `const Application = () => {\n  return (\n    <RenderEngine fluid={true}>\n      <ComponentStack optimization="Lighthouse_99+" />\n    </RenderEngine>\n  );\n}`
+      tag: 'Fase 3: Pemrograman Kustom',
+      description: 'Membangun produk menggunakan kode yang bersih, terstruktur, aman, dan mudah dikembangkan lebih lanjut. Menghindari template drag-and-drop.',
+      deliverables: ['Kode Sumber Terstruktur', 'Sistem Autentikasi Keamanan', 'Integrasi Layanan Pihak Ketiga'],
+      codePreview: `const Project = () => {\n  return (\n    <ProductionApp cleanCode={true}>\n      <CustomLogic engine="NextJS_15" />\n    </ProductionApp>\n  );\n}`
     },
     {
       step: '04',
-      title: 'Testing & Reiterate',
-      tag: 'Phase 4: Optimization & QA',
-      description: 'Every system is tested across responsive breakpoints, touch inputs, performance loads, and automated unit controllers to guarantee seamless, pixel-perfect execution.',
-      deliverables: ['Cross-device compatibility matrices', 'Lighthouse audit checklists', 'Refined UX motion passes'],
-      codePreview: `describe("Render Pipeline", () => {\n  it("should paint first content under 150ms", () => {\n    expect(paintTime).toBeLessThan(150);\n  });\n});`
+      title: 'Testing & Iterasi',
+      tag: 'Fase 4: Uji Coba & Perbaikan',
+      description: 'Melakukan pengujian menyeluruh di berbagai perangkat dan skenario penggunaan sebelum produk dirilis, termasuk revisi berdasarkan feedback Anda.',
+      deliverables: ['Laporan Pengujian Bug', 'Optimasi Kecepatan (Lighthouse)', 'Revisi Sesuai Feedback'],
+      codePreview: `describe("Uji Performa", () => {\n  it("load time di bawah 1.5 detik", () => {\n    expect(pageLoadTime).toBeLessThan(1500);\n  });\n});`
     },
     {
       step: '05',
       title: 'Deployment',
-      tag: 'Phase 5: Release & Server Setup',
-      description: 'We transfer built assets, database definitions, and server routers to stable, isolated containers. Configured with optimized CDNs, SSL certificates, and custom subdomains.',
-      deliverables: ['Dockerized server containers', 'SSL cert & secure DNS routing', 'Lighthouse-optimized asset pipes'],
-      codePreview: `npm run build\n# Creating production container: SEJATIDIMEDIA_VM_01...\n# Assets compiled and cached at edge CDN nodes.\n# System is live at 0.0.0.0:3000.`
+      tag: 'Fase 5: Peluncuran Sistem',
+      description: 'Meluncurkan produk digital Anda ke server produksi yang aman dan terkonfigurasi dengan baik (seperti Vercel, AWS, atau VPS Cloud).',
+      deliverables: ['Aplikasi Live di Produksi', 'Konfigurasi Domain & SSL', 'Backup Database Awal'],
+      codePreview: `npm run build\n# Server Produksi Terbuka...\n# Domain terhubung dengan sertifikat SSL aktif.\n# Aplikasi live dan siap diakses publik.`
     },
     {
       step: '06',
       title: 'Maintenance & Support',
-      tag: 'Phase 6: Sustained Operations',
-      description: 'Continuous monitoring, server health checks, security patches, system updates, and custom scaling tweaks to keep your product stable and optimized at all times.',
-      deliverables: ['Continuous telemetry reports', 'Routine database indexing checks', 'Guaranteed uptime contracts'],
-      codePreview: `{\n  "stage": "MAINTENANCE",\n  "telemetry": "ACTIVE",\n  "serverStatus": "100%_UPTIME",\n  "alerts": []\n}`
+      tag: 'Fase 6: Pendampingan & Pemeliharaan',
+      description: 'Memberikan pendampingan berkelanjutan pasca-peluncuran berupa pemeliharaan server, perbaikan bug jika ada, dan pembaruan sistem berkala.',
+      deliverables: ['Pemantauan Server Rutin', 'Pembaruan Patch Keamanan', 'Bantuan Teknis Berkala'],
+      codePreview: `{\n  "tahap": "MAINTENANCE",\n  "status": "AKTIF",\n  "kondisiServer": "100%_AKTIF",\n  "keamanan": "TERBARU"\n}`
     }
   ];
 
@@ -234,7 +269,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
   return (
     <div className="space-y-24">
-           {/* SECTION 1: BESPOKE SLICED HERO STAGE (AS PER REFERENCE IMAGE) */}
+      {/* SECTION 1: BESPOKE SLICED HERO STAGE (AS PER REFERENCE IMAGE) */}
       <section className="relative py-8 md:py-16 min-h-[85vh] flex flex-col justify-center overflow-visible">
         {/* Cinematic Glint Star lens-flares from reference image */}
         <GlintStar className="top-[10%] left-[2%] opacity-60 scale-125 select-none" />
@@ -242,10 +277,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         <GlintStar className="top-[45%] left-[45%] opacity-35 scale-90 select-none" />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-12 items-stretch text-left">
-          
+
           {/* LEFT COLUMN: Main Typography & Bottom Left Stats Card (lg:col-span-7) */}
           <div className="lg:col-span-7 flex flex-col justify-between space-y-12 min-h-full">
-            
+
             {/* Huge Display Heading */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
@@ -253,20 +288,18 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
               className="space-y-4"
             >
-              <h1 className="text-[44px] sm:text-6xl md:text-7xl lg:text-6xl xl:text-7xl font-sans font-extrabold tracking-tight leading-[1.08] text-theme-fore">
-                {copy?.heroTitle ? (
+              <h1 className="text-[40px] sm:text-5xl md:text-6xl lg:text-5xl xl:text-6.5xl font-sans font-extrabold tracking-tight leading-[1.08] text-theme-fore">
+                {copy?.heroTitle && copy.heroTitle !== "Embrace the future of digital engineering with our high-fidelity product software craftsmanship." ? (
                   copy.heroTitle
                 ) : (
                   <>
-                    Transforming Ideas<br />
-                    into <span className="font-serif italic font-normal text-theme-accent relative inline-block">Exceptional</span> Digital<br />
-                    Experience
+                    Software Developer Independen — Membangun Website, Aplikasi, dan Sistem Backend yang <span className="font-serif italic font-normal text-theme-accent relative inline-block">Siap Diandalkan</span>.
                   </>
                 )}
               </h1>
             </motion.div>
 
-            {/* Bottom Left Card: 320+ Projects */}
+            {/* Bottom Left Card: Pengalaman Industri */}
             <motion.div
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
@@ -276,15 +309,15 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             >
               {/* Soft decorative glow */}
               <div className="absolute top-0 right-0 w-28 h-28 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
-              <div className="space-y-3 relative z-10">
-                <div className="text-4xl sm:text-5xl font-sans font-black tracking-tight text-theme-accent">
-                  320+
+              <div className="space-y-2 relative z-10">
+                <div className="text-xl sm:text-2xl font-sans font-black tracking-tight text-theme-accent">
+                  Pengalaman Industri
                 </div>
-                <div className="text-sm font-bold text-theme-fore">
-                  Project Done
+                <div className="text-xs font-bold text-theme-fore">
+                  Sistem Manufaktur Nyata
                 </div>
                 <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  From start to finish, every project ends with remarkable results.
+                  Pernah bekerja sebagai Software Developer di perusahaan manufaktur, terbiasa dengan sistem yang menangani proses bisnis nyata.
                 </p>
               </div>
             </motion.div>
@@ -293,7 +326,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
           {/* RIGHT COLUMN: Intro Text, Middle Stats Card, Conclusion & Orange CTA Button (lg:col-span-5) */}
           <div className="lg:col-span-5 flex flex-col justify-between space-y-12 lg:space-y-0 min-h-full lg:py-4">
-            
+
             {/* Top Right Paragraph */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -302,11 +335,15 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               className="lg:text-right"
             >
               <p className="text-sm text-theme-fore-muted font-medium leading-relaxed max-w-sm lg:ml-auto">
-                {copy?.heroSubtitle || "We design intuitive and visually engaging digital experiences that connect brands with their users."}
+                {copy?.heroSubtitle && copy.heroSubtitle !== "Providing Comprehensive Solutions Tailored to Your Needs." ? (
+                  copy.heroSubtitle
+                ) : (
+                  "Berbekal pengalaman sebagai Software Developer di industri manufaktur, saya membangun produk digital dengan kode custom, arsitektur yang rapi, dan komunikasi langsung — tanpa perantara."
+                )}
               </p>
             </motion.div>
 
-            {/* Middle Right Card: 99% Satisfied */}
+            {/* Middle Right Card: Dynamic Proyek Independen */}
             <motion.div
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
@@ -316,15 +353,15 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             >
               {/* Soft decorative glow */}
               <div className="absolute top-0 right-0 w-28 h-28 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
-              <div className="space-y-3 relative z-10">
-                <div className="text-4xl sm:text-5xl font-sans font-black tracking-tight text-theme-fore">
-                  99%
+              <div className="space-y-2 relative z-10">
+                <div className="text-xl sm:text-2xl font-sans font-black tracking-tight text-theme-fore">
+                  {projects?.length || 3} Proyek Independen
                 </div>
-                <div className="text-sm font-bold text-theme-fore">
-                  Customer Satisfied
+                <div className="text-xs font-bold text-theme-fore">
+                  Bisa Diuji Langsung
                 </div>
                 <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  100+ big companies trust us to deliver results. Let's create yours next.
+                  Semua proyek dibangun dari nol dengan arsitektur rapi, kodenya bisa di-audit di GitHub, dan aplikasinya aktif serta dapat dicoba langsung.
                 </p>
               </div>
             </motion.div>
@@ -337,16 +374,23 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               className="space-y-6 max-w-sm lg:ml-auto"
             >
               <p className="text-xs text-theme-fore-muted leading-relaxed">
-                Great design is more than just looking good—it's about creating experiences that engage, convert, and leave a lasting impact.
+                Setiap baris kode dirancang untuk stabilitas, kecepatan, dan pertumbuhan bisnis Anda secara jangka panjang.
               </p>
-              <div>
+              <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => scrollToId('contact-section')}
-                  className="px-8 py-3.5 rounded-full text-xs font-bold bg-theme-accent hover:bg-theme-accent-bright text-white shadow-lg shadow-theme-accent/10 hover:shadow-theme-accent/20 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 w-full sm:w-auto"
+                  className="px-6 py-3.5 rounded-full text-xs font-bold bg-theme-accent hover:bg-theme-accent-bright text-white shadow-lg shadow-theme-accent/10 hover:shadow-theme-accent/20 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 flex-grow sm:flex-grow-0"
                   id="hero-btn-book-call"
                 >
-                  <span>Book a Call</span>
+                  <span>Diskusikan Proyek Anda</span>
                   <ArrowRight className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => scrollToId('projects-section')}
+                  className="px-6 py-3.5 rounded-full text-xs font-bold border border-theme-border hover:border-theme-accent text-theme-fore hover:bg-theme-surface/50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 flex-grow sm:flex-grow-0"
+                  id="hero-btn-view-projects"
+                >
+                  <span>Lihat Proyek Saya</span>
                 </button>
               </div>
             </motion.div>
@@ -357,64 +401,80 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
       </section>
 
       {/* SECTION 2: THREE CORE PILOT SERVICES (MODERNIZED & PLACED IMMEDIATELY AFTER HERO) */}
-      <section id="capabilities-section" className="space-y-12 pt-6">
+      <motion.section
+        id="capabilities-section"
+        className="space-y-12 pt-6"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={sectionFadeIn}
+      >
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
             <span className="w-6 h-[1px] bg-theme-accent" />
-            <span>Capabilities</span>
+            <span>Layanan</span>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
             <div className="lg:col-span-7">
-              <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore">
-                Tailored{' '}
+              <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore text-left">
+                Layanan{' '}
                 <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright to-[#9BC2FA] bg-clip-text text-transparent font-black">
-                  Engineering & Architecture
+                  Pengembangan Perangkat Lunak
                 </span>
               </h2>
             </div>
             <div className="lg:col-span-5">
-              <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed">
-                We don't drag-and-drop templates. We author pixel-perfect, high-performance production code optimized for fluid layout responsiveness and sub-second paint speeds.
+              <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed text-left">
+                Sistem dibangun secara custom dari nol dengan kode yang bersih, aman, berkinerja tinggi, dan mudah dikembangkan untuk jangka panjang.
               </p>
             </div>
           </div>
         </div>
 
         {/* High-Fidelity Eye-Catching Modern Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          
+        <motion.div
+          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+
           {/* Card 1: Web App Development */}
-          <div className="group relative p-8 rounded-3xl bg-theme-elevated/80 border border-theme-border/80 shadow-2xl hover:border-theme-border-accent/60 transition-all duration-300 flex flex-col justify-between overflow-hidden min-h-[380px]">
+          <motion.div
+            className="group relative p-8 rounded-3xl bg-theme-elevated/80 border border-theme-border/80 shadow-2xl hover:border-theme-border-accent/60 transition-all duration-300 flex flex-col justify-between overflow-hidden min-h-[380px]"
+            variants={cardSlideUp}
+          >
             {/* Ambient Background Glow Accent */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-theme-accent-glow/5 rounded-full blur-3xl pointer-events-none group-hover:bg-theme-accent-glow/15 transition-all duration-500" />
-            
+
             {/* Classic Swiss Layering Typography (Absolute Number) */}
             <div className="absolute top-4 right-6 text-7xl font-sans font-black text-theme-fore/[0.03] group-hover:text-theme-accent/[0.06] select-none transition-colors duration-350">
               01
             </div>
 
-            <div className="space-y-6 relative z-10">
+            <div className="space-y-6 relative z-10 text-left">
               <div className="w-11 h-11 rounded-2xl bg-theme-accent/5 border border-theme-border/80 flex items-center justify-center text-theme-accent group-hover:bg-theme-accent group-hover:text-white group-hover:scale-105 transition-all duration-350 shadow-md">
                 <Laptop className="w-5 h-5" />
               </div>
               <div className="space-y-3">
                 <h3 className="text-lg sm:text-xl font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors duration-300">
-                  Web Application Engineering
+                  Web Application Development
                 </h3>
                 <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  Bespoke, scalable SaaS architectures, enterprise-grade backends, and highly intuitive management dashboards engineered natively.
+                  Website company profile, dashboard admin, hingga platform SaaS custom — dibangun dengan arsitektur yang scalable dan performa tinggi.
                 </p>
               </div>
             </div>
 
             <div className="space-y-4 pt-6 border-t border-theme-border/40 relative z-10">
-              <span className="text-[10px] font-mono text-theme-fore-subtle uppercase tracking-wider block">
+              <span className="text-[10px] font-mono text-theme-fore-subtle uppercase tracking-wider block text-left">
                 Optimized Stack Integration:
               </span>
               <div className="flex flex-wrap gap-1.5">
-                {['React / Vite', 'Next.js', 'TypeScript', 'Node.js', 'PostgreSQL'].map((tech) => (
-                  <span 
-                    key={tech} 
+                {['React / Vite', 'Next.js', "Vue", "Angular", 'TypeScript', "Laravel", 'Node.js', 'Golang', "MySQL", 'PostgreSQL', "MongoDB", "Docker"].map((tech) => (
+                  <span
+                    key={tech}
                     className="px-2.5 py-1 rounded-lg text-[10px] font-mono bg-theme-base border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/30 hover:text-theme-accent transition-colors duration-250 cursor-default"
                   >
                     {tech}
@@ -422,40 +482,43 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 ))}
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Card 2: Mobile App Development */}
-          <div className="group relative p-8 rounded-3xl bg-theme-elevated/80 border border-theme-border/80 shadow-2xl hover:border-theme-border-accent/60 transition-all duration-300 flex flex-col justify-between overflow-hidden min-h-[380px]">
+          <motion.div
+            className="group relative p-8 rounded-3xl bg-theme-elevated/80 border border-theme-border/80 shadow-2xl hover:border-theme-border-accent/60 transition-all duration-300 flex flex-col justify-between overflow-hidden min-h-[380px]"
+            variants={cardSlideUp}
+          >
             {/* Ambient Background Glow Accent */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-theme-accent-glow/5 rounded-full blur-3xl pointer-events-none group-hover:bg-theme-accent-glow/15 transition-all duration-500" />
-            
+
             {/* Classic Swiss Layering Typography (Absolute Number) */}
             <div className="absolute top-4 right-6 text-7xl font-sans font-black text-theme-fore/[0.03] group-hover:text-theme-accent/[0.06] select-none transition-colors duration-350">
               02
             </div>
 
-            <div className="space-y-6 relative z-10">
+            <div className="space-y-6 relative z-10 text-left">
               <div className="w-11 h-11 rounded-2xl bg-theme-accent/5 border border-theme-border/80 flex items-center justify-center text-theme-accent group-hover:bg-theme-accent group-hover:text-white group-hover:scale-105 transition-all duration-350 shadow-md">
                 <Smartphone className="w-5 h-5" />
               </div>
               <div className="space-y-3">
                 <h3 className="text-lg sm:text-xl font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors duration-300">
-                  Native Mobile Platforms
+                  Mobile App Development
                 </h3>
                 <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  Stunning, performant iOS and Android mobile experiences compiled directly using raw native environments or unified hybrid code structures.
+                  Aplikasi iOS & Android, native maupun cross-platform, dengan pengalaman pengguna yang mulus dan performa setara aplikasi native.
                 </p>
               </div>
             </div>
 
             <div className="space-y-4 pt-6 border-t border-theme-border/40 relative z-10">
-              <span className="text-[10px] font-mono text-theme-fore-subtle uppercase tracking-wider block">
+              <span className="text-[10px] font-mono text-theme-fore-subtle uppercase tracking-wider block text-left">
                 Optimized Stack Integration:
               </span>
               <div className="flex flex-wrap gap-1.5">
-                {['SwiftUI', 'Kotlin Compose', 'Flutter', 'React Native', 'SQLite'].map((tech) => (
-                  <span 
-                    key={tech} 
+                {['Flutter', 'React Native', 'SQLite', "Firebase", "Push Notification", "Geolocation", "Local Database", "Rest API Integration"].map((tech) => (
+                  <span
+                    key={tech}
                     className="px-2.5 py-1 rounded-lg text-[10px] font-mono bg-theme-base border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/30 hover:text-theme-accent transition-colors duration-250 cursor-default"
                   >
                     {tech}
@@ -463,40 +526,43 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 ))}
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Card 3: API & Cloud Integration */}
-          <div className="group relative p-8 rounded-3xl bg-theme-elevated/80 border border-theme-border/80 shadow-2xl hover:border-theme-border-accent/60 transition-all duration-300 flex flex-col justify-between overflow-hidden min-h-[380px]">
+          {/* Card 3: REST API & Cloud Integration */}
+          <motion.div
+            className="group relative p-8 rounded-3xl bg-theme-elevated/80 border border-theme-border/80 shadow-2xl hover:border-theme-border-accent/60 transition-all duration-300 flex flex-col justify-between overflow-hidden min-h-[380px]"
+            variants={cardSlideUp}
+          >
             {/* Ambient Background Glow Accent */}
             <div className="absolute top-0 right-0 w-32 h-32 bg-theme-accent-glow/5 rounded-full blur-3xl pointer-events-none group-hover:bg-theme-accent-glow/15 transition-all duration-500" />
-            
+
             {/* Classic Swiss Layering Typography (Absolute Number) */}
             <div className="absolute top-4 right-6 text-7xl font-sans font-black text-theme-fore/[0.03] group-hover:text-theme-accent/[0.06] select-none transition-colors duration-350">
               03
             </div>
 
-            <div className="space-y-6 relative z-10">
+            <div className="space-y-6 relative z-10 text-left">
               <div className="w-11 h-11 rounded-2xl bg-theme-accent/5 border border-theme-border/80 flex items-center justify-center text-theme-accent group-hover:bg-theme-accent group-hover:text-white group-hover:scale-105 transition-all duration-350 shadow-md">
                 <Cpu className="w-5 h-5" />
               </div>
               <div className="space-y-3">
                 <h3 className="text-lg sm:text-xl font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors duration-300">
-                  API & Cloud Orchestration
+                  REST API & Cloud Integration
                 </h3>
                 <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  Resilient backend routers, secure multi-provider OAuth, real-time message brokers, database layers, and high-performance server pipelines.
+                  Backend API yang aman, terstruktur, dan siap menangani skala — lengkap dengan autentikasi, integrasi pembayaran, dan sistem real-time.
                 </p>
               </div>
             </div>
 
             <div className="space-y-4 pt-6 border-t border-theme-border/40 relative z-10">
-              <span className="text-[10px] font-mono text-theme-fore-subtle uppercase tracking-wider block">
+              <span className="text-[10px] font-mono text-theme-fore-subtle uppercase tracking-wider block text-left">
                 Optimized Stack Integration:
               </span>
               <div className="flex flex-wrap gap-1.5">
-                {['Express / Go', 'Firebase Auth', 'GraphQL API', 'Drizzle ORM', 'Stripe API'].map((tech) => (
-                  <span 
-                    key={tech} 
+                {["Rest API", "GraphQL", "Google Cloud Platform", "Midtrans"].map((tech) => (
+                  <span
+                    key={tech}
                     className="px-2.5 py-1 rounded-lg text-[10px] font-mono bg-theme-base border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/30 hover:text-theme-accent transition-colors duration-250 cursor-default"
                   >
                     {tech}
@@ -504,230 +570,266 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 ))}
               </div>
             </div>
+          </motion.div>
+
+        </motion.div>
+      </motion.section>
+
+      {/* SECTION 9: TECHNOLOGY (REVISED TO CATEGORIES) */}
+      <motion.section
+        id="technology-section"
+        className="space-y-12 pt-6"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={sectionFadeIn}
+      >
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
+            <span className="w-6 h-[1px] bg-theme-accent" />
+            <span>Teknologi</span>
           </div>
-
-        </div>
-      </section>
-
-      {/* NEW SECTION: TECHNOLOGY (FROM UPLOADED REFERENCE) */}
-      <section id="technology-section" className="space-y-12 pt-6">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-          
-          {/* Left Column: Heading with small line label */}
-          <div className="lg:col-span-5 space-y-4">
-            <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
-              <span className="w-6 h-[1px] bg-theme-accent" />
-              <span>Technology</span>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
+            <div className="lg:col-span-7">
+              <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore text-left">
+                Teknologi yang{' '}
+                <span className="bg-gradient-to-r from-theme-accent to-theme-accent-bright bg-clip-text text-transparent font-black">
+                  Digunakan
+                </span>
+              </h2>
             </div>
-            <h2 className="text-3xl sm:text-4xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore">
-              Harnessing the power of{' '}
-              <span className="bg-gradient-to-r from-theme-accent to-theme-accent-bright bg-clip-text text-transparent font-black">
-                Cutting-edge Technology
-              </span>{' '}
-              to drive Innovation and Transformation
-            </h2>
-            <p className="text-xs text-theme-fore-muted leading-relaxed max-w-sm">
-              We engineer with a premier, battle-tested modern stack optimized for fluid layouts, sub-second execution speeds, and bulletproof security.
-            </p>
+            <div className="lg:col-span-5">
+              <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed text-left">
+                Tools dipilih berdasarkan kebutuhan proyek, bukan sekadar tren — memastikan performa, keamanan, dan kemudahan maintenance jangka panjang.
+              </p>
+            </div>
           </div>
-
-          {/* Right Column: High-fidelity Grid of Technology Cards */}
-          <div className="lg:col-span-7">
-            <motion.div 
-              className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
-              variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: {
-                    staggerChildren: 0.04
-                  }
-                }
-              }}
-            >
-              {TECH_ITEMS.map((tech) => {
-                const IconComponent = tech.icon;
-                return (
-                  <motion.div
-                    key={tech.name}
-                    variants={{
-                      hidden: { opacity: 0, y: 15, scale: 0.93 },
-                      visible: { 
-                        opacity: 1, 
-                        y: 0, 
-                        scale: 1, 
-                        transition: { type: 'spring', stiffness: 180, damping: 14 } 
-                      }
-                    }}
-                    whileHover={{ 
-                      scale: 1.05, 
-                      y: -4,
-                    }}
-                    whileTap={{ scale: 0.97 }}
-                    className="p-3 rounded-xl bg-theme-elevated/40 border border-theme-border flex flex-col items-center justify-center text-center gap-2.5 group hover:border-theme-border-accent/60 hover:bg-theme-elevated/80 transition-all duration-300 relative overflow-hidden cursor-pointer select-none shadow-sm"
-                  >
-                    {/* Miniature decorative accent dot */}
-                    <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-theme-accent/15 group-hover:bg-theme-accent group-hover:scale-125 transition-all duration-300" />
-                    
-                    {/* Circle Brand Icon representation */}
-                    <div className={`w-11 h-11 rounded-full flex items-center justify-center border transition-all duration-300 ${tech.color} group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-theme-accent/5`}>
-                      <IconComponent className="w-5 h-5 transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110" />
-                    </div>
-                    <span className="text-[10px] font-mono text-theme-fore font-semibold tracking-tight group-hover:text-theme-accent transition-colors duration-200">
-                      {tech.name}
-                    </span>
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-          </div>
-
         </div>
-      </section>
+
+        {/* Grouped Category Cards Grid */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+          {[
+            {
+              category: "Frontend",
+              desc: "Untuk antarmuka yang cepat, responsif, dan interaktif.",
+              techs: ["React", "Vue", "Angular", "Next.js", "Vite", "TypeScript", "Tailwind CSS"]
+            },
+            {
+              category: "Backend & API",
+              desc: "Untuk logika bisnis, manajemen data, dan alur kerja server.",
+              techs: ["Node.js", "Go Lang", "Python", "Express", "GraphQL"]
+            },
+            {
+              category: "Database",
+              desc: "Untuk penyimpanan data terstruktur, caching, dan ORM cepat.",
+              techs: ["MySQL", "PostgreSQL", "MongoDB", "Firebase Firestore", "Redis"]
+            },
+            {
+              category: "Mobile",
+              desc: "Untuk aplikasi iOS & Android native maupun cross-platform.",
+              techs: ["React Native", "Flutter"]
+            },
+            {
+              category: "Infrastructure",
+              desc: "Untuk server virtual, kontainerisasi, dan integrasi cloud.",
+              techs: ["Docker", "AWS", "Google Cloud", "Firebase"]
+            },
+            {
+              category: "Integrasi",
+              desc: "Untuk modul pembayaran aman dan autentikasi terpusat.",
+              techs: ["Rest API", "Payment Integration", "Cloud Storage", "OAuth Providers", "Stripe API"]
+            }
+          ].map((cat, idx) => (
+            <motion.div
+              key={idx}
+              className="p-6 rounded-2xl bg-theme-elevated/80 border border-theme-border flex flex-col justify-between space-y-4 hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 group text-left"
+              variants={cardSlideUp}
+            >
+              <div className="space-y-2">
+                <h3 className="text-sm sm:text-base font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors">
+                  {cat.category}
+                </h3>
+                <p className="text-[11px] text-theme-fore-muted leading-relaxed">
+                  {cat.desc}
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-1.5 pt-2 border-t border-theme-border/40">
+                {cat.techs.map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-2 py-1 rounded-lg text-[10px] font-mono bg-theme-surface border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/30 hover:text-theme-accent transition-colors duration-250 cursor-default"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.section>
 
 
 
-      {/* SECTION 3: DELIVERING REAL RESULTS */}
-      <section id="preview-section" className="space-y-16">
-        <div className="text-center max-w-3xl mx-auto space-y-4">
+      {/* SECTION 3: CREDIBILITY SECTION (LATAR BELAKANG & KEMAMPUAN) */}
+      <motion.section
+        id="preview-section"
+        className="space-y-16"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={sectionFadeIn}
+      >
+        <div className="text-center max-w-4xl mx-auto space-y-4">
           <div className="flex items-center justify-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
             <span className="w-6 h-[1px] bg-theme-accent" />
-            <span>Delivering Real Results</span>
+            <span>Kredibilitas</span>
             <span className="w-6 h-[1px] bg-theme-accent" />
           </div>
           <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore">
-            Engineering Measurable Success
+            Latar Belakang & Kemampuan
           </h2>
-          <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-2xl mx-auto">
-            Our strategies are designed to drive measurable success. Here's what we've achieved for our clients through clean, custom-crafted digital engineering.
+          <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-3xl mx-auto">
+            Sebelum menekuni proyek independen, saya bekerja sebagai Software Developer di industri manufaktur — menangani sistem yang harus akurat dan diandalkan untuk proses operasional sehari-hari. Pengalaman itu saya bawa ke setiap proyek: kode yang bukan sekadar jalan, tapi juga stabil dan mudah dirawat jangka panjang.
           </p>
         </div>
 
-        {/* Staggered Aspect-Ratio Responsive Grid of Results Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 pt-6">
+        {/* High-fidelity grid showing three concrete proofs */}
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6 max-w-5xl mx-auto"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           {[
             {
-              stat: '300%',
-              label: 'Increase in Organic Traffic',
-              desc: 'Sub-second speed optimization and clean semantic SEO structure elevate search indexing instantly.',
-              img: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80',
-              imgHeight: 'h-[200px] lg:h-[230px]',
-              alt: 'Organic Traffic Team collaborating'
+              title: "Pengalaman Manufaktur",
+              desc: "Berpengalaman mengembangkan & memelihara sistem internal (seperti ERP, inventori, dan HCM) di perusahaan manufaktur nyata.",
+              actionLabel: "Lihat Kompetensi",
+              actionUrl: "#capabilities-section"
             },
             {
-              stat: '2X',
-              label: 'Return on Investment',
-              desc: 'Custom hand-compiled systems save ongoing license costs and run flawlessly without heavy plug-in bloat.',
-              img: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?auto=format&fit=crop&w=600&q=80',
-              imgHeight: 'h-[240px] lg:h-[270px]',
-              alt: 'System analysis dashboard return'
+              title: `${projects?.length || 3} Proyek Independen`,
+              desc: `Bukti keahlian teknis nyata melalui ${projects && projects.length > 0
+                ? projects.slice(0, 3).map((p) => p.name).join(", ")
+                : "Nexus ERP Suite, Antreey, dan AI Resume Analyzer"
+                } yang didokumentasikan penuh.`,
+              actionLabel: "Lihat Portofolio",
+              actionUrl: "#projects-section"
             },
             {
-              stat: '500+',
-              label: 'Successful Projects',
-              desc: 'Robust production-grade code deployed across private servers, SaaS dashboards, and native mobile hubs.',
-              img: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80',
-              imgHeight: 'h-[180px] lg:h-[210px]',
-              alt: 'System architecture demonstration'
-            },
-            {
-              stat: '120%',
-              label: 'Growth in Qualified Leads',
-              desc: 'Frictionless visual entry funnels and sub-pixel typography tracking capture user interest to convert clicks.',
-              img: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=600&q=80',
-              imgHeight: 'h-[220px] lg:h-[250px]',
-              alt: 'Client growth celebration'
+              title: "Verifikasi Terbuka",
+              desc: "Transparansi kode melalui GitHub dan riwayat profesional yang bisa diverifikasi secara terbuka di LinkedIn.",
+              actionLabel: "Hubungi Kontak",
+              actionUrl: "#contact-section"
             }
           ].map((item, idx) => (
-            <div
+            <motion.div
               key={idx}
-              className="group flex flex-col justify-between space-y-5 p-5 rounded-3xl bg-theme-elevated/50 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+              className="group flex flex-col justify-between space-y-6 p-6 rounded-3xl bg-theme-elevated/50 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden text-left"
+              variants={cardSlideUp}
             >
-              {/* Image Block with Custom Staggered Heights */}
-              <div className={`w-full ${item.imgHeight} rounded-2xl overflow-hidden relative border border-theme-border/60 shadow-md`}>
-                <img
-                  src={item.img}
-                  alt={item.alt}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none" />
-              </div>
-
-              {/* Text Block Aligned Elegantly at Bottom */}
-              <div className="space-y-2.5 pt-2">
-                <div className="bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent font-sans font-black text-4xl sm:text-5xl lg:text-5.5xl tracking-tighter leading-none select-none">
-                  {item.stat}
-                </div>
-                <h4 className="text-xs sm:text-sm font-sans font-extrabold text-theme-fore leading-snug">
-                  {item.label}
-                </h4>
-                <p className="text-[11px] text-theme-fore-muted leading-relaxed">
+              <div className="space-y-3">
+                <div className="w-2.5 h-2.5 rounded-full bg-theme-accent/20 group-hover:bg-theme-accent transition-colors duration-300" />
+                <h3 className="text-base font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors">
+                  {item.title}
+                </h3>
+                <p className="text-xs text-theme-fore-muted leading-relaxed">
                   {item.desc}
                 </p>
               </div>
-            </div>
+
+              <button
+                onClick={() => {
+                  const id = item.actionUrl.substring(1);
+                  scrollToId(id);
+                }}
+                className="w-full py-2.5 rounded-xl bg-theme-surface hover:bg-theme-accent hover:text-white text-[11px] font-sans font-bold text-theme-fore transition-all duration-300 border border-theme-border/80 hover:border-theme-accent cursor-pointer flex items-center justify-center gap-1"
+              >
+                <span>{item.actionLabel}</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </button>
+            </motion.div>
           ))}
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* SECTION 3.5: FLEXIBLE PRICING PLANS */}
-      <section id="pricing-section" className="space-y-16 pt-8">
+      <motion.section
+        id="pricing-section"
+        className="space-y-16 pt-8"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={sectionFadeIn}
+      >
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="flex items-center justify-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
             <span className="w-6 h-[1px] bg-theme-accent" />
-            <span>Pricing</span>
+            <span>Harga</span>
             <span className="w-6 h-[1px] bg-theme-accent" />
           </div>
-          <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore">
-            Flexible Pricing Plans
+          <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore text-center">
+            Paket Harga Proyek
           </h2>
-          <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-2xl mx-auto">
-            Choose a plan that fits your business needs and start growing today. Interactive setups designed to match your scale.
+          <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-2xl mx-auto text-center">
+            Pilih paket sesuai skala proyek Anda. Butuh sistem custom di luar paket ini? Diskusikan langsung untuk penawaran khusus.
           </p>
         </div>
 
         {/* 3-Column Beautiful Pricing Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto pt-4">
-          
-          {/* Card 1: Basic Plan */}
-          <div className="p-7 rounded-3xl bg-theme-elevated/75 border border-theme-border hover:border-theme-border-accent/35 hover:shadow-2xl transition-all duration-300 flex flex-col justify-between space-y-8 relative group">
+        <motion.div
+          className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto pt-4"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
+
+          {/* Card 1: Starter - MVP Prototype */}
+          <motion.div
+            className="p-7 rounded-3xl bg-theme-elevated/75 border border-theme-border hover:border-theme-border-accent/35 hover:shadow-2xl transition-all duration-300 flex flex-col justify-between space-y-8 relative group text-left"
+            variants={cardSlideUp}
+          >
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold">Entry Growth</span>
-                  <h3 className="text-lg font-sans font-extrabold text-theme-fore">Basic Plan</h3>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold">Ide Tahap Awal</span>
+                  <h3 className="text-lg font-sans font-extrabold text-theme-fore">Starter — MVP Prototype</h3>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-theme-accent/5 border border-theme-border flex items-center justify-center text-theme-accent">
                   <Trophy className="w-4 h-4" />
                 </div>
               </div>
               <p className="text-[11px] text-theme-fore-muted leading-relaxed">
-                Choose a plan that fits your business goals and starts your growth journey.
+                Cocok untuk validasi ide atau produk tahap awal sebelum meluncurkannya ke pasar secara luas.
               </p>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-3xl sm:text-4xl font-sans font-black text-theme-fore tracking-tight">$299</span>
-                <span className="text-[10px] font-mono text-theme-fore-muted uppercase">/ month</span>
+                <span className="text-2xl sm:text-3xl font-sans font-black text-theme-fore tracking-tight">Rp 15 Jt+</span>
+                <span className="text-[10px] font-mono text-theme-fore-muted uppercase">/ proyek</span>
               </div>
               <button
                 onClick={() => selectPlan('Full-Stack Web App', 'SaaS MVP (Fast Turnaround)')}
                 className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-theme-border hover:border-theme-border-accent hover:bg-theme-accent-glow text-theme-accent transition-all duration-200 cursor-pointer text-center select-none"
               >
-                Get Started
+                Diskusikan Proyek Anda
               </button>
             </div>
             <div className="space-y-3.5 pt-6 border-t border-theme-border/50">
-              <span className="text-[9px] font-mono uppercase tracking-wider text-theme-fore-subtle block font-bold">Includes:</span>
+              <span className="text-[9px] font-mono uppercase tracking-wider text-theme-fore-subtle block font-bold">Termasuk:</span>
               <ul className="space-y-2.5 text-xs">
                 {[
-                  'SEO Audit & Setup',
-                  'Keyword Research',
-                  'Competitor Analysis',
-                  'Monthly Performance Report',
-                  'Basic Support'
+                  '1 Platform (Web / Mobile)',
+                  'Fitur Inti & Core Logic',
+                  'Estimasi 2–4 Minggu Pengerjaan',
+                  '1x Revisi Besar',
+                  'Kode Bersih & Siap Skala'
                 ].map((item, idx) => (
                   <li key={idx} className="flex items-center gap-2.5 text-theme-fore-muted">
                     <Check className="w-3.5 h-3.5 text-theme-accent flex-shrink-0" />
@@ -736,49 +838,52 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 ))}
               </ul>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Card 2: Premium Plan (Highly highlighted, standing out) */}
-          <div className="p-7 rounded-3xl bg-[#0F1115] dark:bg-[#0A0C10] text-white border-2 border-theme-accent hover:shadow-[0_0_50px_-10px_rgba(74,133,217,0.35)] transition-all duration-300 flex flex-col justify-between space-y-8 relative lg:scale-105 z-10 overflow-hidden">
+          {/* Card 2: Growth - Production Ready (Most Popular) */}
+          <motion.div
+            className="p-7 rounded-3xl bg-[#0F1115] dark:bg-[#0A0C10] text-white border-2 border-theme-accent hover:shadow-[0_0_50px_-10px_rgba(74,133,217,0.35)] transition-all duration-300 flex flex-col justify-between space-y-8 relative lg:scale-105 z-10 overflow-hidden text-left"
+            variants={cardSlideUp}
+          >
             {/* Luminous dynamic glow mesh background for highlighted premium feel */}
             <div className="absolute inset-0 bg-[radial-gradient(350px_circle_at_top_right,rgba(74,133,217,0.18),transparent_80%)] pointer-events-none" />
             <div className="absolute top-2 right-2.5 bg-theme-accent/25 border border-theme-accent/40 text-theme-accent text-[9px] font-mono font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
-              Most Popular
+              Paling Populer
             </div>
 
             <div className="space-y-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-accent font-bold">Unmatched Scale</span>
-                  <h3 className="text-lg font-sans font-extrabold text-white">Premium Plan</h3>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-accent font-bold">Skala Siap Produksi</span>
+                  <h3 className="text-lg font-sans font-extrabold text-white">Growth — Production Ready</h3>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-theme-accent/20 border border-theme-accent/30 flex items-center justify-center text-theme-accent">
                   <Crown className="w-4 h-4" />
                 </div>
               </div>
               <p className="text-[11px] text-zinc-400 leading-relaxed">
-                Flexible plans designed to help you scale faster, capture market Share, and maximize performance.
+                Cocok untuk bisnis yang siap merilis produk secara resmi ke pengguna umum dengan fitur lengkap dan integrasi backend.
               </p>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-3xl sm:text-4xl font-sans font-black text-white tracking-tight">$999</span>
-                <span className="text-[10px] font-mono text-zinc-400 uppercase">/ month</span>
+                <span className="text-2xl sm:text-3xl font-sans font-black text-white tracking-tight">Rp 35 Jt+</span>
+                <span className="text-[10px] font-mono text-zinc-400 uppercase">/ proyek</span>
               </div>
               <button
                 onClick={() => selectPlan('Comprehensive Hybrid Pipeline', 'High-Scale Custom Architecture')}
                 className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-theme-accent hover:bg-theme-accent-bright text-white shadow-lg shadow-theme-accent/20 transition-all duration-200 cursor-pointer text-center select-none"
               >
-                Contact Us
+                Diskusikan Proyek Anda
               </button>
             </div>
             <div className="space-y-3.5 pt-6 border-t border-zinc-800 relative z-10">
-              <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-400 block font-bold">Includes:</span>
+              <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-400 block font-bold">Termasuk:</span>
               <ul className="space-y-2.5 text-xs">
                 {[
-                  'Complete Marketing Strategy',
-                  'Paid Ads Management',
-                  'Advanced Analytics Integration',
-                  'Dedicated Account Manager',
-                  'Continuous System Optimization'
+                  'Web Application + API Backend',
+                  'Integrasi Pembayaran & Autentikasi',
+                  'Dashboard Admin & Manajemen',
+                  'Pendampingan 30 Hari Pasca-Launch',
+                  '100% Hak Cipta & Source Code'
                 ].map((item, idx) => (
                   <li key={idx} className="flex items-center gap-2.5 text-zinc-300">
                     <Check className="w-3.5 h-3.5 text-theme-accent flex-shrink-0" />
@@ -787,43 +892,46 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 ))}
               </ul>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Card 3: Standard Plan */}
-          <div className="p-7 rounded-3xl bg-theme-elevated/75 border border-theme-border hover:border-theme-border-accent/35 hover:shadow-2xl transition-all duration-300 flex flex-col justify-between space-y-8 relative group">
+          {/* Card 3: Custom - Sistem Kompleks */}
+          <motion.div
+            className="p-7 rounded-3xl bg-theme-elevated/75 border border-theme-border hover:border-theme-border-accent/35 hover:shadow-2xl transition-all duration-300 flex flex-col justify-between space-y-8 relative group text-left"
+            variants={cardSlideUp}
+          >
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold">Flexible Growth</span>
-                  <h3 className="text-lg font-sans font-extrabold text-theme-fore">Standard Plan</h3>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold">Skala Enterprise</span>
+                  <h3 className="text-lg font-sans font-extrabold text-theme-fore">Custom — Sistem Kompleks</h3>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-theme-accent/5 border border-theme-border flex items-center justify-center text-theme-accent">
                   <Sparkles className="w-4 h-4" />
                 </div>
               </div>
               <p className="text-[11px] text-theme-fore-muted leading-relaxed">
-                Simple pricing structured to power every developmental stage of your growing business.
+                Cocok untuk kebutuhan sistem skala besar, arsitektur rumit, dan terintegrasi dengan banyak proses bisnis operasional.
               </p>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-3xl sm:text-4xl font-sans font-black text-theme-fore tracking-tight">$599</span>
-                <span className="text-[10px] font-mono text-theme-fore-muted uppercase">/ month</span>
+                <span className="text-2xl sm:text-3xl font-sans font-black text-theme-fore tracking-tight">Custom</span>
+                <span className="text-[10px] font-mono text-theme-fore-muted uppercase">/ scope</span>
               </div>
               <button
-                onClick={() => selectPlan('Native iOS/Android App', 'Medium Scale Production')}
+                onClick={() => selectPlan('Comprehensive Hybrid Pipeline', 'High-Scale Custom Architecture')}
                 className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-theme-border hover:border-theme-border-accent hover:bg-theme-accent-glow text-theme-accent transition-all duration-200 cursor-pointer text-center select-none"
               >
-                Start Now
+                Diskusikan Kebutuhan Anda
               </button>
             </div>
             <div className="space-y-3.5 pt-6 border-t border-theme-border/50">
-              <span className="text-[9px] font-mono uppercase tracking-wider text-theme-fore-subtle block font-bold">Includes:</span>
+              <span className="text-[9px] font-mono uppercase tracking-wider text-theme-fore-subtle block font-bold">Termasuk:</span>
               <ul className="space-y-2.5 text-xs">
                 {[
-                  'Full SEO Optimization',
-                  'In-depth Content Strategy',
-                  'Premium Link Building',
-                  'Monthly Analytics & Reporting',
-                  'Priority Dedicated Support'
+                  'Arsitektur Multi-Platform',
+                  'Timeline & Scope Kustom',
+                  'Dukungan Lanjutan Sesuai Kesepakatan',
+                  'Dokumentasi API & Arsitektur Lengkap',
+                  'Pemeliharaan Server Berkala'
                 ].map((item, idx) => (
                   <li key={idx} className="flex items-center gap-2.5 text-theme-fore-muted">
                     <Check className="w-3.5 h-3.5 text-theme-accent flex-shrink-0" />
@@ -832,15 +940,22 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 ))}
               </ul>
             </div>
-          </div>
+          </motion.div>
 
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
       {/* SECTION 3.8: FREQUENTLY ASKED QUESTIONS */}
-      <section id="faq-section" className="space-y-16 pt-8">
+      <motion.section
+        id="faq-section"
+        className="space-y-16 pt-8"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={sectionFadeIn}
+      >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start max-w-6xl mx-auto">
-          
+
           {/* Left Column: Any Question Box */}
           <div className="lg:col-span-5 space-y-7 lg:sticky lg:top-24">
             <div className="space-y-4">
@@ -848,17 +963,17 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 <span className="w-6 h-[1px] bg-theme-accent" />
                 <span>FAQ</span>
               </div>
-              <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore">
-                Frequently Asked Questions
+              <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore text-left">
+                Pertanyaan Umum
               </h2>
             </div>
 
             {/* Any Question Form widget */}
-            <div className="p-6 sm:p-7 rounded-3xl bg-theme-surface/75 backdrop-blur-md border border-theme-border space-y-5 shadow-xl relative overflow-hidden">
+            <div className="p-6 sm:p-7 rounded-3xl bg-theme-surface/75 backdrop-blur-md border border-theme-border space-y-5 shadow-xl relative overflow-hidden text-left">
               <div className="space-y-1">
-                <h4 className="text-sm font-sans font-bold text-theme-fore">Any Question?</h4>
+                <h4 className="text-sm font-sans font-bold text-theme-fore">Ada Pertanyaan?</h4>
                 <p className="text-[11px] text-theme-fore-muted leading-relaxed">
-                  Feel free to ask anything about feedback, custom setups, or special features.
+                  Tanyakan apa saja terkait kebutuhan pengembangan software, revisi, atau penawaran khusus.
                 </p>
               </div>
 
@@ -877,7 +992,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     className="space-y-3"
                   >
                     <label htmlFor="custom-q-input" className="text-[9px] font-mono uppercase tracking-wider text-theme-fore-subtle font-bold">
-                      Let me know.
+                      Tulis pertanyaan Anda.
                     </label>
                     <div className="relative flex items-center">
                       <input
@@ -886,7 +1001,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                         required
                         value={customQuestion}
                         onChange={(e) => setCustomQuestion(e.target.value)}
-                        placeholder="Enter Here..."
+                        placeholder="Tulis di sini..."
                         className="w-full pr-12 pl-4 py-3 text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 shadow-sm"
                       />
                       <button
@@ -908,9 +1023,9 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   >
                     <CheckCircle className="w-6 h-6 text-emerald-500 mx-auto" />
                     <div className="space-y-1">
-                      <h5 className="text-[11px] font-bold text-theme-fore">Question Received!</h5>
+                      <h5 className="text-[11px] font-bold text-theme-fore">Pertanyaan Terkirim!</h5>
                       <p className="text-[10px] text-theme-fore-muted leading-relaxed">
-                        Thank you. We'll examine your query and align a custom response in <span className="font-semibold text-theme-accent">12 hours</span>.
+                        Terima kasih. Saya akan mempelajari pertanyaan Anda dan merespons dalam waktu <span className="font-semibold text-theme-accent">12 jam</span>.
                       </p>
                     </div>
                     <button
@@ -920,7 +1035,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                       }}
                       className="text-[9px] font-mono uppercase tracking-wider text-theme-accent hover:underline cursor-pointer"
                     >
-                      Ask another question
+                      Kirim pertanyaan lain
                     </button>
                   </motion.div>
                 )}
@@ -935,35 +1050,38 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           <div className="lg:col-span-7 space-y-4">
             {[
               {
-                q: "How will the payment be collected?",
-                a: "Our platform supports secure bank wire transfers, automated stripe payouts, or milestone escrow. Depending on your select plan, services are billed transparently on a recurring 30-day index cycle."
+                q: "Bagaimana sistem pembayarannya?",
+                a: "Pembayaran dilakukan bertahap sesuai milestone proyek (biasanya 3 tahap: DP, progress, pelunasan), via transfer bank atau metode lain sesuai kesepakatan."
               },
               {
-                q: "Do you guarantee results?",
-                a: "Yes, we guarantee complete sub-pixel visual fidelity, extreme performance optimization ratings (99+ score benchmarks), and absolute security compliance. Every build is verified through thorough QA checks."
+                q: "Apakah source code jadi milik saya sepenuhnya?",
+                a: "Ya. Setelah proyek selesai dan pembayaran lunas, seluruh source code dan hak cipta sepenuhnya diserahkan ke Anda."
               },
               {
-                q: "What industries do you work with?",
-                a: "We work with tech SaaS platforms, progressive design groups, marketing agencies, modern e-commerce systems, and direct creators seeking high-end tailored software architecture."
+                q: "Berapa lama waktu pengerjaan?",
+                a: "Tergantung skala proyek — MVP sederhana bisa 2–4 minggu, sistem enterprise bisa 2–3 bulan. Timeline pasti diberikan setelah tahap Discovery."
               },
               {
-                q: "Can I cancel anytime?",
-                a: "Absolutely. You can modify your tier, upgrade scope limits, or pause/cancel your billing cycles at any time. We support friction-free handovers with zero long-term locks."
+                q: "Apakah ada dukungan setelah peluncuran?",
+                a: "Ya, saya menyediakan masa maintenance pasca-launch, dan paket support lanjutan jika dibutuhkan."
               },
               {
-                q: "How does the GoTo Meeting free trial work?",
-                a: "Before signing any contracts, we set up a complimentary 30-minute system consultation. We align on your core project milestones, wireframes, database schemas, and expected deployment guidelines."
+                q: "Apakah bisa request revisi di tengah pengerjaan?",
+                a: "Bisa. Setiap paket sudah termasuk jumlah revisi tertentu; revisi tambahan di luar itu akan diinformasikan estimasi biaya & waktunya terlebih dahulu."
+              },
+              {
+                q: "Industri apa saja yang pernah Anda tangani?",
+                a: "Sejauh ini saya sudah membangun beberapa proyek independen di berbagai domain — HR/HCM (ERP), rekrutmen (AI Resume Analyzer), hingga layanan reservasi (Antreey untuk barbershop & arena olahraga) — sekaligus punya pengalaman kerja langsung di industri manufaktur. Lihat detailnya di halaman Projects."
               }
             ].map((faq, idx) => {
               const isExpanded = activeFaq === idx;
               return (
                 <div
                   key={idx}
-                  className={`rounded-2xl border transition-all duration-300 ${
-                    isExpanded 
-                      ? 'bg-theme-elevated border-theme-border-accent shadow-lg shadow-theme-accent-glow/5' 
-                      : 'bg-theme-elevated/40 border-theme-border hover:border-theme-border-hover hover:bg-theme-elevated/70'
-                  }`}
+                  className={`rounded-2xl border transition-all duration-300 ${isExpanded
+                    ? 'bg-theme-elevated border-theme-border-accent shadow-lg shadow-theme-accent-glow/5'
+                    : 'bg-theme-elevated/40 border-theme-border hover:border-theme-border-hover hover:bg-theme-elevated/70'
+                    }`}
                 >
                   <button
                     onClick={() => setActiveFaq(isExpanded ? null : idx)}
@@ -971,9 +1089,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     aria-expanded={isExpanded}
                   >
                     <span>{faq.q}</span>
-                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${
-                      isExpanded ? 'bg-theme-accent text-white' : 'bg-theme-surface text-theme-fore-muted'
-                    }`}>
+                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${isExpanded ? 'bg-theme-accent text-white' : 'bg-theme-surface text-theme-fore-muted'
+                      }`}>
                       {isExpanded ? <Minus className="w-3 h-3" /> : <Plus className="w-3 h-3" />}
                     </div>
                   </button>
@@ -988,7 +1105,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                         transition={{ duration: 0.25, ease: 'easeInOut' }}
                         className="overflow-hidden"
                       >
-                        <div className="px-5 pb-5 pt-1 text-[11px] sm:text-xs text-theme-fore-muted leading-relaxed border-t border-theme-border/50">
+                        <div className="px-5 pb-5 pt-1 text-[11px] sm:text-xs text-theme-fore-muted leading-relaxed border-t border-theme-border/50 text-left">
                           {faq.a}
                         </div>
                       </motion.div>
@@ -1000,25 +1117,31 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           </div>
 
         </div>
-      </section>
+      </motion.section>
 
       {/* SECTION 4: THE PROCESSES LOOP (FROM UPLOADED REFERENCE) */}
-      <section id="methodology-section" className="space-y-12">
+      <motion.section
+        id="methodology-section"
+        className="space-y-12"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={sectionFadeIn}
+      >
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
             <span className="w-6 h-[1px] bg-theme-accent" />
-            <span>Processes</span>
+            <span>Proses Kerja</span>
           </div>
           <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-2xl">
-            {copy?.processesTitle ? (
+            {copy?.processesTitle && copy.processesTitle !== "Providing Comprehensive Solutions Tailored to Your Needs." ? (
               copy.processesTitle
             ) : (
               <>
-                Providing{' '}
+                Proses Kerja Terstruktur{' '}
                 <span className="bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent font-black">
-                  Comprehensive Solutions
-                </span>{' '}
-                Tailored to Your Needs.
+                  untuk Hasil Terbaik
+                </span>
               </>
             )}
           </h2>
@@ -1026,7 +1149,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
         {/* Dynamic Split Layout matching reference block 2 */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-          
+
           {/* Left Column: Clean vertical list with line delimiters (5 cols) */}
           <div className="lg:col-span-6 flex flex-col">
             {MILESTONES.map((milestone, idx) => {
@@ -1035,21 +1158,18 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 <button
                   key={milestone.step}
                   onClick={() => setActiveMilestone(idx)}
-                  className={`w-full py-4 text-left cursor-pointer border-b border-theme-border/60 transition-all duration-300 flex items-center justify-between group ${
-                    isActive ? 'border-theme-accent' : 'hover:border-theme-border-hover'
-                  }`}
+                  className={`w-full py-4 text-left cursor-pointer border-b border-theme-border/60 transition-all duration-300 flex items-center justify-between group ${isActive ? 'border-theme-accent' : 'hover:border-theme-border-hover'
+                    }`}
                   id={`processes-step-${milestone.step}`}
                 >
-                  <span className={`text-base font-sans font-bold transition-all duration-300 ${
-                    isActive 
-                      ? 'text-theme-accent translate-x-1.5' 
-                      : 'text-theme-fore/60 group-hover:text-theme-fore group-hover:translate-x-1'
-                  }`}>
+                  <span className={`text-base font-sans font-bold transition-all duration-300 ${isActive
+                    ? 'text-theme-accent translate-x-1.5'
+                    : 'text-theme-fore/60 group-hover:text-theme-fore group-hover:translate-x-1'
+                    }`}>
                     {milestone.title}
                   </span>
-                  <span className={`text-xs font-mono font-bold transition-colors ${
-                    isActive ? 'text-theme-accent' : 'text-theme-fore-subtle'
-                  }`}>
+                  <span className={`text-xs font-mono font-bold transition-colors ${isActive ? 'text-theme-accent' : 'text-theme-fore-subtle'
+                    }`}>
                     {milestone.step}
                   </span>
                 </button>
@@ -1102,22 +1222,28 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           </div>
 
         </div>
-      </section>
+      </motion.section>
 
       {/* SECTION 4.25: FEATURED PROJECTS SHOWCASE */}
-      <section id="projects-section" className="space-y-12 pt-12">
+      <motion.section
+        id="projects-section"
+        className="space-y-12 pt-12"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={sectionFadeIn}
+      >
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
               <span className="w-6 h-[1px] bg-theme-accent" />
-              <span>Showcase</span>
+              <span>Portofolio</span>
             </div>
-            <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-2xl">
-              Our Latest{" "}
+            <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-2xl text-left">
+              Karya Rekayasa{' '}
               <span className="bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent font-black">
-                Software Craftsmanship
-              </span>{" "}
-              Releases.
+                Perangkat Lunak
+              </span>
             </h2>
           </div>
 
@@ -1125,72 +1251,82 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             href="/projects"
             className="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-theme-surface border border-theme-border/80 hover:border-theme-accent text-xs font-sans font-bold text-theme-fore cursor-pointer transition-all duration-300"
           >
-            <span>View All Projects</span>
+            <span>Lihat Semua Proyek</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           {projects && projects.length > 0 ? (
             projects.slice(0, 3).map((project) => {
-            const isDummy = !project.thumbnail || 
-              project.thumbnail.trim() === "" || 
-              project.thumbnail === "/thumbnail.png" || 
-              project.thumbnail === "/placeholder.png";
-            const displayThumbnail = (isDummy ? "/logo.svg" : project.thumbnail) as string;
+              const isDummy = !project.thumbnail ||
+                project.thumbnail.trim() === "" ||
+                project.thumbnail === "/thumbnail.png" ||
+                project.thumbnail === "/placeholder.png";
+              const displayThumbnail = (isDummy ? "/logo.svg" : project.thumbnail) as string;
 
               return (
-                <div
+                <motion.div
                   key={project.slug}
                   className="group flex flex-col justify-between p-5 rounded-2xl bg-theme-elevated border border-theme-border hover:border-theme-border-accent hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+                  variants={cardSlideUp}
                 >
-                <div className="space-y-4">
-                  {/* Thumbnail Container */}
-                  <div className="relative w-full h-48 rounded-xl overflow-hidden bg-theme-surface border border-theme-border/40">
-                    <Image
-                      src={displayThumbnail}
-                      alt={project.name}
-                      fill
-                      className={isDummy ? "object-contain p-8 bg-theme-surface/40" : "object-cover group-hover:scale-[1.03] transition-transform duration-500"}
-                      sizes="(max-w-768px) 100vw, 33vw"
-                    />
-                  </div>
+                  <div className="space-y-4">
+                    {/* Thumbnail Container */}
+                    <div className="relative w-full h-48 rounded-xl overflow-hidden bg-theme-surface border border-theme-border/40">
+                      <Image
+                        src={displayThumbnail}
+                        alt={project.name}
+                        fill
+                        className={isDummy ? "object-contain p-8 bg-theme-surface/40" : "object-cover group-hover:scale-[1.03] transition-transform duration-500"}
+                        sizes="(max-w-768px) 100vw, 33vw"
+                      />
+                    </div>
 
-                  {/* Info Block */}
-                  <div className="space-y-2 text-left">
-                    <h3 className="text-sm sm:text-base font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors">
-                      {project.name}
-                    </h3>
-                    <p className="text-xs text-theme-fore-muted leading-relaxed line-clamp-3">
-                      {project.summary || project.description}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="space-y-4 pt-4 border-t border-theme-border/30 mt-4">
-                  {/* Tech stack tags */}
-                  <div className="flex flex-wrap gap-1">
-                    {project.technologies.slice(0, 4).map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-1.5 py-0.5 rounded-md text-[9px] font-mono bg-theme-surface text-theme-fore-muted border border-theme-border/40"
-                      >
-                        {tech}
+                    {/* Info Block */}
+                    <div className="space-y-2 text-left">
+                      <span className="inline-block text-[8px] font-mono uppercase tracking-widest font-bold text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                        Proyek Independen
                       </span>
-                    ))}
+                      <h3 className="text-sm sm:text-base font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors">
+                        {project.name}
+                      </h3>
+                      <p className="text-xs text-theme-fore-muted leading-relaxed line-clamp-3">
+                        {project.summary || project.description}
+                      </p>
+                    </div>
                   </div>
 
-                  {/* Explore button */}
-                  <Link
-                    href={`/projects/${project.slug}`}
-                    className="flex items-center justify-center gap-1.5 w-full py-2 rounded-xl bg-theme-surface hover:bg-theme-accent hover:text-white text-xs font-sans font-bold text-theme-fore transition-all duration-300 border border-theme-border/80 hover:border-theme-accent"
-                  >
-                    <span>Explore Project</span>
-                    <ChevronRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </div>
+                  <div className="space-y-4 pt-4 border-t border-theme-border/30 mt-4">
+                    {/* Tech stack tags */}
+                    <div className="flex flex-wrap gap-1 text-left">
+                      {project.technologies.slice(0, 4).map((tech) => (
+                        <span
+                          key={tech}
+                          className="px-1.5 py-0.5 rounded-md text-[9px] font-mono bg-theme-surface text-theme-fore-muted border border-theme-border/40"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Explore button */}
+                    <Link
+                      href={`/projects/${project.slug}`}
+                      className="flex items-center justify-center gap-1.5 w-full py-2 rounded-xl bg-theme-surface hover:bg-theme-accent hover:text-white text-xs font-sans font-bold text-theme-fore transition-all duration-300 border border-theme-border/80 hover:border-theme-accent"
+                    >
+                      <span>Lihat Proyek</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </motion.div>
               );
             })
           ) : (
@@ -1198,34 +1334,47 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               <span className="text-xs font-mono text-theme-fore-muted">No projects found.</span>
             </div>
           )}
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
-      {/* SECTION 4.5: THE FEATURES SECTION (FROM UPLOADED REFERENCE) */}
-      <section id="features-section" className="space-y-12 pt-12">
+      {/* SECTION 4.5: THE FEATURES SECTION (KENAPA BEKERJA SAMA DENGAN SAYA) */}
+      <motion.section
+        id="features-section"
+        className="space-y-12 pt-12"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={sectionFadeIn}
+      >
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
             <span className="w-6 h-[1px] bg-theme-accent" />
-            <span>Features</span>
+            <span>Keunggulan</span>
           </div>
-          <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-3xl">
-            We Offer Including{' '}
+          <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-3xl text-left">
+            Kenapa{' '}
             <span className="bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent font-black">
-              Expertise, Reliability, and Exceptional Customer Satisfaction.
+              Bekerja Sama dengan Saya?
             </span>
           </h2>
         </div>
 
         {/* 2-Column Bento Grid styled precisely like Section 3 of the uploaded reference */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           {FEATURE_ITEMS.map((item, idx) => {
             const isFullWidth = idx === FEATURE_ITEMS.length - 1;
             return (
-              <div
+              <motion.div
                 key={item.num}
-                className={`p-6 rounded-2xl bg-theme-elevated border border-theme-border flex flex-col sm:flex-row gap-5 items-start group hover:border-theme-border-accent hover:shadow-xl transition-all duration-300 ${
-                  isFullWidth ? 'md:col-span-2' : ''
-                }`}
+                className={`p-6 rounded-2xl bg-theme-elevated border border-theme-border flex flex-col sm:flex-row gap-5 items-start group hover:border-theme-border-accent hover:shadow-xl transition-all duration-300 ${isFullWidth ? 'md:col-span-2' : ''
+                  } text-left`}
+                variants={cardSlideUp}
               >
                 {/* Number digit leading */}
                 <div className="text-4xl sm:text-5xl font-sans font-extrabold tracking-tighter text-theme-accent/60 dark:text-theme-accent/40 select-none flex-shrink-0">
@@ -1241,43 +1390,102 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     {item.description}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
-        </div>
-      </section>
+        </motion.div>
+      </motion.section>
 
-      {/* SECTION 5: THE SEJATIDIMEDIA DIRECT CONSOLE (CONTACT FORM) */}
-      <section id="contact-section" className="p-8 md:p-14 rounded-3xl bg-theme-elevated border border-theme-border shadow-2xl space-y-8 relative overflow-hidden">
+      {/* SECTION: RISK REVERSAL / JAMINAN KERJA SAMA */}
+      <motion.section
+        id="guarantee-section"
+        className="pt-12"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={sectionFadeIn}
+      >
+        <div className="p-8 md:p-10 rounded-3xl bg-theme-surface/60 border border-theme-border space-y-6 text-left max-w-4xl mx-auto">
+          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
+            <span className="w-6 h-[1px] bg-theme-accent" />
+            <span>Jaminan</span>
+          </div>
+          <h3 className="text-xl sm:text-2xl font-sans font-extrabold text-theme-fore leading-tight">
+            Kenapa Aman Berinvestasi di Proyek Ini?
+          </h3>
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            {[
+              {
+                title: "Revisi Terstruktur",
+                desc: "Setiap paket sudah mencakup alokasi revisi. Anda tidak akan terjebak dengan hasil akhir yang tidak sesuai ekspektasi."
+              },
+              {
+                title: "100% Hak Cipta Anda",
+                desc: "Source code, desain, dan seluruh aset digital sepenuhnya milik Anda setelah proyek lunas — tanpa royalti atau lisensi berulang."
+              },
+              {
+                title: "Pembayaran Bertahap",
+                desc: "Pembayaran dilakukan per milestone, sehingga Anda bisa mengevaluasi progress sebelum melanjutkan ke tahap berikutnya."
+              }
+            ].map((g, idx) => (
+              <motion.div
+                key={idx}
+                className="space-y-2"
+                variants={cardSlideUp}
+              >
+                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                <h4 className="text-sm font-sans font-bold text-theme-fore">{g.title}</h4>
+                <p className="text-[11px] text-theme-fore-muted leading-relaxed">{g.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </motion.section>
+
+      {/* SECTION 5: FORMULIR KONTAK */}
+      <motion.section
+        id="contact-section"
+        className="p-8 md:p-14 rounded-3xl bg-theme-elevated border border-theme-border shadow-2xl space-y-8 relative overflow-hidden"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={sectionFadeIn}
+      >
         {/* Supporting decorative premium ambient background spotlight */}
         <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-theme-accent-glow/50 rounded-full blur-[130px] pointer-events-none opacity-40 dark:opacity-60" />
         <div className="absolute -bottom-20 -left-20 w-[300px] h-[300px] bg-theme-accent-glow/25 rounded-full blur-[100px] pointer-events-none opacity-30" />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
-          
+
           {/* Left Block: Information, Value Prop, Active Slots Indicator */}
-          <div className="lg:col-span-5 space-y-8 flex flex-col justify-between">
+          <div className="lg:col-span-5 space-y-8 flex flex-col justify-between text-left">
             <div className="space-y-6">
               <div className="flex flex-wrap items-center gap-2.5">
                 <span className="text-[9px] font-mono bg-theme-accent-glow text-theme-accent border border-theme-border-accent/40 px-3 py-1 rounded-full uppercase font-bold tracking-wider inline-flex items-center gap-1.5 shadow-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                  <span>Secure Premium Slot</span>
+                  <span>Slot Pengerjaan Terfokus</span>
                 </span>
                 <span className="text-[9px] font-mono bg-theme-surface text-theme-fore-muted border border-theme-border px-2.5 py-1 rounded-full uppercase font-semibold">
-                  2 Available Slots Left This Quarter
+                  2 Slot Tersedia Kuartal Ini
                 </span>
               </div>
-              
+
               <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore">
-                Let's engineer something{' '}
+                Mari bangun sesuatu yang{' '}
                 <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright to-[#9BC2FA] bg-clip-text text-transparent font-black italic">
-                  Exceptional
+                  Luar Biasa
                 </span>{' '}
-                together.
+                bersama.
               </h2>
-              
+
               <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-md">
-                We accept a strictly limited cohort of premium clients each quarter to guarantee sub-second delivery pipelines, bespoke structural layouts, and developer-direct execution. 
+                Saya hanya menerima jumlah proyek terbatas setiap kuartal agar bisa fokus penuh pada setiap klien — memastikan kualitas kode, performa, dan komunikasi tanpa kompromi.
               </p>
 
               <div className="space-y-4 pt-6 border-t border-theme-border/50 max-w-sm">
@@ -1286,8 +1494,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     <Workflow className="w-4 h-4" />
                   </div>
                   <div className="space-y-0.5">
-                    <h4 className="text-xs sm:text-sm font-sans font-bold text-theme-fore">Interactive Sprint Sandboxes</h4>
-                    <p className="text-[11px] text-theme-fore-muted leading-relaxed">Weekly live staging build releases directly to your private preview terminal.</p>
+                    <h4 className="text-xs sm:text-sm font-sans font-bold text-theme-fore">Preview Mingguan</h4>
+                    <p className="text-[11px] text-theme-fore-muted leading-relaxed">Update progress build langsung ke staging Anda setiap minggu.</p>
                   </div>
                 </div>
 
@@ -1296,8 +1504,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     <Lock className="w-4 h-4" />
                   </div>
                   <div className="space-y-0.5">
-                    <h4 className="text-xs sm:text-sm font-sans font-bold text-theme-fore">Absolute IP & Code Handovers</h4>
-                    <p className="text-[11px] text-theme-fore-muted leading-relaxed">100% intellectual copyright assignment, fully clean TypeScript commits, and stable deployment guides.</p>
+                    <h4 className="text-xs sm:text-sm font-sans font-bold text-theme-fore">Serah Terima Kode Penuh</h4>
+                    <p className="text-[11px] text-theme-fore-muted leading-relaxed">100% hak cipta, commit history bersih, dan panduan deployment lengkap.</p>
                   </div>
                 </div>
               </div>
@@ -1305,7 +1513,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
             {/* Quick tech tagline metadata at bottom of left column */}
             <div className="pt-6 border-t border-theme-border/30 hidden lg:block text-[10px] font-mono text-theme-fore-subtle flex items-center gap-1.5">
-              <span>EST. RESPONSE DELAY &lt; 12 HOURS • SECURE SHA-256 PIPELINE</span>
+              <span>RESPON &lt; 12 JAM • PIPELINE AMAN SHA-256</span>
             </div>
           </div>
 
@@ -1322,18 +1530,18 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   className="space-y-6"
                   id="contact-form-element"
                 >
-                  
+
                   {/* Name and Email Input Fields */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div className="space-y-2">
                       <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider" htmlFor="form-name">
-                        Your Name
+                        Nama Anda
                       </label>
                       <input
                         id="form-name"
                         type="text"
                         required
-                        placeholder="e.g. Raden"
+                        placeholder="cth. Raden"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="w-full px-4 py-3 text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 shadow-sm"
@@ -1342,13 +1550,13 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
                     <div className="space-y-2">
                       <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider" htmlFor="form-email">
-                        Email Address
+                        Alamat Email
                       </label>
                       <input
                         id="form-email"
                         type="email"
                         required
-                        placeholder="e.g. contact@domain.com"
+                        placeholder="cth. kontak@domain.com"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="w-full px-4 py-3 text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 shadow-sm"
@@ -1359,14 +1567,14 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   {/* HIGH-FIDELITY: INTERACTIVE SERVICE SELECTOR CARDS */}
                   <div className="space-y-2.5">
                     <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider block">
-                      Primary Service Desired
+                      Layanan yang Dibutuhkan
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {[
-                        { id: 'Full-Stack Web App', label: 'Web Application Development', desc: 'SaaS Platforms & Dashboards' },
-                        { id: 'Native iOS/Android App', label: 'Native Mobile Apps', desc: 'SwiftUI, Kotlin, Flutter' },
-                        { id: 'API Gateway & Cloud Integration', label: 'Cloud API & Integration', desc: 'Express, Go, Databases & OAuth' },
-                        { id: 'Comprehensive Hybrid Pipeline', label: 'Full-Scale Enterprise Bundle', desc: 'End-to-End System Design' }
+                        { id: 'Full-Stack Web App', label: 'Web Application', desc: 'Platform SaaS & Dashboard' },
+                        { id: 'Native iOS/Android App', label: 'Aplikasi Mobile', desc: 'SwiftUI, Kotlin, Flutter' },
+                        { id: 'API Gateway & Cloud Integration', label: 'Cloud API & Integrasi', desc: 'Express, Go, Database & OAuth' },
+                        { id: 'Comprehensive Hybrid Pipeline', label: 'Paket Enterprise Penuh', desc: 'Desain sistem end-to-end' }
                       ].map((svc) => {
                         const isSelected = formData.service === svc.id;
                         return (
@@ -1374,21 +1582,19 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                             type="button"
                             key={svc.id}
                             onClick={() => setFormData({ ...formData, service: svc.id })}
-                            className={`p-3 text-left rounded-xl border text-xs transition-all duration-300 cursor-pointer flex flex-col justify-between h-[85px] relative overflow-hidden group select-none ${
-                              isSelected
-                                ? 'bg-theme-accent-glow/55 border-theme-border-accent shadow-md shadow-theme-accent/5'
-                                : 'bg-theme-elevated/60 border-theme-border hover:border-theme-border-hover hover:bg-theme-elevated'
-                            }`}
+                            className={`p-3 text-left rounded-xl border text-xs transition-all duration-300 cursor-pointer flex flex-col justify-between h-[85px] relative overflow-hidden group select-none ${isSelected
+                              ? 'bg-theme-accent-glow/55 border-theme-border-accent shadow-md shadow-theme-accent/5'
+                              : 'bg-theme-elevated/60 border-theme-border hover:border-theme-border-hover hover:bg-theme-elevated'
+                              }`}
                           >
-                            <span className={`font-sans font-bold transition-colors duration-200 block ${
-                              isSelected ? 'text-theme-accent' : 'text-theme-fore'
-                            }`}>
+                            <span className={`font-sans font-bold transition-colors duration-200 block ${isSelected ? 'text-theme-accent' : 'text-theme-fore'
+                              }`}>
                               {svc.label}
                             </span>
                             <span className="text-[10px] text-theme-fore-muted block truncate">
                               {svc.desc}
                             </span>
-                            
+
                             {/* Selected Active Indicator Dot */}
                             {isSelected && (
                               <div className="absolute top-2 right-2.5 w-1.5 h-1.5 rounded-full bg-theme-accent animate-pulse" />
@@ -1402,13 +1608,13 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   {/* HIGH-FIDELITY: INTERACTIVE SCOPE SELECTOR TABS */}
                   <div className="space-y-2.5">
                     <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider block">
-                      Project Scope Size
+                      Skala Proyek
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       {[
-                        { id: 'SaaS MVP (Fast Turnaround)', label: 'MVP Prototype', desc: 'Fast turnaround setup' },
-                        { id: 'Medium Scale Production', label: 'Production Growth', desc: 'Standard scalable app' },
-                        { id: 'High-Scale Custom Architecture', label: 'Enterprise Elite', desc: 'Bespoke large-scale system' }
+                        { id: 'SaaS MVP (Fast Turnaround)', label: 'MVP Prototype', desc: 'Pengerjaan cepat' },
+                        { id: 'Medium Scale Production', label: 'Produksi Growth', desc: 'Aplikasi standar scalable' },
+                        { id: 'High-Scale Custom Architecture', label: 'Enterprise Elite', desc: 'Sistem skala besar kustom' }
                       ].map((sc) => {
                         const isSelected = formData.scope === sc.id;
                         return (
@@ -1416,15 +1622,13 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                             type="button"
                             key={sc.id}
                             onClick={() => setFormData({ ...formData, scope: sc.id })}
-                            className={`p-3 text-left rounded-xl border text-xs transition-all duration-300 cursor-pointer flex flex-col justify-between h-[75px] select-none ${
-                              isSelected
-                                ? 'bg-theme-accent-glow/55 border-theme-border-accent shadow-md shadow-theme-accent/5'
-                                : 'bg-theme-elevated/60 border-theme-border hover:border-theme-border-hover hover:bg-theme-elevated'
-                            }`}
+                            className={`p-3 text-left rounded-xl border text-xs transition-all duration-300 cursor-pointer flex flex-col justify-between h-[75px] select-none ${isSelected
+                              ? 'bg-theme-accent-glow/55 border-theme-border-accent shadow-md shadow-theme-accent/5'
+                              : 'bg-theme-elevated/60 border-theme-border hover:border-theme-border-hover hover:bg-theme-elevated'
+                              }`}
                           >
-                            <span className={`font-sans font-bold transition-colors duration-200 block ${
-                              isSelected ? 'text-theme-accent' : 'text-theme-fore'
-                            }`}>
+                            <span className={`font-sans font-bold transition-colors duration-200 block ${isSelected ? 'text-theme-accent' : 'text-theme-fore'
+                              }`}>
                               {sc.label}
                             </span>
                             <span className="text-[9px] text-theme-fore-muted block truncate">
@@ -1439,12 +1643,12 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   {/* Project Details */}
                   <div className="space-y-2">
                     <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider" htmlFor="form-details">
-                      Project Details & Goals
+                      Detail & Tujuan Proyek
                     </label>
                     <textarea
                       id="form-details"
                       rows={3}
-                      placeholder="Briefly describe your feature scope, stack constraints, or goals..."
+                      placeholder="Jelaskan secara singkat fitur, batasan teknis, atau tujuan proyek Anda..."
                       value={formData.details}
                       onChange={(e) => setFormData({ ...formData, details: e.target.value })}
                       className="w-full px-4 py-3 text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 resize-none shadow-sm"
@@ -1458,7 +1662,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     id="btn-submit-contact"
                   >
                     <Send className="w-4 h-4 group-hover/submit:translate-x-1 group-hover/submit:-translate-y-0.5 transition-transform" />
-                    <span>Launch Blueprint Query</span>
+                    <span>Kirim Konsultasi Proyek</span>
                   </button>
 
                 </motion.form>
@@ -1474,13 +1678,13 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     <CheckCircle className="w-7 h-7" />
                   </div>
                   <div className="space-y-2">
-                    <h4 className="text-lg font-sans font-bold text-theme-fore">Blueprint Safely Received!</h4>
+                    <h4 className="text-lg font-sans font-bold text-theme-fore">Konsultasi Berhasil Dikirim!</h4>
                     <p className="text-xs text-theme-fore-muted max-w-sm leading-relaxed mx-auto">
-                      Your technical parameters were integrated directly into the SejatiDImedia rendering queue. We are auditing your stack specs and will contact you within 12 hours.
+                      Detail proyek Anda telah diterima. Saya akan mempelajari kebutuhan teknis Anda dan menghubungi dalam waktu 12 jam.
                     </p>
                   </div>
                   <div className="text-[10px] font-mono text-theme-fore-subtle bg-theme-elevated/80 border border-theme-border px-3.5 py-2 rounded-lg">
-                    RENDER NODE: {Math.random().toString(36).substring(2, 9).toUpperCase()} • SECURE STATUS: HIGH_PRIORITY
+                    REF: {Math.random().toString(36).substring(2, 9).toUpperCase()} • STATUS: PRIORITAS_TINGGI
                   </div>
                 </motion.div>
               )}
@@ -1488,7 +1692,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           </div>
 
         </div>
-      </section>
+      </motion.section>
 
     </div>
   );

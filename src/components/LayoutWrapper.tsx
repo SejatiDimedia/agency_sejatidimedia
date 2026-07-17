@@ -245,19 +245,19 @@ export default function LayoutWrapper({
                     : "text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface"
                 }`}
               >
-                Home
+                Beranda
               </button>
               <button
                 onClick={() => handleNavClick("capabilities-section")}
                 className="px-4 py-1.5 rounded-full text-xs font-semibold text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface cursor-pointer transition-colors"
               >
-                Capabilities
+                Layanan
               </button>
               <button
                 onClick={() => handleNavClick("methodology-section")}
                 className="px-4 py-1.5 rounded-full text-xs font-semibold text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface cursor-pointer transition-colors"
               >
-                Methodology
+                Proses Kerja
               </button>
               <button
                 onClick={() => router.push("/projects")}
@@ -267,13 +267,13 @@ export default function LayoutWrapper({
                     : "text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface"
                 }`}
               >
-                Projects
+                Portofolio
               </button>
               <button
                 onClick={() => handleNavClick("contact-section")}
                 className="px-4 py-1.5 rounded-full text-xs font-semibold text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface cursor-pointer transition-colors"
               >
-                Contact
+                Kontak
               </button>
             </nav>
 
@@ -284,7 +284,7 @@ export default function LayoutWrapper({
                 onClick={() => handleNavClick("contact-section")}
                 className="hidden sm:inline-flex px-4 py-2 rounded-full text-xs font-bold bg-theme-accent hover:bg-theme-accent-bright text-white transition-all duration-200 cursor-pointer shadow-md shadow-theme-accent/10 hover:scale-[1.02]"
               >
-                Start a Project
+                Mulai Proyek
               </button>
             </div>
           </div>
@@ -300,7 +300,7 @@ export default function LayoutWrapper({
           <div className="max-w-7xl mx-auto px-6 space-y-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
               {/* Left Block: Tagline and Contact */}
-              <div className="md:col-span-7 space-y-6">
+              <div className="md:col-span-7 space-y-6 text-left">
                 <div className="h-7 w-auto flex items-center justify-start">
                   <Image
                     src="/logo.svg"
@@ -311,7 +311,7 @@ export default function LayoutWrapper({
                   />
                 </div>
                 <h3 className="text-xl sm:text-2xl font-sans font-extrabold tracking-tight text-theme-fore max-w-lg leading-snug">
-                  Embrace the future of digital engineering with our high-fidelity product software craftsmanship.
+                  Membangun website, aplikasi, dan sistem backend yang andal dengan kode custom dan arsitektur rapi.
                 </h3>
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono text-theme-fore-muted">
                   <a
@@ -327,9 +327,9 @@ export default function LayoutWrapper({
 
               {/* Right Block: Sitemap Link List */}
               <div className="md:col-span-5 grid grid-cols-2 gap-4">
-                <div className="space-y-3.5">
+                <div className="space-y-3.5 text-left">
                   <span className="text-[10px] font-mono text-theme-fore-subtle uppercase tracking-wider block font-bold">
-                    Sitemap Navigation
+                    Navigasi
                   </span>
                   <ul className="space-y-2.5 text-xs font-sans font-semibold text-theme-fore-muted">
                     <li>
@@ -337,7 +337,7 @@ export default function LayoutWrapper({
                         onClick={() => handleNavClick("capabilities-section")}
                         className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left"
                       >
-                        Explore Services
+                        Layanan
                       </button>
                     </li>
                     <li>
@@ -345,23 +345,23 @@ export default function LayoutWrapper({
                         onClick={() => handleNavClick("technology-section")}
                         className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left"
                       >
-                        Active Tech Stack
+                        Teknologi
                       </button>
                     </li>
                     <li>
                       <button
-                        onClick={() => handleNavClick("preview-section")}
+                        onClick={() => handleNavClick("projects-section")}
                         className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left"
                       >
-                        Interactive Sandbox
+                        Portofolio
                       </button>
                     </li>
                   </ul>
                 </div>
 
-                <div className="space-y-3.5">
+                <div className="space-y-3.5 text-left">
                   <span className="text-[10px] font-mono text-theme-fore-subtle uppercase tracking-wider block font-bold">
-                    Processes & Contact
+                    Proses & Kontak
                   </span>
                   <ul className="space-y-2.5 text-xs font-sans font-semibold text-theme-fore-muted">
                     <li>
@@ -369,7 +369,7 @@ export default function LayoutWrapper({
                         onClick={() => handleNavClick("methodology-section")}
                         className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left"
                       >
-                        Sprint Methodology
+                        Proses Kerja
                       </button>
                     </li>
                     <li>
@@ -377,7 +377,7 @@ export default function LayoutWrapper({
                         onClick={() => handleNavClick("features-section")}
                         className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left"
                       >
-                        Enterprise Features
+                        Keunggulan
                       </button>
                     </li>
                     <li>
@@ -385,7 +385,7 @@ export default function LayoutWrapper({
                         onClick={() => handleNavClick("contact-section")}
                         className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left font-bold text-theme-fore"
                       >
-                        Start Project Console
+                        Mulai Konsultasi
                       </button>
                     </li>
                   </ul>
@@ -406,11 +406,11 @@ export default function LayoutWrapper({
                 <span>© {new Date().getFullYear()} SEJATIDIMEDIA.</span>
                 <span className="text-theme-border/60">•</span>
                 <button className="hover:text-theme-fore transition-colors cursor-pointer">
-                  PRIVACY POLICY
+                  KEBIJAKAN PRIVASI
                 </button>
                 <span className="text-theme-border/60">•</span>
                 <button className="hover:text-theme-fore transition-colors cursor-pointer">
-                  TERMS & CONDITIONS
+                  SYARAT & KETENTUAN
                 </button>
               </div>
 

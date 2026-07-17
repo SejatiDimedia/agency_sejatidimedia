@@ -52,7 +52,7 @@ export default async function ProjectDetailPage({
           className="inline-flex items-center gap-1.5 text-xs font-mono text-theme-fore-muted hover:text-theme-accent transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to Projects</span>
+          <span>Kembali ke Portofolio</span>
         </Link>
       </div>
 
@@ -69,6 +69,9 @@ export default async function ProjectDetailPage({
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
         <div className="absolute bottom-6 left-6 right-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 z-10">
           <div className="space-y-2">
+            <span className="inline-block text-[8px] font-mono uppercase tracking-widest font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
+              Proyek Independen
+            </span>
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-sans font-black tracking-tight text-white">
               {project.name}
             </h1>
@@ -82,7 +85,7 @@ export default async function ProjectDetailPage({
         <div className="lg:col-span-8 space-y-6">
           <div className="p-6 sm:p-8 rounded-2xl bg-theme-elevated border border-theme-border shadow-md text-left space-y-4">
             <h2 className="text-xl font-sans font-bold text-theme-fore border-b border-theme-border/40 pb-2">
-              Project Overview
+              Detail Proyek
             </h2>
             <div className="text-sm sm:text-base text-theme-fore-muted leading-relaxed text-left">
               <ReactMarkdown
@@ -108,7 +111,7 @@ export default async function ProjectDetailPage({
         <div className="lg:col-span-4 lg:sticky lg:top-28 h-fit space-y-6">
           <div className="p-6 rounded-2xl bg-theme-elevated border border-theme-border shadow-md space-y-6 text-left">
             <h2 className="text-sm font-sans font-bold text-theme-fore uppercase tracking-wider border-b border-theme-border/40 pb-2">
-              Project Specs
+              Spesifikasi Proyek
             </h2>
 
             {/* Status & Date */}
@@ -119,12 +122,12 @@ export default async function ProjectDetailPage({
                   {project.status === "COMPLETE" ? (
                     <>
                       <CheckCircle2 className="w-3.5 h-3.5 text-green-500" />
-                      <span>Completed</span>
+                      <span>Selesai</span>
                     </>
                   ) : (
                     <>
                       <Clock className="w-3.5 h-3.5 text-amber-500" />
-                      <span>Ongoing</span>
+                      <span>Sedang Berjalan</span>
                     </>
                   )}
                 </span>
@@ -143,7 +146,7 @@ export default async function ProjectDetailPage({
 
             {/* Technologies */}
             <div className="space-y-3">
-              <span className="text-xs font-mono text-theme-fore-subtle block">Technologies Used</span>
+              <span className="text-xs font-mono text-theme-fore-subtle block">Teknologi yang Digunakan</span>
               <div className="flex flex-wrap gap-1.5">
                 {project.technologies.map((tech) => (
                   <span
@@ -159,7 +162,7 @@ export default async function ProjectDetailPage({
             {/* External Links */}
             {project.links && project.links.length > 0 && (
               <div className="space-y-3 pt-2">
-                <span className="text-xs font-mono text-theme-fore-subtle block">Project Links</span>
+                <span className="text-xs font-mono text-theme-fore-subtle block">Tautan Proyek</span>
                 <div className="space-y-2">
                   {project.links.map((link) => (
                     <a
@@ -188,14 +191,14 @@ export default async function ProjectDetailPage({
         <div className="space-y-6 pt-10 border-t border-theme-border/40">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div className="space-y-1 text-left">
-              <h3 className="text-xl font-sans font-bold text-theme-fore">Related Showcase</h3>
-              <p className="text-xs text-theme-fore-muted">Explore other premium software craftsmanship projects.</p>
+              <h3 className="text-xl font-sans font-bold text-theme-fore">Proyek Lainnya</h3>
+              <p className="text-xs text-theme-fore-muted">Jelajahi karya rekayasa perangkat lunak lainnya.</p>
             </div>
             <Link
               href="/projects"
               className="group inline-flex items-center gap-1.5 text-xs font-sans font-bold text-theme-accent hover:text-theme-accent-bright transition-colors"
             >
-              <span>View All Projects</span>
+              <span>Lihat Semua Proyek</span>
               <ArrowLeft className="w-3.5 h-3.5 rotate-180 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
@@ -243,7 +246,7 @@ export default async function ProjectDetailPage({
                       href={`/projects/${relProject.slug}`}
                       className="group inline-flex items-center gap-1 text-[11px] font-sans font-bold text-theme-fore hover:text-theme-accent transition-colors"
                     >
-                      <span>Details</span>
+                      <span>Detail</span>
                       <ArrowLeft className="w-3.5 h-3.5 rotate-180 group-hover:translate-x-0.5 transition-transform" />
                     </Link>
                   </div>

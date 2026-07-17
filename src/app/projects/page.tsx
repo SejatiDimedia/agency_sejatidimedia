@@ -17,18 +17,18 @@ export default async function ProjectsPage() {
           className="inline-flex items-center gap-1.5 text-xs font-mono text-theme-fore-muted hover:text-theme-accent transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Back to Home</span>
+          <span>Kembali ke Beranda</span>
         </Link>
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
             <span className="w-6 h-[1px] bg-theme-accent" />
-            <span>Showcase</span>
+            <span>Portofolio</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-sans font-black tracking-tight text-theme-fore">
-            Software Portfolio
+          <h1 className="text-4xl sm:text-5xl font-sans font-black tracking-tight text-theme-fore text-left">
+            Portofolio Perangkat Lunak
           </h1>
-          <p className="text-sm text-theme-fore-muted max-w-xl leading-relaxed">
-            Explore our curated catalog of production systems, SaaS applications, and mobile products engineered with precision.
+          <p className="text-sm text-theme-fore-muted max-w-xl leading-relaxed text-left">
+            Jelajahi katalog sistem produksi, aplikasi SaaS, dan produk mobile kustom yang dibangun dengan presisi.
           </p>
         </div>
       </div>
@@ -62,6 +62,9 @@ export default async function ProjectsPage() {
 
                 {/* Title & Desc */}
                 <div className="space-y-2 text-left">
+                  <span className="inline-block text-[8px] font-mono uppercase tracking-widest font-bold text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
+                    Proyek Independen
+                  </span>
                   <h3 className="text-base font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors">
                     {project.name}
                   </h3>
@@ -87,7 +90,7 @@ export default async function ProjectsPage() {
                   href={`/projects/${project.slug}`}
                   className="flex items-center justify-center gap-1.5 w-full py-2 rounded-xl bg-theme-surface hover:bg-theme-accent hover:text-white text-xs font-sans font-bold text-theme-fore transition-all duration-300 border border-theme-border/80 hover:border-theme-accent"
                 >
-                  <span>Explore Details</span>
+                  <span>Lihat Detail</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -96,7 +99,7 @@ export default async function ProjectsPage() {
           })
         ) : (
           <div className="col-span-1 md:col-span-3 p-12 text-center rounded-2xl bg-theme-elevated border border-theme-border">
-            <span className="text-xs font-mono text-theme-fore-muted">No projects found in showcase.</span>
+            <span className="text-xs font-mono text-theme-fore-muted">Tidak ada proyek ditemukan dalam portofolio.</span>
           </div>
         )}
       </div>

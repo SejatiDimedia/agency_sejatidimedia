@@ -18,10 +18,10 @@ export const sanityClient = isSanityConfigured
 
 // Default high-fidelity Indonesian/English copywriting from current static landing page
 export const DEFAULT_COPYWRITING = {
-  heroTitle: "Embrace the future of digital engineering with our high-fidelity product software craftsmanship.",
-  heroSubtitle: "Providing Comprehensive Solutions Tailored to Your Needs.",
-  contactTagline: "Your technical parameters were integrated directly into the SejatiDImedia rendering queue.",
-  processesTitle: "Providing Comprehensive Solutions Tailored to Your Needs.",
+  heroTitle: "Software Developer Independen — Membangun Website, Aplikasi, dan Sistem Backend yang Siap Diandalkan.",
+  heroSubtitle: "Berbekal pengalaman sebagai Software Developer di industri manufaktur, saya membangun produk digital dengan kode custom, arsitektur yang rapi, dan komunikasi langsung — tanpa perantara.",
+  contactTagline: "Parameter proyek Anda telah diterima secara langsung. Saya akan mempelajari kebutuhan Anda dan menghubungi Anda dalam waktu 12 jam.",
+  processesTitle: "Proses Kerja Terstruktur untuk Hasil Terbaik",
 };
 
 export async function getHomePageCopy() {
