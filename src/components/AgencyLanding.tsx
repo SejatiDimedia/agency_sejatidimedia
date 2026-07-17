@@ -811,7 +811,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 Cocok untuk validasi ide atau produk tahap awal sebelum meluncurkannya ke pasar secara luas.
               </p>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-2xl sm:text-3xl font-sans font-black text-theme-fore tracking-tight">Rp 15 Jt+</span>
+                <span className="text-2xl sm:text-3xl font-sans font-black text-theme-fore tracking-tight">Rp 3 - 7 Jt+</span>
                 <span className="text-[10px] font-mono text-theme-fore-muted uppercase">/ proyek</span>
               </div>
               <button
@@ -865,7 +865,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 Cocok untuk bisnis yang siap merilis produk secara resmi ke pengguna umum dengan fitur lengkap dan integrasi backend.
               </p>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-2xl sm:text-3xl font-sans font-black text-white tracking-tight">Rp 35 Jt+</span>
+                <span className="text-2xl sm:text-3xl font-sans font-black text-white tracking-tight">Rp 10 Jt+</span>
                 <span className="text-[10px] font-mono text-zinc-400 uppercase">/ proyek</span>
               </div>
               <button
