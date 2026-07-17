@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-theme-deep: var(--background-deep);
+  --color-theme-base: var(--background-base);
+  --color-theme-elevated: var(--background-elevated);
+  --color-theme-surface: var(--surface);
+  --color-theme-surface-hover: var(--surface-hover);
+  --color-theme-fore: var(--foreground);
+  --color-theme-fore-muted: var(--foreground-muted);
+  --color-theme-fore-subtle: var(--foreground-subtle);
+  --color-theme-accent: var(--accent);
+  --color-theme-accent-bright: var(--accent-bright);
+  --color-theme-accent-glow: var(--accent-glow);
+  --color-theme-border: var(--border-default);
+  --color-theme-border-hover: var(--border-hover);
+  --color-theme-border-accent: var(--border-accent);
+}
+
+:root {
+  --background-deep: #F4F4F6;
+  --background-base: #FFFFFF;
+  --background-elevated: #FFFFFF;
+  --surface: rgba(0, 0, 0, 0.02);
+  --surface-hover: rgba(0, 0, 0, 0.04);
+  --foreground: #0F1115;
+  --foreground-muted: #626771;
+  --foreground-subtle: #9499A6;
+  --accent: #2B5495;
+  --accent-bright: #1E315B;
+  --accent-glow: rgba(43, 84, 149, 0.1);
+  --border-default: rgba(0, 0, 0, 0.07);
+  --border-hover: rgba(0, 0, 0, 0.12);
+  --border-accent: rgba(43, 84, 149, 0.40);
+}
+
+.dark {
+  --background-deep: #020203;
+  --background-base: #050506;
+  --background-elevated: #0A0A0C;
+  --surface: rgba(255, 255, 255, 0.05);
+  --surface-hover: rgba(255, 255, 255, 0.08);
+  --foreground: #EDEDEF;
+  --foreground-muted: #8A8F98;
+  --foreground-subtle: rgba(255, 255, 255, 0.60);
+  --accent: #4A85D9;
+  --accent-bright: #6AA0F2;
+  --accent-glow: rgba(74, 133, 217, 0.3);
+  --border-default: rgba(255, 255, 255, 0.06);
+  --border-hover: rgba(255, 255, 255, 0.10);
+  --border-accent: rgba(74, 133, 217, 0.30);
+}
+
+/* Base resets & scrollbar enhancements */
+* {
+  transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1), 
+              color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Custom linear gradient animations for the ambient backgrounds */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(40px, -30px) scale(1.1);
+  }
+  66% {
+    transform: translate(-30px, 20px) scale(0.9);
+  }
+}
+
+@keyframes float-slower {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  50% {
+    transform: translate(-40px, 40px) scale(1.15);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 12s ease-in-out infinite;
+}
+
+.animate-float-slower {
+  animation: float-slower 16s ease-in-out infinite;
+}
+
+/* Smooth custom scrollbars matching theme */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-hover);
+}
+
+/* Helper class to hide scrollbars */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

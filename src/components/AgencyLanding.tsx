@@ -1,9 +1,14 @@
+"use client";
+
 /**
  * @license
  * SPDX-License-Identifier: Apache-2.0
  */
 
 import React, { useState, useRef } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Project } from '../lib/api/glio-projects';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
   Laptop, 
@@ -101,7 +106,7 @@ const FEATURE_ITEMS = [
   }
 ];
 
-export default function AgencyLanding() {
+export default function AgencyLanding({ copy, projects }: { copy?: any; projects?: Project[] }) {
   const scrollToId = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -249,9 +254,15 @@ export default function AgencyLanding() {
               className="space-y-4"
             >
               <h1 className="text-[44px] sm:text-6xl md:text-7xl lg:text-6xl xl:text-7xl font-sans font-extrabold tracking-tight leading-[1.08] text-theme-fore">
-                Transforming Ideas<br />
-                into <span className="font-serif italic font-normal text-theme-accent relative inline-block">Exceptional</span> Digital<br />
-                Experience
+                {copy?.heroTitle ? (
+                  copy.heroTitle
+                ) : (
+                  <>
+                    Transforming Ideas<br />
+                    into <span className="font-serif italic font-normal text-theme-accent relative inline-block">Exceptional</span> Digital<br />
+                    Experience
+                  </>
+                )}
               </h1>
             </motion.div>
 
@@ -291,7 +302,7 @@ export default function AgencyLanding() {
               className="lg:text-right"
             >
               <p className="text-sm text-theme-fore-muted font-medium leading-relaxed max-w-sm lg:ml-auto">
-                We design intuitive and visually engaging digital experiences that connect brands with their users.
+                {copy?.heroSubtitle || "We design intuitive and visually engaging digital experiences that connect brands with their users."}
               </p>
             </motion.div>
 
@@ -999,11 +1010,17 @@ export default function AgencyLanding() {
             <span>Processes</span>
           </div>
           <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-2xl">
-            Providing{' '}
-            <span className="bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent font-black">
-              Comprehensive Solutions
-            </span>{' '}
-            Tailored to Your Needs.
+            {copy?.processesTitle ? (
+              copy.processesTitle
+            ) : (
+              <>
+                Providing{' '}
+                <span className="bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent font-black">
+                  Comprehensive Solutions
+                </span>{' '}
+                Tailored to Your Needs.
+              </>
+            )}
           </h2>
         </div>
 
@@ -1084,6 +1101,103 @@ export default function AgencyLanding() {
             </AnimatePresence>
           </div>
 
+        </div>
+      </section>
+
+      {/* SECTION 4.25: FEATURED PROJECTS SHOWCASE */}
+      <section id="projects-section" className="space-y-12 pt-12">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
+              <span className="w-6 h-[1px] bg-theme-accent" />
+              <span>Showcase</span>
+            </div>
+            <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-2xl">
+              Our Latest{" "}
+              <span className="bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent font-black">
+                Software Craftsmanship
+              </span>{" "}
+              Releases.
+            </h2>
+          </div>
+
+          <Link
+            href="/projects"
+            className="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-theme-surface border border-theme-border/80 hover:border-theme-accent text-xs font-sans font-bold text-theme-fore cursor-pointer transition-all duration-300"
+          >
+            <span>View All Projects</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+
+        {/* Projects Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {projects && projects.length > 0 ? (
+            projects.slice(0, 3).map((project) => {
+            const isDummy = !project.thumbnail || 
+              project.thumbnail.trim() === "" || 
+              project.thumbnail === "/thumbnail.png" || 
+              project.thumbnail === "/placeholder.png";
+            const displayThumbnail = (isDummy ? "/logo.svg" : project.thumbnail) as string;
+
+              return (
+                <div
+                  key={project.slug}
+                  className="group flex flex-col justify-between p-5 rounded-2xl bg-theme-elevated border border-theme-border hover:border-theme-border-accent hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+                >
+                <div className="space-y-4">
+                  {/* Thumbnail Container */}
+                  <div className="relative w-full h-48 rounded-xl overflow-hidden bg-theme-surface border border-theme-border/40">
+                    <Image
+                      src={displayThumbnail}
+                      alt={project.name}
+                      fill
+                      className={isDummy ? "object-contain p-8 bg-theme-surface/40" : "object-cover group-hover:scale-[1.03] transition-transform duration-500"}
+                      sizes="(max-w-768px) 100vw, 33vw"
+                    />
+                  </div>
+
+                  {/* Info Block */}
+                  <div className="space-y-2 text-left">
+                    <h3 className="text-sm sm:text-base font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors">
+                      {project.name}
+                    </h3>
+                    <p className="text-xs text-theme-fore-muted leading-relaxed line-clamp-3">
+                      {project.summary || project.description}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-4 pt-4 border-t border-theme-border/30 mt-4">
+                  {/* Tech stack tags */}
+                  <div className="flex flex-wrap gap-1">
+                    {project.technologies.slice(0, 4).map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-1.5 py-0.5 rounded-md text-[9px] font-mono bg-theme-surface text-theme-fore-muted border border-theme-border/40"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Explore button */}
+                  <Link
+                    href={`/projects/${project.slug}`}
+                    className="flex items-center justify-center gap-1.5 w-full py-2 rounded-xl bg-theme-surface hover:bg-theme-accent hover:text-white text-xs font-sans font-bold text-theme-fore transition-all duration-300 border border-theme-border/80 hover:border-theme-accent"
+                  >
+                    <span>Explore Project</span>
+                    <ChevronRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+              );
+            })
+          ) : (
+            <div className="col-span-1 md:col-span-3 p-12 text-center rounded-2xl bg-theme-elevated border border-theme-border">
+              <span className="text-xs font-mono text-theme-fore-muted">No projects found.</span>
+            </div>
+          )}
         </div>
       </section>
 
