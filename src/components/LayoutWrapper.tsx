@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import ThemeToggle from "./ThemeToggle";
 import { ThemeMode } from "../types";
+import { useLanguage, Language } from "@/lib/i18n/LanguageContext";
 
 export default function LayoutWrapper({
   children,
@@ -26,6 +27,7 @@ export default function LayoutWrapper({
 
   const pathname = usePathname();
   const router = useRouter();
+  const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -208,11 +210,10 @@ export default function LayoutWrapper({
 
         {/* 2. Main Portal Application Header */}
         <header
-          className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-[0.16,1,0.3,1] ${
-            scrolled
-              ? "bg-theme-base/80 backdrop-blur-xl border-b border-theme-border/80 shadow-lg shadow-black/5 py-3"
-              : "bg-transparent border-b border-transparent py-5"
-          }`}
+          className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-[0.16,1,0.3,1] ${scrolled
+            ? "bg-theme-base/80 backdrop-blur-xl border-b border-theme-border/80 shadow-lg shadow-black/5 py-3"
+            : "bg-transparent border-b border-transparent py-5"
+            }`}
         >
           <div className="max-w-7xl mx-auto px-6 flex items-center justify-between gap-4 transition-all duration-300">
             {/* Logo / Brand Name */}
@@ -231,7 +232,7 @@ export default function LayoutWrapper({
                 />
               </div>
               <span className="font-display font-bold text-base tracking-wider text-theme-accent">
-                SEJATIDI<span className="text-theme-accent/80 font-normal">MEDIA</span>
+                SEJATI<span className="text-theme-accent/70 font-normal">DIMEDIA</span>
               </span>
             </div>
 
@@ -239,52 +240,64 @@ export default function LayoutWrapper({
             <nav className="hidden md:flex items-center gap-1 p-1 rounded-full bg-theme-surface/80 border border-theme-border/60">
               <button
                 onClick={() => handleNavClick("home")}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors ${
-                  pathname === "/"
-                    ? "text-theme-fore bg-theme-surface"
-                    : "text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface"
-                }`}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors ${pathname === "/"
+                  ? "text-theme-fore bg-theme-surface"
+                  : "text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface"
+                  }`}
               >
-                Beranda
+                {t.nav.home}
               </button>
               <button
                 onClick={() => handleNavClick("capabilities-section")}
                 className="px-4 py-1.5 rounded-full text-xs font-semibold text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface cursor-pointer transition-colors"
               >
-                Layanan
+                {t.nav.services}
               </button>
               <button
                 onClick={() => handleNavClick("methodology-section")}
                 className="px-4 py-1.5 rounded-full text-xs font-semibold text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface cursor-pointer transition-colors"
               >
-                Proses Kerja
+                {t.nav.workflow}
               </button>
               <button
                 onClick={() => router.push("/projects")}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors ${
-                  pathname.startsWith("/projects")
-                    ? "text-theme-fore bg-theme-surface"
-                    : "text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface"
-                }`}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors ${pathname.startsWith("/projects")
+                  ? "text-theme-fore bg-theme-surface"
+                  : "text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface"
+                  }`}
               >
-                Portofolio
+                {t.nav.portfolio}
               </button>
               <button
                 onClick={() => handleNavClick("contact-section")}
                 className="px-4 py-1.5 rounded-full text-xs font-semibold text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface cursor-pointer transition-colors"
               >
-                Kontak
+                {t.nav.contact}
               </button>
             </nav>
 
-            {/* Right Action: Theme Toggle & CTA */}
+            {/* Right Action: Theme Toggle, Lang Toggle & CTA */}
             <div className="flex items-center gap-3">
+              <div className="hidden sm:flex items-center bg-theme-surface/50 border border-theme-border/60 rounded-full p-0.5">
+                <button
+                  onClick={() => setLanguage('id')}
+                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold transition-colors ${language === 'id' ? 'bg-theme-accent text-white' : 'text-theme-fore-muted hover:text-theme-fore'}`}
+                >
+                  ID
+                </button>
+                <button
+                  onClick={() => setLanguage('en')}
+                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold transition-colors ${language === 'en' ? 'bg-theme-accent text-white' : 'text-theme-fore-muted hover:text-theme-fore'}`}
+                >
+                  EN
+                </button>
+              </div>
               <ThemeToggle theme={theme} onToggle={setTheme} />
               <button
                 onClick={() => handleNavClick("contact-section")}
                 className="hidden sm:inline-flex px-4 py-2 rounded-full text-xs font-bold bg-theme-accent hover:bg-theme-accent-bright text-white transition-all duration-200 cursor-pointer shadow-md shadow-theme-accent/10 hover:scale-[1.02]"
               >
-                Mulai Proyek
+                {t.nav.contact}
               </button>
             </div>
           </div>
@@ -311,7 +324,7 @@ export default function LayoutWrapper({
                   />
                 </div>
                 <h3 className="text-xl sm:text-2xl font-sans font-extrabold tracking-tight text-theme-fore max-w-lg leading-snug">
-                  Partner teknis untuk bisnis yang ingin sistem digitalnya dibangun dengan benar — sejak awal.
+                  {t.footer.tagline}
                 </h3>
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono text-theme-fore-muted">
                   <a
@@ -329,7 +342,7 @@ export default function LayoutWrapper({
               <div className="md:col-span-5 grid grid-cols-2 gap-4">
                 <div className="space-y-3.5 text-left">
                   <span className="text-[10px] font-mono text-theme-fore-subtle uppercase tracking-wider block font-bold">
-                    Navigasi
+                    {t.footer.contact}
                   </span>
                   <ul className="space-y-2.5 text-xs font-sans font-semibold text-theme-fore-muted">
                     <li>
@@ -337,7 +350,7 @@ export default function LayoutWrapper({
                         onClick={() => handleNavClick("capabilities-section")}
                         className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left"
                       >
-                        Layanan
+                        {t.nav.services}
                       </button>
                     </li>
                     <li>
@@ -345,7 +358,7 @@ export default function LayoutWrapper({
                         onClick={() => handleNavClick("technology-section")}
                         className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left"
                       >
-                        Teknologi
+                        {t.nav.tech}
                       </button>
                     </li>
                     <li>
@@ -353,7 +366,7 @@ export default function LayoutWrapper({
                         onClick={() => handleNavClick("projects-section")}
                         className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left"
                       >
-                        Portofolio
+                        {t.nav.portfolio}
                       </button>
                     </li>
                   </ul>
@@ -361,7 +374,7 @@ export default function LayoutWrapper({
 
                 <div className="space-y-3.5 text-left">
                   <span className="text-[10px] font-mono text-theme-fore-subtle uppercase tracking-wider block font-bold">
-                    Proses & Kontak
+                    {t.footer.connect}
                   </span>
                   <ul className="space-y-2.5 text-xs font-sans font-semibold text-theme-fore-muted">
                     <li>
@@ -369,7 +382,7 @@ export default function LayoutWrapper({
                         onClick={() => handleNavClick("methodology-section")}
                         className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left"
                       >
-                        Proses Kerja
+                        {t.nav.workflow}
                       </button>
                     </li>
                     <li>
@@ -377,7 +390,7 @@ export default function LayoutWrapper({
                         onClick={() => handleNavClick("features-section")}
                         className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left"
                       >
-                        Keunggulan
+                        {t.nav.advantages}
                       </button>
                     </li>
                     <li>
@@ -385,7 +398,7 @@ export default function LayoutWrapper({
                         onClick={() => handleNavClick("contact-section")}
                         className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left font-bold text-theme-fore"
                       >
-                        Mulai Konsultasi
+                        {t.nav.contact}
                       </button>
                     </li>
                   </ul>
@@ -403,14 +416,14 @@ export default function LayoutWrapper({
             {/* Bottom Row: Legal/Trademarks */}
             <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 text-[10px] font-mono tracking-wider text-theme-fore-subtle uppercase">
               <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1.5">
-                <span>© {new Date().getFullYear()} SEJATIDIMEDIA.</span>
+                <span>© {new Date().getFullYear()} SEJATIDIMEDIA. {t.footer.rights}</span>
                 <span className="text-theme-border/60">•</span>
                 <button className="hover:text-theme-fore transition-colors cursor-pointer">
-                  KEBIJAKAN PRIVASI
+                  {t.legal.privacy}
                 </button>
                 <span className="text-theme-border/60">•</span>
                 <button className="hover:text-theme-fore transition-colors cursor-pointer">
-                  SYARAT & KETENTUAN
+                  {t.legal.terms}
                 </button>
               </div>
 

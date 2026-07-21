@@ -16,6 +16,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+import { LanguageProvider } from "@/lib/i18n/LanguageContext";
+
 export default function RootLayout({
   children,
 }: {
@@ -35,7 +37,9 @@ export default function RootLayout({
           speed={200}
           shadow="0 0 10px #4A85D9,0 0 5px #4A85D9"
         />
-        <LayoutWrapper>{children}</LayoutWrapper>
+        <LanguageProvider>
+          <LayoutWrapper>{children}</LayoutWrapper>
+        </LanguageProvider>
       </body>
     </html>
   );

@@ -9,6 +9,7 @@ import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Project } from '../lib/api/glio-projects';
+import { useLanguage } from '../lib/i18n/LanguageContext';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Laptop,
@@ -86,33 +87,7 @@ const TECH_ITEMS = [
   { name: 'Stripe API', icon: CreditCard, color: 'text-[#635BFF] bg-[#635BFF]/5 border-[#635BFF]/20' },
 ];
 
-const FEATURE_ITEMS = [
-  {
-    num: '01',
-    title: 'Kode 100% Milik Anda',
-    description: 'Setelah proyek selesai dan lunas, seluruh source code, hak cipta, dan aset digital diserahkan sepenuhnya kepada Anda — tanpa lisensi berulang, tanpa vendor lock-in.'
-  },
-  {
-    num: '02',
-    title: 'Komunikasi Langsung Tanpa Perantara',
-    description: 'Anda berkomunikasi langsung dengan developer yang menulis kode, bukan dengan manajer proyek atau tim sales. Setiap keputusan teknis dibahas transparan dan cepat.'
-  },
-  {
-    num: '03',
-    title: 'Kode Bersih & Terstruktur',
-    description: 'Setiap baris kode ditulis manual dengan konvensi industri — mudah dibaca, mudah di-debug, dan siap dikembangkan oleh tim Anda di masa depan.'
-  },
-  {
-    num: '04',
-    title: 'Harga Transparan, Tanpa Biaya Tersembunyi',
-    description: 'Estimasi biaya diberikan di awal berdasarkan scope yang disepakati. Tidak ada invoice dadakan atau biaya tambahan yang muncul tiba-tiba di tengah pengerjaan.'
-  },
-  {
-    num: '05',
-    title: 'Pendampingan Pasca-Launch',
-    description: 'Proyek tidak berhenti di deployment. Saya menyediakan masa maintenance dan perbaikan bug setelah peluncuran, memastikan sistem Anda berjalan stabil di dunia nyata.'
-  }
-];
+
 
 const sectionFadeIn = {
   hidden: { opacity: 0, y: 30 },
@@ -150,6 +125,36 @@ const cardSlideUp = {
 };
 
 export default function AgencyLanding({ copy, projects }: { copy?: any; projects?: Project[] }) {
+  const { t, language } = useLanguage();
+
+  const FEATURE_ITEMS = [
+    {
+      num: '01',
+      title: t.guarantee.item2Title,
+      description: t.guarantee.item2Desc
+    },
+    {
+      num: '02',
+      title: t.contact.perk2Title + ' ' + t.features.f1,
+      description: t.differences.items[0].desc
+    },
+    {
+      num: '03',
+      title: t.features.f2,
+      description: t.differences.items[2].desc
+    },
+    {
+      num: '04',
+      title: t.features.f3,
+      description: t.pricing.desc
+    },
+    {
+      num: '05',
+      title: t.features.f4,
+      description: t.pricing.includeItems[4]
+    }
+  ];
+
   const scrollToId = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
@@ -297,13 +302,9 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               className="space-y-4"
             >
               <h1 className="text-[40px] sm:text-5xl md:text-6xl lg:text-5xl xl:text-6.5xl font-sans font-extrabold tracking-tight leading-[1.08] text-theme-fore">
-                {copy?.heroTitle && copy.heroTitle !== "Embrace the future of digital engineering with our high-fidelity product software craftsmanship." ? (
-                  copy.heroTitle
-                ) : (
-                  <>
-                    Software Developer Independen untuk Bisnis yang Butuh Sistem, Bukan Sekadar <span className="font-serif italic font-normal text-theme-accent relative inline-block">Website</span>.
-                  </>
-                )}
+                <>
+                  {t.hero.title} <span className="font-serif italic font-normal text-theme-accent relative inline-block">{t.hero.titleHighlight}</span>.
+                </>
               </h1>
             </motion.div>
 
@@ -322,10 +323,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   Pengalaman Industri
                 </div>
                 <div className="text-xs font-bold text-theme-fore">
-                  Sistem Manufaktur Nyata
+                  {t.hero.card1Title}
                 </div>
                 <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  Terbiasa membangun sistem yang menangani transaksi, inventori, dan proses kerja harian — bukan sekadar landing page.
+                  {t.hero.card1Desc}
                 </p>
               </div>
             </motion.div>
@@ -343,11 +344,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               className="lg:text-right"
             >
               <p className="text-sm text-theme-fore-muted font-medium leading-relaxed max-w-sm lg:ml-auto">
-                {copy?.heroSubtitle && copy.heroSubtitle !== "Providing Comprehensive Solutions Tailored to Your Needs." ? (
-                  copy.heroSubtitle
-                ) : (
-                  "Dari latar belakang industri manufaktur ke proyek independen — saya membangun aplikasi web, mobile, dan backend dengan standar yang sama seperti sistem yang menangani operasional bisnis nyata setiap hari."
-                )}
+                {t.hero.subtitle}
               </p>
             </motion.div>
 
@@ -366,10 +363,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   {projects?.length || 3} Proyek Independen
                 </div>
                 <div className="text-xs font-bold text-theme-fore">
-                  Bisa Diuji Langsung
+                  {t.hero.card2Title}
                 </div>
                 <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  Kode dapat diaudit di GitHub, aplikasi aktif dan bisa dicoba langsung — tidak hanya screenshot portofolio.
+                  {t.hero.card2Desc}
                 </p>
               </div>
             </motion.div>
@@ -382,7 +379,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               className="space-y-6 max-w-sm lg:ml-auto"
             >
               <p className="text-xs text-theme-fore-muted leading-relaxed">
-                Setiap baris kode dirancang untuk stabilitas, kecepatan, dan pertumbuhan bisnis Anda secara jangka panjang.
+                {t.hero.subtitle}
               </p>
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
@@ -390,7 +387,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   className="px-6 py-3.5 rounded-full text-xs font-bold bg-theme-accent hover:bg-theme-accent-bright text-white shadow-lg shadow-theme-accent/10 hover:shadow-theme-accent/20 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 flex-grow sm:flex-grow-0"
                   id="hero-btn-book-call"
                 >
-                  <span>Diskusikan Proyek Anda</span>
+                  <span>{t.hero.btnPrimary}</span>
                   <ArrowRight className="w-4 h-4" />
                 </button>
                 <button
@@ -398,7 +395,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   className="px-6 py-3.5 rounded-full text-xs font-bold border border-theme-border hover:border-theme-accent text-theme-fore hover:bg-theme-surface/50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 flex-grow sm:flex-grow-0"
                   id="hero-btn-view-projects"
                 >
-                  <span>Cek Portofolio & Live Demo</span>
+                  <span>{t.hero.btnSecondary}</span>
                 </button>
               </div>
             </motion.div>
@@ -420,20 +417,20 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
             <span className="w-6 h-[1px] bg-theme-accent" />
-            <span>Layanan</span>
+            <span>{t.nav.services}</span>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
             <div className="lg:col-span-7">
               <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore text-left">
-                Layanan{' '}
+                {t.nav.services}{' '}
                 <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright to-[#9BC2FA] bg-clip-text text-transparent font-black">
-                  Pengembangan Perangkat Lunak
+                  {t.services.mainHeadingHighlight}
                 </span>
               </h2>
             </div>
             <div className="lg:col-span-5">
               <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed text-left">
-                Setiap proyek dimulai dari kebutuhan bisnis Anda, bukan dari template siap pakai. Arsitektur, keamanan, dan performa dirancang agar sistem tetap relevan seiring bisnis Anda berkembang.
+                {t.services.desc}
               </p>
             </div>
           </div>
@@ -470,7 +467,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   Web Application Development
                 </h3>
                 <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  Website company profile, dashboard admin, hingga platform SaaS custom — dibangun dengan arsitektur yang scalable dan performa tinggi.
+                  {t.hero.titleHighlight} company profile, dashboard admin, hingga platform SaaS custom — dibangun dengan arsitektur yang scalable dan performa tinggi.
                 </p>
               </div>
             </div>
@@ -514,7 +511,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   Mobile App Development
                 </h3>
                 <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  Aplikasi iOS & Android, native maupun cross-platform, dengan pengalaman pengguna yang mulus dan performa setara aplikasi native.
+                  {t.services.items[1].desc}
                 </p>
               </div>
             </div>
@@ -536,7 +533,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             </div>
           </motion.div>
 
-          {/* Card 3: REST API & Cloud Integration */}
+          {/* Card 3: {t.services.items[2].title} */}
           <motion.div
             className="group relative p-8 rounded-3xl bg-theme-elevated/80 border border-theme-border/80 shadow-2xl hover:border-theme-border-accent/60 transition-all duration-300 flex flex-col justify-between overflow-hidden min-h-[380px]"
             variants={cardSlideUp}
@@ -555,10 +552,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               </div>
               <div className="space-y-3">
                 <h3 className="text-lg sm:text-xl font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors duration-300">
-                  REST API & Cloud Integration
+                  {t.services.items[2].title}
                 </h3>
                 <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  Backend API yang aman, terstruktur, dan siap menangani skala — lengkap dengan autentikasi, integrasi pembayaran, dan sistem real-time.
+                  {t.services.items[2].desc}
                 </p>
               </div>
             </div>
@@ -600,15 +597,15 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
             <div className="lg:col-span-7">
               <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore text-left">
-                Teknologi yang{' '}
+                {t.tech.mainHeading}{' '}
                 <span className="bg-gradient-to-r from-theme-accent to-theme-accent-bright bg-clip-text text-transparent font-black">
-                  Digunakan
+                  {t.tech.mainHeadingHighlight}
                 </span>
               </h2>
             </div>
             <div className="lg:col-span-5">
               <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed text-left">
-                Tools dipilih berdasarkan kebutuhan proyek, bukan sekadar tren — memastikan performa, keamanan, dan kemudahan maintenance jangka panjang.
+                {t.tech.desc}
               </p>
             </div>
           </div>
@@ -634,7 +631,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               </div>
               <div className="space-y-1.5">
                 <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">Frontend</h3>
-                <p className="text-xs text-theme-fore-muted max-w-sm leading-relaxed">Untuk antarmuka yang cepat, responsif, dan interaktif.</p>
+                <p className="text-xs text-theme-fore-muted max-w-sm leading-relaxed">{t.tech.frontendDesc}</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
@@ -657,8 +654,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 <Server className="w-5 h-5" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">Backend & API</h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">Logika bisnis & manajemen server.</p>
+                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">{t.tech.backend}</h3>
+                <p className="text-xs text-theme-fore-muted leading-relaxed">{t.tech.backendDesc}</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
@@ -681,8 +678,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 <Database className="w-5 h-5" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">Database</h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">Penyimpanan terstruktur & ORM.</p>
+                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">{t.tech.database}</h3>
+                <p className="text-xs text-theme-fore-muted leading-relaxed">{t.tech.databaseDesc}</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
@@ -705,8 +702,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 <Smartphone className="w-5 h-5" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">Mobile</h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">Aplikasi iOS & Android native/hybrid.</p>
+                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">{t.tech.mobile}</h3>
+                <p className="text-xs text-theme-fore-muted leading-relaxed">{t.tech.mobileDesc}</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
@@ -729,8 +726,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 <Cloud className="w-5 h-5" />
               </div>
               <div className="space-y-1.5">
-                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">Infrastructure</h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">Virtualisasi & integrasi cloud.</p>
+                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">{t.tech.infra}</h3>
+                <p className="text-xs text-theme-fore-muted leading-relaxed">{t.tech.infraDesc}</p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
@@ -754,8 +751,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   <Network className="w-5 h-5" />
                 </div>
                 <div className="space-y-1.5">
-                  <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">Integrasi Pihak Ketiga</h3>
-                  <p className="text-xs text-theme-fore-muted leading-relaxed">Penghubungan dengan layanan eksternal untuk modul pembayaran aman, autentikasi terpusat, dan layanan berbasis API lainnya.</p>
+                  <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">{t.tech.integrationTitle}</h3>
+                  <p className="text-xs text-theme-fore-muted leading-relaxed">{t.tech.integrationDesc}</p>
                 </div>
               </div>
               <div className="flex flex-wrap gap-2 justify-start md:justify-end flex-grow w-full md:max-w-md">
@@ -784,14 +781,14 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         <div className="text-center max-w-4xl mx-auto space-y-4">
           <div className="flex items-center justify-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
             <span className="w-6 h-[1px] bg-theme-accent" />
-            <span>Kredibilitas</span>
+            <span>{t.credibility.badge}</span>
             <span className="w-6 h-[1px] bg-theme-accent" />
           </div>
           <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore">
-            Latar Belakang & Kemampuan
+            {t.credibility.mainHeading}
           </h2>
           <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-3xl mx-auto">
-            Sebelum menekuni proyek independen, saya bekerja sebagai Software Developer di industri manufaktur — menangani sistem yang harus akurat dan diandalkan untuk proses operasional sehari-hari. Pengalaman itu saya bawa ke setiap proyek: kode yang bukan sekadar jalan, tapi juga stabil dan mudah dirawat jangka panjang.
+            {t.credibility.desc}
           </p>
         </div>
 
@@ -815,10 +812,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               </div>
               <div className="space-y-3">
                 <h3 className="text-xl font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors duration-300">
-                  Pengalaman Manufaktur
+                  {t.credibility.card1Title}
                 </h3>
                 <p className="text-sm text-theme-fore-muted leading-relaxed">
-                  Berpengalaman mengembangkan & memelihara sistem internal (seperti ERP, inventori, dan HCM) di perusahaan manufaktur nyata yang menuntut keandalan tinggi.
+                  {t.credibility.card1Desc}
                 </p>
               </div>
             </div>
@@ -826,7 +823,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               onClick={() => scrollToId('capabilities-section')}
               className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-theme-fore-muted group-hover:text-theme-accent transition-colors duration-300 relative z-10 w-fit"
             >
-              <span className="border-b border-transparent group-hover:border-theme-accent/30 pb-0.5 uppercase tracking-wide">Lihat Kompetensi</span>
+              <span className="border-b border-transparent group-hover:border-theme-accent/30 pb-0.5 uppercase tracking-wide">{t.credibility.card1Btn}</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </button>
           </motion.div>
@@ -843,10 +840,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               </div>
               <div className="space-y-3">
                 <h3 className="text-xl font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors duration-300 leading-tight">
-                  {projects?.length || 3} Proyek, Beragam Kompleksitas
+                  {projects?.length || 3} {t.credibility.card2Title}
                 </h3>
                 <p className="text-sm text-theme-fore-muted leading-relaxed">
-                  Mulai dari MVP validasi ide hingga sistem ERP multi-tenant untuk kebutuhan enterprise. Setiap proyek didokumentasikan dan dapat ditelusuri riwayat pengerjaannya.
+                  {t.credibility.card2Desc}
                 </p>
               </div>
             </div>
@@ -854,7 +851,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               onClick={() => scrollToId('projects-section')}
               className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-theme-fore-muted group-hover:text-theme-accent transition-colors duration-300 relative z-10 w-fit"
             >
-              <span className="border-b border-transparent group-hover:border-theme-accent/30 pb-0.5 uppercase tracking-wide">Lihat Portofolio</span>
+              <span className="border-b border-transparent group-hover:border-theme-accent/30 pb-0.5 uppercase tracking-wide">{t.credibility.card2Btn}</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </button>
           </motion.div>
@@ -871,10 +868,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               </div>
               <div className="space-y-3">
                 <h3 className="text-xl font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors duration-300">
-                  Verifikasi Terbuka
+                  {t.credibility.card3Title}
                 </h3>
                 <p className="text-sm text-theme-fore-muted leading-relaxed">
-                  Transparansi kode melalui GitHub dan riwayat profesional yang bisa diverifikasi secara terbuka di LinkedIn, memberikan rasa aman 100%.
+                  {t.credibility.card3Desc}
                 </p>
               </div>
             </div>
@@ -882,7 +879,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               onClick={() => scrollToId('contact-section')}
               className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-theme-fore-muted group-hover:text-theme-accent transition-colors duration-300 relative z-10 w-fit"
             >
-              <span className="border-b border-transparent group-hover:border-theme-accent/30 pb-0.5 uppercase tracking-wide">Hubungi Kontak</span>
+              <span className="border-b border-transparent group-hover:border-theme-accent/30 pb-0.5 uppercase tracking-wide">{t.nav.contactBadge}</span>
               <ExternalLink className="w-3.5 h-3.5" />
             </button>
           </motion.div>
@@ -901,14 +898,14 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="flex items-center justify-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
             <span className="w-6 h-[1px] bg-theme-accent" />
-            <span>Harga</span>
+            <span>{t.pricing.label}</span>
             <span className="w-6 h-[1px] bg-theme-accent" />
           </div>
           <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore text-center">
-            Paket Harga Proyek
+            {t.pricing.badge}
           </h2>
           <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-2xl mx-auto text-center">
-            Pilih paket sesuai skala proyek Anda. Butuh sistem custom di luar paket ini? Diskusikan langsung untuk penawaran khusus.
+            {t.pricing.desc}
           </p>
         </div>
 
@@ -929,15 +926,15 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold">Untuk Validasi Ide</span>
-                  <h3 className="text-lg font-sans font-extrabold text-theme-fore">Starter — MVP Prototype</h3>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold">{t.pricingCards.starterTag}</span>
+                  <h3 className="text-lg font-sans font-extrabold text-theme-fore">{t.pricingCards.starterTitle}</h3>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-theme-accent/5 border border-theme-border flex items-center justify-center text-theme-accent">
                   <Trophy className="w-4 h-4" />
                 </div>
               </div>
               <p className="text-[11px] text-theme-fore-muted leading-relaxed">
-                Cocok untuk validasi ide atau produk tahap awal sebelum meluncurkannya ke pasar secara luas.
+                {t.pricingCards.starterDesc}
               </p>
               <div className="flex items-baseline gap-1.5">
                 <span className="text-2xl sm:text-3xl font-sans font-black text-theme-fore tracking-tight">Rp 3 - 7 Jt+</span>
@@ -953,13 +950,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             <div className="space-y-3.5 pt-6 border-t border-theme-border/50">
               <span className="text-[9px] font-mono uppercase tracking-wider text-theme-fore-subtle block font-bold">Termasuk:</span>
               <ul className="space-y-2.5 text-xs">
-                {[
-                  '1 Platform (Web / Mobile)',
-                  'Fitur Inti & Core Logic',
-                  'Estimasi 2–4 Minggu Pengerjaan',
-                  '1x Revisi Besar',
-                  'Kode Bersih & Siap Skala'
-                ].map((item, idx) => (
+                {t.pricingCards.starterIncludes.map((item, idx) => (
                   <li key={idx} className="flex items-center gap-2.5 text-theme-fore-muted">
                     <Check className="w-3.5 h-3.5 text-theme-accent flex-shrink-0" />
                     <span className="text-[11px]">{item}</span>
@@ -983,15 +974,15 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             <div className="space-y-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-accent font-bold">Untuk Rilis ke Publik</span>
-                  <h3 className="text-lg font-sans font-extrabold text-white">Growth — Production Ready</h3>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-accent font-bold">{t.pricingCards.growthTag}</span>
+                  <h3 className="text-lg font-sans font-extrabold text-white">{t.pricingCards.growthTitle}</h3>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-theme-accent/20 border border-theme-accent/30 flex items-center justify-center text-theme-accent">
                   <Crown className="w-4 h-4" />
                 </div>
               </div>
               <p className="text-[11px] text-zinc-400 leading-relaxed">
-                Cocok untuk bisnis yang siap merilis produk secara resmi ke pengguna umum dengan fitur lengkap dan integrasi backend.
+                {t.pricingCards.growthDesc}
               </p>
               <div className="flex items-baseline gap-1.5">
                 <span className="text-2xl sm:text-3xl font-sans font-black text-white tracking-tight">Rp 10 Jt+</span>
@@ -1007,13 +998,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             <div className="space-y-3.5 pt-6 border-t border-zinc-800 relative z-10">
               <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-400 block font-bold">Termasuk:</span>
               <ul className="space-y-2.5 text-xs">
-                {[
-                  'Web Application + API Backend',
-                  'Integrasi Pembayaran & Autentikasi',
-                  'Dashboard Admin & Manajemen',
-                  'Pendampingan 30 Hari Pasca-Launch',
-                  '100% Hak Cipta & Source Code'
-                ].map((item, idx) => (
+                {t.pricingCards.growthIncludes.map((item, idx) => (
                   <li key={idx} className="flex items-center gap-2.5 text-zinc-300">
                     <Check className="w-3.5 h-3.5 text-theme-accent flex-shrink-0" />
                     <span className="text-[11px]">{item}</span>
@@ -1031,15 +1016,15 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold">Skala Enterprise</span>
-                  <h3 className="text-lg font-sans font-extrabold text-theme-fore">Custom — Sistem Kompleks</h3>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold">{t.pricingCards.customTag}</span>
+                  <h3 className="text-lg font-sans font-extrabold text-theme-fore">{t.pricingCards.customTitle}</h3>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-theme-accent/5 border border-theme-border flex items-center justify-center text-theme-accent">
                   <Sparkles className="w-4 h-4" />
                 </div>
               </div>
               <p className="text-[11px] text-theme-fore-muted leading-relaxed">
-                Cocok untuk kebutuhan sistem skala besar, arsitektur rumit, dan terintegrasi dengan banyak proses bisnis operasional.
+                {t.pricingCards.customDesc}
               </p>
               <div className="flex items-baseline gap-1.5">
                 <span className="text-2xl sm:text-3xl font-sans font-black text-theme-fore tracking-tight">Custom</span>
@@ -1055,13 +1040,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             <div className="space-y-3.5 pt-6 border-t border-theme-border/50">
               <span className="text-[9px] font-mono uppercase tracking-wider text-theme-fore-subtle block font-bold">Termasuk:</span>
               <ul className="space-y-2.5 text-xs">
-                {[
-                  'Arsitektur Multi-Platform',
-                  'Timeline & Scope Kustom',
-                  'Dukungan Lanjutan Sesuai Kesepakatan',
-                  'Dokumentasi API & Arsitektur Lengkap',
-                  'Pemeliharaan Server Berkala'
-                ].map((item, idx) => (
+                {t.pricingCards.customIncludes.map((item, idx) => (
                   <li key={idx} className="flex items-center gap-2.5 text-theme-fore-muted">
                     <Check className="w-3.5 h-3.5 text-theme-accent flex-shrink-0" />
                     <span className="text-[11px]">{item}</span>
@@ -1093,16 +1072,16 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 <span>FAQ</span>
               </div>
               <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore text-left">
-                Pertanyaan Umum
+                {t.faq.mainHeading}
               </h2>
             </div>
 
             {/* Any Question Form widget */}
             <div className="p-6 sm:p-7 rounded-3xl bg-theme-surface/75 backdrop-blur-md border border-theme-border space-y-5 shadow-xl relative overflow-hidden text-left">
               <div className="space-y-1">
-                <h4 className="text-sm font-sans font-bold text-theme-fore">Ada Pertanyaan?</h4>
+                <h4 className="text-sm font-sans font-bold text-theme-fore">{t.faq.askTitle}</h4>
                 <p className="text-[11px] text-theme-fore-muted leading-relaxed">
-                  Tanyakan apa saja terkait kebutuhan pengembangan software, revisi, atau penawaran khusus.
+                  {t.faq.askDesc}
                 </p>
               </div>
 
@@ -1121,7 +1100,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     className="space-y-3"
                   >
                     <label htmlFor="custom-q-input" className="text-[9px] font-mono uppercase tracking-wider text-theme-fore-subtle font-bold">
-                      Tulis pertanyaan Anda.
+                      {t.faq.askLabel}
                     </label>
                     <div className="relative flex items-center">
                       <input
@@ -1130,7 +1109,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                         required
                         value={customQuestion}
                         onChange={(e) => setCustomQuestion(e.target.value)}
-                        placeholder="Tulis di sini..."
+                        placeholder={t.faq.askPlaceholder}
                         className="w-full pr-12 pl-4 py-3 text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 shadow-sm"
                       />
                       <button
@@ -1177,32 +1156,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
           {/* Right Column: Custom Stateful Interactive Accordion */}
           <div className="lg:col-span-7 space-y-4">
-            {[
-              {
-                q: "Bagaimana sistem pembayarannya?",
-                a: "Pembayaran dilakukan bertahap sesuai milestone proyek (biasanya 3 tahap: DP, progress, pelunasan), via transfer bank atau metode lain sesuai kesepakatan."
-              },
-              {
-                q: "Apakah source code jadi milik saya sepenuhnya?",
-                a: "Ya. Setelah proyek selesai dan pembayaran lunas, seluruh source code dan hak cipta sepenuhnya diserahkan ke Anda."
-              },
-              {
-                q: "Berapa lama waktu pengerjaan?",
-                a: "Tergantung skala proyek — MVP sederhana bisa 2–4 minggu, sistem enterprise bisa 2–3 bulan. Timeline pasti diberikan setelah tahap Discovery."
-              },
-              {
-                q: "Apakah ada dukungan setelah peluncuran?",
-                a: "Ya, saya menyediakan masa maintenance pasca-launch, dan paket support lanjutan jika dibutuhkan."
-              },
-              {
-                q: "Apakah bisa request revisi di tengah pengerjaan?",
-                a: "Bisa. Setiap paket sudah termasuk jumlah revisi tertentu; revisi tambahan di luar itu akan diinformasikan estimasi biaya & waktunya terlebih dahulu."
-              },
-              {
-                q: "Industri apa saja yang pernah Anda tangani?",
-                a: "Sejauh ini saya sudah membangun beberapa proyek independen di berbagai domain — HR/HCM (ERP), rekrutmen (AI Resume Analyzer), hingga layanan reservasi (Antreey untuk barbershop & arena olahraga) — sekaligus punya pengalaman kerja langsung di industri manufaktur. Lihat detailnya di halaman Projects."
-              }
-            ].map((faq, idx) => {
+            {t.faq.items.map((faq, idx) => {
               const isExpanded = activeFaq === idx;
               return (
                 <div
@@ -1260,19 +1214,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
             <span className="w-6 h-[1px] bg-theme-accent" />
-            <span>Proses Kerja</span>
+            <span>{t.process.badge}</span>
           </div>
           <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-2xl">
-            {copy?.processesTitle && copy.processesTitle !== "Providing Comprehensive Solutions Tailored to Your Needs." ? (
-              copy.processesTitle
-            ) : (
-              <>
-                Proses Kerja Terstruktur{' '}
-                <span className="bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent font-black">
-                  untuk Hasil Terbaik
-                </span>
-              </>
-            )}
+            {t.process.mainHeading}
           </h2>
         </div>
 
@@ -1295,7 +1240,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     ? 'text-theme-accent translate-x-1.5'
                     : 'text-theme-fore/60 group-hover:text-theme-fore group-hover:translate-x-1'
                     }`}>
-                    {milestone.title}
+                    {t.milestones[idx].title}
                   </span>
                   <span className={`text-xs font-mono font-bold transition-colors ${isActive ? 'text-theme-accent' : 'text-theme-fore-subtle'
                     }`}>
@@ -1327,10 +1272,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
                   <div className="space-y-3">
                     <h3 className="text-2xl font-sans font-bold text-theme-fore">
-                      {MILESTONES[activeMilestone].title}
+                      {t.milestones[activeMilestone].title}
                     </h3>
                     <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-lg">
-                      {MILESTONES[activeMilestone].description}
+                      {t.milestones[activeMilestone].description}
                     </p>
                   </div>
                 </div>
@@ -1366,12 +1311,12 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           <div className="space-y-4">
             <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
               <span className="w-6 h-[1px] bg-theme-accent" />
-              <span>Portofolio</span>
+              <span>{t.nav.portfolio}</span>
             </div>
             <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-2xl text-left">
-              Karya Rekayasa{' '}
+              {t.portfolio.mainHeading}{' '}
               <span className="bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent font-black">
-                Perangkat Lunak
+                {t.portfolio.mainHeadingHighlight}
               </span>
             </h2>
           </div>
@@ -1380,7 +1325,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             href="/projects"
             className="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-theme-surface border border-theme-border/80 hover:border-theme-accent text-xs font-sans font-bold text-theme-fore cursor-pointer transition-all duration-300"
           >
-            <span>Lihat Semua Proyek</span>
+            <span>{t.portfolio.viewAll}</span>
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
@@ -1425,7 +1370,9 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                         {project.name}
                       </h3>
                       <p className="text-xs text-theme-fore-muted leading-relaxed line-clamp-3">
-                        {project.summary || project.description}
+                        {language === 'en' 
+                          ? (project.summaryEn || project.descriptionEn || project.summary || project.description)
+                          : (project.summaryId || project.descriptionId || project.summary || project.description)}
                       </p>
                     </div>
                   </div>
@@ -1448,7 +1395,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                       href={`/projects/${project.slug}`}
                       className="flex items-center justify-center gap-1.5 w-full py-2 rounded-xl bg-theme-surface hover:bg-theme-accent hover:text-white text-xs font-sans font-bold text-theme-fore transition-all duration-300 border border-theme-border/80 hover:border-theme-accent"
                     >
-                      <span>Lihat Proyek</span>
+                      <span>{t.portfolio.viewProject}</span>
                       <ChevronRight className="w-3.5 h-3.5" />
                     </Link>
                   </div>
@@ -1475,13 +1422,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         <div className="space-y-4">
           <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
             <span className="w-6 h-[1px] bg-theme-accent" />
-            <span>Keunggulan</span>
+            <span>{t.nav.advantages}</span>
           </div>
           <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-3xl text-left">
-            Yang Membedakan{' '}
-            <span className="bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent font-black">
-              Cara Saya Bekerja
-            </span>
+            {t.differences.mainHeading} <span className="bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent font-black">{t.differences.mainHeadingHighlight}</span>
           </h2>
         </div>
 
@@ -1534,18 +1478,18 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         <div className="relative p-8 md:p-12 rounded-3xl bg-theme-elevated/40 border border-theme-border/60 shadow-xl overflow-hidden max-w-5xl mx-auto">
           {/* Subtle glowing shield/secure background */}
           <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-theme-accent-glow/20 rounded-full blur-[100px] pointer-events-none" />
-          
+
           <div className="relative z-10 flex flex-col md:flex-row gap-10 md:gap-16 items-center md:items-start text-center md:text-left">
             <div className="md:w-1/3 space-y-6">
               <div className="flex items-center justify-center md:justify-start gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
                 <span className="w-6 h-[1px] bg-theme-accent" />
-                <span>Jaminan Klien</span>
+                <span>{t.guarantee.badge}</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-sans font-extrabold text-theme-fore leading-[1.2]">
-                Kenapa Aman Berinvestasi di Sini?
+                {t.guarantee.mainHeading}
               </h3>
               <p className="text-xs text-theme-fore-muted leading-relaxed">
-                Setiap kerja sama didasari oleh transparansi, profesionalisme, dan komitmen untuk meminimalkan risiko di pihak Anda.
+                {t.guarantee.desc}
               </p>
             </div>
 
@@ -1555,8 +1499,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   <RefreshCcw className="w-5 h-5" />
                 </div>
                 <div className="space-y-2">
-                  <h4 className="text-sm font-sans font-bold text-theme-fore">Revisi Terstruktur</h4>
-                  <p className="text-[11px] text-theme-fore-muted leading-relaxed">Setiap paket sudah mencakup alokasi revisi. Anda tidak akan terjebak dengan hasil akhir yang tidak sesuai ekspektasi.</p>
+                  <h4 className="text-sm font-sans font-bold text-theme-fore">{t.guarantee.item1Title}</h4>
+                  <p className="text-[11px] text-theme-fore-muted leading-relaxed">{t.guarantee.item1Desc}</p>
                 </div>
               </motion.div>
 
@@ -1565,8 +1509,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   <Copyright className="w-5 h-5" />
                 </div>
                 <div className="space-y-2">
-                  <h4 className="text-sm font-sans font-bold text-theme-fore">100% Hak Cipta Anda</h4>
-                  <p className="text-[11px] text-theme-fore-muted leading-relaxed">Source code, desain, dan seluruh aset digital sepenuhnya milik Anda setelah proyek lunas — tanpa lisensi berulang.</p>
+                  <h4 className="text-sm font-sans font-bold text-theme-fore">{t.guarantee.item2Title}</h4>
+                  <p className="text-[11px] text-theme-fore-muted leading-relaxed">{t.guarantee.item2Desc}</p>
                 </div>
               </motion.div>
 
@@ -1575,8 +1519,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   <Wallet className="w-5 h-5" />
                 </div>
                 <div className="space-y-2">
-                  <h4 className="text-sm font-sans font-bold text-theme-fore">Pembayaran Bertahap</h4>
-                  <p className="text-[11px] text-theme-fore-muted leading-relaxed">Pembayaran dilakukan per milestone, sehingga Anda bisa mengevaluasi progress sebelum melanjutkan ke tahap berikutnya secara aman.</p>
+                  <h4 className="text-sm font-sans font-bold text-theme-fore">{t.guarantee.item3Title}</h4>
+                  <p className="text-[11px] text-theme-fore-muted leading-relaxed">{t.guarantee.item3Desc}</p>
                 </div>
               </motion.div>
             </div>
@@ -1603,21 +1547,18 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           <div className="lg:col-span-5 space-y-8 flex flex-col justify-between text-left">
             <div className="space-y-6">
               <div className="flex flex-wrap items-center gap-2.5">
-                <span className="text-[9px] font-mono bg-theme-accent-glow text-theme-accent border border-theme-border-accent/40 px-3 py-1 rounded-full uppercase font-bold tracking-wider inline-flex items-center gap-1.5 shadow-sm">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                  <span>Kapasitas Terbatas Setiap Kuartal</span>
-                </span>
+                &nbsp;
               </div>
 
               <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore">
-                Mari Bangun Sistem yang{' '}
+                {t.contact.mainHeading}{' '}
                 <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright to-[#9BC2FA] bg-clip-text text-transparent font-black italic">
-                  Benar-Benar Anda Butuhkan
+                  {t.contact.mainHeadingHighlight}
                 </span>
               </h2>
 
               <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-md">
-                Saya membatasi jumlah proyek yang diterima setiap kuartal agar setiap klien mendapat perhatian penuh — bukan dikerjakan sambil lalu di antara proyek lain.
+                {t.contact.desc}
               </p>
 
               <div className="space-y-4 pt-6 border-t border-theme-border/50 max-w-sm">
@@ -1626,8 +1567,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     <Workflow className="w-4 h-4" />
                   </div>
                   <div className="space-y-0.5">
-                    <h4 className="text-xs sm:text-sm font-sans font-bold text-theme-fore">Preview Mingguan</h4>
-                    <p className="text-[11px] text-theme-fore-muted leading-relaxed">Update progress build langsung ke staging Anda setiap minggu.</p>
+                    <h4 className="text-xs sm:text-sm font-sans font-bold text-theme-fore">{t.contact.perk1Title}</h4>
+                    <p className="text-[11px] text-theme-fore-muted leading-relaxed">{t.contact.perk1Desc}</p>
                   </div>
                 </div>
 
@@ -1636,16 +1577,11 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     <Lock className="w-4 h-4" />
                   </div>
                   <div className="space-y-0.5">
-                    <h4 className="text-xs sm:text-sm font-sans font-bold text-theme-fore">Serah Terima Kode Penuh</h4>
-                    <p className="text-[11px] text-theme-fore-muted leading-relaxed">100% hak cipta, commit history bersih, dan panduan deployment lengkap.</p>
+                    <h4 className="text-xs sm:text-sm font-sans font-bold text-theme-fore">{t.contact.perk3Title}</h4>
+                    <p className="text-[11px] text-theme-fore-muted leading-relaxed">{t.contact.perk3Desc}</p>
                   </div>
                 </div>
               </div>
-            </div>
-
-            {/* Quick tech tagline metadata at bottom of left column */}
-            <div className="pt-6 border-t border-theme-border/30 hidden lg:block text-[10px] font-mono text-theme-fore-subtle flex items-center gap-1.5">
-              <span>RESPON &lt; 12 JAM • PIPELINE AMAN SHA-256</span>
             </div>
           </div>
 
@@ -1663,17 +1599,17 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   id="contact-form-element"
                 >
 
-                  {/* Name and Email Input Fields */}
+                  {/* Name and {t.contact.formEmail} Input Fields */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                     <div className="space-y-2">
                       <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider" htmlFor="form-name">
-                        Nama Anda
+                        {t.contact.formNameLabel}
                       </label>
                       <input
                         id="form-name"
                         type="text"
                         required
-                        placeholder="cth. Raden"
+                        placeholder={t.contact.formNamePlaceholder}
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         className="w-full px-4 py-3 text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 shadow-sm"
@@ -1682,13 +1618,13 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
                     <div className="space-y-2">
                       <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider" htmlFor="form-email">
-                        Alamat Email
+                        {t.contact.formEmailLabel}
                       </label>
                       <input
                         id="form-email"
                         type="email"
                         required
-                        placeholder="cth. kontak@domain.com"
+                        placeholder={t.contact.formEmailPlaceholder}
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         className="w-full px-4 py-3 text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 shadow-sm"
@@ -1699,14 +1635,14 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   {/* HIGH-FIDELITY: INTERACTIVE SERVICE SELECTOR CARDS */}
                   <div className="space-y-2.5">
                     <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider block">
-                      Layanan yang Dibutuhkan
+                      {t.contact.formServiceLabel}
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {[
-                        { id: 'Full-Stack Web App', label: 'Web Application', desc: 'Platform SaaS & Dashboard' },
-                        { id: 'Native iOS/Android App', label: 'Aplikasi Mobile', desc: 'SwiftUI, Kotlin, Flutter' },
-                        { id: 'API Gateway & Cloud Integration', label: 'Cloud API & Integrasi', desc: 'Express, Go, Database & OAuth' },
-                        { id: 'Comprehensive Hybrid Pipeline', label: 'Paket Enterprise Penuh', desc: 'Desain sistem end-to-end' }
+                        { id: 'Full-Stack Web App', label: t.contact.formService1Title, desc: t.contact.formService1Desc },
+                        { id: 'Native iOS/Android App', label: t.contact.formService2Title, desc: t.contact.formService2Desc },
+                        { id: 'API Gateway & Cloud Integration', label: t.contact.formService3Title, desc: t.contact.formService3Desc },
+                        { id: 'Comprehensive Hybrid Pipeline', label: t.contact.formService4Title, desc: t.contact.formService4Desc }
                       ].map((svc) => {
                         const isSelected = formData.service === svc.id;
                         return (
@@ -1740,13 +1676,13 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   {/* HIGH-FIDELITY: INTERACTIVE SCOPE SELECTOR TABS */}
                   <div className="space-y-2.5">
                     <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider block">
-                      Skala Proyek
+                      {t.contact.formScopeLabel}
                     </label>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                       {[
-                        { id: 'SaaS MVP (Fast Turnaround)', label: 'MVP Prototype', desc: 'Pengerjaan cepat' },
-                        { id: 'Medium Scale Production', label: 'Produksi Growth', desc: 'Aplikasi standar scalable' },
-                        { id: 'High-Scale Custom Architecture', label: 'Enterprise Elite', desc: 'Sistem skala besar kustom' }
+                        { id: 'SaaS MVP (Fast Turnaround)', label: t.contact.formScope1Title, desc: t.contact.formScope1Desc },
+                        { id: 'Medium Scale Production', label: t.contact.formScope2Title, desc: t.contact.formScope2Desc },
+                        { id: 'High-Scale Custom Architecture', label: t.contact.formScope3Title, desc: t.contact.formScope3Desc }
                       ].map((sc) => {
                         const isSelected = formData.scope === sc.id;
                         return (
@@ -1775,12 +1711,12 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   {/* Project Details */}
                   <div className="space-y-2">
                     <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider" htmlFor="form-details">
-                      Detail & Tujuan Proyek
+                      {t.contact.formDetailsLabel}
                     </label>
                     <textarea
                       id="form-details"
                       rows={3}
-                      placeholder="Jelaskan secara singkat fitur, batasan teknis, atau tujuan proyek Anda..."
+                      placeholder={t.contact.formDetailsPlaceholder}
                       value={formData.details}
                       onChange={(e) => setFormData({ ...formData, details: e.target.value })}
                       className="w-full px-4 py-3 text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 resize-none shadow-sm"
@@ -1794,7 +1730,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     id="btn-submit-contact"
                   >
                     <Send className="w-4 h-4 group-hover/submit:translate-x-1 group-hover/submit:-translate-y-0.5 transition-transform" />
-                    <span>Kirim Konsultasi Proyek</span>
+                    <span>{t.contact.formSubmit}</span>
                   </button>
 
                 </motion.form>
@@ -1810,9 +1746,9 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     <CheckCircle className="w-7 h-7" />
                   </div>
                   <div className="space-y-2">
-                    <h4 className="text-lg font-sans font-bold text-theme-fore">Konsultasi Berhasil Dikirim!</h4>
+                    <h4 className="text-lg font-sans font-bold text-theme-fore">{t.contact.formSubmitSuccess}</h4>
                     <p className="text-xs text-theme-fore-muted max-w-sm leading-relaxed mx-auto">
-                      Detail proyek Anda telah diterima. Saya akan mempelajari kebutuhan teknis Anda dan menghubungi dalam waktu 12 jam.
+                      {t.contact.formSubmitSuccessDesc}
                     </p>
                   </div>
                   <div className="text-[10px] font-mono text-theme-fore-subtle bg-theme-elevated/80 border border-theme-border px-3.5 py-2 rounded-lg">
