@@ -320,7 +320,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               <div className="absolute top-0 right-0 w-28 h-28 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
               <div className="space-y-2 relative z-10">
                 <div className="text-xl sm:text-2xl font-sans font-black tracking-tight text-theme-accent">
-                  Pengalaman Industri
+                  {language === 'en' ? 'Industry Experience' : 'Pengalaman Industri'}
                 </div>
                 <div className="text-xs font-bold text-theme-fore">
                   {t.hero.card1Title}
@@ -360,7 +360,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               <div className="absolute top-0 right-0 w-28 h-28 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
               <div className="space-y-2 relative z-10">
                 <div className="text-xl sm:text-2xl font-sans font-black tracking-tight text-theme-fore">
-                  {projects?.length || 3} Proyek Independen
+                  {projects?.length || 3} {language === 'en' ? 'Independent Projects' : 'Proyek Independen'}
                 </div>
                 <div className="text-xs font-bold text-theme-fore">
                   {t.hero.card2Title}
@@ -407,12 +407,12 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
       {/* SECTION 1.5: AVAILABLE ON FREELANCE PLATFORMS BANNER */}
       <motion.section
-        className="w-full max-w-4xl mx-auto pt-6 pb-20 px-6"
+        className="w-full max-w-4xl mx-auto pt-6 pb-10 sm:pb-20 px-4 sm:px-6"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
       >
-        <div className="relative group overflow-hidden rounded-3xl bg-theme-surface/30 backdrop-blur-xl border border-theme-border/50 shadow-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 hover:border-theme-border-accent/30 transition-all duration-500">
+        <div className="relative group overflow-hidden rounded-3xl bg-theme-surface/30 backdrop-blur-xl border border-theme-border/50 shadow-2xl p-5 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 hover:border-theme-border-accent/30 transition-all duration-500">
           {/* Subtle moving glow inside the banner */}
           <div className="absolute inset-0 bg-gradient-to-r from-theme-accent/5 via-transparent to-theme-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
           
@@ -425,13 +425,13 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             </h3>
           </div>
 
-          <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-4 z-10">
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 w-full sm:w-auto z-10">
             {/* Upwork */}
             <a
               href="https://www.upwork.com/freelancers/~017698b392e21b4b6c"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#14A800]/5 border border-[#14A800]/20 hover:bg-[#14A800]/15 hover:border-[#14A800]/40 transition-all duration-300 group/btn"
+              className="w-full sm:w-auto flex items-center justify-center gap-3 px-5 py-3 rounded-2xl bg-[#14A800]/5 border border-[#14A800]/20 hover:bg-[#14A800]/15 hover:border-[#14A800]/40 transition-all duration-300 group/btn"
             >
               <div className="w-8 h-8 rounded-full bg-[#14A800] flex items-center justify-center text-white font-black text-sm shadow-lg shadow-[#14A800]/30 group-hover/btn:scale-110 transition-transform duration-300">
                 U
@@ -444,7 +444,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               href="https://fastwork.id/en/user/timurradhadian?source=web_marketplace_profile-menu_profile"
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#1D4ED8]/5 border border-[#1D4ED8]/20 hover:bg-[#1D4ED8]/15 hover:border-[#1D4ED8]/40 transition-all duration-300 group/btn"
+              className="w-full sm:w-auto flex items-center justify-center gap-3 px-5 py-3 rounded-2xl bg-[#1D4ED8]/5 border border-[#1D4ED8]/20 hover:bg-[#1D4ED8]/15 hover:border-[#1D4ED8]/40 transition-all duration-300 group/btn"
             >
               <div className="w-8 h-8 rounded-full bg-[#1D4ED8] flex items-center justify-center text-white font-black text-sm shadow-lg shadow-[#1D4ED8]/30 group-hover/btn:scale-110 transition-transform duration-300">
                 F
@@ -1675,7 +1675,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           </div>
 
           {/* Right Block: High-Fidelity Interactive Form Widget */}
-          <div className="lg:col-span-7 p-6 sm:p-8 rounded-3xl bg-theme-surface/75 backdrop-blur-md border border-theme-border/80 shadow-2xl relative">
+          <div className="lg:col-span-7 p-4 sm:p-8 rounded-3xl bg-theme-surface/75 backdrop-blur-md border border-theme-border/80 shadow-2xl relative">
             <AnimatePresence mode="wait">
               {!formSubmitted ? (
                 <motion.form
