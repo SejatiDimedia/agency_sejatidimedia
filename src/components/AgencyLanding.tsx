@@ -1292,9 +1292,6 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
                     {/* Info Block */}
                     <div className="space-y-2 text-left">
-                      <span className="inline-block text-[8px] font-mono uppercase tracking-widest font-bold text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
-                        Proyek Independen
-                      </span>
                       <h3 className="text-sm sm:text-base font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors">
                         {project.name}
                       </h3>

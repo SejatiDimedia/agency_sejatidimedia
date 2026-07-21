@@ -69,9 +69,6 @@ export default async function ProjectDetailPage({
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
         <div className="absolute bottom-6 left-6 right-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 z-10">
           <div className="space-y-2">
-            <span className="inline-block text-[8px] font-mono uppercase tracking-widest font-bold text-emerald-400 bg-emerald-500/15 border border-emerald-500/25 px-2.5 py-0.5 rounded-full">
-              Proyek Independen
-            </span>
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-sans font-black tracking-tight text-white">
               {project.name}
             </h1>
@@ -94,9 +91,9 @@ export default async function ProjectDetailPage({
                   h2: ({ children }) => <h2 className="text-xl font-sans font-bold text-theme-fore mt-5 mb-2.5 border-b border-theme-border/20 pb-1.5">{children}</h2>,
                   h3: ({ children }) => <h3 className="text-lg font-sans font-bold text-theme-fore mt-4 mb-2">{children}</h3>,
                   p: ({ children }) => <p className="mb-4 text-theme-fore-muted leading-relaxed">{children}</p>,
-                  ul: ({ children }) => <ul className="list-disc list-inside mb-4 pl-4 space-y-1.5">{children}</ul>,
-                  ol: ({ children }) => <ol className="list-decimal list-inside mb-4 pl-4 space-y-1.5">{children}</ol>,
-                  li: ({ children }) => <li className="text-theme-fore-muted list-item">{children}</li>,
+                  ul: ({ children }) => <ul className="list-disc list-outside mb-6 ml-5 space-y-2">{children}</ul>,
+                  ol: ({ children }) => <ol className="list-decimal list-outside mb-6 ml-5 space-y-2">{children}</ol>,
+                  li: ({ children }) => <li className="text-theme-fore-muted marker:font-bold marker:text-theme-fore [&>p]:m-0">{children}</li>,
                   strong: ({ children }) => <strong className="font-bold text-theme-fore">{children}</strong>,
                   code: ({ children }) => <code className="px-1.5 py-0.5 rounded bg-theme-surface border border-theme-border font-mono text-xs text-theme-accent">{children}</code>,
                 }}

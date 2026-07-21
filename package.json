@@ -15,6 +15,7 @@
     "motion": "^12.23.24",
     "next": "^15.1.0",
     "next-sanity": "^9.8.31",
+    "nextjs-toploader": "^3.9.17",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-markdown": "^10.1.0"
