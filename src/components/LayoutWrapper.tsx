@@ -311,7 +311,7 @@ export default function LayoutWrapper({
                   />
                 </div>
                 <h3 className="text-xl sm:text-2xl font-sans font-extrabold tracking-tight text-theme-fore max-w-lg leading-snug">
-                  Membangun website, aplikasi, dan sistem backend yang andal dengan kode custom dan arsitektur rapi.
+                  Partner teknis untuk bisnis yang ingin sistem digitalnya dibangun dengan benar — sejak awal.
                 </h3>
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono text-theme-fore-muted">
                   <a

@@ -12,6 +12,14 @@ import { Project } from '../lib/api/glio-projects';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   Laptop,
+  RefreshCcw,
+  Copyright,
+  Wallet,
+  Factory,
+  ShieldCheck,
+  ExternalLink,
+  Layout,
+  Server,
   Smartphone,
   Cpu,
   ArrowRight,
@@ -293,7 +301,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   copy.heroTitle
                 ) : (
                   <>
-                    Software Developer Independen — Membangun Website, Aplikasi, dan Sistem Backend yang <span className="font-serif italic font-normal text-theme-accent relative inline-block">Siap Diandalkan</span>.
+                    Software Developer Independen untuk Bisnis yang Butuh Sistem, Bukan Sekadar <span className="font-serif italic font-normal text-theme-accent relative inline-block">Website</span>.
                   </>
                 )}
               </h1>
@@ -317,7 +325,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   Sistem Manufaktur Nyata
                 </div>
                 <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  Pernah bekerja sebagai Software Developer di perusahaan manufaktur, terbiasa dengan sistem yang menangani proses bisnis nyata.
+                  Terbiasa membangun sistem yang menangani transaksi, inventori, dan proses kerja harian — bukan sekadar landing page.
                 </p>
               </div>
             </motion.div>
@@ -338,7 +346,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 {copy?.heroSubtitle && copy.heroSubtitle !== "Providing Comprehensive Solutions Tailored to Your Needs." ? (
                   copy.heroSubtitle
                 ) : (
-                  "Berbekal pengalaman sebagai Software Developer di industri manufaktur, saya membangun produk digital dengan kode custom, arsitektur yang rapi, dan komunikasi langsung — tanpa perantara."
+                  "Dari latar belakang industri manufaktur ke proyek independen — saya membangun aplikasi web, mobile, dan backend dengan standar yang sama seperti sistem yang menangani operasional bisnis nyata setiap hari."
                 )}
               </p>
             </motion.div>
@@ -361,7 +369,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   Bisa Diuji Langsung
                 </div>
                 <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  Semua proyek dibangun dari nol dengan arsitektur rapi, kodenya bisa di-audit di GitHub, dan aplikasinya aktif serta dapat dicoba langsung.
+                  Kode dapat diaudit di GitHub, aplikasi aktif dan bisa dicoba langsung — tidak hanya screenshot portofolio.
                 </p>
               </div>
             </motion.div>
@@ -390,7 +398,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   className="px-6 py-3.5 rounded-full text-xs font-bold border border-theme-border hover:border-theme-accent text-theme-fore hover:bg-theme-surface/50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 flex-grow sm:flex-grow-0"
                   id="hero-btn-view-projects"
                 >
-                  <span>Lihat Proyek Saya</span>
+                  <span>Cek Portofolio & Live Demo</span>
                 </button>
               </div>
             </motion.div>
@@ -425,7 +433,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             </div>
             <div className="lg:col-span-5">
               <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed text-left">
-                Sistem dibangun secara custom dari nol dengan kode yang bersih, aman, berkinerja tinggi, dan mudah dikembangkan untuk jangka panjang.
+                Setiap proyek dimulai dari kebutuhan bisnis Anda, bukan dari template siap pakai. Arsitektur, keamanan, dan performa dirancang agar sistem tetap relevan seiring bisnis Anda berkembang.
               </p>
             </div>
           </div>
@@ -606,7 +614,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           </div>
         </div>
 
-        {/* Grouped Category Cards Grid */}
+        {/* Grouped Category Cards Grid - Modern Bento Layout */}
         <motion.div
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4"
           variants={staggerContainer}
@@ -614,63 +622,151 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          {[
-            {
-              category: "Frontend",
-              desc: "Untuk antarmuka yang cepat, responsif, dan interaktif.",
-              techs: ["React", "Vue", "Angular", "Next.js", "Vite", "TypeScript", "Tailwind CSS"]
-            },
-            {
-              category: "Backend & API",
-              desc: "Untuk logika bisnis, manajemen data, dan alur kerja server.",
-              techs: ["Node.js", "Go Lang", "Python", "Express", "GraphQL"]
-            },
-            {
-              category: "Database",
-              desc: "Untuk penyimpanan data terstruktur, caching, dan ORM cepat.",
-              techs: ["MySQL", "PostgreSQL", "MongoDB", "Firebase Firestore", "Redis"]
-            },
-            {
-              category: "Mobile",
-              desc: "Untuk aplikasi iOS & Android native maupun cross-platform.",
-              techs: ["React Native", "Flutter"]
-            },
-            {
-              category: "Infrastructure",
-              desc: "Untuk server virtual, kontainerisasi, dan integrasi cloud.",
-              techs: ["Docker", "AWS", "Google Cloud", "Firebase"]
-            },
-            {
-              category: "Integrasi",
-              desc: "Untuk modul pembayaran aman dan autentikasi terpusat.",
-              techs: ["Rest API", "Payment Integration", "Cloud Storage", "OAuth Providers", "Stripe API"]
-            }
-          ].map((cat, idx) => (
-            <motion.div
-              key={idx}
-              className="p-6 rounded-2xl bg-theme-elevated/80 border border-theme-border flex flex-col justify-between space-y-4 hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 group text-left"
-              variants={cardSlideUp}
-            >
-              <div className="space-y-2">
-                <h3 className="text-sm sm:text-base font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors">
-                  {cat.category}
-                </h3>
-                <p className="text-[11px] text-theme-fore-muted leading-relaxed">
-                  {cat.desc}
-                </p>
+          {/* Frontend - Wide Card */}
+          <motion.div
+            className="group md:col-span-2 p-6 md:p-8 rounded-3xl bg-theme-elevated/60 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+            variants={cardSlideUp}
+          >
+            <div className="absolute -top-12 -right-12 w-48 h-48 bg-theme-accent-glow/20 rounded-full blur-3xl pointer-events-none group-hover:bg-theme-accent-glow/40 transition-colors duration-500" />
+            <div className="space-y-4 relative z-10">
+              <div className="w-10 h-10 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent shadow-sm group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300">
+                <Layout className="w-5 h-5" />
               </div>
-              <div className="flex flex-wrap gap-1.5 pt-2 border-t border-theme-border/40">
-                {cat.techs.map((tech) => (
-                  <span
-                    key={tech}
-                    className="px-2 py-1 rounded-lg text-[10px] font-mono bg-theme-surface border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/30 hover:text-theme-accent transition-colors duration-250 cursor-default"
-                  >
+              <div className="space-y-1.5">
+                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">Frontend</h3>
+                <p className="text-xs text-theme-fore-muted max-w-sm leading-relaxed">Untuk antarmuka yang cepat, responsif, dan interaktif.</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
+              {["React", "Vue", "Angular", "Next.js", "Vite", "TypeScript", "Tailwind CSS"].map((tech) => (
+                <span key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Backend - Square Card */}
+          <motion.div
+            className="group p-6 md:p-8 rounded-3xl bg-theme-elevated/60 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+            variants={cardSlideUp}
+          >
+            <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-theme-accent-glow/20 rounded-full blur-2xl pointer-events-none group-hover:bg-theme-accent-glow/40 transition-colors duration-500" />
+            <div className="space-y-4 relative z-10">
+              <div className="w-10 h-10 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent shadow-sm group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300">
+                <Server className="w-5 h-5" />
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">Backend & API</h3>
+                <p className="text-xs text-theme-fore-muted leading-relaxed">Logika bisnis & manajemen server.</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
+              {["Node.js", "Go Lang", "Python", "Express", "GraphQL"].map((tech) => (
+                <span key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Database - Square Card */}
+          <motion.div
+            className="group p-6 md:p-8 rounded-3xl bg-theme-elevated/60 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+            variants={cardSlideUp}
+          >
+            <div className="absolute top-0 right-0 w-32 h-32 bg-theme-accent-glow/10 rounded-full blur-2xl pointer-events-none group-hover:bg-theme-accent-glow/30 transition-colors duration-500" />
+            <div className="space-y-4 relative z-10">
+              <div className="w-10 h-10 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent shadow-sm group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300">
+                <Database className="w-5 h-5" />
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">Database</h3>
+                <p className="text-xs text-theme-fore-muted leading-relaxed">Penyimpanan terstruktur & ORM.</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
+              {["MySQL", "PostgreSQL", "MongoDB", "Firestore", "Redis"].map((tech) => (
+                <span key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Mobile - Square Card */}
+          <motion.div
+            className="group p-6 md:p-8 rounded-3xl bg-theme-elevated/60 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+            variants={cardSlideUp}
+          >
+            <div className="absolute top-1/2 right-1/2 w-32 h-32 bg-theme-accent-glow/10 rounded-full blur-2xl pointer-events-none group-hover:bg-theme-accent-glow/30 transition-colors duration-500" />
+            <div className="space-y-4 relative z-10">
+              <div className="w-10 h-10 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent shadow-sm group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300">
+                <Smartphone className="w-5 h-5" />
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">Mobile</h3>
+                <p className="text-xs text-theme-fore-muted leading-relaxed">Aplikasi iOS & Android native/hybrid.</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
+              {["React Native", "Flutter"].map((tech) => (
+                <span key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Infrastructure - Square Card */}
+          <motion.div
+            className="group p-6 md:p-8 rounded-3xl bg-theme-elevated/60 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+            variants={cardSlideUp}
+          >
+            <div className="absolute bottom-0 right-0 w-32 h-32 bg-theme-accent-glow/10 rounded-full blur-2xl pointer-events-none group-hover:bg-theme-accent-glow/30 transition-colors duration-500" />
+            <div className="space-y-4 relative z-10">
+              <div className="w-10 h-10 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent shadow-sm group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300">
+                <Cloud className="w-5 h-5" />
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">Infrastructure</h3>
+                <p className="text-xs text-theme-fore-muted leading-relaxed">Virtualisasi & integrasi cloud.</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
+              {["Docker", "AWS", "Google Cloud", "Firebase"].map((tech) => (
+                <span key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default">
+                  {tech}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* Integrasi - Super Wide Card */}
+          <motion.div
+            className="group md:col-span-2 lg:col-span-3 p-6 md:p-8 rounded-3xl bg-theme-elevated/60 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+            variants={cardSlideUp}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-theme-accent-glow/5 via-transparent to-theme-accent-glow/5 pointer-events-none group-hover:from-theme-accent-glow/10 group-hover:to-theme-accent-glow/10 transition-colors duration-500" />
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
+              <div className="space-y-4 max-w-lg">
+                <div className="w-10 h-10 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent shadow-sm group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300">
+                  <Network className="w-5 h-5" />
+                </div>
+                <div className="space-y-1.5">
+                  <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">Integrasi Pihak Ketiga</h3>
+                  <p className="text-xs text-theme-fore-muted leading-relaxed">Penghubungan dengan layanan eksternal untuk modul pembayaran aman, autentikasi terpusat, dan layanan berbasis API lainnya.</p>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-2 justify-start md:justify-end flex-grow w-full md:max-w-md">
+                {["Rest API", "Payment Integration", "Cloud Storage", "OAuth Providers", "Stripe / Midtrans"].map((tech) => (
+                  <span key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default">
                     {tech}
                   </span>
                 ))}
               </div>
-            </motion.div>
-          ))}
+            </div>
+          </motion.div>
         </motion.div>
       </motion.section>
 
@@ -701,62 +797,95 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
         {/* High-fidelity grid showing three concrete proofs */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6 max-w-5xl mx-auto"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 max-w-6xl mx-auto"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          {[
-            {
-              title: "Pengalaman Manufaktur",
-              desc: "Berpengalaman mengembangkan & memelihara sistem internal (seperti ERP, inventori, dan HCM) di perusahaan manufaktur nyata.",
-              actionLabel: "Lihat Kompetensi",
-              actionUrl: "#capabilities-section"
-            },
-            {
-              title: `${projects?.length || 3} Proyek Independen`,
-              desc: `Bukti keahlian teknis nyata melalui ${projects && projects.length > 0
-                ? projects.slice(0, 3).map((p) => p.name).join(", ")
-                : "Nexus ERP Suite, Antreey, dan AI Resume Analyzer"
-                } yang didokumentasikan penuh.`,
-              actionLabel: "Lihat Portofolio",
-              actionUrl: "#projects-section"
-            },
-            {
-              title: "Verifikasi Terbuka",
-              desc: "Transparansi kode melalui GitHub dan riwayat profesional yang bisa diverifikasi secara terbuka di LinkedIn.",
-              actionLabel: "Hubungi Kontak",
-              actionUrl: "#contact-section"
-            }
-          ].map((item, idx) => (
-            <motion.div
-              key={idx}
-              className="group flex flex-col justify-between space-y-6 p-6 rounded-3xl bg-theme-elevated/50 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden text-left"
-              variants={cardSlideUp}
-            >
+          {/* Card 1: Pengalaman Manufaktur */}
+          <motion.div
+            className="group flex flex-col justify-between space-y-6 p-8 rounded-3xl bg-theme-elevated/40 border border-theme-border hover:border-theme-border-accent/50 hover:shadow-2xl hover:shadow-theme-accent/5 transition-all duration-500 relative overflow-hidden text-left"
+            variants={cardSlideUp}
+          >
+            <div className="absolute -top-24 -right-24 w-64 h-64 bg-theme-accent/10 rounded-full blur-3xl pointer-events-none group-hover:bg-theme-accent/20 transition-colors duration-700" />
+            <div className="space-y-6 relative z-10">
+              <div className="w-14 h-14 rounded-2xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-fore-muted group-hover:text-theme-accent group-hover:border-theme-accent/40 group-hover:scale-110 transition-all duration-500 shadow-sm">
+                <Factory className="w-7 h-7" />
+              </div>
               <div className="space-y-3">
-                <div className="w-2.5 h-2.5 rounded-full bg-theme-accent/20 group-hover:bg-theme-accent transition-colors duration-300" />
-                <h3 className="text-base font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors">
-                  {item.title}
+                <h3 className="text-xl font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors duration-300">
+                  Pengalaman Manufaktur
                 </h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  {item.desc}
+                <p className="text-sm text-theme-fore-muted leading-relaxed">
+                  Berpengalaman mengembangkan & memelihara sistem internal (seperti ERP, inventori, dan HCM) di perusahaan manufaktur nyata yang menuntut keandalan tinggi.
                 </p>
               </div>
+            </div>
+            <button
+              onClick={() => scrollToId('capabilities-section')}
+              className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-theme-fore-muted group-hover:text-theme-accent transition-colors duration-300 relative z-10 w-fit"
+            >
+              <span className="border-b border-transparent group-hover:border-theme-accent/30 pb-0.5 uppercase tracking-wide">Lihat Kompetensi</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </button>
+          </motion.div>
 
-              <button
-                onClick={() => {
-                  const id = item.actionUrl.substring(1);
-                  scrollToId(id);
-                }}
-                className="w-full py-2.5 rounded-xl bg-theme-surface hover:bg-theme-accent hover:text-white text-[11px] font-sans font-bold text-theme-fore transition-all duration-300 border border-theme-border/80 hover:border-theme-accent cursor-pointer flex items-center justify-center gap-1"
-              >
-                <span>{item.actionLabel}</span>
-                <ChevronRight className="w-3.5 h-3.5" />
-              </button>
-            </motion.div>
-          ))}
+          {/* Card 2: 30 Proyek, Beragam Kompleksitas */}
+          <motion.div
+            className="group flex flex-col justify-between space-y-6 p-8 rounded-3xl bg-theme-elevated/40 border border-theme-border hover:border-theme-border-accent/50 hover:shadow-2xl hover:shadow-theme-accent/5 transition-all duration-500 relative overflow-hidden text-left md:-translate-y-4"
+            variants={cardSlideUp}
+          >
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-theme-accent/10 rounded-full blur-3xl pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-700" />
+            <div className="space-y-6 relative z-10">
+              <div className="w-14 h-14 rounded-2xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-fore-muted group-hover:text-theme-accent group-hover:border-theme-accent/40 group-hover:scale-110 transition-all duration-500 shadow-sm">
+                <Layers className="w-7 h-7" />
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-xl font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors duration-300 leading-tight">
+                  {projects?.length || 3} Proyek, Beragam Kompleksitas
+                </h3>
+                <p className="text-sm text-theme-fore-muted leading-relaxed">
+                  Mulai dari MVP validasi ide hingga sistem ERP multi-tenant untuk kebutuhan enterprise. Setiap proyek didokumentasikan dan dapat ditelusuri riwayat pengerjaannya.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => scrollToId('projects-section')}
+              className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-theme-fore-muted group-hover:text-theme-accent transition-colors duration-300 relative z-10 w-fit"
+            >
+              <span className="border-b border-transparent group-hover:border-theme-accent/30 pb-0.5 uppercase tracking-wide">Lihat Portofolio</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </button>
+          </motion.div>
+
+          {/* Card 3: Verifikasi Terbuka */}
+          <motion.div
+            className="group flex flex-col justify-between space-y-6 p-8 rounded-3xl bg-theme-elevated/40 border border-theme-border hover:border-theme-border-accent/50 hover:shadow-2xl hover:shadow-theme-accent/5 transition-all duration-500 relative overflow-hidden text-left"
+            variants={cardSlideUp}
+          >
+            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-theme-accent/10 rounded-full blur-3xl pointer-events-none group-hover:bg-theme-accent/20 transition-colors duration-700" />
+            <div className="space-y-6 relative z-10">
+              <div className="w-14 h-14 rounded-2xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-fore-muted group-hover:text-theme-accent group-hover:border-theme-accent/40 group-hover:scale-110 transition-all duration-500 shadow-sm">
+                <ShieldCheck className="w-7 h-7" />
+              </div>
+              <div className="space-y-3">
+                <h3 className="text-xl font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors duration-300">
+                  Verifikasi Terbuka
+                </h3>
+                <p className="text-sm text-theme-fore-muted leading-relaxed">
+                  Transparansi kode melalui GitHub dan riwayat profesional yang bisa diverifikasi secara terbuka di LinkedIn, memberikan rasa aman 100%.
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => scrollToId('contact-section')}
+              className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-theme-fore-muted group-hover:text-theme-accent transition-colors duration-300 relative z-10 w-fit"
+            >
+              <span className="border-b border-transparent group-hover:border-theme-accent/30 pb-0.5 uppercase tracking-wide">Hubungi Kontak</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </button>
+          </motion.div>
         </motion.div>
       </motion.section>
 
@@ -800,7 +929,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold">Ide Tahap Awal</span>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold">Untuk Validasi Ide</span>
                   <h3 className="text-lg font-sans font-extrabold text-theme-fore">Starter — MVP Prototype</h3>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-theme-accent/5 border border-theme-border flex items-center justify-center text-theme-accent">
@@ -818,7 +947,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 onClick={() => selectPlan('Full-Stack Web App', 'SaaS MVP (Fast Turnaround)')}
                 className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-theme-border hover:border-theme-border-accent hover:bg-theme-accent-glow text-theme-accent transition-all duration-200 cursor-pointer text-center select-none"
               >
-                Diskusikan Proyek Anda
+                Mulai dari Sini
               </button>
             </div>
             <div className="space-y-3.5 pt-6 border-t border-theme-border/50">
@@ -854,7 +983,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             <div className="space-y-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-accent font-bold">Skala Siap Produksi</span>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-accent font-bold">Untuk Rilis ke Publik</span>
                   <h3 className="text-lg font-sans font-extrabold text-white">Growth — Production Ready</h3>
                 </div>
                 <div className="w-9 h-9 rounded-xl bg-theme-accent/20 border border-theme-accent/30 flex items-center justify-center text-theme-accent">
@@ -920,7 +1049,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 onClick={() => selectPlan('Comprehensive Hybrid Pipeline', 'High-Scale Custom Architecture')}
                 className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-theme-border hover:border-theme-border-accent hover:bg-theme-accent-glow text-theme-accent transition-all duration-200 cursor-pointer text-center select-none"
               >
-                Diskusikan Kebutuhan Anda
+                Ceritakan Kebutuhan Anda
               </button>
             </div>
             <div className="space-y-3.5 pt-6 border-t border-theme-border/50">
@@ -1349,9 +1478,9 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             <span>Keunggulan</span>
           </div>
           <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-3xl text-left">
-            Kenapa{' '}
+            Yang Membedakan{' '}
             <span className="bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent font-black">
-              Bekerja Sama dengan Saya?
+              Cara Saya Bekerja
             </span>
           </h2>
         </div>
@@ -1396,52 +1525,62 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
       {/* SECTION: RISK REVERSAL / JAMINAN KERJA SAMA */}
       <motion.section
         id="guarantee-section"
-        className="pt-12"
+        className="pt-16"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={sectionFadeIn}
       >
-        <div className="p-8 md:p-10 rounded-3xl bg-theme-surface/60 border border-theme-border space-y-6 text-left max-w-4xl mx-auto">
-          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
-            <span className="w-6 h-[1px] bg-theme-accent" />
-            <span>Jaminan</span>
-          </div>
-          <h3 className="text-xl sm:text-2xl font-sans font-extrabold text-theme-fore leading-tight">
-            Kenapa Aman Berinvestasi di Proyek Ini?
-          </h3>
-          <motion.div
-            className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2"
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            {[
-              {
-                title: "Revisi Terstruktur",
-                desc: "Setiap paket sudah mencakup alokasi revisi. Anda tidak akan terjebak dengan hasil akhir yang tidak sesuai ekspektasi."
-              },
-              {
-                title: "100% Hak Cipta Anda",
-                desc: "Source code, desain, dan seluruh aset digital sepenuhnya milik Anda setelah proyek lunas — tanpa royalti atau lisensi berulang."
-              },
-              {
-                title: "Pembayaran Bertahap",
-                desc: "Pembayaran dilakukan per milestone, sehingga Anda bisa mengevaluasi progress sebelum melanjutkan ke tahap berikutnya."
-              }
-            ].map((g, idx) => (
-              <motion.div
-                key={idx}
-                className="space-y-2"
-                variants={cardSlideUp}
-              >
-                <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                <h4 className="text-sm font-sans font-bold text-theme-fore">{g.title}</h4>
-                <p className="text-[11px] text-theme-fore-muted leading-relaxed">{g.desc}</p>
+        <div className="relative p-8 md:p-12 rounded-3xl bg-theme-elevated/40 border border-theme-border/60 shadow-xl overflow-hidden max-w-5xl mx-auto">
+          {/* Subtle glowing shield/secure background */}
+          <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-theme-accent-glow/20 rounded-full blur-[100px] pointer-events-none" />
+          
+          <div className="relative z-10 flex flex-col md:flex-row gap-10 md:gap-16 items-center md:items-start text-center md:text-left">
+            <div className="md:w-1/3 space-y-6">
+              <div className="flex items-center justify-center md:justify-start gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
+                <span className="w-6 h-[1px] bg-theme-accent" />
+                <span>Jaminan Klien</span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-sans font-extrabold text-theme-fore leading-[1.2]">
+                Kenapa Aman Berinvestasi di Sini?
+              </h3>
+              <p className="text-xs text-theme-fore-muted leading-relaxed">
+                Setiap kerja sama didasari oleh transparansi, profesionalisme, dan komitmen untuk meminimalkan risiko di pihak Anda.
+              </p>
+            </div>
+
+            <div className="md:w-2/3 grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <motion.div className="space-y-4 p-6 rounded-2xl bg-theme-surface border border-theme-border hover:border-theme-border-accent/50 hover:shadow-xl transition-all duration-300 group" variants={cardSlideUp}>
+                <div className="w-10 h-10 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300 shadow-sm">
+                  <RefreshCcw className="w-5 h-5" />
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-sm font-sans font-bold text-theme-fore">Revisi Terstruktur</h4>
+                  <p className="text-[11px] text-theme-fore-muted leading-relaxed">Setiap paket sudah mencakup alokasi revisi. Anda tidak akan terjebak dengan hasil akhir yang tidak sesuai ekspektasi.</p>
+                </div>
               </motion.div>
-            ))}
-          </motion.div>
+
+              <motion.div className="space-y-4 p-6 rounded-2xl bg-theme-surface border border-theme-border hover:border-theme-border-accent/50 hover:shadow-xl transition-all duration-300 group" variants={cardSlideUp}>
+                <div className="w-10 h-10 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300 shadow-sm">
+                  <Copyright className="w-5 h-5" />
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-sm font-sans font-bold text-theme-fore">100% Hak Cipta Anda</h4>
+                  <p className="text-[11px] text-theme-fore-muted leading-relaxed">Source code, desain, dan seluruh aset digital sepenuhnya milik Anda setelah proyek lunas — tanpa lisensi berulang.</p>
+                </div>
+              </motion.div>
+
+              <motion.div className="sm:col-span-2 space-y-4 p-6 rounded-2xl bg-theme-surface border border-theme-border hover:border-theme-border-accent/50 hover:shadow-xl transition-all duration-300 flex flex-col sm:flex-row gap-6 items-start sm:items-center group" variants={cardSlideUp}>
+                <div className="w-10 h-10 shrink-0 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300 shadow-sm">
+                  <Wallet className="w-5 h-5" />
+                </div>
+                <div className="space-y-2">
+                  <h4 className="text-sm font-sans font-bold text-theme-fore">Pembayaran Bertahap</h4>
+                  <p className="text-[11px] text-theme-fore-muted leading-relaxed">Pembayaran dilakukan per milestone, sehingga Anda bisa mengevaluasi progress sebelum melanjutkan ke tahap berikutnya secara aman.</p>
+                </div>
+              </motion.div>
+            </div>
+          </div>
         </div>
       </motion.section>
 
@@ -1466,23 +1605,19 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               <div className="flex flex-wrap items-center gap-2.5">
                 <span className="text-[9px] font-mono bg-theme-accent-glow text-theme-accent border border-theme-border-accent/40 px-3 py-1 rounded-full uppercase font-bold tracking-wider inline-flex items-center gap-1.5 shadow-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                  <span>Slot Pengerjaan Terfokus</span>
-                </span>
-                <span className="text-[9px] font-mono bg-theme-surface text-theme-fore-muted border border-theme-border px-2.5 py-1 rounded-full uppercase font-semibold">
-                  2 Slot Tersedia Kuartal Ini
+                  <span>Kapasitas Terbatas Setiap Kuartal</span>
                 </span>
               </div>
 
               <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore">
-                Mari bangun sesuatu yang{' '}
+                Mari Bangun Sistem yang{' '}
                 <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright to-[#9BC2FA] bg-clip-text text-transparent font-black italic">
-                  Luar Biasa
-                </span>{' '}
-                bersama.
+                  Benar-Benar Anda Butuhkan
+                </span>
               </h2>
 
               <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-md">
-                Saya hanya menerima jumlah proyek terbatas setiap kuartal agar bisa fokus penuh pada setiap klien — memastikan kualitas kode, performa, dan komunikasi tanpa kompromi.
+                Saya membatasi jumlah proyek yang diterima setiap kuartal agar setiap klien mendapat perhatian penuh — bukan dikerjakan sambil lalu di antara proyek lain.
               </p>
 
               <div className="space-y-4 pt-6 border-t border-theme-border/50 max-w-sm">
