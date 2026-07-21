@@ -9,7 +9,7 @@ import { ThemeMode } from '../types';
 
 interface ThemeToggleProps {
   theme: ThemeMode;
-  onToggle: (theme: ThemeMode) => void;
+  onToggle: (theme: ThemeMode, event: React.MouseEvent) => void;
 }
 
 export default function ThemeToggle({ theme, onToggle }: ThemeToggleProps) {
@@ -17,7 +17,7 @@ export default function ThemeToggle({ theme, onToggle }: ThemeToggleProps) {
 
   return (
     <button
-      onClick={() => onToggle(isDark ? 'light' : 'dark')}
+      onClick={(e) => onToggle(isDark ? 'light' : 'dark', e)}
       className="relative w-10 h-10 rounded-full bg-theme-elevated border border-theme-border flex items-center justify-center hover:border-theme-border-accent/80 hover:bg-theme-surface hover:shadow-lg hover:shadow-theme-accent/5 active:scale-95 transition-all duration-300 cursor-pointer overflow-hidden group"
       id="btn-theme-toggle"
       aria-label="Toggle theme"

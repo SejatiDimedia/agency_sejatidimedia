@@ -356,6 +356,10 @@ export const id = {
     privacy: "KEBIJAKAN PRIVASI",
     terms: "SYARAT & KETENTUAN"
   },
+    platforms: {
+    availableOn: "Juga tersedia untuk disewa melalui platform:",
+    secure: "Transaksi aman & terjamin"
+  },
   footer: {
     tagline: "Partner teknis untuk bisnis yang ingin sistem digitalnya dibangun dengan benar — sejak awal.",
     contact: "Kontak",

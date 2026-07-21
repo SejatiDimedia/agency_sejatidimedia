@@ -1,9 +1,11 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { flushSync } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
+import { Home, Layers, GitMerge, FolderOpen, MessageCircle } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { ThemeMode } from "../types";
 import { useLanguage, Language } from "@/lib/i18n/LanguageContext";
@@ -61,6 +63,47 @@ export default function LayoutWrapper({
     }
     localStorage.setItem("sejatidimedia-theme", theme);
   }, [theme]);
+
+  const handleThemeToggle = (newTheme: ThemeMode, event?: React.MouseEvent) => {
+    // If the browser doesn't support view transitions, just set the theme instantly
+    if (!document.startViewTransition || !event) {
+      setTheme(newTheme);
+      return;
+    }
+
+    const x = event.clientX;
+    const y = event.clientY;
+    
+    // Calculate distance to furthest corner
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    const transition = document.startViewTransition(() => {
+      flushSync(() => {
+        setTheme(newTheme);
+      });
+    });
+
+    transition.ready.then(() => {
+      const clipPath = [
+        `circle(0px at ${x}px ${y}px)`,
+        `circle(${endRadius}px at ${x}px ${y}px)`
+      ];
+      
+      document.documentElement.animate(
+        {
+          clipPath: clipPath,
+        },
+        {
+          duration: 700,
+          easing: 'ease-in-out',
+          pseudoElement: '::view-transition-new(root)',
+        }
+      );
+    });
+  };
 
   const handleNavClick = (sectionId: string) => {
     if (pathname === "/") {
@@ -276,29 +319,32 @@ export default function LayoutWrapper({
               </button>
             </nav>
 
-            {/* Right Action: Theme Toggle, Lang Toggle & CTA */}
-            <div className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center bg-theme-surface/50 border border-theme-border/60 rounded-full p-0.5">
+            {/* Right Action: Theme Toggle & Premium Lang Toggle */}
+            <div className="flex items-center gap-3 sm:gap-4">
+              {/* Premium Segmented Language Toggle (Flags) */}
+              <div className="flex items-center relative bg-theme-surface border border-theme-border/60 rounded-full p-1 shadow-inner h-[36px]">
+                {/* Active Slider Background */}
+                <div 
+                  className={`absolute top-1 bottom-1 w-[32px] bg-theme-accent/20 border border-theme-accent/50 rounded-full transition-all duration-400 ease-[0.16,1,0.3,1] shadow-sm ${language === 'id' ? 'left-1' : 'left-[37px]'}`}
+                />
                 <button
                   onClick={() => setLanguage('id')}
-                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold transition-colors ${language === 'id' ? 'bg-theme-accent text-white' : 'text-theme-fore-muted hover:text-theme-fore'}`}
+                  className="relative z-10 w-[32px] h-[28px] flex items-center justify-center rounded-full transition-all duration-300 hover:scale-105 group"
+                  title="Bahasa Indonesia"
                 >
-                  ID
+                  <img src="/flags/id.svg" alt="ID" className={`w-5 h-5 rounded-full object-cover shadow-sm border border-black/10 dark:border-white/10 transition-all duration-300 ${language === 'id' ? 'opacity-100 scale-100' : 'opacity-40 grayscale-[50%] group-hover:opacity-100 group-hover:grayscale-0'}`} />
                 </button>
                 <button
                   onClick={() => setLanguage('en')}
-                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold transition-colors ${language === 'en' ? 'bg-theme-accent text-white' : 'text-theme-fore-muted hover:text-theme-fore'}`}
+                  className="relative z-10 w-[32px] h-[28px] flex items-center justify-center rounded-full transition-all duration-300 hover:scale-105 group"
+                  title="English"
                 >
-                  EN
+                  <img src="/flags/gb.svg" alt="EN" className={`w-5 h-5 rounded-full object-cover shadow-sm border border-black/10 dark:border-white/10 transition-all duration-300 ${language === 'en' ? 'opacity-100 scale-100' : 'opacity-40 grayscale-[50%] group-hover:opacity-100 group-hover:grayscale-0'}`} />
                 </button>
               </div>
-              <ThemeToggle theme={theme} onToggle={setTheme} />
-              <button
-                onClick={() => handleNavClick("contact-section")}
-                className="hidden sm:inline-flex px-4 py-2 rounded-full text-xs font-bold bg-theme-accent hover:bg-theme-accent-bright text-white transition-all duration-200 cursor-pointer shadow-md shadow-theme-accent/10 hover:scale-[1.02]"
-              >
-                {t.nav.contact}
-              </button>
+
+              {/* Theme Toggle Component */}
+              <ThemeToggle theme={theme} onToggle={handleThemeToggle} />
             </div>
           </div>
         </header>
@@ -309,7 +355,7 @@ export default function LayoutWrapper({
         </main>
 
         {/* 4. High-Fidelity Premium Footer */}
-        <footer className="relative z-10 w-full bg-theme-base border-t border-theme-border/60 pt-16 pb-12">
+        <footer className="relative z-10 w-full bg-theme-base border-t border-theme-border/60 pt-16 pb-28 md:pb-12">
           <div className="max-w-7xl mx-auto px-6 space-y-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
               {/* Left Block: Tagline and Contact */}
@@ -443,6 +489,47 @@ export default function LayoutWrapper({
             </div>
           </div>
         </footer>
+
+        {/* 5. Mobile Bottom Navigation Bar (Hidden on Desktop) */}
+        <nav className="md:hidden fixed bottom-4 left-4 right-4 z-50">
+          <div className="bg-theme-surface/80 backdrop-blur-xl border border-theme-border/60 shadow-2xl rounded-2xl p-1.5 flex items-center justify-between">
+            <button
+              onClick={() => handleNavClick("home")}
+              className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname === "/" ? "text-theme-accent bg-theme-accent/10" : "text-theme-fore-muted hover:text-theme-fore"}`}
+            >
+              <Home className="w-5 h-5 mb-1" />
+              <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.home}</span>
+            </button>
+            <button
+              onClick={() => handleNavClick("capabilities-section")}
+              className="flex flex-col items-center justify-center w-[60px] h-12 rounded-xl text-theme-fore-muted hover:text-theme-fore transition-all duration-300"
+            >
+              <Layers className="w-5 h-5 mb-1" />
+              <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.services}</span>
+            </button>
+            <button
+              onClick={() => handleNavClick("methodology-section")}
+              className="flex flex-col items-center justify-center w-[60px] h-12 rounded-xl text-theme-fore-muted hover:text-theme-fore transition-all duration-300"
+            >
+              <GitMerge className="w-5 h-5 mb-1" />
+              <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.workflow}</span>
+            </button>
+            <button
+              onClick={() => router.push("/projects")}
+              className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/projects") ? "text-theme-accent bg-theme-accent/10" : "text-theme-fore-muted hover:text-theme-fore"}`}
+            >
+              <FolderOpen className="w-5 h-5 mb-1" />
+              <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.portfolio}</span>
+            </button>
+            <button
+              onClick={() => handleNavClick("contact-section")}
+              className="flex flex-col items-center justify-center w-[60px] h-12 rounded-xl text-theme-fore-muted hover:text-theme-fore transition-all duration-300"
+            >
+              <MessageCircle className="w-5 h-5 mb-1" />
+              <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.contact}</span>
+            </button>
+          </div>
+        </nav>
       </div>
     </>
   );

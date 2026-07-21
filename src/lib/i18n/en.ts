@@ -356,6 +356,10 @@ export const en = {
     privacy: "PRIVACY POLICY",
     terms: "TERMS & CONDITIONS"
   },
+    platforms: {
+    availableOn: "Also available for hire on these platforms:",
+    secure: "Secure & guaranteed transactions"
+  },
   footer: {
     tagline: "Technical partner for businesses that want their digital systems built right — from the start.",
     contact: "Contact",

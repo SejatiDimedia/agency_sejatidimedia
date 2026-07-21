@@ -405,6 +405,56 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         </div>
       </section>
 
+      {/* SECTION 1.5: AVAILABLE ON FREELANCE PLATFORMS BANNER */}
+      <motion.section
+        className="w-full max-w-4xl mx-auto pt-6 pb-20 px-6"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      >
+        <div className="relative group overflow-hidden rounded-3xl bg-theme-surface/30 backdrop-blur-xl border border-theme-border/50 shadow-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 hover:border-theme-border-accent/30 transition-all duration-500">
+          {/* Subtle moving glow inside the banner */}
+          <div className="absolute inset-0 bg-gradient-to-r from-theme-accent/5 via-transparent to-theme-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+          
+          <div className="flex flex-col items-center sm:items-start text-center sm:text-left z-10">
+            <span className="text-[10px] font-mono text-theme-accent font-bold uppercase tracking-[0.3em] mb-1.5">
+              {t.platforms?.secure || "Transaksi aman & terjamin"}
+            </span>
+            <h3 className="text-sm sm:text-base font-sans font-semibold text-theme-fore">
+              {t.platforms?.availableOn || "Tersedia juga di:"}
+            </h3>
+          </div>
+
+          <div className="flex flex-wrap justify-center items-center gap-3 sm:gap-4 z-10">
+            {/* Upwork */}
+            <a
+              href="https://www.upwork.com/freelancers/~017698b392e21b4b6c"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#14A800]/5 border border-[#14A800]/20 hover:bg-[#14A800]/15 hover:border-[#14A800]/40 transition-all duration-300 group/btn"
+            >
+              <div className="w-8 h-8 rounded-full bg-[#14A800] flex items-center justify-center text-white font-black text-sm shadow-lg shadow-[#14A800]/30 group-hover/btn:scale-110 transition-transform duration-300">
+                U
+              </div>
+              <span className="font-sans font-bold text-sm text-theme-fore">Upwork</span>
+            </a>
+
+            {/* Fastwork */}
+            <a
+              href="https://fastwork.id/en/user/timurradhadian?source=web_marketplace_profile-menu_profile"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 px-5 py-3 rounded-2xl bg-[#1D4ED8]/5 border border-[#1D4ED8]/20 hover:bg-[#1D4ED8]/15 hover:border-[#1D4ED8]/40 transition-all duration-300 group/btn"
+            >
+              <div className="w-8 h-8 rounded-full bg-[#1D4ED8] flex items-center justify-center text-white font-black text-sm shadow-lg shadow-[#1D4ED8]/30 group-hover/btn:scale-110 transition-transform duration-300">
+                F
+              </div>
+              <span className="font-sans font-bold text-sm text-theme-fore">Fastwork</span>
+            </a>
+          </div>
+        </div>
+      </motion.section>
+
       {/* SECTION 2: THREE CORE PILOT SERVICES (MODERNIZED & PLACED IMMEDIATELY AFTER HERO) */}
       <motion.section
         id="capabilities-section"
@@ -920,40 +970,42 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
           {/* Card 1: Starter - MVP Prototype */}
           <motion.div
-            className="p-7 rounded-3xl bg-theme-elevated/75 border border-theme-border hover:border-theme-border-accent/35 hover:shadow-2xl transition-all duration-300 flex flex-col justify-between space-y-8 relative group text-left"
+            className="p-8 rounded-[2rem] bg-theme-surface/40 backdrop-blur-xl border border-theme-border/40 hover:border-theme-border-accent/50 hover:bg-theme-surface/80 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between space-y-8 relative group text-left"
             variants={cardSlideUp}
           >
-            <div className="space-y-6">
+            <div className="space-y-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold">{t.pricingCards.starterTag}</span>
-                  <h3 className="text-lg font-sans font-extrabold text-theme-fore">{t.pricingCards.starterTitle}</h3>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold group-hover:text-theme-fore transition-colors">{t.pricingCards.starterTag}</span>
+                  <h3 className="text-xl font-sans font-extrabold text-theme-fore">{t.pricingCards.starterTitle}</h3>
                 </div>
-                <div className="w-9 h-9 rounded-xl bg-theme-accent/5 border border-theme-border flex items-center justify-center text-theme-accent">
-                  <Trophy className="w-4 h-4" />
+                <div className="w-10 h-10 rounded-2xl bg-theme-elevated border border-theme-border flex items-center justify-center text-theme-fore-muted group-hover:text-theme-accent group-hover:border-theme-accent/30 transition-all duration-300 shadow-sm">
+                  <Trophy className="w-4.5 h-4.5" />
                 </div>
               </div>
               <p className="text-[11px] text-theme-fore-muted leading-relaxed">
                 {t.pricingCards.starterDesc}
               </p>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-2xl sm:text-3xl font-sans font-black text-theme-fore tracking-tight">Rp 3 - 7 Jt+</span>
+              <div className="flex items-baseline gap-1.5 pt-2">
+                <span className="text-3xl sm:text-4xl font-sans font-black text-theme-fore tracking-tighter">Rp 3 - 7 Jt+</span>
                 <span className="text-[10px] font-mono text-theme-fore-muted uppercase">/ proyek</span>
               </div>
               <button
                 onClick={() => selectPlan('Full-Stack Web App', 'SaaS MVP (Fast Turnaround)')}
-                className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-theme-border hover:border-theme-border-accent hover:bg-theme-accent-glow text-theme-accent transition-all duration-200 cursor-pointer text-center select-none"
+                className="w-full py-3 px-4 rounded-xl text-xs font-bold border border-theme-border bg-theme-surface hover:border-theme-accent hover:bg-theme-accent hover:text-white text-theme-fore transition-all duration-300 cursor-pointer text-center select-none shadow-sm"
               >
-                Mulai dari Sini
+                {t.pricing.starterBtn || "Mulai dari Sini"}
               </button>
             </div>
-            <div className="space-y-3.5 pt-6 border-t border-theme-border/50">
-              <span className="text-[9px] font-mono uppercase tracking-wider text-theme-fore-subtle block font-bold">Termasuk:</span>
-              <ul className="space-y-2.5 text-xs">
+            <div className="space-y-4 pt-6 border-t border-theme-border/50 relative z-10">
+              <span className="text-[9px] font-mono uppercase tracking-widest text-theme-fore-subtle block font-bold">Termasuk:</span>
+              <ul className="space-y-3 text-xs">
                 {t.pricingCards.starterIncludes.map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-2.5 text-theme-fore-muted">
-                    <Check className="w-3.5 h-3.5 text-theme-accent flex-shrink-0" />
-                    <span className="text-[11px]">{item}</span>
+                  <li key={idx} className="flex items-start gap-3 text-theme-fore-muted group/item hover:text-theme-fore transition-colors">
+                    <div className="mt-0.5 w-4 h-4 rounded-full bg-theme-accent/10 flex items-center justify-center flex-shrink-0 group-hover/item:bg-theme-accent group-hover/item:text-white transition-colors text-theme-accent">
+                      <Check className="w-2.5 h-2.5" />
+                    </div>
+                    <span className="text-[11px] leading-relaxed">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -962,46 +1014,48 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
           {/* Card 2: Growth - Production Ready (Most Popular) */}
           <motion.div
-            className="p-7 rounded-3xl bg-[#0F1115] dark:bg-[#0A0C10] text-white border-2 border-theme-accent hover:shadow-[0_0_50px_-10px_rgba(74,133,217,0.35)] transition-all duration-300 flex flex-col justify-between space-y-8 relative lg:scale-105 z-10 overflow-hidden text-left"
+            className="p-8 md:p-9 rounded-[2.5rem] bg-gradient-to-b from-[#f0f4f8] to-white dark:from-[#111625] dark:to-[#0A0C10] text-theme-fore border-2 border-theme-accent/40 dark:border-theme-accent/60 hover:border-theme-accent hover:shadow-[0_0_60px_-15px_rgba(74,133,217,0.4)] transition-all duration-500 flex flex-col justify-between space-y-8 relative lg:-mt-4 lg:mb-4 z-20 overflow-hidden text-left group shadow-2xl shadow-theme-accent/15 dark:shadow-theme-accent/20"
             variants={cardSlideUp}
           >
-            {/* Luminous dynamic glow mesh background for highlighted premium feel */}
-            <div className="absolute inset-0 bg-[radial-gradient(350px_circle_at_top_right,rgba(74,133,217,0.18),transparent_80%)] pointer-events-none" />
-            <div className="absolute top-2 right-2.5 bg-theme-accent/25 border border-theme-accent/40 text-theme-accent text-[9px] font-mono font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
-              Paling Populer
+            {/* Premium Glow Overlay (Dark Mode Only) */}
+            <div className="absolute inset-0 hidden dark:block bg-[radial-gradient(ellipse_at_top,rgba(74,133,217,0.25),transparent_70%)] pointer-events-none transition-opacity duration-700 group-hover:opacity-100 opacity-60" />
+            <div className="absolute top-0 left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-transparent via-theme-accent to-transparent opacity-100 dark:opacity-80" />
+
+            <div className="absolute top-0 right-0 bg-gradient-to-r from-theme-accent to-blue-500 text-white text-[9px] font-mono font-bold px-5 py-2 rounded-bl-2xl rounded-tr-[2.5rem] uppercase tracking-widest shadow-lg shadow-theme-accent/30 flex items-center gap-1.5">
+              <Crown className="w-3 h-3" />
+              {language === 'en' ? 'Most Popular' : 'Paling Populer'}
             </div>
 
-            <div className="space-y-6 relative z-10">
+            <div className="space-y-6 relative z-10 pt-2">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <span className="text-[10px] font-mono uppercase tracking-widest text-theme-accent font-bold">{t.pricingCards.growthTag}</span>
-                  <h3 className="text-lg font-sans font-extrabold text-white">{t.pricingCards.growthTitle}</h3>
-                </div>
-                <div className="w-9 h-9 rounded-xl bg-theme-accent/20 border border-theme-accent/30 flex items-center justify-center text-theme-accent">
-                  <Crown className="w-4 h-4" />
+                  <h3 className="text-xl font-sans font-extrabold text-theme-fore dark:text-white">{t.pricingCards.growthTitle}</h3>
                 </div>
               </div>
-              <p className="text-[11px] text-zinc-400 leading-relaxed">
+              <p className="text-[11px] text-theme-fore-muted dark:text-blue-100/70 leading-relaxed">
                 {t.pricingCards.growthDesc}
               </p>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-2xl sm:text-3xl font-sans font-black text-white tracking-tight">Rp 10 Jt+</span>
-                <span className="text-[10px] font-mono text-zinc-400 uppercase">/ proyek</span>
+              <div className="flex items-baseline gap-1.5 pt-2">
+                <span className="text-3xl sm:text-4xl font-sans font-black text-theme-fore dark:text-white tracking-tighter">Rp 10 Jt+</span>
+                <span className="text-[10px] font-mono text-theme-fore-subtle dark:text-blue-200/50 uppercase">/ proyek</span>
               </div>
               <button
                 onClick={() => selectPlan('Comprehensive Hybrid Pipeline', 'High-Scale Custom Architecture')}
-                className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-theme-accent hover:bg-theme-accent-bright text-white shadow-lg shadow-theme-accent/20 transition-all duration-200 cursor-pointer text-center select-none"
+                className="w-full py-3.5 px-4 rounded-xl text-xs font-bold bg-theme-accent text-white hover:bg-theme-accent-bright dark:bg-white dark:text-[#0A0C10] dark:hover:bg-theme-accent dark:hover:text-white shadow-lg shadow-theme-accent/20 hover:shadow-[0_0_20px_rgba(74,133,217,0.4)] transition-all duration-300 cursor-pointer text-center select-none"
               >
-                Diskusikan Proyek Anda
+                {t.pricing.growthBtn || "Diskusikan Proyek Anda"}
               </button>
             </div>
-            <div className="space-y-3.5 pt-6 border-t border-zinc-800 relative z-10">
-              <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-400 block font-bold">Termasuk:</span>
-              <ul className="space-y-2.5 text-xs">
+            <div className="space-y-4 pt-6 border-t border-theme-border/50 dark:border-white/10 relative z-10">
+              <span className="text-[9px] font-mono uppercase tracking-widest text-theme-fore-subtle dark:text-blue-200/50 block font-bold">Termasuk:</span>
+              <ul className="space-y-3 text-xs">
                 {t.pricingCards.growthIncludes.map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-2.5 text-zinc-300">
-                    <Check className="w-3.5 h-3.5 text-theme-accent flex-shrink-0" />
-                    <span className="text-[11px]">{item}</span>
+                  <li key={idx} className="flex items-start gap-3 text-theme-fore-muted dark:text-blue-50/80 group/item hover:text-theme-fore dark:hover:text-white transition-colors">
+                    <div className="mt-0.5 w-4 h-4 rounded-full bg-theme-accent flex items-center justify-center flex-shrink-0 text-white shadow-sm shadow-theme-accent/50">
+                      <Check className="w-2.5 h-2.5" />
+                    </div>
+                    <span className="text-[11px] leading-relaxed">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -1010,40 +1064,42 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
           {/* Card 3: Custom - Sistem Kompleks */}
           <motion.div
-            className="p-7 rounded-3xl bg-theme-elevated/75 border border-theme-border hover:border-theme-border-accent/35 hover:shadow-2xl transition-all duration-300 flex flex-col justify-between space-y-8 relative group text-left"
+            className="p-8 rounded-[2rem] bg-theme-surface/40 backdrop-blur-xl border border-theme-border/40 hover:border-theme-border-accent/50 hover:bg-theme-surface/80 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between space-y-8 relative group text-left"
             variants={cardSlideUp}
           >
-            <div className="space-y-6">
+            <div className="space-y-6 relative z-10">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold">{t.pricingCards.customTag}</span>
-                  <h3 className="text-lg font-sans font-extrabold text-theme-fore">{t.pricingCards.customTitle}</h3>
+                  <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold group-hover:text-theme-fore transition-colors">{t.pricingCards.customTag}</span>
+                  <h3 className="text-xl font-sans font-extrabold text-theme-fore">{t.pricingCards.customTitle}</h3>
                 </div>
-                <div className="w-9 h-9 rounded-xl bg-theme-accent/5 border border-theme-border flex items-center justify-center text-theme-accent">
-                  <Sparkles className="w-4 h-4" />
+                <div className="w-10 h-10 rounded-2xl bg-theme-elevated border border-theme-border flex items-center justify-center text-theme-fore-muted group-hover:text-theme-accent group-hover:border-theme-accent/30 transition-all duration-300 shadow-sm">
+                  <Sparkles className="w-4.5 h-4.5" />
                 </div>
               </div>
               <p className="text-[11px] text-theme-fore-muted leading-relaxed">
                 {t.pricingCards.customDesc}
               </p>
-              <div className="flex items-baseline gap-1.5">
-                <span className="text-2xl sm:text-3xl font-sans font-black text-theme-fore tracking-tight">Custom</span>
+              <div className="flex items-baseline gap-1.5 pt-2">
+                <span className="text-3xl sm:text-4xl font-sans font-black text-theme-fore tracking-tighter">Custom</span>
                 <span className="text-[10px] font-mono text-theme-fore-muted uppercase">/ scope</span>
               </div>
               <button
                 onClick={() => selectPlan('Comprehensive Hybrid Pipeline', 'High-Scale Custom Architecture')}
-                className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-theme-border hover:border-theme-border-accent hover:bg-theme-accent-glow text-theme-accent transition-all duration-200 cursor-pointer text-center select-none"
+                className="w-full py-3 px-4 rounded-xl text-xs font-bold border border-theme-border bg-theme-surface hover:border-theme-accent hover:bg-theme-accent hover:text-white text-theme-fore transition-all duration-300 cursor-pointer text-center select-none shadow-sm"
               >
-                Ceritakan Kebutuhan Anda
+                {t.pricing.customBtn || "Ceritakan Kebutuhan Anda"}
               </button>
             </div>
-            <div className="space-y-3.5 pt-6 border-t border-theme-border/50">
-              <span className="text-[9px] font-mono uppercase tracking-wider text-theme-fore-subtle block font-bold">Termasuk:</span>
-              <ul className="space-y-2.5 text-xs">
+            <div className="space-y-4 pt-6 border-t border-theme-border/50 relative z-10">
+              <span className="text-[9px] font-mono uppercase tracking-widest text-theme-fore-subtle block font-bold">Termasuk:</span>
+              <ul className="space-y-3 text-xs">
                 {t.pricingCards.customIncludes.map((item, idx) => (
-                  <li key={idx} className="flex items-center gap-2.5 text-theme-fore-muted">
-                    <Check className="w-3.5 h-3.5 text-theme-accent flex-shrink-0" />
-                    <span className="text-[11px]">{item}</span>
+                  <li key={idx} className="flex items-start gap-3 text-theme-fore-muted group/item hover:text-theme-fore transition-colors">
+                    <div className="mt-0.5 w-4 h-4 rounded-full bg-theme-accent/10 flex items-center justify-center flex-shrink-0 group-hover/item:bg-theme-accent group-hover/item:text-white transition-colors text-theme-accent">
+                      <Check className="w-2.5 h-2.5" />
+                    </div>
+                    <span className="text-[11px] leading-relaxed">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -1114,7 +1170,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                       />
                       <button
                         type="submit"
-                        className="absolute right-1.5 p-2 bg-theme-accent hover:bg-theme-accent-bright text-white rounded-lg transition-colors cursor-pointer flex items-center justify-center shadow-md active:scale-95"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg bg-theme-accent hover:bg-theme-accent-bright text-white transition-colors cursor-pointer"
                         aria-label="Submit question"
                       >
                         <Send className="w-3 h-3" />
@@ -1582,6 +1638,39 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   </div>
                 </div>
               </div>
+
+              {/* Freelance Platform Options (Upwork / Fastwork) */}
+              <div className="pt-6 mt-2 border-t border-theme-border/50 max-w-sm space-y-4">
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] font-mono text-theme-accent uppercase tracking-wider font-bold">
+                    {t.platforms?.secure || "Transaksi aman & terjamin"}
+                  </span>
+                  <p className="text-xs font-sans font-semibold text-theme-fore">
+                    {t.platforms?.availableOn || "Tersedia juga di:"}
+                  </p>
+                </div>
+                
+                <div className="flex flex-col sm:flex-row items-center gap-3">
+                  <a
+                    href="https://www.upwork.com/freelancers/~017698b392e21b4b6c"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex-1 flex items-center justify-start sm:justify-center gap-3 px-4 py-3 rounded-2xl bg-[#14A800]/5 border border-[#14A800]/20 hover:border-[#14A800]/40 hover:bg-[#14A800]/10 transition-all duration-300 group/btn"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-[#14A800] flex items-center justify-center text-white font-black text-[10px] shadow-sm group-hover/btn:scale-110 transition-transform">U</div>
+                    <span className="font-sans font-bold text-xs text-theme-fore">Upwork</span>
+                  </a>
+                  <a
+                    href="https://fastwork.id/en/user/timurradhadian?source=web_marketplace_profile-menu_profile"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex-1 flex items-center justify-start sm:justify-center gap-3 px-4 py-3 rounded-2xl bg-[#1D4ED8]/5 border border-[#1D4ED8]/20 hover:border-[#1D4ED8]/40 hover:bg-[#1D4ED8]/10 transition-all duration-300 group/btn"
+                  >
+                    <div className="w-6 h-6 rounded-full bg-[#1D4ED8] flex items-center justify-center text-white font-black text-[10px] shadow-sm group-hover/btn:scale-110 transition-transform">F</div>
+                    <span className="font-sans font-bold text-xs text-theme-fore">Fastwork</span>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1726,10 +1815,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   {/* Dispatch CTA Button */}
                   <button
                     type="submit"
-                    className="w-full py-3.5 rounded-xl bg-theme-accent hover:bg-theme-accent-bright text-white text-xs font-sans font-extrabold tracking-widest uppercase shadow-lg shadow-theme-accent/10 active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2 group/submit"
+                    className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-3.5 rounded-xl bg-theme-accent hover:bg-theme-accent-bright text-white text-[11px] sm:text-xs font-sans font-extrabold tracking-widest uppercase shadow-lg shadow-theme-accent/10 active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2 group/submit mx-auto"
                     id="btn-submit-contact"
                   >
-                    <Send className="w-4 h-4 group-hover/submit:translate-x-1 group-hover/submit:-translate-y-0.5 transition-transform" />
+                    <Send className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/submit:translate-x-1 group-hover/submit:-translate-y-0.5 transition-transform" />
                     <span>{t.contact.formSubmit}</span>
                   </button>
 
