@@ -4,8 +4,41 @@ import NextTopLoader from 'nextjs-toploader';
 import LayoutWrapper from "../components/LayoutWrapper";
 
 export const metadata: Metadata = {
-  title: "SejatiDimedia",
-  description: "A premium dual-theme design system and media command center designed in a Linear/Modern style.",
+  metadataBase: new URL("https://sejatidimedia.web.id"),
+  title: {
+    template: "%s | SejatiDimedia",
+    default: "SejatiDimedia - Premium Software Agency & Development",
+  },
+  description: "SejatiDimedia adalah software agency & media command center premium. Kami membangun sistem produksi, aplikasi SaaS, dan produk mobile kustom berkinerja tinggi.",
+  keywords: [
+    "sejatidimedia",
+    "sejati dimedia",
+    "software agency indonesia",
+    "web development",
+    "mobile app development",
+    "jasa pembuatan website",
+    "jasa pembuatan aplikasi",
+    "Timur Dian Radhasejati",
+    "SaaS builder",
+  ],
+  authors: [{ name: "Timur Dian Radhasejati" }],
+  creator: "SejatiDimedia",
+  openGraph: {
+    type: "website",
+    locale: "id_ID",
+    url: "https://sejatidimedia.web.id",
+    title: "SejatiDimedia - Premium Software Agency",
+    description: "Software agency premium yang berfokus pada aplikasi SaaS, web, dan produk mobile berkualitas tinggi.",
+    siteName: "SejatiDimedia",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "SejatiDimedia - Premium Software Agency",
+    description: "Membangun sistem produksi, aplikasi SaaS, dan produk mobile kustom.",
+  },
+  verification: {
+    google: "VDJFy4jlvNQW0Xibu-TmVqJt9ZuNH-hBwIPG3W8TIn8",
+  },
   icons: {
     icon: "/logo.svg",
   },
@@ -14,6 +47,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#050506",
 };
 
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
@@ -41,6 +75,33 @@ export default function RootLayout({
           easing="ease"
           speed={200}
           shadow="0 0 10px #4A85D9,0 0 5px #4A85D9"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ProfessionalService",
+              "name": "SejatiDimedia",
+              "url": "https://sejatidimedia.web.id",
+              "logo": "https://sejatidimedia.web.id/logo.svg",
+              "image": "https://sejatidimedia.web.id/logo.svg",
+              "description": "SejatiDimedia adalah software agency & media command center premium. Kami membangun sistem produksi, aplikasi SaaS, dan produk mobile kustom.",
+              "founder": {
+                "@type": "Person",
+                "name": "Timur Dian Radhasejati"
+              },
+              "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "ID"
+              },
+              "priceRange": "$$",
+              "sameAs": [
+                "https://fastwork.id/en/user/timurradhadian",
+                "https://www.upwork.com/freelancers/~017698b392e21b4b6c"
+              ]
+            })
+          }}
         />
         <LanguageProvider>
           <LayoutWrapper>{children}</LayoutWrapper>
