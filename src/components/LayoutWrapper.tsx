@@ -36,7 +36,7 @@ export default function LayoutWrapper({
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(() => setLoading(false), 200);
+          setTimeout(() => setLoading(false), 1400); // Extended to allow the text animation to play out
           return 100;
         }
         return prev + 2;
@@ -132,65 +132,50 @@ export default function LayoutWrapper({
             }}
             className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-theme-deep text-theme-fore transition-colors duration-300"
           >
-            <div className="absolute w-[300px] h-[300px] rounded-full bg-theme-accent/5 blur-[80px] pointer-events-none transition-colors duration-300" />
+            <div className="absolute w-[400px] h-[400px] rounded-full bg-theme-accent/5 blur-[100px] pointer-events-none transition-colors duration-300" />
 
-            {/* Central Circle Progress & Logo */}
+            {/* Premium Minimalist Logo Reveal */}
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="z-10 flex flex-col items-center gap-6"
+              className="z-10 flex flex-col items-center gap-8"
             >
-              <div className="relative w-36 h-36 flex items-center justify-center">
-                <svg className="absolute w-full h-full -rotate-90" viewBox="0 0 144 144">
-                  <defs>
-                    <linearGradient id="circle-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#2E54A2" />
-                      <stop offset="50%" stopColor="#4A85D9" />
-                      <stop offset="100%" stopColor="#6AA0F2" />
-                    </linearGradient>
-                  </defs>
-                  <circle
-                    cx="72"
-                    cy="72"
-                    r="60"
-                    fill="none"
-                    stroke="var(--border-default)"
-                    strokeWidth="1.5"
-                  />
-                  <motion.circle
-                    cx="72"
-                    cy="72"
-                    r="60"
-                    fill="none"
-                    stroke="url(#circle-grad)"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                    strokeDasharray={376.99}
-                    animate={{ strokeDashoffset: 376.99 - (progress / 100) * 376.99 }}
+              <Image
+                src="/logo.svg"
+                alt="SEJATIDIMEDIA Logo"
+                width={140}
+                height={70}
+                priority
+                className="h-12 w-auto object-contain drop-shadow-xl"
+              />
+              
+              <div className="relative flex flex-col items-center">
+                {/* Ultra-thin elegant progress line */}
+                <div className="w-32 h-[1px] bg-theme-border/50 overflow-hidden rounded-full relative">
+                  <motion.div
+                    className="absolute top-0 left-0 h-full bg-theme-accent shadow-[0_0_8px_rgba(74,133,217,0.8)]"
+                    initial={{ width: "0%" }}
+                    animate={{ width: `${progress}%` }}
                     transition={{ ease: "easeOut", duration: 0.2 }}
                   />
-                </svg>
-
-                <motion.div
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute flex items-center justify-center w-20 h-10"
-                >
-                  <Image
-                    src="/logo.svg"
-                    alt="SEJATIDIMEDIA Logo"
-                    width={80}
-                    height={40}
-                    priority
-                    className="h-10 w-auto object-contain"
-                  />
-                </motion.div>
+                </div>
+                
+                {/* Animated Brand Title at the end of loading */}
+                <div className="absolute top-full mt-6 flex items-center justify-center w-64">
+                  {progress >= 100 && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -8, filter: "blur(4px)" }}
+                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      <span className="font-sans font-extrabold text-[11px] tracking-[0.3em] text-theme-fore uppercase">
+                        SejatiDimedia
+                      </span>
+                    </motion.div>
+                  )}
+                </div>
               </div>
-
-              <span className="font-mono text-xs text-theme-accent/80 tracking-widest transition-colors duration-300">
-                {progress}%
-              </span>
             </motion.div>
           </motion.div>
         )}

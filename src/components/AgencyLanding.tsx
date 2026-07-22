@@ -1587,7 +1587,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
       {/* SECTION 5: FORMULIR KONTAK */}
       <motion.section
         id="contact-section"
-        className="p-8 md:p-14 rounded-3xl bg-theme-elevated border border-theme-border shadow-2xl space-y-8 relative overflow-hidden"
+        className="p-4 sm:p-8 md:p-14 rounded-3xl bg-theme-elevated border border-theme-border shadow-2xl space-y-8 relative overflow-hidden"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
@@ -1640,7 +1640,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               </div>
 
               {/* Freelance Platform Options (Upwork / Fastwork) */}
-              <div className="pt-6 mt-2 border-t border-theme-border/50 max-w-sm space-y-4">
+              <div className="pt-4 sm:pt-6 mt-0 sm:mt-2 border-t border-theme-border/50 max-w-sm space-y-4">
                 <div className="flex flex-col gap-1">
                   <span className="text-[10px] font-mono text-theme-accent uppercase tracking-wider font-bold">
                     {t.platforms?.secure || "Transaksi aman & terjamin"}
@@ -1655,7 +1655,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     href="https://www.upwork.com/freelancers/~017698b392e21b4b6c"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full flex-1 flex items-center justify-start sm:justify-center gap-3 px-4 py-3 rounded-2xl bg-[#14A800]/5 border border-[#14A800]/20 hover:border-[#14A800]/40 hover:bg-[#14A800]/10 transition-all duration-300 group/btn"
+                    className="w-full flex-1 flex items-center justify-center gap-3 px-4 py-3 rounded-2xl bg-[#14A800]/5 border border-[#14A800]/20 hover:border-[#14A800]/40 hover:bg-[#14A800]/10 transition-all duration-300 group/btn"
                   >
                     <div className="w-6 h-6 rounded-full bg-[#14A800] flex items-center justify-center text-white font-black text-[10px] shadow-sm group-hover/btn:scale-110 transition-transform">U</div>
                     <span className="font-sans font-bold text-xs text-theme-fore">Upwork</span>
@@ -1664,7 +1664,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     href="https://fastwork.id/en/user/timurradhadian?source=web_marketplace_profile-menu_profile"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full flex-1 flex items-center justify-start sm:justify-center gap-3 px-4 py-3 rounded-2xl bg-[#1D4ED8]/5 border border-[#1D4ED8]/20 hover:border-[#1D4ED8]/40 hover:bg-[#1D4ED8]/10 transition-all duration-300 group/btn"
+                    className="w-full flex-1 flex items-center justify-center gap-3 px-4 py-3 rounded-2xl bg-[#1D4ED8]/5 border border-[#1D4ED8]/20 hover:border-[#1D4ED8]/40 hover:bg-[#1D4ED8]/10 transition-all duration-300 group/btn"
                   >
                     <div className="w-6 h-6 rounded-full bg-[#1D4ED8] flex items-center justify-center text-white font-black text-[10px] shadow-sm group-hover/btn:scale-110 transition-transform">F</div>
                     <span className="font-sans font-bold text-xs text-theme-fore">Fastwork</span>
@@ -1675,7 +1675,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           </div>
 
           {/* Right Block: High-Fidelity Interactive Form Widget */}
-          <div className="lg:col-span-7 p-4 sm:p-8 rounded-3xl bg-theme-surface/75 backdrop-blur-md border border-theme-border/80 shadow-2xl relative">
+          <div className="lg:col-span-7 p-3 sm:p-8 rounded-3xl bg-theme-surface/75 backdrop-blur-md border border-theme-border/80 shadow-2xl relative">
             <AnimatePresence mode="wait">
               {!formSubmitted ? (
                 <motion.form
@@ -1701,7 +1701,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                         placeholder={t.contact.formNamePlaceholder}
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-3 text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 shadow-sm"
+                        className="w-full px-4 py-4 sm:py-3 text-sm sm:text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 shadow-sm"
                       />
                     </div>
 
@@ -1716,7 +1716,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                         placeholder={t.contact.formEmailPlaceholder}
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-4 py-3 text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 shadow-sm"
+                        className="w-full px-4 py-4 sm:py-3 text-sm sm:text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 shadow-sm"
                       />
                     </div>
                   </div>
@@ -1808,7 +1808,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                       placeholder={t.contact.formDetailsPlaceholder}
                       value={formData.details}
                       onChange={(e) => setFormData({ ...formData, details: e.target.value })}
-                      className="w-full px-4 py-3 text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 resize-none shadow-sm"
+                      className="w-full px-4 py-4 sm:py-3 text-sm sm:text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 resize-none shadow-sm"
                     />
                   </div>
 
