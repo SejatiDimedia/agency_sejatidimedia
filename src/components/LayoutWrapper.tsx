@@ -8,6 +8,7 @@ import Image from "next/image";
 import { Home, Layers, GitMerge, FolderOpen, MessageCircle } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import AiChatWidget from "./AiChatWidget";
+import AuroraBackground from "./ui/aurora-background";
 import { ThemeMode } from "../types";
 import { useLanguage, Language } from "@/lib/i18n/LanguageContext";
 
@@ -182,60 +183,15 @@ export default function LayoutWrapper({
         )}
       </AnimatePresence>
 
-      <div className="min-h-screen relative w-full flex flex-col font-sans overflow-x-clip bg-theme-deep text-theme-fore transition-colors duration-300">
-        {/* 1. Multi-Layer Background System */}
-        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          {theme === "dark" ? (
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#090912_0%,#050506_60%,#010103_100%)]" />
-          ) : (
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,#FFFFFF_0%,#FAF9FC_60%,#F3F2F6_100%)]" />
-          )}
+      <AuroraBackground 
+        className="min-h-screen relative w-full flex flex-col font-sans overflow-x-clip bg-theme-deep text-theme-fore"
+        gradientColors={
+          theme === 'dark' 
+            ? ["rgba(74, 133, 217, 0.15)", "rgba(106, 160, 242, 0.15)"] 
+            : ["rgba(43, 84, 149, 0.12)", "rgba(30, 49, 91, 0.12)"]
+        }
+      >
 
-          <AnimatePresence mode="wait">
-            {theme === "dark" ? (
-              <motion.div
-                key="dark-blobs"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="absolute inset-0"
-              >
-                <div className="absolute -top-[20%] left-[25%] w-[800px] h-[800px] rounded-full bg-[#4A85D9]/10 blur-[150px] animate-float-slow pointer-events-none" />
-                <div className="absolute top-[40%] right-[10%] w-[600px] h-[600px] rounded-full bg-[#1E315B]/5 blur-[120px] animate-float-slower pointer-events-none" />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="light-blobs"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="absolute inset-0"
-              >
-                <div className="absolute -top-[15%] left-[20%] w-[1000px] h-[1000px] rounded-full bg-[#2B5495]/3 blur-[140px] animate-float-slow pointer-events-none" />
-                <div className="absolute top-[35%] right-[5%] w-[800px] h-[800px] rounded-full bg-[#F59E0B]/2 blur-[150px] animate-float-slower pointer-events-none" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage:
-                theme === "dark"
-                  ? "linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px)"
-                  : "linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px)",
-              backgroundSize: "56px 56px",
-            }}
-          />
-
-          <div
-            className="absolute inset-0 pointer-events-none mix-blend-overlay"
-            style={{
-              opacity: theme === "dark" ? 0.015 : 0.008,
-              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
-            }}
-          />
-        </div>
 
         {/* 2. Main Portal Application Header */}
         <header
@@ -353,7 +309,7 @@ export default function LayoutWrapper({
         </main>
 
         {/* 4. High-Fidelity Premium Footer */}
-        <footer className="relative z-10 w-full bg-theme-base border-t border-theme-border/60 pt-16 pb-28 md:pb-12">
+        <footer className="relative z-10 w-full bg-theme-base/30 backdrop-blur-2xl border-t border-theme-border/60 pt-16 pb-28 md:pb-12">
           <div className="max-w-7xl mx-auto px-6 space-y-16">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
               {/* Left Block: Tagline and Contact */}
@@ -531,7 +487,7 @@ export default function LayoutWrapper({
         
         {/* 6. AI Customer Service Widget */}
         <AiChatWidget />
-      </div>
+      </AuroraBackground>
     </>
   );
 }

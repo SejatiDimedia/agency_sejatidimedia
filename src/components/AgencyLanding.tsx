@@ -970,7 +970,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
           {/* Card 1: Starter - MVP Prototype */}
           <motion.div
-            className="p-8 rounded-[2rem] bg-theme-surface/40 backdrop-blur-xl border border-theme-border/40 hover:border-theme-border-accent/50 hover:bg-theme-surface/80 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between space-y-8 relative group text-left"
+            className="p-8 rounded-[2rem] bg-theme-surface/40 backdrop-blur-xl border border-theme-border/80 dark:border-white/15 hover:border-theme-accent/50 hover:bg-theme-surface/80 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between space-y-8 relative group text-left"
             variants={cardSlideUp}
           >
             <div className="space-y-6 relative z-10">
@@ -1014,7 +1014,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
           {/* Card 2: Growth - Production Ready (Most Popular) */}
           <motion.div
-            className="p-8 md:p-9 rounded-[2.5rem] bg-gradient-to-b from-[#f0f4f8] to-white dark:from-[#111625] dark:to-[#0A0C10] text-theme-fore border-2 border-theme-accent/40 dark:border-theme-accent/60 hover:border-theme-accent hover:shadow-[0_0_60px_-15px_rgba(74,133,217,0.4)] transition-all duration-500 flex flex-col justify-between space-y-8 relative lg:-mt-4 lg:mb-4 z-20 overflow-hidden text-left group shadow-2xl shadow-theme-accent/15 dark:shadow-theme-accent/20"
+            className="p-8 md:p-9 rounded-[2.5rem] bg-gradient-to-b from-[#f0f4f8] to-white dark:from-[#111625] dark:to-[#0A0C10] text-theme-fore border-2 border-theme-accent/70 dark:border-theme-accent hover:border-theme-accent hover:shadow-[0_0_60px_-15px_rgba(74,133,217,0.4)] transition-all duration-500 flex flex-col justify-between space-y-8 relative lg:-mt-4 lg:mb-4 z-20 overflow-hidden text-left group shadow-2xl shadow-theme-accent/15 dark:shadow-theme-accent/20"
             variants={cardSlideUp}
           >
             {/* Premium Glow Overlay (Dark Mode Only) */}
@@ -1064,7 +1064,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
           {/* Card 3: Custom - Sistem Kompleks */}
           <motion.div
-            className="p-8 rounded-[2rem] bg-theme-surface/40 backdrop-blur-xl border border-theme-border/40 hover:border-theme-border-accent/50 hover:bg-theme-surface/80 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between space-y-8 relative group text-left"
+            className="p-8 rounded-[2rem] bg-theme-surface/40 backdrop-blur-xl border border-theme-border/80 dark:border-white/15 hover:border-theme-accent/50 hover:bg-theme-surface/80 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between space-y-8 relative group text-left"
             variants={cardSlideUp}
           >
             <div className="space-y-6 relative z-10">

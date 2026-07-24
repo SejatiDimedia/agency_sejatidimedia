@@ -46,6 +46,10 @@
   --border-default: rgba(0, 0, 0, 0.07);
   --border-hover: rgba(0, 0, 0, 0.12);
   --border-accent: rgba(43, 84, 149, 0.40);
+  
+  /* Aurora Colors */
+  --aurora-color1: rgba(168,85,247,0.2);
+  --aurora-color2: rgba(79,70,229,0.2);
 }
 
 .dark {
