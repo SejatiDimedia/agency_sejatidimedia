@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getProjects } from '../../../lib/api/glio-projects';
+import { notifyOwnerViaTelegram } from '../../../lib/telegram';
+import { saveSessionMapping, enableHandoffMode, isHandoffMode } from '../../../lib/redis';
 
 const BASE_SYSTEM_PROMPT = `Namamu adalah Sedia AI, asisten virtual resmi untuk SejatiDimedia (sejatidimedia.web.id). 
 SejatiDimedia adalah software agency & media command center premium berbasis di Balikpapan, Indonesia. Dikelola oleh Timur Dian Radha Sejati.
@@ -23,7 +25,78 @@ Aturan menjawab & Anti-Halusinasi (SANGAT PENTING!):
 
 export async function POST(req: Request) {
   try {
-    const { history, message } = await req.json();
+    const { history, message, session_id } = await req.json();
+
+    // Check if user is already in Handoff (Human) mode
+    const inHandoff = session_id ? await isHandoffMode(session_id) : false;
+
+    // HANDOFF LOGIC
+    if (message.trim().toLowerCase() === '/end') {
+      if (session_id) {
+        const { disableHandoffMode } = await import('../../../lib/redis');
+        await disableHandoffMode(session_id);
+        
+        // Notify owner on Telegram that the client ended the chat
+        const telegramText = `🔴 *Klien Mengakhiri Sesi Chat*\n\nSession ID: \`${session_id}\`\nSedia AI telah mengambil alih percakapan kembali.`;
+        try {
+          await notifyOwnerViaTelegram(telegramText);
+        } catch(e) {}
+      }
+      return NextResponse.json({ 
+        response: "Sesi percakapan langsung dengan Tim SejatiDimedia telah diakhiri. Saya (Sedia AI) kembali siap membantu Anda! 🤖",
+        isHandoff: false
+      });
+    }
+
+    if (message.toLowerCase().startsWith('/chatowner') || inHandoff) {
+      if (!session_id) {
+        return NextResponse.json({ response: "Maaf, sesi Anda tidak valid (Session ID kosong). Coba muat ulang halaman.", isHandoff: false });
+      }
+
+      // If this is the FIRST time triggering handoff
+      if (message.toLowerCase().startsWith('/chatowner')) {
+        const clientName = message.substring(10).trim() || 'Klien Baru';
+
+        // Format summary of chat for the owner
+        const chatSummary = Array.isArray(history) 
+          ? history.map((msg: any) => `${msg.role === 'user' ? '👤 User' : '🤖 AI'}: ${msg.text}`).join('\n')
+          : '';
+        
+        const telegramText = `🔔 *Request Chat dari ${clientName}*\n\n*Session ID:* \`${session_id}\`\n\n*Riwayat Chat Singkat:*\n${chatSummary.substring(chatSummary.length - 1000)}\n\n_Balas pesan ini untuk merespons user secara langsung._`;
+
+        try {
+          const tgResponse = await notifyOwnerViaTelegram(telegramText);
+          // Save mapping message_id -> session_id
+          await saveSessionMapping(tgResponse.message_id, session_id);
+          // Lock user into human handoff mode for 2 hours
+          await enableHandoffMode(session_id);
+          
+          return NextResponse.json({ 
+            response: "Baik, saya akan sampaikan pesan Anda ke tim kami. Mohon tunggu sebentar ya, mereka akan segera membalas langsung di sini.",
+            isHandoff: true
+          });
+        } catch (err) {
+          console.error("Handoff failed:", err);
+          return NextResponse.json({ response: "Mohon maaf, sistem notifikasi ke tim kami sedang bermasalah. Silakan isi form kontak di bawah layar.", isHandoff: false });
+        }
+      } 
+      
+      // If user is ALREADY in handoff mode, just forward their message directly
+      else {
+        const telegramText = `💬 *Balasan dari User (${session_id.substring(0,6)}...)*\n\n"${message}"`;
+        
+        try {
+          const tgResponse = await notifyOwnerViaTelegram(telegramText);
+          await saveSessionMapping(tgResponse.message_id, session_id);
+          
+          // Don't return an AI text response, just acknowledge receipt
+          return NextResponse.json({ response: "_Pesan terkirim ke Tim SejatiDimedia..._", isHandoff: true });
+        } catch (err) {
+          console.error("Handoff forwarding failed:", err);
+          return NextResponse.json({ response: "Mohon maaf, pesan Anda gagal terkirim ke tim kami. Coba beberapa saat lagi.", isHandoff: true });
+        }
+      }
+    }
 
     const apiKey = process.env.OPENROUTER_API_KEY || process.env.GEMINI_API_KEY;
     
@@ -104,7 +177,7 @@ export async function POST(req: Request) {
       throw new Error("Semua server AI gratis sedang sibuk (Provider returned error). Coba lagi beberapa saat.");
     }
 
-    return NextResponse.json({ response: aiMessage });
+    return NextResponse.json({ response: aiMessage, isHandoff: false });
   } catch (error: any) {
     console.error("Chat API Error:", error);
     return NextResponse.json(

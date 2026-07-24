@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageSquare, X, Send, User, Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import Pusher from 'pusher-js';
 
 // Custom Sedia AI Icon based on user's new SVG/image
 const SediaIcon = ({ className }: { className?: string }) => (
@@ -37,8 +38,43 @@ export default function AiChatWidget() {
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [sessionId, setSessionId] = useState<string>('');
+  const [isHandoffMode, setIsHandoffMode] = useState(false);
+  const [isWaitingForName, setIsWaitingForName] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Initialize Session ID and Pusher
+  useEffect(() => {
+    // Get or create session ID
+    let currentSessionId = localStorage.getItem('sedia_session_id');
+    if (!currentSessionId) {
+      currentSessionId = crypto.randomUUID();
+      localStorage.setItem('sedia_session_id', currentSessionId);
+    }
+    setSessionId(currentSessionId);
+
+    // Initialize Pusher Client
+    const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
+    const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
+    
+    if (pusherKey && pusherCluster) {
+      const pusher = new Pusher(pusherKey, {
+        cluster: pusherCluster,
+      });
+
+      const channel = pusher.subscribe(`session-${currentSessionId}`);
+      channel.bind('owner_reply', (data: { text: string }) => {
+        setMessages(prev => [...prev, { role: 'ai', text: `**👨‍💼 Tim SejatiDimedia:**\n\n${data.text}` }]);
+        setIsHandoffMode(true); // Since owner replied, we must be in handoff
+      });
+
+      return () => {
+        pusher.unsubscribe(`session-${currentSessionId}`);
+        pusher.disconnect();
+      };
+    }
+  }, []);
 
   // Auto scroll to bottom when new messages arrive
   useEffect(() => {
@@ -48,10 +84,25 @@ export default function AiChatWidget() {
   const handleSendMessage = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!input.trim() || isLoading) return;
-
     const userMessage = input.trim();
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
+    
+    if (isWaitingForName) {
+      setIsWaitingForName(false);
+      await performChat(userMessage, `/chatowner ${userMessage}`);
+    } else {
+      await performChat(userMessage);
+    }
+  };
+
+  const performChat = async (displayMessage: string, hiddenPayload?: string) => {
+    if (isLoading) return;
+    
+    // Only display user message if it's not a system command
+    if (!displayMessage.startsWith('/')) {
+      setMessages(prev => [...prev, { role: 'user', text: displayMessage }]);
+    }
+    
     setIsLoading(true);
 
     try {
@@ -65,8 +116,9 @@ export default function AiChatWidget() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          message: userMessage,
-          history: historyForApi
+          message: hiddenPayload || displayMessage,
+          history: historyForApi,
+          session_id: sessionId
         })
       });
 
@@ -77,9 +129,16 @@ export default function AiChatWidget() {
       }
 
       setMessages(prev => [...prev, { role: 'ai', text: data.response }]);
+      
+      // Update handoff state from server response
+      if (data.isHandoff !== undefined) {
+        setIsHandoffMode(data.isHandoff);
+      }
     } catch (error: any) {
       setMessages(prev => [...prev, { role: 'ai', text: `⚠️ Error: ${error.message}` }]);
-      setInput(userMessage); // Restore input so user doesn't have to retype
+      if (!displayMessage.startsWith('/')) {
+        setInput(displayMessage); // Restore input so user doesn't have to retype
+      }
     } finally {
       setIsLoading(false);
     }
@@ -131,12 +190,35 @@ export default function AiChatWidget() {
                   </p>
                 </div>
               </div>
-              <button 
-                onClick={() => setIsOpen(false)}
-                className="w-8 h-8 rounded-full bg-theme-elevated hover:bg-theme-border/50 flex items-center justify-center text-theme-fore-muted hover:text-theme-fore transition-colors cursor-pointer"
-              >
-                <X className="w-4 h-4" />
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    if (isHandoffMode) {
+                      performChat('/end');
+                    } else {
+                      setIsWaitingForName(true);
+                      setMessages(prev => [...prev, { role: 'ai', text: "Baik, saya akan segera memanggilkan tim SejatiDimedia untuk Anda. Sebelumnya, bolehkah saya tahu siapa nama Anda?" }]);
+                    }
+                  }}
+                  disabled={isLoading || isWaitingForName}
+                  className={
+                    isHandoffMode 
+                      ? "px-3 py-1.5 rounded-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white transition-colors text-[10px] font-bold tracking-wide uppercase disabled:opacity-50 cursor-pointer border border-red-500/20 flex items-center gap-1.5"
+                      : "px-3 py-1.5 rounded-full bg-theme-accent/10 hover:bg-theme-accent text-theme-accent hover:text-white transition-colors text-[10px] font-bold tracking-wide uppercase disabled:opacity-50 cursor-pointer border border-theme-accent/20 flex items-center gap-1.5"
+                  }
+                >
+                  {!isHandoffMode && (
+                    <img src="/telegram-icon.svg" alt="Telegram" className="w-3.5 h-3.5" />
+                  )}
+                  {isHandoffMode ? "Akhiri Sesi" : "Hubungi Tim"}
+                </button>
+                <button 
+                  onClick={() => setIsOpen(false)}
+                  className="w-8 h-8 rounded-full bg-theme-elevated hover:bg-theme-border/50 flex items-center justify-center text-theme-fore-muted hover:text-theme-fore transition-colors cursor-pointer"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
             {/* Messages Area */}
