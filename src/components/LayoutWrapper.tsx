@@ -7,6 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { Home, Layers, GitMerge, FolderOpen, MessageCircle } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import AiChatWidget from "./AiChatWidget";
 import { ThemeMode } from "../types";
 import { useLanguage, Language } from "@/lib/i18n/LanguageContext";
 
@@ -238,12 +239,24 @@ export default function LayoutWrapper({
 
         {/* 2. Main Portal Application Header */}
         <header
-          className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-[0.16,1,0.3,1] ${scrolled
-            ? "bg-theme-base/80 backdrop-blur-xl border-b border-theme-border/80 shadow-lg shadow-black/5 py-3"
-            : "bg-transparent border-b border-transparent py-5"
+          className={`fixed top-0 left-0 right-0 z-50 w-full flex flex-col transition-all duration-300 ease-[0.16,1,0.3,1] ${scrolled
+            ? "bg-theme-base/80 backdrop-blur-xl border-b border-theme-border/80 shadow-lg shadow-black/5"
+            : "bg-transparent border-b border-transparent"
             }`}
         >
-          <div className="max-w-7xl mx-auto px-6 flex items-center justify-between gap-4 transition-all duration-300">
+          {/* Top Info Announcement Bar */}
+          <div className={`w-full bg-theme-accent flex items-center justify-center transition-all duration-300 overflow-hidden ${scrolled ? 'h-0 opacity-0' : 'h-8 opacity-100'}`}>
+            <div className="flex items-center gap-2 text-white text-[9px] sm:text-[10px] font-sans font-bold tracking-widest uppercase">
+              <span className="animate-pulse">🔥</span>
+              <span>{language === 'id' ? 'Tersedia Sesi Konsultasi Gratis Terbatas' : 'Limited Free Consultation Available'}</span>
+              <span className="mx-1 opacity-50 hidden sm:inline">|</span>
+              <button onClick={() => handleNavClick('contact-section')} className="underline underline-offset-2 hover:text-white/80 transition-colors cursor-pointer hidden sm:inline">
+                {language === 'id' ? 'Pesan Sekarang' : 'Book Now'}
+              </button>
+            </div>
+          </div>
+
+          <div className={`max-w-7xl mx-auto px-6 w-full flex items-center justify-between gap-4 transition-all duration-300 ${scrolled ? 'py-3' : 'py-5'}`}>
             {/* Logo / Brand Name */}
             <div
               className="flex items-center gap-3 cursor-pointer select-none"
@@ -515,6 +528,9 @@ export default function LayoutWrapper({
             </button>
           </div>
         </nav>
+        
+        {/* 6. AI Customer Service Widget */}
+        <AiChatWidget />
       </div>
     </>
   );
