@@ -15,15 +15,15 @@ export const en = {
   },
   hero: {
     badge: "AVAILABLE FOR NEW CLIENTS",
-    title: "Independent Software Developer for Businesses That Need Systems, Not Just ",
+    title: "Independent Software Developer for Businesses That Need Systems, Not Just",
     titleHighlight: "Websites",
     subtitle: "From a manufacturing industry background to independent projects — I build web, mobile, and backend applications with the same standards as systems handling real daily business operations.",
     card1Title: "Real Manufacturing Systems",
-    card1Desc: "Accustomed to building systems that handle transactions, inventory, and daily workflows — not just landing pages.",
+    card1Desc: "Accustomed to building enterprise-scale systems in the manufacturing industry that handle transactions, inventory, and daily workflows accurately.",
     card2Title: "Testable Products",
-    card2Desc: "Code can be audited on GitHub, applications are active and can be tested directly — not just portfolio screenshots.",
-    btnPrimary: "View Portfolio & Live Demo",
-    btnSecondary: "See Capabilities",
+    card2Desc: "Code can be audited on GitHub, applications are active and can be tested directly — providing concrete evidence, not just portfolio screenshots.",
+    btnPrimary: "Contact Me",
+    btnSecondary: "View Portfolio",
   },
   services: {
     sectionTitle: "Services",
@@ -80,7 +80,7 @@ export const en = {
     card2Desc: "From idea validation MVPs to multi-tenant ERP systems for enterprise needs. Every project is documented and its workflow history is traceable.",
     card2Btn: "View Portfolio",
     card3Title: "Open Verification",
-    card3Desc: "Code transparency through GitHub and a professional history that can be openly verified on LinkedIn, providing 100% peace of mind.",
+    card3Desc: "Code transparency through GitHub and professional history on LinkedIn, so potential clients can openly verify credibility before starting a project.",
     card3Btn: "Contact Me",
   },
   pricing: {
@@ -156,7 +156,7 @@ export const en = {
   },
   differences: {
     badge: "Advantages",
-    mainHeading: "What Sets ",
+    mainHeading: "What Sets",
     mainHeadingHighlight: "My Work Apart",
     items: [
       {
@@ -186,7 +186,7 @@ export const en = {
   },
   contact: {
     badge: "Limited Capacity Every Quarter",
-    mainHeading: "Let's Build the System ",
+    mainHeading: "Let's Build the System",
     mainHeadingHighlight: "You Truly Need",
     desc: "I limit the number of projects accepted each quarter so every client gets full attention — not worked on casually between other projects.",
     perk1Title: "Weekly Previews",
@@ -199,7 +199,7 @@ export const en = {
     formEmail: "Email",
     formProject: "Project Description",
     formProjectPlaceholder: "Tell me a little bit about the project or problem you want to solve...",
-        formBtn: "Send Message",
+    formBtn: "Send Message",
     formNameLabel: "Your Name",
     formNamePlaceholder: "e.g. Raden",
     formEmailLabel: "Email Address",
@@ -235,7 +235,7 @@ export const en = {
     viewAll: "View All Projects",
     viewProject: "View Project"
   },
-  
+
   milestones: [
     {
       step: '01',
@@ -313,7 +313,7 @@ export const en = {
       'Periodic Server Maintenance'
     ]
   },
-  
+
   features: {
     f1: "No Middlemen",
     f2: "Clean & Structured Code",
@@ -356,7 +356,7 @@ export const en = {
     privacy: "PRIVACY POLICY",
     terms: "TERMS & CONDITIONS"
   },
-    platforms: {
+  platforms: {
     availableOn: "Also available for hire on these platforms:",
     secure: "Secure & guaranteed transactions"
   },
@@ -372,5 +372,18 @@ export const en = {
     github: "GitHub",
     dribbble: "Dribbble",
     rights: "All Rights Reserved."
+  },
+  trust: {
+    badge: "Why Clients Trust",
+    mainHeading: "Why Clients Trust",
+    mainHeadingHighlight: "Working With Me",
+    items: [
+      { title: "Direct Communication Without Intermediaries", desc: "You speak directly with the main developer who understands your technical vision, ensuring every instruction and feedback is executed without distortion." },
+      { title: "Clean & Structured Code", desc: "The architecture is built with the best industry standards, neat, and documented, making it easy to scale or hand over to another team in the future." },
+      { title: "Post-Launch Support", desc: "Accompanying you during the critical post-launch phase to ensure the system runs stably, fixing bugs, and maintaining performance." },
+      { title: "Structured Revisions", desc: "A structured feedback process at each milestone, preventing a total overhaul at the end and keeping the project on-track." },
+      { title: "Gradual Payments", desc: "A milestone-based payment scheme. You only pay when the agreed features are fully completed and pass testing." },
+      { title: "100% Your Copyright", desc: "After full payment is complete, all source code, intellectual property, and infrastructure access are fully handed over to you." }
+    ]
   }
 };

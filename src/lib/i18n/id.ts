@@ -15,15 +15,15 @@ export const id = {
   },
   hero: {
     badge: "TERSEDIA UNTUK KLIEN BARU",
-    title: "Software Developer Independen untuk Bisnis yang Butuh Sistem, Bukan Sekadar ",
+    title: "Software Developer Independen untuk Bisnis yang Butuh Sistem, Bukan Sekadar",
     titleHighlight: "Website",
     subtitle: "Dari latar belakang industri manufaktur ke proyek independen — saya membangun aplikasi web, mobile, dan backend dengan standar yang sama seperti sistem yang menangani operasional bisnis nyata setiap hari.",
     card1Title: "Sistem Manufaktur Nyata",
-    card1Desc: "Terbiasa membangun sistem yang menangani transaksi, inventori, dan proses kerja harian — bukan sekadar landing page.",
+    card1Desc: "Terbiasa membangun sistem berskala enterprise di industri manufaktur yang menangani transaksi, inventori, dan proses kerja harian secara akurat.",
     card2Title: "Bisa Diuji Langsung",
-    card2Desc: "Kode dapat diaudit di GitHub, aplikasi aktif dan bisa dicoba langsung — tidak hanya screenshot portofolio.",
-    btnPrimary: "Cek Portofolio & Live Demo",
-    btnSecondary: "Lihat Kompetensi",
+    card2Desc: "Kode dapat diaudit di GitHub, aplikasi aktif dan bisa dicoba langsung — memberikan bukti konkret, tidak hanya sebatas screenshot portofolio.",
+    btnPrimary: "Kontak Saya",
+    btnSecondary: "Lihat Portofolio",
   },
   services: {
     sectionTitle: "Layanan",
@@ -80,7 +80,7 @@ export const id = {
     card2Desc: "Mulai dari MVP validasi ide hingga sistem ERP multi-tenant untuk kebutuhan enterprise. Setiap proyek didokumentasikan dan dapat ditelusuri riwayat pengerjaannya.",
     card2Btn: "Lihat Portofolio",
     card3Title: "Verifikasi Terbuka",
-    card3Desc: "Transparansi kode melalui GitHub dan riwayat profesional yang bisa diverifikasi secara terbuka di LinkedIn, memberikan rasa aman 100%.",
+    card3Desc: "Transparansi kode melalui GitHub dan riwayat profesional di LinkedIn, sehingga calon klien dapat memverifikasi kredibilitas secara terbuka sebelum memulai proyek.",
     card3Btn: "Hubungi Kontak",
   },
   pricing: {
@@ -156,7 +156,7 @@ export const id = {
   },
   differences: {
     badge: "Keunggulan",
-    mainHeading: "Yang Membedakan ",
+    mainHeading: "Yang Membedakan",
     mainHeadingHighlight: "Cara Saya Bekerja",
     items: [
       {
@@ -186,7 +186,7 @@ export const id = {
   },
   contact: {
     badge: "Kapasitas Terbatas Setiap Kuartal",
-    mainHeading: "Mari Bangun Sistem yang ",
+    mainHeading: "Mari Bangun Sistem yang",
     mainHeadingHighlight: "Benar-Benar Anda Butuhkan",
     desc: "Saya membatasi jumlah proyek yang diterima setiap kuartal agar setiap klien mendapat perhatian penuh — bukan dikerjakan sambil lalu di antara proyek lain.",
     perk1Title: "Preview Mingguan",
@@ -199,7 +199,7 @@ export const id = {
     formEmail: "Email",
     formProject: "Deskripsi Proyek",
     formProjectPlaceholder: "Ceritakan sedikit tentang proyek atau masalah yang ingin Anda selesaikan...",
-        formBtn: "Kirim Pesan",
+    formBtn: "Kirim Pesan",
     formNameLabel: "Nama Anda",
     formNamePlaceholder: "cth. Raden",
     formEmailLabel: "Alamat Email",
@@ -235,7 +235,7 @@ export const id = {
     viewAll: "Lihat Semua Proyek",
     viewProject: "Lihat Proyek"
   },
-  
+
   milestones: [
     {
       step: '01',
@@ -313,7 +313,7 @@ export const id = {
       'Pemeliharaan Server Berkala'
     ]
   },
-  
+
   features: {
     f1: "Tanpa Perantara",
     f2: "Kode Bersih & Terstruktur",
@@ -356,7 +356,7 @@ export const id = {
     privacy: "KEBIJAKAN PRIVASI",
     terms: "SYARAT & KETENTUAN"
   },
-    platforms: {
+  platforms: {
     availableOn: "Juga tersedia untuk disewa melalui platform:",
     secure: "Transaksi aman & terjamin"
   },
@@ -372,5 +372,18 @@ export const id = {
     github: "GitHub",
     dribbble: "Dribbble",
     rights: "Hak Cipta Dilindungi."
+  },
+  trust: {
+    badge: "Kenapa Klien Percaya",
+    mainHeading: "Kenapa Klien Percaya",
+    mainHeadingHighlight: "Bekerja Sama Dengan Saya",
+    items: [
+      { title: "Komunikasi Langsung Tanpa Perantara", desc: "Anda berbicara langsung dengan pengembang utama yang memahami visi teknis Anda, memastikan setiap instruksi dan masukan dieksekusi tanpa distorsi." },
+      { title: "Kode Bersih & Terstruktur", desc: "Arsitektur dibangun dengan standar industri terbaik, rapi, dan terdokumentasi, sehingga mudah diskalakan atau diserahkan ke tim lain di masa depan." },
+      { title: "Pendampingan Pasca-Launch", desc: "Mendampingi Anda selama fase kritis pasca-peluncuran untuk memastikan sistem berjalan stabil, memperbaiki bug, dan menjaga performa." },
+      { title: "Revisi Terstruktur", desc: "Proses feedback yang terstruktur di setiap milestone (tahapan), mencegah rombak total di akhir dan menjaga proyek tetap on-track." },
+      { title: "Pembayaran Bertahap", desc: "Skema pembayaran termin berbasis milestone (berkala). Anda hanya membayar saat fitur yang disepakati benar-benar selesai dan lulus uji coba." },
+      { title: "100% Hak Cipta Anda", desc: "Setelah pelunasan selesai, seluruh source code, kekayaan intelektual, dan akses infrastruktur sepenuhnya diserahkan menjadi milik Anda seutuhnya." }
+    ]
   }
 };
