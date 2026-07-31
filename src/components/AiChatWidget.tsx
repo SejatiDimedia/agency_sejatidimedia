@@ -183,8 +183,8 @@ export default function AiChatWidget() {
             {/* Header */}
             <div className="px-5 py-4 border-b border-theme-border bg-theme-elevated/50 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-theme-accent/10 border border-theme-accent/20 flex items-center justify-center">
-                  <SediaIcon className="w-5 h-5 text-theme-accent" />
+                <div className="w-8 h-8 rounded-full bg-theme-accent/10 border border-theme-accent/20 flex items-center justify-center overflow-hidden">
+                  <img src="/ai-gif2.gif" alt="CS Avatar" className="w-full h-full object-cover scale-110" />
                 </div>
                 <div>
                   <h3 className="text-sm font-sans font-bold text-theme-fore leading-tight">Sedia AI</h3>
@@ -230,8 +230,8 @@ export default function AiChatWidget() {
               {messages.map((msg, idx) => (
                 <div key={idx} className={`flex items-end gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                   {/* Avatar */}
-                  <div className={`shrink-0 w-7 h-7 rounded-full flex items-center justify-center shadow-sm ${msg.role === 'user' ? 'bg-theme-fore text-theme-base' : 'bg-theme-accent text-white'}`}>
-                    {msg.role === 'user' ? <User className="w-3.5 h-3.5" /> : <SediaIcon className="w-4 h-4" />}
+                  <div className={`shrink-0 w-7 h-7 rounded-full overflow-hidden flex items-center justify-center shadow-sm ${msg.role === 'user' ? 'bg-theme-fore text-theme-base' : 'bg-theme-accent/10 border border-theme-accent/20'}`}>
+                    {msg.role === 'user' ? <User className="w-3.5 h-3.5" /> : <img src="/ai-gif2.gif" className="w-full h-full object-cover scale-110" />}
                   </div>
                   
                   {/* Bubble */}
