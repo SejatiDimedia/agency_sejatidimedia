@@ -46,5 +46,6 @@ export const TECH_ICONS: Record<string, string> = {
   "Cloudflare R2": "devicon:cloudflare",
   "Supabase": "devicon:supabase",
   "Astro": "devicon:astro",
-  "Fast API": "devicon:fastapi"
+  "Fast API": "devicon:fastapi",
+  "RabbitMQ": "devicon:rabbitmq"
 };
