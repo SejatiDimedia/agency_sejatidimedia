@@ -14,15 +14,28 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Icon } from '@iconify/react';
 
 
-const GlintStar = ({ className }: { className?: string }) => (
-  <div className={`absolute pointer-events-none select-none ${className}`}>
+const GlintStar = ({ className, delay = 0 }: { className?: string; delay?: number }) => (
+  <motion.div 
+    className={`absolute pointer-events-none select-none ${className}`}
+    animate={{ 
+      opacity: [0.2, 1, 0.2],
+      scale: [0.8, 1.3, 0.8],
+      rotate: [0, 15, 0]
+    }}
+    transition={{
+      duration: 3,
+      repeat: Infinity,
+      ease: "easeInOut",
+      delay: delay
+    }}
+  >
     {/* Center core glow */}
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-theme-accent/25 blur-[4px]" />
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-theme-accent/30 blur-[4px]" />
     {/* Horizontal ray */}
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-[1px] bg-gradient-to-r from-transparent via-white/80 to-transparent" />
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-[1px] bg-gradient-to-r from-transparent via-theme-accent-bright/90 to-transparent" />
     {/* Vertical ray */}
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-24 w-[1px] bg-gradient-to-b from-transparent via-white/80 to-transparent" />
-  </div>
+    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-24 w-[1px] bg-gradient-to-b from-transparent via-theme-accent-bright/90 to-transparent" />
+  </motion.div>
 );
 
 
@@ -252,11 +265,40 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
   return (
     <div className="space-y-24">
       {/* SECTION 1: BESPOKE SLICED HERO STAGE (AS PER REFERENCE IMAGE) */}
-      <section className="relative py-8 md:py-16 min-h-[85vh] flex flex-col justify-center overflow-visible">
+      <section className="relative py-8 md:py-16 min-h-[85vh] flex flex-col justify-center overflow-visible z-0">
+
+        {/* Animated Background Orb */}
+        <motion.div 
+          className="absolute top-[20%] left-[20%] w-72 h-72 sm:w-96 sm:h-96 bg-theme-accent/20 rounded-full blur-[100px] -z-10 pointer-events-none"
+          animate={{
+            x: [0, 50, 0, -50, 0],
+            y: [0, -30, 30, -30, 0],
+            scale: [1, 1.2, 0.9, 1.1, 1]
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+        <motion.div 
+          className="absolute bottom-[20%] right-[10%] w-64 h-64 sm:w-80 sm:h-80 bg-[#1D4ED8]/15 rounded-full blur-[100px] -z-10 pointer-events-none"
+          animate={{
+            x: [0, -50, 0, 50, 0],
+            y: [0, 40, -40, 40, 0],
+            scale: [1, 1.1, 0.8, 1.2, 1]
+          }}
+          transition={{
+            duration: 12,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        />
+
         {/* Cinematic Glint Star lens-flares from reference image */}
-        <GlintStar className="top-[10%] left-[2%] opacity-60 scale-125 select-none" />
-        <GlintStar className="bottom-[22%] right-[12%] opacity-50 scale-150 select-none" />
-        <GlintStar className="top-[45%] left-[45%] opacity-35 scale-90 select-none" />
+        <GlintStar className="top-[10%] left-[2%] opacity-60 scale-125 select-none" delay={0} />
+        <GlintStar className="bottom-[22%] right-[12%] opacity-50 scale-150 select-none" delay={1.5} />
+        <GlintStar className="top-[45%] left-[45%] opacity-35 scale-90 select-none" delay={3} />
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-12 items-stretch text-left">
 
@@ -272,7 +314,11 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             >
               <h1 className="text-[40px] sm:text-5xl md:text-6xl lg:text-5xl xl:text-6.5xl font-sans font-extrabold tracking-tight leading-[1.08] text-theme-fore">
                 <>
-                  {t.hero.title} <span className="font-serif italic font-normal text-theme-accent relative inline-block">{t.hero.titleHighlight}</span>.
+                  {t.hero.title} <motion.span 
+                    animate={{ textShadow: ["0px 0px 0px rgba(0,0,0,0)", "0px 0px 25px var(--theme-accent)", "0px 0px 0px rgba(0,0,0,0)"] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    className="font-serif italic font-normal text-theme-accent relative inline-block"
+                  >{t.hero.titleHighlight}</motion.span>.
                 </>
               </h1>
             </motion.div>
@@ -282,9 +328,13 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="max-w-[340px] p-6 rounded-3xl bg-theme-elevated/70 backdrop-blur-xl border border-theme-border shadow-2xl relative overflow-hidden group hover:border-theme-border-accent transition-all duration-300"
               id="hero-stats-card-left"
             >
+              <motion.div
+                animate={{ y: [0, -15, 0], rotate: [0, 1, -1, 0] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
+                className="max-w-[340px] p-6 rounded-3xl bg-theme-elevated/70 backdrop-blur-xl border border-theme-border shadow-2xl relative overflow-hidden group hover:border-theme-border-accent transition-all duration-300"
+              >
               {/* Soft decorative glow */}
               <div className="absolute top-0 right-0 w-28 h-28 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
               <div className="space-y-2 relative z-10">
@@ -298,6 +348,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   {t.hero.card1Desc}
                 </p>
               </div>
+              </motion.div>
             </motion.div>
 
           </div>
@@ -310,9 +361,14 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="max-w-[340px] p-6 rounded-3xl bg-theme-elevated/70 backdrop-blur-xl border border-theme-border shadow-2xl relative overflow-hidden group hover:border-theme-border-accent transition-all duration-300 lg:ml-auto lg:my-6"
+              className="lg:ml-auto lg:my-6"
               id="hero-stats-card-right"
             >
+              <motion.div
+                animate={{ y: [0, -15, 0], rotate: [0, -1, 1, 0] }}
+                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
+                className="max-w-[340px] p-6 rounded-3xl bg-theme-elevated/70 backdrop-blur-xl border border-theme-border shadow-2xl relative overflow-hidden group hover:border-theme-border-accent transition-all duration-300"
+              >
               {/* Soft decorative glow */}
               <div className="absolute top-0 right-0 w-28 h-28 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
               <div className="space-y-2 relative z-10">
@@ -326,6 +382,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   {t.hero.card2Desc}
                 </p>
               </div>
+              </motion.div>
             </motion.div>
 
             {/* Bottom Right Description & CTA Button */}
@@ -341,9 +398,15 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               <div className="flex flex-col sm:flex-row gap-3">
                 <button
                   onClick={() => scrollToId('contact-section')}
-                  className="px-6 py-3.5 rounded-full text-xs font-bold bg-theme-accent hover:bg-theme-accent-bright text-white shadow-lg shadow-theme-accent/10 hover:shadow-theme-accent/20 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 flex-grow sm:flex-grow-0"
+                  className="relative px-6 py-3.5 rounded-full text-xs font-bold bg-theme-accent hover:bg-theme-accent-bright text-white shadow-lg shadow-theme-accent/10 hover:shadow-theme-accent/20 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 flex-grow sm:flex-grow-0"
                   id="hero-btn-book-call"
                 >
+                  {/* Subtle pulse ring behind button */}
+                  <motion.div
+                    className="absolute inset-0 rounded-full bg-theme-accent -z-10"
+                    animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  />
                   <span>{t.hero.btnPrimary}</span>
                   <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
                 </button>
@@ -975,7 +1038,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   <h3 className="text-xl font-sans font-extrabold text-theme-fore">{t.pricingCards.customTitle}</h3>
                 </div>
                 <div className="w-10 h-10 rounded-2xl bg-theme-elevated border border-theme-border flex items-center justify-center text-theme-fore-muted group-hover:text-theme-accent group-hover:border-theme-accent/30 transition-all duration-300 shadow-sm">
-                  <Icon icon="ph:sparkle-duotone" className="w-4.5 h-4.5" />
+                  <Icon icon="hugeicons:customize" className="w-4.5 h-4.5" />
                 </div>
               </div>
               <p className="text-[11px] text-theme-fore-muted leading-relaxed">
