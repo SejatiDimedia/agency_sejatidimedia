@@ -287,17 +287,19 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               </h1>
             </motion.div>
 
-            {/* Bottom Left Card: Pengalaman Industri */}
+            {/* Bottom Left Cards */}
             <motion.div
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              id="hero-stats-card-left"
+              className="mt-8 lg:mt-auto flex flex-col sm:flex-row gap-4"
+              id="hero-stats-cards"
             >
+              {/* Card 1: 6+ Years Experience */}
               <motion.div
                 animate={{ y: [0, -15, 0], rotate: [0, 1, -1, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
-                className="max-w-[340px] p-6 rounded-3xl bg-theme-elevated/70 backdrop-blur-xl border border-theme-border shadow-2xl relative overflow-hidden group hover:border-theme-border-accent transition-all duration-300"
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                className="flex-1 max-w-[340px] p-6 rounded-3xl bg-theme-elevated/70 backdrop-blur-xl border border-theme-border shadow-2xl relative overflow-hidden group hover:border-theme-border-accent transition-all duration-300"
               >
                 {/* Soft decorative glow */}
                 <div className="absolute top-0 right-0 w-28 h-28 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
@@ -313,31 +315,18 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   </p>
                 </div>
               </motion.div>
-            </motion.div>
 
-          </div>
-
-          {/* RIGHT COLUMN: Intro Text, Middle Stats Card, Conclusion & Orange CTA Button (lg:col-span-5) */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-12 lg:space-y-0 min-h-full lg:py-4">
-
-            {/* Middle Right Card: Dynamic Proyek Independen */}
-            <motion.div
-              initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:ml-auto lg:my-6"
-              id="hero-stats-card-right"
-            >
+              {/* Card 2: Independent Projects */}
               <motion.div
                 animate={{ y: [0, -15, 0], rotate: [0, -1, 1, 0] }}
                 transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
-                className="max-w-[340px] p-6 rounded-3xl bg-theme-elevated/70 backdrop-blur-xl border border-theme-border shadow-2xl relative overflow-hidden group hover:border-theme-border-accent transition-all duration-300"
+                className="flex-1 max-w-[340px] p-6 rounded-3xl bg-theme-elevated/70 backdrop-blur-xl border border-theme-border shadow-2xl relative overflow-hidden group hover:border-theme-border-accent transition-all duration-300"
               >
                 {/* Soft decorative glow */}
                 <div className="absolute top-0 right-0 w-28 h-28 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
                 <div className="space-y-2 relative z-10">
                   <div className="text-xl sm:text-2xl font-sans font-black tracking-tight text-theme-fore">
-                    {projects?.length || 3} {language === 'en' ? 'Independent Projects' : 'Proyek Independen'}
+                    {projects?.length || 31} {language === 'en' ? 'Independent Projects' : 'Proyek Independen'}
                   </div>
                   <div className="text-xs font-bold text-theme-fore">
                     {t.hero.card2Title}
@@ -346,6 +335,44 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     {t.hero.card2Desc}
                   </p>
                 </div>
+              </motion.div>
+            </motion.div>
+
+          </div>
+
+          {/* RIGHT COLUMN: Intro Text, Middle Stats Card, Conclusion & Orange CTA Button (lg:col-span-5) */}
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-12 lg:space-y-0 min-h-full lg:py-4">
+
+            {/* Middle Right Card: Hero Illustration */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full relative lg:ml-auto lg:my-4 flex justify-end"
+            >
+              <motion.div
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="relative w-full max-w-[400px] aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-theme-border/50 group"
+              >
+                <div className="absolute inset-0 bg-theme-accent/20 mix-blend-overlay z-10 group-hover:bg-transparent transition-colors duration-500" />
+                <Image
+                  src="/hero-illustration.jpg"
+                  alt="Modern Tech Workspace"
+                  fill
+                  priority
+                  className="object-cover scale-105 group-hover:scale-110 transition-transform duration-700"
+                  sizes="(max-w-768px) 100vw, 400px"
+                />
+              </motion.div>
+
+              {/* Floating AI GIF Top Right - Transparent */}
+              <motion.div 
+                className="absolute -top-8 -right-8 sm:-top-12 sm:-right-12 w-24 h-24 sm:w-36 sm:h-36 z-30 drop-shadow-2xl pointer-events-none"
+                animate={{ y: [-15, 5, -15] }}
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              >
+                <img src="/ai-gif2.gif" alt="AI Assistant" className="w-full h-full object-contain" />
               </motion.div>
             </motion.div>
 

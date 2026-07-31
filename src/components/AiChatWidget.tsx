@@ -156,12 +156,16 @@ export default function AiChatWidget() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-24 right-4 md:bottom-8 md:right-8 z-[100] w-14 h-14 rounded-full bg-theme-accent hover:bg-theme-accent-bright text-white shadow-lg shadow-theme-accent/20 flex items-center justify-center cursor-pointer transition-colors border border-white/10 group"
+            className="fixed bottom-24 right-4 md:bottom-8 md:right-8 z-[100] w-14 h-14 rounded-full bg-theme-accent hover:bg-theme-accent-bright text-white shadow-lg shadow-theme-accent/20 flex items-center justify-center cursor-pointer transition-colors border border-white/10 group p-0 overflow-hidden"
           >
-            <SediaIcon className="w-6 h-6 group-hover:scale-110 transition-transform duration-300" />
+            <img 
+              src="/ai-gif.gif" 
+              alt="Chat with us" 
+              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            />
             
             {/* Ping animation behind button */}
-            <span className="absolute inset-0 rounded-full bg-theme-accent animate-ping opacity-20" />
+            <span className="absolute inset-0 rounded-full bg-theme-accent animate-ping opacity-20 pointer-events-none" />
           </motion.button>
         )}
       </AnimatePresence>
