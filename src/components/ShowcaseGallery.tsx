@@ -102,7 +102,7 @@ export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
                   <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}
                     whileHover={{ scale: 1.1 }}
-                    className="p-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white shadow-lg"
+                    className="p-2 rounded-full bg-theme-elevated/80 backdrop-blur-sm border border-theme-border text-theme-base shadow-lg"
                   >
                     <Maximize2 className="w-3.5 h-3.5" />
                   </motion.div>
@@ -178,7 +178,7 @@ export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handlePrev}
-                      className="absolute left-4 z-20 p-2.5 rounded-full bg-black/60 hover:bg-theme-accent border border-white/10 text-white cursor-pointer shadow-lg transition-colors animate-in fade-in"
+                      className="absolute left-4 z-20 p-2.5 rounded-full bg-theme-elevated/80 hover:bg-theme-accent border border-theme-border text-theme-base cursor-pointer shadow-lg transition-colors animate-in fade-in"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </motion.button>
@@ -212,7 +212,7 @@ export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleNext}
-                      className="absolute right-4 z-20 p-2.5 rounded-full bg-black/60 hover:bg-theme-accent border border-white/10 text-white cursor-pointer shadow-lg transition-colors animate-in fade-in"
+                      className="absolute right-4 z-20 p-2.5 rounded-full bg-theme-elevated/80 hover:bg-theme-accent border border-theme-border text-theme-base cursor-pointer shadow-lg transition-colors animate-in fade-in"
                     >
                       <ChevronRight className="w-5 h-5" />
                     </motion.button>

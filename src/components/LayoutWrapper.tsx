@@ -75,7 +75,7 @@ export default function LayoutWrapper({
 
     const x = event.clientX;
     const y = event.clientY;
-    
+
     // Calculate distance to furthest corner
     const endRadius = Math.hypot(
       Math.max(x, window.innerWidth - x),
@@ -93,7 +93,7 @@ export default function LayoutWrapper({
         `circle(0px at ${x}px ${y}px)`,
         `circle(${endRadius}px at ${x}px ${y}px)`
       ];
-      
+
       document.documentElement.animate(
         {
           clipPath: clipPath,
@@ -151,7 +151,7 @@ export default function LayoutWrapper({
                 priority
                 className="h-12 w-auto object-contain drop-shadow-xl"
               />
-              
+
               <div className="relative flex flex-col items-center">
                 {/* Ultra-thin elegant progress line */}
                 <div className="w-32 h-[1px] bg-theme-border/50 overflow-hidden rounded-full relative">
@@ -162,7 +162,7 @@ export default function LayoutWrapper({
                     transition={{ ease: "easeOut", duration: 0.2 }}
                   />
                 </div>
-                
+
                 {/* Animated Brand Title at the end of loading */}
                 <div className="absolute top-full mt-6 flex items-center justify-center w-64">
                   {progress >= 100 && (
@@ -183,11 +183,11 @@ export default function LayoutWrapper({
         )}
       </AnimatePresence>
 
-      <AuroraBackground 
+      <AuroraBackground
         className="min-h-screen relative w-full flex flex-col font-sans overflow-x-clip bg-theme-deep text-theme-fore"
         gradientColors={
-          theme === 'dark' 
-            ? ["rgba(74, 133, 217, 0.15)", "rgba(106, 160, 242, 0.15)"] 
+          theme === 'dark'
+            ? ["rgba(74, 133, 217, 0.15)", "rgba(106, 160, 242, 0.15)"]
             : ["rgba(43, 84, 149, 0.12)", "rgba(30, 49, 91, 0.12)"]
         }
       >
@@ -202,11 +202,11 @@ export default function LayoutWrapper({
         >
           {/* Top Info Announcement Bar */}
           <div className={`w-full bg-theme-accent flex items-center justify-center transition-all duration-300 overflow-hidden ${scrolled ? 'h-0 opacity-0' : 'h-8 opacity-100'}`}>
-            <div className="flex items-center gap-2 text-white text-[9px] sm:text-[10px] font-sans font-bold tracking-widest uppercase">
+            <div className="flex items-center gap-2 text-theme-base text-[9px] sm:text-[10px] font-sans font-bold tracking-widest uppercase">
               <span className="animate-pulse">🔥</span>
               <span>{language === 'id' ? 'Tersedia Sesi Konsultasi Gratis Terbatas' : 'Limited Free Consultation Available'}</span>
               <span className="mx-1 opacity-50 hidden sm:inline">|</span>
-              <button onClick={() => handleNavClick('contact-section')} className="underline underline-offset-2 hover:text-white/80 transition-colors cursor-pointer hidden sm:inline">
+              <button onClick={() => handleNavClick('contact-section')} className="underline underline-offset-2 hover:text-theme-base/80 transition-colors cursor-pointer hidden sm:inline">
                 {language === 'id' ? 'Pesan Sekarang' : 'Book Now'}
               </button>
             </div>
@@ -229,7 +229,7 @@ export default function LayoutWrapper({
                 />
               </div>
               <span className="font-display font-bold text-base tracking-wider text-theme-accent">
-                SEJATI<span className="text-theme-accent/70 font-normal">DIMEDIA</span>
+                SEJATI DIMEDIA
               </span>
             </div>
 
@@ -278,7 +278,7 @@ export default function LayoutWrapper({
               {/* Premium Segmented Language Toggle (Flags) */}
               <div className="flex items-center relative bg-theme-surface border border-theme-border/60 rounded-full p-1 shadow-inner h-[36px]">
                 {/* Active Slider Background */}
-                <div 
+                <div
                   className={`absolute top-1 bottom-1 w-[32px] bg-theme-accent/20 border border-theme-accent/50 rounded-full transition-all duration-400 ease-[0.16,1,0.3,1] shadow-sm ${language === 'id' ? 'left-1' : 'left-[37px]'}`}
                 />
                 <button
@@ -286,14 +286,14 @@ export default function LayoutWrapper({
                   className="relative z-10 w-[32px] h-[28px] flex items-center justify-center rounded-full transition-all duration-300 hover:scale-105 group"
                   title="Bahasa Indonesia"
                 >
-                  <img src="/flags/id.svg" alt="ID" className={`w-5 h-5 rounded-full object-cover shadow-sm border border-black/10 dark:border-white/10 transition-all duration-300 ${language === 'id' ? 'opacity-100 scale-100' : 'opacity-40 grayscale-[50%] group-hover:opacity-100 group-hover:grayscale-0'}`} />
+                  <img src="/flags/id.svg" alt="ID" className={`w-5 h-5 rounded-full object-cover shadow-sm border border-theme-border transition-all duration-300 ${language === 'id' ? 'opacity-100 scale-100' : 'opacity-40 grayscale-[50%] group-hover:opacity-100 group-hover:grayscale-0'}`} />
                 </button>
                 <button
                   onClick={() => setLanguage('en')}
                   className="relative z-10 w-[32px] h-[28px] flex items-center justify-center rounded-full transition-all duration-300 hover:scale-105 group"
                   title="English"
                 >
-                  <img src="/flags/gb.svg" alt="EN" className={`w-5 h-5 rounded-full object-cover shadow-sm border border-black/10 dark:border-white/10 transition-all duration-300 ${language === 'en' ? 'opacity-100 scale-100' : 'opacity-40 grayscale-[50%] group-hover:opacity-100 group-hover:grayscale-0'}`} />
+                  <img src="/flags/gb.svg" alt="EN" className={`w-5 h-5 rounded-full object-cover shadow-sm border border-theme-border transition-all duration-300 ${language === 'en' ? 'opacity-100 scale-100' : 'opacity-40 grayscale-[50%] group-hover:opacity-100 group-hover:grayscale-0'}`} />
                 </button>
               </div>
 
@@ -484,10 +484,10 @@ export default function LayoutWrapper({
             </button>
           </div>
         </nav>
-        
+
         {/* 6. AI Customer Service Widget */}
         <AiChatWidget />
-      </AuroraBackground>
+      </AuroraBackground >
     </>
   );
 }

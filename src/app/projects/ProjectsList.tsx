@@ -4,9 +4,11 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight, ArrowLeft } from "lucide-react";
+import { Icon } from "@iconify/react";
 import { Project } from "../../lib/api/glio-projects";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../../lib/i18n/LanguageContext";
+import { TECH_ICONS } from "../../lib/constants";
 
 export default function ProjectsList({ projects }: { projects: Project[] }) {
   const { language } = useLanguage();
@@ -59,8 +61,8 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
               {language === 'en' ? 'Software Portfolio' : 'Portofolio Perangkat Lunak'}
             </h1>
             <p className="text-sm text-theme-fore-muted max-w-xl leading-relaxed text-left">
-              {language === 'en' 
-                ? 'Explore a catalog of production systems, SaaS applications, and custom mobile products built with precision.' 
+              {language === 'en'
+                ? 'Explore a catalog of production systems, SaaS applications, and custom mobile products built with precision.'
                 : 'Jelajahi katalog sistem produksi, aplikasi SaaS, dan produk mobile kustom yang dibangun dengan presisi.'}
             </p>
           </div>
@@ -72,11 +74,10 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-sans font-bold transition-all duration-300 ${
-                activeCategory === cat
-                  ? "bg-theme-accent text-white shadow-md shadow-theme-accent/20"
-                  : "bg-theme-surface text-theme-fore-muted hover:bg-theme-elevated hover:text-theme-fore border border-theme-border"
-              }`}
+              className={`px-4 py-2 rounded-full text-xs font-sans font-bold transition-all duration-300 ${activeCategory === cat
+                ? "bg-theme-accent text-white shadow-md shadow-theme-accent/20"
+                : "bg-theme-surface text-theme-fore-muted hover:bg-theme-elevated hover:text-theme-fore border border-theme-border"
+                }`}
             >
               {cat}
             </button>
@@ -137,7 +138,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
                         {project.name}
                       </h3>
                       <p className="text-xs text-theme-fore-muted leading-relaxed line-clamp-3">
-                        {language === 'en' 
+                        {language === 'en'
                           ? (project.summaryEn || project.descriptionEn || project.summary || project.description)
                           : (project.summaryId || project.descriptionId || project.summary || project.description)}
                       </p>
@@ -145,12 +146,13 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
                   </div>
 
                   <div className="space-y-4 pt-4 border-t border-theme-border/30 mt-4">
-                    <div className="flex flex-wrap gap-1">
+                    <div className="flex flex-wrap gap-1.5">
                       {project.technologies.map((tech) => (
                         <span
                           key={tech}
-                          className="px-1.5 py-0.5 rounded-md text-[9px] font-mono bg-theme-surface text-theme-fore-muted border border-theme-border/40"
+                          className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-mono bg-theme-surface text-theme-fore-muted border border-theme-border/40"
                         >
+                          {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5 opacity-80" />}
                           {tech}
                         </span>
                       ))}

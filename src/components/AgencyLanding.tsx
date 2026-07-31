@@ -10,14 +10,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Project } from '../lib/api/glio-projects';
 import { useLanguage } from '../lib/i18n/LanguageContext';
+import { TECH_ICONS } from '../lib/constants';
 import { motion, AnimatePresence } from 'motion/react';
 import { Icon } from '@iconify/react';
 
 
 const GlintStar = ({ className, delay = 0 }: { className?: string; delay?: number }) => (
-  <motion.div 
+  <motion.div
     className={`absolute pointer-events-none select-none ${className}`}
-    animate={{ 
+    animate={{
       opacity: [0.2, 1, 0.2],
       scale: [0.8, 1.3, 0.8],
       rotate: [0, 15, 0]
@@ -75,43 +76,6 @@ const cardSlideUp = {
       damping: 15
     }
   }
-};
-
-const TECH_ICONS: Record<string, string> = {
-  "React": "logos:react",
-  "Vue": "logos:vue",
-  "Angular": "logos:angular-icon",
-  "Next.js": "logos:nextjs-icon",
-  "Vite": "logos:vitejs",
-  "TypeScript": "logos:typescript-icon",
-  "Tailwind CSS": "logos:tailwindcss-icon",
-  "Node.js": "logos:nodejs-icon",
-  "NestJS": "logos:nestjs",
-  "Golang": "selfhst:golang",
-  "Python": "logos:python",
-  "PostgreSQL": "logos:postgresql",
-  "MySQL": "logos:mysql",
-  "MongoDB": "devicon:mongodb",
-  "Firestore": "vscode-icons:file-type-firestore",
-  "Redis": "logos:redis",
-  "Firebase": "logos:firebase",
-  "AWS": "logos:aws",
-  "GCP": "logos:google-cloud",
-  "Docker": "logos:docker-icon",
-  "CI/CD": "logos:github-actions",
-  "Vercel": "logos:vercel-icon",
-  "Flutter": "logos:flutter",
-  "React Native": "logos:react",
-  "Payment Gateway": "logos:stripe",
-  "GraphQL": "logos:graphql",
-  "REST API": "logos:postman-icon",
-  "Laravel": "devicon:laravel",
-  "Google Cloud": "devicon:googlecloud",
-  "Express": "bxl:express-js",
-  "Rest API": "dashicons:rest-api",
-  "Payment Integration": "ri:secure-payment-fill",
-  "Cloud Storage": "typcn:cloud-storage",
-  "OAuth Providers": "mdi:two-factor-authentication"
 };
 
 const TRUST_ICONS = [
@@ -268,7 +232,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
       <section className="relative py-8 md:py-16 min-h-[85vh] flex flex-col justify-center overflow-visible z-0">
 
         {/* Animated Background Orb */}
-        <motion.div 
+        <motion.div
           className="absolute top-[20%] left-[20%] w-72 h-72 sm:w-96 sm:h-96 bg-theme-accent/20 rounded-full blur-[100px] -z-10 pointer-events-none"
           animate={{
             x: [0, 50, 0, -50, 0],
@@ -281,7 +245,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             ease: "linear"
           }}
         />
-        <motion.div 
+        <motion.div
           className="absolute bottom-[20%] right-[10%] w-64 h-64 sm:w-80 sm:h-80 bg-[#1D4ED8]/15 rounded-full blur-[100px] -z-10 pointer-events-none"
           animate={{
             x: [0, -50, 0, 50, 0],
@@ -314,7 +278,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             >
               <h1 className="text-[40px] sm:text-5xl md:text-6xl lg:text-5xl xl:text-6.5xl font-sans font-extrabold tracking-tight leading-[1.08] text-theme-fore">
                 <>
-                  {t.hero.title} <motion.span 
+                  {t.hero.title} <motion.span
                     animate={{ textShadow: ["0px 0px 0px rgba(0,0,0,0)", "0px 0px 25px var(--theme-accent)", "0px 0px 0px rgba(0,0,0,0)"] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                     className="font-serif italic font-normal text-theme-accent relative inline-block"
@@ -335,19 +299,19 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
                 className="max-w-[340px] p-6 rounded-3xl bg-theme-elevated/70 backdrop-blur-xl border border-theme-border shadow-2xl relative overflow-hidden group hover:border-theme-border-accent transition-all duration-300"
               >
-              {/* Soft decorative glow */}
-              <div className="absolute top-0 right-0 w-28 h-28 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
-              <div className="space-y-2 relative z-10">
-                <div className="text-xl sm:text-2xl font-sans font-black tracking-tight text-theme-accent">
-                  {language === 'en' ? 'Industry Experience' : 'Pengalaman Industri'}
+                {/* Soft decorative glow */}
+                <div className="absolute top-0 right-0 w-28 h-28 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
+                <div className="space-y-2 relative z-10">
+                  <div className="text-xl sm:text-2xl font-sans font-black tracking-tight text-theme-accent">
+                    {language === 'en' ? 'Industry Experience' : 'Pengalaman Industri'}
+                  </div>
+                  <div className="text-xs font-bold text-theme-fore">
+                    {t.hero.card1Title}
+                  </div>
+                  <p className="text-xs text-theme-fore-muted leading-relaxed">
+                    {t.hero.card1Desc}
+                  </p>
                 </div>
-                <div className="text-xs font-bold text-theme-fore">
-                  {t.hero.card1Title}
-                </div>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  {t.hero.card1Desc}
-                </p>
-              </div>
               </motion.div>
             </motion.div>
 
@@ -369,19 +333,19 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
                 className="max-w-[340px] p-6 rounded-3xl bg-theme-elevated/70 backdrop-blur-xl border border-theme-border shadow-2xl relative overflow-hidden group hover:border-theme-border-accent transition-all duration-300"
               >
-              {/* Soft decorative glow */}
-              <div className="absolute top-0 right-0 w-28 h-28 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
-              <div className="space-y-2 relative z-10">
-                <div className="text-xl sm:text-2xl font-sans font-black tracking-tight text-theme-fore">
-                  {projects?.length || 3} {language === 'en' ? 'Independent Projects' : 'Proyek Independen'}
+                {/* Soft decorative glow */}
+                <div className="absolute top-0 right-0 w-28 h-28 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
+                <div className="space-y-2 relative z-10">
+                  <div className="text-xl sm:text-2xl font-sans font-black tracking-tight text-theme-fore">
+                    {projects?.length || 3} {language === 'en' ? 'Independent Projects' : 'Proyek Independen'}
+                  </div>
+                  <div className="text-xs font-bold text-theme-fore">
+                    {t.hero.card2Title}
+                  </div>
+                  <p className="text-xs text-theme-fore-muted leading-relaxed">
+                    {t.hero.card2Desc}
+                  </p>
                 </div>
-                <div className="text-xs font-bold text-theme-fore">
-                  {t.hero.card2Title}
-                </div>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  {t.hero.card2Desc}
-                </p>
-              </div>
               </motion.div>
             </motion.div>
 
@@ -451,7 +415,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               href="https://www.upwork.com/freelancers/~017698b392e21b4b6c"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto flex items-center justify-center gap-3 px-5 py-3 rounded-2xl bg-[#14A800]/5 border border-[#14A800]/20 hover:bg-[#14A800]/15 hover:border-[#14A800]/40 transition-all duration-300 group/btn"
+              className="w-full sm:w-auto flex items-center justify-center gap-3 px-5 py-3 rounded-2xl bg-[#14A800]/10 dark:bg-[#14A800]/5 border border-[#14A800]/20 hover:bg-[#14A800]/20 dark:hover:bg-[#14A800]/15 hover:border-[#14A800]/40 transition-all duration-300 group/btn"
             >
               <div className="w-8 h-8 rounded-full bg-[#14A800] flex items-center justify-center text-white font-black text-sm shadow-lg shadow-[#14A800]/30 group-hover/btn:scale-110 transition-transform duration-300">
                 <Icon icon="simple-icons:upwork" className="w-4 h-4" />
@@ -464,7 +428,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               href="https://fastwork.id/en/user/timurradhadian?source=web_marketplace_profile-menu_profile"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full sm:w-auto flex items-center justify-center gap-3 px-5 py-3 rounded-2xl bg-[#1D4ED8]/5 border border-[#1D4ED8]/20 hover:bg-[#1D4ED8]/15 hover:border-[#1D4ED8]/40 transition-all duration-300 group/btn"
+              className="w-full sm:w-auto flex items-center justify-center gap-3 px-5 py-3 rounded-2xl bg-[#1D4ED8]/10 dark:bg-[#1D4ED8]/5 border border-[#1D4ED8]/20 hover:bg-[#1D4ED8]/20 dark:hover:bg-[#1D4ED8]/15 hover:border-[#1D4ED8]/40 transition-all duration-300 group/btn"
             >
               <div className="w-8 h-8 rounded-full bg-[#1D4ED8] flex items-center justify-center text-white font-black text-sm shadow-lg shadow-[#1D4ED8]/30 group-hover/btn:scale-110 transition-transform duration-300">
                 <Icon icon="ph:lightning-fill" className="w-4 h-4" />
@@ -493,7 +457,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             <div className="lg:col-span-7">
               <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore text-left">
                 {t.nav.services}{' '}
-                <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright to-[#9BC2FA] bg-clip-text text-transparent font-black">
+                <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright to-theme-accent-bright dark:to-[#9BC2FA] bg-clip-text text-transparent font-black">
                   {t.services.mainHeadingHighlight}
                 </span>
               </h2>
@@ -529,7 +493,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             </div>
 
             <div className="space-y-6 relative z-10 text-left">
-              <div className="w-11 h-11 rounded-2xl bg-theme-accent/5 border border-theme-border/80 flex items-center justify-center text-theme-accent group-hover:bg-theme-accent group-hover:text-white group-hover:scale-105 transition-all duration-350 shadow-md">
+              <div className="w-11 h-11 rounded-2xl bg-theme-accent/5 border border-theme-border/80 flex items-center justify-center text-theme-accent group-hover:bg-theme-accent group-hover:text-theme-base group-hover:scale-105 transition-all duration-350 shadow-md">
                 <Icon icon="ph:laptop-duotone" className="w-5 h-5" />
               </div>
               <div className="space-y-3">
@@ -557,7 +521,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             </div>
 
             <div className="space-y-6 relative z-10 text-left">
-              <div className="w-11 h-11 rounded-2xl bg-theme-accent/5 border border-theme-border/80 flex items-center justify-center text-theme-accent group-hover:bg-theme-accent group-hover:text-white group-hover:scale-105 transition-all duration-350 shadow-md">
+              <div className="w-11 h-11 rounded-2xl bg-theme-accent/5 border border-theme-border/80 flex items-center justify-center text-theme-accent group-hover:bg-theme-accent group-hover:text-theme-base group-hover:scale-105 transition-all duration-350 shadow-md">
                 <Icon icon="ph:device-mobile-speaker-duotone" className="w-5 h-5" />
               </div>
               <div className="space-y-3">
@@ -585,7 +549,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             </div>
 
             <div className="space-y-6 relative z-10 text-left">
-              <div className="w-11 h-11 rounded-2xl bg-theme-accent/5 border border-theme-border/80 flex items-center justify-center text-theme-accent group-hover:bg-theme-accent group-hover:text-white group-hover:scale-105 transition-all duration-350 shadow-md">
+              <div className="w-11 h-11 rounded-2xl bg-theme-accent/5 border border-theme-border/80 flex items-center justify-center text-theme-accent group-hover:bg-theme-accent group-hover:text-theme-base group-hover:scale-105 transition-all duration-350 shadow-md">
                 <Icon icon="ph:cpu-duotone" className="w-5 h-5" />
               </div>
               <div className="space-y-3">
@@ -658,7 +622,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             </div>
             <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
               {["React", "Vue", "Angular", "Next.js", "Vite", "TypeScript", "Tailwind CSS"].map((tech) => (
-                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech">
+                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-black dark:text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent dark:hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech shadow-sm">
                   <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
                   <span>{tech}</span>
                 </div>))}
@@ -682,7 +646,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             </div>
             <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
               {["Laravel", "Node.js", "Golang", "Python", "Express", "GraphQL"].map((tech) => (
-                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech">
+                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-black dark:text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent dark:hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech shadow-sm">
                   <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
                   <span>{tech}</span>
                 </div>))}
@@ -706,7 +670,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             </div>
             <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
               {["MySQL", "PostgreSQL", "MongoDB", "Firestore", "Redis"].map((tech) => (
-                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech">
+                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-black dark:text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent dark:hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech shadow-sm">
                   <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
                   <span>{tech}</span>
                 </div>))}
@@ -730,7 +694,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             </div>
             <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
               {["React Native", "Flutter"].map((tech) => (
-                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech">
+                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-black dark:text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent dark:hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech shadow-sm">
                   <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
                   <span>{tech}</span>
                 </div>))}
@@ -754,7 +718,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             </div>
             <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
               {["Docker", "AWS", "Google Cloud", "Firebase"].map((tech) => (
-                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech">
+                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-black dark:text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent dark:hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech shadow-sm">
                   <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
                   <span>{tech}</span>
                 </div>))}
@@ -779,7 +743,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               </div>
               <div className="flex flex-wrap gap-2 justify-start md:justify-end flex-grow w-full md:max-w-md">
                 {["Rest API", "Payment Integration", "Cloud Storage", "OAuth Providers"].map((tech) => (
-                  <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech">
+                  <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-black dark:text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent dark:hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech shadow-sm">
                     <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
                     <span>{tech}</span>
                   </div>))}
@@ -808,7 +772,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             </div>
             <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-2xl text-left">
               {t.portfolio.mainHeading}{' '}
-              <span className="bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent font-black">
+              <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright dark:via-[#6AA0F2] to-theme-accent-bright dark:to-[#9BC2FA] bg-clip-text text-transparent font-black">
                 {t.portfolio.mainHeadingHighlight}
               </span>
             </h2>
@@ -874,7 +838,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     {/* Tech stack tags */}
                     <div className="flex flex-wrap gap-1 text-left">
                       {project.technologies.slice(0, 4).map((tech) => (
-                        <div key={tech} className="px-1.5 py-0.5 rounded-md text-[9px] font-mono bg-theme-surface text-theme-fore-muted border border-theme-border/40 flex items-center gap-1 group/tech">
+                        <div key={tech} className="px-1.5 py-0.5 rounded-md text-[9px] font-mono bg-theme-surface text-black dark:text-theme-fore-muted border border-theme-border/40 flex items-center gap-1 group/tech shadow-sm">
                           <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
                           <span>{tech}</span>
                         </div>))}
@@ -934,7 +898,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
           {/* Card 1: Starter - MVP Prototype */}
           <motion.div
-            className="p-8 rounded-[2rem] bg-theme-surface/40 backdrop-blur-xl border border-theme-border/80 dark:border-white/15 hover:border-theme-accent/50 hover:bg-theme-surface/80 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between space-y-8 relative group text-left"
+            className="p-8 rounded-[2rem] bg-white shadow-xl dark:shadow-none dark:bg-theme-surface/40 backdrop-blur-xl border border-theme-border/80 dark:border-white/15 hover:border-theme-accent/50 hover:bg-gray-50 dark:hover:bg-theme-surface/80 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between space-y-8 relative group text-left"
             variants={cardSlideUp}
           >
             <div className="space-y-6 relative z-10">
@@ -978,14 +942,14 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
           {/* Card 2: Growth - Production Ready (Most Popular) */}
           <motion.div
-            className="p-8 md:p-9 rounded-[2.5rem] bg-gradient-to-b from-[#f0f4f8] to-white dark:from-[#111625] dark:to-[#0A0C10] text-theme-fore border-2 border-theme-accent/70 dark:border-theme-accent hover:border-theme-accent hover:shadow-[0_0_60px_-15px_rgba(74,133,217,0.4)] transition-all duration-500 flex flex-col justify-between space-y-8 relative lg:-mt-4 lg:mb-4 z-20 overflow-hidden text-left group shadow-2xl shadow-theme-accent/15 dark:shadow-theme-accent/20"
+            className="p-8 md:p-9 rounded-[2.5rem] bg-gradient-to-b from-theme-surface to-theme-base text-theme-fore border-2 border-theme-accent/70 dark:border-theme-accent hover:border-theme-accent hover:shadow-[0_0_60px_-15px_rgba(74,133,217,0.4)] transition-all duration-500 flex flex-col justify-between space-y-8 relative lg:-mt-4 lg:mb-4 z-20 overflow-hidden text-left group shadow-2xl shadow-theme-accent/15 dark:shadow-theme-accent/20"
             variants={cardSlideUp}
           >
             {/* Premium Glow Overlay (Dark Mode Only) */}
             <div className="absolute inset-0 hidden dark:block bg-[radial-gradient(ellipse_at_top,rgba(74,133,217,0.25),transparent_70%)] pointer-events-none transition-opacity duration-700 group-hover:opacity-100 opacity-60" />
             <div className="absolute top-0 left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-transparent via-theme-accent to-transparent opacity-100 dark:opacity-80" />
 
-            <div className="absolute top-0 right-0 bg-gradient-to-r from-theme-accent to-blue-500 text-white text-[9px] font-mono font-bold px-5 py-2 rounded-bl-2xl rounded-tr-[2.5rem] uppercase tracking-widest shadow-lg shadow-theme-accent/30 flex items-center gap-1.5">
+            <div className="absolute top-0 right-0 bg-gradient-to-r from-theme-accent via-theme-accent-bright to-theme-accent text-theme-base text-[9px] font-mono font-bold px-5 py-2 rounded-bl-2xl rounded-tr-[2.5rem] uppercase tracking-widest shadow-lg shadow-theme-accent/30 flex items-center gap-1.5">
               <Icon icon="ph:crown-duotone" className="w-3 h-3" />
               {language === 'en' ? 'Most Popular' : 'Paling Populer'}
             </div>
@@ -994,19 +958,19 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <span className="text-[10px] font-mono uppercase tracking-widest text-theme-accent font-bold">{t.pricingCards.growthTag}</span>
-                  <h3 className="text-xl font-sans font-extrabold text-theme-fore dark:text-white">{t.pricingCards.growthTitle}</h3>
+                  <h3 className="text-xl font-sans font-extrabold text-theme-fore">{t.pricingCards.growthTitle}</h3>
                 </div>
               </div>
-              <p className="text-[11px] text-theme-fore-muted dark:text-blue-100/70 leading-relaxed">
+              <p className="text-[11px] text-theme-fore-muted dark:text-blue-100/80 leading-relaxed">
                 {t.pricingCards.growthDesc}
               </p>
               <div className="flex items-baseline gap-1.5 pt-2">
-                <span className="text-3xl sm:text-4xl font-sans font-black text-theme-fore dark:text-white tracking-tighter">Rp 10 Jt+</span>
+                <span className="text-3xl sm:text-4xl font-sans font-black text-theme-fore tracking-tighter">Rp 10 Jt+</span>
                 <span className="text-[10px] font-mono text-theme-fore-subtle dark:text-blue-200/50 uppercase">/ proyek</span>
               </div>
               <button
                 onClick={() => selectPlan('Comprehensive Hybrid Pipeline', 'High-Scale Custom Architecture')}
-                className="w-full py-3.5 px-4 rounded-xl text-xs font-bold bg-theme-accent text-white hover:bg-theme-accent-bright dark:bg-white dark:text-[#0A0C10] dark:hover:bg-theme-accent dark:hover:text-white shadow-lg shadow-theme-accent/20 hover:shadow-[0_0_20px_rgba(74,133,217,0.4)] transition-all duration-300 cursor-pointer text-center select-none"
+                className="w-full py-3.5 px-4 rounded-xl text-xs font-bold bg-theme-accent text-theme-base hover:bg-theme-accent-bright dark:bg-white dark:text-[#0A0C10] dark:hover:bg-theme-accent dark:hover:text-white shadow-lg shadow-theme-accent/20 hover:shadow-[0_0_20px_rgba(74,133,217,0.4)] transition-all duration-300 cursor-pointer text-center select-none"
               >
                 {t.pricing.growthBtn || "Diskusikan Proyek Anda"}
               </button>
@@ -1028,7 +992,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
           {/* Card 3: Custom - Sistem Kompleks */}
           <motion.div
-            className="p-8 rounded-[2rem] bg-theme-surface/40 backdrop-blur-xl border border-theme-border/80 dark:border-white/15 hover:border-theme-accent/50 hover:bg-theme-surface/80 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between space-y-8 relative group text-left"
+            className="p-8 rounded-[2rem] bg-white shadow-xl dark:shadow-none dark:bg-theme-surface/40 backdrop-blur-xl border border-theme-border/80 dark:border-white/15 hover:border-theme-accent/50 hover:bg-gray-50 dark:hover:bg-theme-surface/80 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between space-y-8 relative group text-left"
             variants={cardSlideUp}
           >
             <div className="space-y-6 relative z-10">
@@ -1088,7 +1052,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             <span>{t.trust?.badge || "Kenapa Klien Percaya"}</span>
           </div>
           <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-3xl text-left">
-            {t.trust?.mainHeading || "Kenapa Klien Percaya"} <span className="bg-gradient-to-r from-theme-accent via-[#6AA0F2] to-[#9BC2FA] bg-clip-text text-transparent font-black">{t.trust?.mainHeadingHighlight || "Bekerja Sama Dengan Saya"}</span>
+            {t.trust?.mainHeading || "Kenapa Klien Percaya"} <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright dark:via-[#6AA0F2] to-theme-accent-bright dark:to-[#9BC2FA] bg-clip-text text-transparent font-black">{t.trust?.mainHeadingHighlight || "Bekerja Sama Dengan Saya"}</span>
           </h2>
         </div>
 
@@ -1203,7 +1167,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 <div>
                   <button
                     onClick={() => scrollToId('contact-section')}
-                    className="px-6 py-3 bg-theme-fore text-theme-base dark:bg-white dark:text-black hover:bg-theme-accent hover:text-white dark:hover:bg-theme-accent dark:hover:text-white rounded-lg text-xs font-sans font-extrabold tracking-widest uppercase transition-all duration-300 shadow-lg cursor-pointer flex items-center gap-2 group/btn"
+                    className="px-6 py-3 bg-theme-accent text-white hover:bg-theme-accent-bright rounded-lg text-xs font-sans font-extrabold tracking-widest uppercase transition-all duration-300 shadow-lg cursor-pointer flex items-center gap-2 group/btn"
                     id={`processes-get-started-${MILESTONES[activeMilestone].step}`}
                   >
                     <span>Get Started</span>
@@ -1278,7 +1242,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                       />
                       <button
                         type="submit"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg bg-theme-accent hover:bg-theme-accent-bright text-white transition-colors cursor-pointer"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg bg-theme-accent hover:bg-theme-accent-bright text-theme-base transition-colors cursor-pointer"
                         aria-label="Submit question"
                       >
                         <Icon icon="ph:paper-plane-tilt-fill" className="w-3 h-3" />
@@ -1293,7 +1257,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     exit={{ scale: 0.95, opacity: 0 }}
                     className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-center space-y-3"
                   >
-                    <Icon icon="ph:check-circle-fill" className="w-6 h-6 text-emerald-500 mx-auto" />
+                    <Icon icon="ph:check-circle-fill" className="w-6 h-6 text-emerald-600 dark:text-emerald-500 mx-auto" />
                     <div className="space-y-1">
                       <h5 className="text-[11px] font-bold text-theme-fore">Pertanyaan Terkirim!</h5>
                       <p className="text-[10px] text-theme-fore-muted leading-relaxed">
@@ -1335,8 +1299,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                     className="w-full px-5 py-4 text-left font-sans font-extrabold text-xs sm:text-sm text-theme-fore flex items-center justify-between gap-4 cursor-pointer select-none"
                     aria-expanded={isExpanded}
                   >
-                    <span>{faq.q}</span>
-                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${isExpanded ? 'bg-theme-accent text-white' : 'bg-theme-surface text-theme-fore-muted'
+                    <span className="text-theme-fore">{faq.q}</span>
+                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${isExpanded ? 'bg-theme-accent text-theme-base' : 'bg-theme-surface text-theme-fore-muted dark:text-white/70'
                       }`}>
                       {isExpanded ? <Icon icon="ph:minus-bold" className="w-3 h-3" /> : <Icon icon="ph:plus-bold" className="w-3 h-3" />}
                     </div>
@@ -1390,7 +1354,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
               <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore">
                 {t.contact.mainHeading}{' '}
-                <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright to-[#9BC2FA] bg-clip-text text-transparent font-black italic">
+                <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright to-theme-accent-bright dark:to-[#9BC2FA] bg-clip-text text-transparent font-black italic">
                   {t.contact.mainHeadingHighlight}
                 </span>
               </h2>
@@ -1560,7 +1524,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   exit={{ opacity: 0, scale: 0.95 }}
                   className="py-16 flex flex-col items-center justify-center text-center space-y-5"
                 >
-                  <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 shadow-lg shadow-emerald-500/5">
+                  <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-500 shadow-lg shadow-emerald-500/5">
                     <Icon icon="ph:check-circle-fill" className="w-7 h-7" />
                   </div>
                   <div className="space-y-2">
