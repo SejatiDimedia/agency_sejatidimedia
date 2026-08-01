@@ -525,10 +525,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               </div>
               <div className="space-y-3">
                 <h3 className="text-lg sm:text-xl font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors duration-300">
-                  Web Application Development
+                  {t.services.items[0].title}
                 </h3>
                 <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  {t.hero.titleHighlight} company profile, dashboard admin, hingga platform SaaS custom — dibangun dengan arsitektur yang scalable dan performa tinggi.
+                  {t.services.items[0].desc}
                 </p>
               </div>
             </div>
@@ -553,7 +553,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               </div>
               <div className="space-y-3">
                 <h3 className="text-lg sm:text-xl font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors duration-300">
-                  Mobile App Development
+                  {t.services.items[1].title}
                 </h3>
                 <p className="text-xs text-theme-fore-muted leading-relaxed">
                   {t.services.items[1].desc}
@@ -823,7 +823,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           viewport={{ once: true, margin: "-100px" }}
         >
           {projects && projects.length > 0 ? (
-            projects.slice(0, 3).map((project) => {
+            projects.slice(0, 6).map((project) => {
               const isDummy = !project.thumbnail ||
                 project.thumbnail.trim() === "" ||
                 project.thumbnail === "/thumbnail.png" ||
@@ -1391,6 +1391,11 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               </p>
 
               {/* Duplicate value props and platform badges removed for brevity */}
+            </div>
+
+            {/* Computer SVG Illustration */}
+            <div className="hidden lg:block relative w-full max-w-[400px] mt-8 opacity-90 drop-shadow-2xl">
+              <img src="/computer.svg" alt="Computer Tech Setup" className="w-full h-auto object-contain" />
             </div>
           </div>
 

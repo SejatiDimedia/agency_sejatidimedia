@@ -33,8 +33,8 @@ export const en = {
     desc: "Every project starts from your business needs, not off-the-shelf templates. Architecture, security, and performance are designed so the system remains relevant as your business grows.",
     items: [
       {
-        title: "Web App & SaaS Development",
-        desc: "Building complex web applications like admin dashboards, CRMs, and highly interactive & scalable SaaS (Software as a Service) platforms.",
+        title: "Web Application Development",
+        desc: "Company profile websites, admin dashboards, to custom SaaS platforms — built with a scalable architecture and high performance.",
       },
       {
         title: "Mobile App Development",

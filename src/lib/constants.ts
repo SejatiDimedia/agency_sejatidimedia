@@ -47,5 +47,6 @@ export const TECH_ICONS: Record<string, string> = {
   "Supabase": "devicon:supabase",
   "Astro": "devicon:astro",
   "Fast API": "devicon:fastapi",
-  "RabbitMQ": "devicon:rabbitmq"
+  "RabbitMQ": "devicon:rabbitmq",
+  "Nuxt": "devicon:nuxt"
 };

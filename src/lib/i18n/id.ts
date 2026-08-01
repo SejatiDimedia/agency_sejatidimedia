@@ -33,8 +33,8 @@ export const id = {
     desc: "Setiap proyek dimulai dari kebutuhan bisnis Anda, bukan dari template siap pakai. Arsitektur, keamanan, dan performa dirancang agar sistem tetap relevan seiring bisnis Anda berkembang.",
     items: [
       {
-        title: "Web App & SaaS Development",
-        desc: "Membangun aplikasi web kompleks seperti dashboard admin, CRM, dan platform SaaS (Software as a Service) yang interaktif dan scalable.",
+        title: "Web Application Development",
+        desc: "Website company profile, dashboard admin, hingga platform SaaS custom — dibangun dengan arsitektur yang scalable dan performa tinggi.",
       },
       {
         title: "Mobile App Development",
