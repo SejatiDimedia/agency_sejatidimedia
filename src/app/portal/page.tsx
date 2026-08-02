@@ -21,7 +21,7 @@ export default function ClientPortalPage() {
 
   const [projects] = useState<Project[]>(INITIAL_PROJECTS);
   const [selectedProject, setSelectedProject] = useState<Project>(INITIAL_PROJECTS[0]);
-  const [userSession, setUserSession] = useState<{ name: string; email: string } | null>(null);
+  const [userSession, setUserSession] = useState<{ name: string; email: string; role: 'ADMIN' | 'CLIENT' } | null>(null);
 
   useEffect(() => {
     fetch('/api/auth/me')
@@ -31,6 +31,7 @@ export default function ClientPortalPage() {
           setUserSession({
             name: data.user.name || 'Client User',
             email: data.user.email,
+            role: data.user.role || 'CLIENT',
           });
         } else {
           router.replace('/auth/login');
@@ -52,6 +53,7 @@ export default function ClientPortalPage() {
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
         openAddLeadModal={() => {}}
+        userRole={userSession?.role || 'CLIENT'}
       />
 
       {/* Main Content */}

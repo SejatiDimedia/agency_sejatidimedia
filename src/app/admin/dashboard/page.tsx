@@ -225,6 +225,7 @@ export default function AdminDashboardPage() {
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
         openAddLeadModal={() => setIsAddLeadModalOpen(true)}
+        userRole="ADMIN"
       />
 
       {/* Main Content Area */}
