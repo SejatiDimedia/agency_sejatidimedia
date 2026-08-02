@@ -55,16 +55,21 @@ export default function LayoutWrapper({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Check if current route is an admin or portal panel route (standalone full-page layout)
+  const isStandalonePage = pathname?.startsWith('/admin') || pathname?.startsWith('/portal');
+
   // Synchronize theme class with document element
   useEffect(() => {
+    if (isStandalonePage) return;
     const root = window.document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
+    root.classList.remove("light", "dark");
+    root.classList.add(theme);
     localStorage.setItem("sejatidimedia-theme", theme);
-  }, [theme]);
+  }, [theme, isStandalonePage]);
+
+  if (isStandalonePage) {
+    return <div className="min-h-screen bg-[#f0f4f8] text-slate-900 antialiased font-sans">{children}</div>;
+  }
 
   const handleThemeToggle = (newTheme: ThemeMode, event?: React.MouseEvent) => {
     // If the browser doesn't support view transitions, just set the theme instantly
