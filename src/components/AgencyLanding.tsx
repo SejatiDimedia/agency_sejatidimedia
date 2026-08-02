@@ -186,12 +186,15 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
   // Contact form submission state
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formSubmitting, setFormSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     service: 'Full-Stack Web App',
-    scope: 'Medium Scale',
+    scope: 'medium',
     details: '',
+    honeypot: '',
   });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -203,21 +206,49 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
     });
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email) return;
-    setFormSubmitted(true);
-    setTimeout(() => {
-      // Simulate reset after short duration
-      setFormSubmitted(false);
-      setFormData({
-        name: '',
-        email: '',
-        service: 'Full-Stack Web App',
-        scope: 'Medium Scale',
-        details: '',
+    setFormSubmitting(true);
+    setFormError(null);
+
+    try {
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          service: formData.service,
+          scale: formData.scope || 'medium',
+          message: formData.details || `Inquiry layanan ${formData.service} dari ${formData.name}`,
+          honeypot: formData.honeypot,
+        }),
       });
-    }, 4000);
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Gagal mengirim pesan');
+      }
+
+      setFormSubmitted(true);
+      setTimeout(() => {
+        setFormSubmitted(false);
+        setFormData({
+          name: '',
+          email: '',
+          service: 'Full-Stack Web App',
+          scope: 'medium',
+          details: '',
+          honeypot: '',
+        });
+      }, 5000);
+    } catch (err: any) {
+      setFormError(err.message || 'Terjadi kesalahan saat mengantarkan pesan.');
+    } finally {
+      setFormSubmitting(false);
+    }
   };
 
   const getQuickPrice = () => {
@@ -1412,6 +1443,23 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   className="space-y-6"
                   id="contact-form-element"
                 >
+                  {/* Honeypot field for bot spam detection */}
+                  <div style={{ position: 'absolute', left: '-9999px' }} aria-hidden="true">
+                    <input
+                      type="text"
+                      name="website_url_check"
+                      tabIndex={-1}
+                      value={formData.honeypot || ''}
+                      onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+                      autoComplete="off"
+                    />
+                  </div>
+
+                  {formError && (
+                    <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs font-semibold">
+                      ⚠️ {formError}
+                    </div>
+                  )}
 
                   {/* Name and {t.contact.formEmail} Input Fields */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

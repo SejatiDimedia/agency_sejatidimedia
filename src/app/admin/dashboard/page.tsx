@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PortalSidebar } from '@/components/portal/PortalSidebar';
 import { PortalHeader } from '@/components/portal/PortalHeader';
 import { LeadKanbanBoard } from '@/components/portal/LeadKanbanBoard';
@@ -11,7 +11,7 @@ import { StyleGuideModal } from '@/components/portal/StyleGuideModal';
 import { INITIAL_LEADS, INITIAL_PROJECTS } from '@/lib/portalMockData';
 import { Lead, LeadStatus, ActiveNavSection, Project } from '@/types/portal';
 import { Button } from '@/components/ui';
-import { Plus, Kanban, List } from 'lucide-react';
+import { Plus, Kanban, List, ShieldAlert } from 'lucide-react';
 
 export default function AdminDashboardPage() {
   const [activeSection, setActiveSection] = useState<ActiveNavSection>('dashboard-leads');
@@ -20,6 +20,7 @@ export default function AdminDashboardPage() {
   const [currentRole, setCurrentRole] = useState<'Admin' | 'Client'>('Admin');
   const [viewMode, setViewMode] = useState<'kanban' | 'table'>('kanban');
   const [activeFilterMonth, setActiveFilterMonth] = useState('November 2024');
+  const [showSpamAndLost, setShowSpamAndLost] = useState(false);
 
   const [leads, setLeads] = useState<Lead[]>(INITIAL_LEADS);
   const [projects, setProjects] = useState<Project[]>(INITIAL_PROJECTS);
@@ -28,8 +29,54 @@ export default function AdminDashboardPage() {
   const [isAddLeadModalOpen, setIsAddLeadModalOpen] = useState(false);
   const [isStyleGuideModalOpen, setIsStyleGuideModalOpen] = useState(false);
 
-  // Filter leads based on search
+  // Fetch leads from API on load
+  const fetchLeads = async () => {
+    try {
+      const res = await fetch('/api/admin/leads');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.leads) && data.leads.length > 0) {
+        // Map Prisma or API response to UI Lead format
+        const formatted = data.leads.map((item: any) => ({
+          id: item.id,
+          name: item.name,
+          company: item.company || 'Inquiry Website',
+          email: item.email,
+          phone: item.phone || '-',
+          serviceType: item.service || 'Web Development',
+          budgetEstimate: item.scale ? `Skala ${item.scale}` : 'Rp 20M - 40M',
+          submittedDate: item.createdAt
+            ? new Date(item.createdAt).toLocaleDateString('id-ID', { day: '2-digit', month: 'short' })
+            : 'Hari ini',
+          status:
+            item.status === 'NEW'
+              ? 'New'
+              : item.status === 'REVIEWING'
+              ? 'Reviewing'
+              : item.status === 'WON'
+              ? 'Won'
+              : 'Lost/Spam',
+          notes: item.notes || '',
+          source: 'Website Form',
+          message: item.message,
+          timelineHistory: [],
+        }));
+        setLeads(formatted);
+      }
+    } catch {
+      // Fallback to local state if fetch fails
+    }
+  };
+
+  useEffect(() => {
+    fetchLeads();
+  }, []);
+
+  // Filter leads: hide SPAM / LOST by default from main dashboard (Requirement 6)
   const filteredLeads = leads.filter((lead) => {
+    if (!showSpamAndLost && lead.status === 'Lost/Spam') {
+      return false;
+    }
+
     const term = searchTerm.toLowerCase();
     return (
       lead.name.toLowerCase().includes(term) ||
@@ -40,35 +87,47 @@ export default function AdminDashboardPage() {
     );
   });
 
-  const handleUpdateLeadStatus = (leadId: string, newStatus: LeadStatus) => {
+  const handleUpdateLeadStatus = async (leadId: string, newStatus: LeadStatus) => {
     setLeads((prevLeads) =>
       prevLeads.map((lead) =>
         lead.id === leadId
           ? {
               ...lead,
               status: newStatus,
-              timelineHistory: [
-                ...lead.timelineHistory,
-                {
-                  id: `tl-${Date.now()}`,
-                  status: newStatus,
-                  timestamp: new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }),
-                  author: 'Admin Drag/Drop',
-                  note: `Status diubah menjadi ${newStatus}`,
-                },
-              ],
             }
           : lead
       )
     );
+
     if (selectedLead && selectedLead.id === leadId) {
       setSelectedLead((prev) => (prev ? { ...prev, status: newStatus } : null));
     }
+
+    // Persist via API
+    try {
+      await fetch(`/api/admin/leads/${leadId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      });
+    } catch {
+      // Ignore API failure in offline dev
+    }
   };
 
-  const handleUpdateLead = (updatedLead: Lead) => {
+  const handleUpdateLead = async (updatedLead: Lead) => {
     setLeads((prev) => prev.map((l) => (l.id === updatedLead.id ? updatedLead : l)));
     setSelectedLead(updatedLead);
+
+    try {
+      await fetch(`/api/admin/leads/${updatedLead.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: updatedLead.status, notes: updatedLead.notes }),
+      });
+    } catch {
+      // Ignore API failure
+    }
   };
 
   const handleConvertToProject = (lead: Lead) => {
@@ -103,7 +162,7 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="min-h-screen bg-[#f0f4f8] text-slate-900 p-3 sm:p-5 flex gap-5 font-sans antialiased">
-      {/* 1. Left Floating Sidebar */}
+      {/* Left Floating Sidebar */}
       <PortalSidebar
         activeSection={activeSection}
         setActiveSection={setActiveSection}
@@ -114,7 +173,7 @@ export default function AdminDashboardPage() {
         openAddLeadModal={() => setIsAddLeadModalOpen(true)}
       />
 
-      {/* 2. Main Content Area */}
+      {/* Main Content Area */}
       <main className="flex-1 flex flex-col min-w-0">
         {/* Top Header */}
         <PortalHeader
@@ -143,8 +202,20 @@ export default function AdminDashboardPage() {
             </h1>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end">
+          {/* Action Buttons & Filter Toggle */}
+          <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end flex-wrap">
+            <button
+              onClick={() => setShowSpamAndLost(!showSpamAndLost)}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-xs font-bold transition-all border cursor-pointer ${
+                showSpamAndLost
+                  ? 'bg-rose-50 text-rose-700 border-rose-200'
+                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+              }`}
+            >
+              <ShieldAlert className="w-3.5 h-3.5" />
+              <span>{showSpamAndLost ? 'Sembunyikan Spam/Lost' : 'Tampilkan Spam/Lost'}</span>
+            </button>
+
             <div className="bg-slate-200/70 p-1 rounded-2xl flex items-center text-xs font-bold">
               <button
                 onClick={() => setViewMode('kanban')}
@@ -186,7 +257,7 @@ export default function AdminDashboardPage() {
           projects={projects}
           activeFilterMonth={activeFilterMonth}
           setActiveFilterMonth={setActiveFilterMonth}
-          refreshData={() => {}}
+          refreshData={fetchLeads}
         />
 
         {/* Kanban Board (Main Content) */}
