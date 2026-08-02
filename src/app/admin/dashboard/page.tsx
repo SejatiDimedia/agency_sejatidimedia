@@ -10,7 +10,7 @@ import { AddLeadModal } from '@/components/portal/AddLeadModal';
 import { StyleGuideModal } from '@/components/portal/StyleGuideModal';
 import { INITIAL_LEADS, INITIAL_PROJECTS } from '@/lib/portalMockData';
 import { Lead, LeadStatus, ActiveNavSection, Project } from '@/types/portal';
-import { Button } from '@/components/ui';
+import { Button, Toast } from '@/components/ui';
 import { Plus, Kanban, List, ShieldAlert } from 'lucide-react';
 
 export default function AdminDashboardPage() {
@@ -92,6 +92,8 @@ export default function AdminDashboardPage() {
     );
   });
 
+  const [toastNotification, setToastNotification] = useState<{ type: 'success' | 'warning' | 'error'; message: string } | null>(null);
+
   const handleUpdateLeadStatus = async (leadId: string, newStatus: LeadStatus) => {
     setLeads((prevLeads) =>
       prevLeads.map((lead) =>
@@ -127,14 +129,17 @@ export default function AdminDashboardPage() {
       await fetch(`/api/admin/leads/${updatedLead.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ status: updatedLead.status, notes: updatedLead.notes }),
+        body: JSON.stringify({
+          status: updatedLead.status,
+          notes: updatedLead.notes,
+        }),
       });
     } catch {
       // Ignore API failure
     }
   };
 
-  const handleConvertToProject = (lead: Lead) => {
+  const handleConvertToProject = async (lead: Lead) => {
     const newProject: Project = {
       id: `proj-${Date.now()}`,
       projectName: `${lead.company} - ${lead.serviceType}`,
@@ -156,7 +161,52 @@ export default function AdminDashboardPage() {
     };
 
     setProjects((prev) => [newProject, ...prev]);
-    handleUpdateLeadStatus(lead.id, 'Won');
+
+    // Update status to WON in local state
+    setLeads((prevLeads) =>
+      prevLeads.map((item) => (item.id === lead.id ? { ...item, status: 'Won' } : item))
+    );
+    if (selectedLead) {
+      setSelectedLead((prev) => (prev ? { ...prev, status: 'Won' } : null));
+    }
+
+    // Trigger API backend with sendEmail: true ONLY on explicit conversion click!
+    try {
+      const res = await fetch(`/api/admin/leads/${lead.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          status: 'Won',
+          email: lead.email,
+          name: lead.name,
+          service: lead.serviceType,
+          sendEmail: true,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.onboarding?.emailSent) {
+        setToastNotification({
+          type: 'success',
+          message: `🚀 Lead ${lead.name} berhasil dikonversi & Email Magic Link Onboarding sukses terkirim ke ${lead.email}!`,
+        });
+      } else {
+        const errorDetail = data.onboarding?.emailError || 'Resend Free Tier Testing Domain Policy (Pengiriman gratis terbatas ke email pemilik akun Resend)';
+        setToastNotification({
+          type: 'warning',
+          message: `⚠️ Project berhasil dibuat, namun pengiriman email ke ${lead.email} mengalami kendala: ${errorDetail}`,
+        });
+      }
+
+      setTimeout(() => setToastNotification(null), 9000);
+    } catch {
+      setToastNotification({
+        type: 'warning',
+        message: `⚠️ Project berhasil dibuat di portal, namun koneksi pengiriman email mengalami masalah.`,
+      });
+      setTimeout(() => setToastNotification(null), 9000);
+    }
   };
 
   const handleAddLead = (newLeadData: Lead) => {
@@ -306,6 +356,14 @@ export default function AdminDashboardPage() {
       <StyleGuideModal
         isOpen={isStyleGuideModalOpen}
         onClose={() => setIsStyleGuideModalOpen(false)}
+      />
+
+      {/* Floating Toast Notification */}
+      <Toast
+        isOpen={!!toastNotification}
+        type={toastNotification?.type}
+        message={toastNotification?.message || ''}
+        onClose={() => setToastNotification(null)}
       />
     </div>
   );

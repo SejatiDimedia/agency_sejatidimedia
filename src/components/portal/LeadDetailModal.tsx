@@ -33,6 +33,7 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
 
   const [notes, setNotes] = useState(lead.notes || '');
   const [newNote, setNewNote] = useState('');
+  const [isConverting, setIsConverting] = useState(false);
 
   const handleStatusChange = (newStatus: LeadStatus) => {
     const updated: Lead = {
@@ -74,6 +75,15 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
     setNotes(updated.notes);
     setNewNote('');
     onUpdateLead(updated);
+  };
+
+  const handleConvertClick = async () => {
+    setIsConverting(true);
+    try {
+      await onConvertToProject(lead);
+    } finally {
+      setIsConverting(false);
+    }
   };
 
   return (
@@ -169,10 +179,11 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
           <div className="pt-4 border-t border-slate-100 flex justify-end">
             <Button
               variant="primary"
-              onClick={() => onConvertToProject(lead)}
+              onClick={handleConvertClick}
+              isLoading={isConverting}
               icon={<Rocket className="w-4 h-4" />}
             >
-              Konversi Ke Client Portal Project
+              {isConverting ? 'Mengonversi & Mengirim Email...' : 'Konversi Ke Client Portal Project'}
             </Button>
           </div>
         )}

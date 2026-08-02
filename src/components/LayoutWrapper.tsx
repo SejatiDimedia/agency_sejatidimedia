@@ -55,8 +55,12 @@ export default function LayoutWrapper({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Check if current route is an admin or portal panel route (standalone full-page layout)
-  const isStandalonePage = pathname?.startsWith('/admin') || pathname?.startsWith('/portal');
+  // Check if current route is an admin, portal, or auth route (standalone full-page layout)
+  const isStandalonePage =
+    pathname?.startsWith('/admin') ||
+    pathname?.startsWith('/portal') ||
+    pathname?.startsWith('/auth') ||
+    pathname?.startsWith('/design-system');
 
   // Synchronize theme class with document element
   useEffect(() => {
