@@ -87,14 +87,14 @@ export async function POST(request: Request) {
         serviceType: service as any,
         budgetEstimate: 'Rp 20M - 40M',
         submittedDate: 'Hari ini',
-        status: initialStatus === 'SPAM' ? ('Lost/Spam' as const) : ('New' as const),
+        status: initialStatus === 'SPAM' ? ('Spam' as const) : ('New' as const),
         notes: isBotSpam ? 'Ditandai SPAM otomatis via honeypot bot filter.' : '',
         source: 'Website Form' as const,
         message,
         timelineHistory: [
           {
             id: `tl-${Date.now()}`,
-            status: initialStatus === 'SPAM' ? ('Lost/Spam' as const) : ('New' as const),
+            status: initialStatus === 'SPAM' ? ('Spam' as const) : ('New' as const),
             timestamp: new Date().toLocaleString('id-ID'),
             author: 'System (Contact Form)',
           },

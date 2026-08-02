@@ -20,7 +20,7 @@ export default function AdminDashboardPage() {
   const [currentRole, setCurrentRole] = useState<'Admin' | 'Client'>('Admin');
   const [viewMode, setViewMode] = useState<'kanban' | 'table'>('kanban');
   const [activeFilterMonth, setActiveFilterMonth] = useState('November 2024');
-  const [showSpamAndLost, setShowSpamAndLost] = useState(false);
+  const [showSpamAndLost, setShowSpamAndLost] = useState(true);
 
   const [isLoadingLeads, setIsLoadingLeads] = useState(true);
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -52,10 +52,12 @@ export default function AdminDashboardPage() {
             item.status === 'NEW'
               ? 'New'
               : item.status === 'REVIEWING'
-              ? 'Reviewing'
-              : item.status === 'WON'
-              ? 'Won'
-              : 'Lost/Spam',
+                ? 'Reviewing'
+                : item.status === 'WON'
+                  ? 'Won'
+                  : item.status === 'LOST'
+                    ? 'Lost'
+                    : 'Spam',
           notes: item.notes || '',
           source: 'Website Form',
           message: item.message,
@@ -78,7 +80,7 @@ export default function AdminDashboardPage() {
 
   // Filter leads: hide SPAM / LOST by default from main dashboard
   const filteredLeads = leads.filter((lead) => {
-    if (!showSpamAndLost && lead.status === 'Lost/Spam') {
+    if (!showSpamAndLost && (lead.status === 'Lost' || lead.status === 'Spam')) {
       return false;
     }
 
@@ -99,9 +101,9 @@ export default function AdminDashboardPage() {
       prevLeads.map((lead) =>
         lead.id === leadId
           ? {
-              ...lead,
-              status: newStatus,
-            }
+            ...lead,
+            status: newStatus,
+          }
           : lead
       )
     );
@@ -261,11 +263,10 @@ export default function AdminDashboardPage() {
           <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end flex-wrap">
             <button
               onClick={() => setShowSpamAndLost(!showSpamAndLost)}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-xs font-bold transition-all border cursor-pointer ${
-                showSpamAndLost
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-xs font-bold transition-all border cursor-pointer ${showSpamAndLost
                   ? 'bg-rose-50 text-rose-700 border-rose-200'
                   : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-              }`}
+                }`}
             >
               <ShieldAlert className="w-3.5 h-3.5" />
               <span>{showSpamAndLost ? 'Sembunyikan Spam/Lost' : 'Tampilkan Spam/Lost'}</span>
@@ -274,22 +275,20 @@ export default function AdminDashboardPage() {
             <div className="bg-slate-200/70 p-1 rounded-2xl flex items-center text-xs font-bold">
               <button
                 onClick={() => setViewMode('kanban')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
-                  viewMode === 'kanban'
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${viewMode === 'kanban'
                     ? 'bg-white text-slate-900 shadow-sm'
                     : 'text-slate-600 hover:text-slate-900'
-                }`}
+                  }`}
               >
                 <Kanban className="w-3.5 h-3.5" />
                 <span>Kanban Board</span>
               </button>
               <button
                 onClick={() => setViewMode('table')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
-                  viewMode === 'table'
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${viewMode === 'table'
                     ? 'bg-white text-slate-900 shadow-sm'
                     : 'text-slate-600 hover:text-slate-900'
-                }`}
+                  }`}
               >
                 <List className="w-3.5 h-3.5" />
                 <span>Table List</span>

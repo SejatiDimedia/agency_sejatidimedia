@@ -32,7 +32,6 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
   if (!lead) return null;
 
   const [notes, setNotes] = useState(lead.notes || '');
-  const [newNote, setNewNote] = useState('');
   const [isConverting, setIsConverting] = useState(false);
 
   const handleStatusChange = (newStatus: LeadStatus) => {
@@ -53,13 +52,11 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
     onUpdateLead(updated);
   };
 
-  const handleAddNote = (e: React.FormEvent) => {
+  const handleSaveNotes = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newNote.trim()) return;
-
     const updated: Lead = {
       ...lead,
-      notes: notes ? `${notes}\n\n[${new Date().toLocaleDateString()}] ${newNote}` : newNote,
+      notes: notes,
       timelineHistory: [
         ...lead.timelineHistory,
         {
@@ -67,13 +64,11 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
           status: lead.status,
           timestamp: new Date().toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' }),
           author: 'Admin Note',
-          note: newNote,
+          note: 'Catatan diperbarui',
         },
       ],
     };
 
-    setNotes(updated.notes);
-    setNewNote('');
     onUpdateLead(updated);
   };
 
@@ -136,7 +131,7 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
             Ubah Status Lead
           </h4>
           <div className="flex flex-wrap gap-2">
-            {(['New', 'Reviewing', 'Won', 'Lost/Spam'] as LeadStatus[]).map((st) => (
+            {(['New', 'Reviewing', 'Won', 'Lost', 'Spam'] as LeadStatus[]).map((st) => (
               <button
                 key={st}
                 onClick={() => handleStatusChange(st)}
@@ -158,7 +153,7 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
             <FileText className="w-4 h-4 text-amber-600" />
             Internal Admin Notes (Private)
           </h4>
-          <form onSubmit={handleAddNote} className="space-y-2">
+          <form onSubmit={handleSaveNotes} className="space-y-2">
             <textarea
               rows={3}
               value={notes}

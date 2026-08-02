@@ -85,14 +85,14 @@ export const INITIAL_LEADS: Lead[] = [
     serviceType: 'Custom Software',
     budgetEstimate: 'Rp 150M+',
     submittedDate: '25 Okt 2024',
-    status: 'Lost/Spam',
+    status: 'Lost',
     notes: 'Budget tidak sesuai dengan scope keamanan tingkat tinggi yang diminta.',
     source: 'Direct Email',
     message: 'Minta diprogramkan smart contract & exchange wallet dalam waktu 1 minggu.',
     timelineHistory: [
       {
         id: 'tl-5',
-        status: 'Lost/Spam',
+        status: 'Lost',
         timestamp: '27 Okt 2024, 11:00 WIB',
         author: 'Timur (Admin)',
         note: 'Ditolak karena kriteria deadline & scope tidak realistis.'

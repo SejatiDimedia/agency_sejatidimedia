@@ -212,7 +212,7 @@ export function DesignSystemShowcase() {
                     <Badge status="New" showDot count={5} />
                     <Badge status="Reviewing" showDot count={12} />
                     <Badge status="Won" showDot />
-                    <Badge status="Lost/Spam" showDot />
+                    <Badge status="Spam" showDot />
                     <Badge status="Active" showDot />
                     <Badge status="Completed" showDot />
                     <Badge status="Pending" showDot />

@@ -66,10 +66,10 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
     <aside
       className={`${
         collapsed ? 'w-20' : 'w-72'
-      } bg-white rounded-[2rem] p-5 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.04)] border border-slate-200/70 flex flex-col justify-between shrink-0 transition-all duration-300 relative z-20`}
+      } bg-white rounded-[2rem] p-5 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.04)] border border-slate-200/70 flex flex-col shrink-0 transition-all duration-300 relative z-20 h-[calc(100vh-2.5rem)] sticky top-5`}
     >
-      {/* Top Header & Logo */}
-      <div>
+      {/* Top Header & Logo - Fixed */}
+      <div className="shrink-0">
         <div className="flex items-center justify-between mb-7 px-1">
           <div className="flex items-center gap-3 overflow-hidden cursor-pointer" onClick={() => router.push('/')}>
             <div className="w-9 h-9 flex items-center justify-center shrink-0">
@@ -96,6 +96,10 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
           </button>
         </div>
 
+      </div>
+
+      {/* Scrollable Navigation Area */}
+      <div className="flex-1 overflow-y-auto min-h-0 pr-1 -mr-1">
         {/* Navigation Group 1: GENERAL / CLIENT MENU */}
         <div className="mb-6">
           {!collapsed && (
@@ -212,8 +216,8 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
         )}
       </div>
 
-      {/* Bottom Area: Settings & Logout */}
-      <div className="pt-4 border-t border-slate-100 space-y-1">
+      {/* Bottom Area: Settings & Logout - Fixed */}
+      <div className="shrink-0 pt-4 border-t border-slate-100 space-y-1">
         <button
           onClick={() => handleNavigate('/portal', 'settings')}
           className={`w-full flex items-center ${

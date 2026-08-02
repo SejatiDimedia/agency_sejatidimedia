@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import { 
-  Plus, 
-  Calendar, 
-  Building2, 
+import {
+  Plus,
+  Calendar,
+  Building2,
   ArrowRight
 } from 'lucide-react';
 import { Lead, LeadStatus } from '@/types/portal';
@@ -21,7 +21,8 @@ const KANBAN_COLUMNS: { key: LeadStatus; title: string; color: string; badgeStat
   { key: 'New', title: 'New Leads', color: 'bg-blue-500', badgeStatus: 'New' },
   { key: 'Reviewing', title: 'Reviewing', color: 'bg-amber-500', badgeStatus: 'Reviewing' },
   { key: 'Won', title: 'Won (Converted)', color: 'bg-emerald-500', badgeStatus: 'Won' },
-  { key: 'Lost/Spam', title: 'Lost / Spam', color: 'bg-rose-500', badgeStatus: 'Lost/Spam' },
+  { key: 'Lost', title: 'Lost', color: 'bg-slate-400', badgeStatus: 'Lost' },
+  { key: 'Spam', title: 'Spam', color: 'bg-rose-500', badgeStatus: 'Spam' },
 ];
 
 export const LeadKanbanBoard: React.FC<LeadKanbanBoardProps> = ({
@@ -30,14 +31,14 @@ export const LeadKanbanBoard: React.FC<LeadKanbanBoardProps> = ({
   openAddLeadModal,
 }) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+    <div className="flex gap-4 overflow-x-auto pb-3 -mb-3">
       {KANBAN_COLUMNS.map((column) => {
         const columnLeads = leads.filter((lead) => lead.status === column.key);
 
         return (
           <div
             key={column.key}
-            className="bg-slate-50/70 rounded-[1.8rem] p-4 border border-slate-200/60 flex flex-col min-h-[500px]"
+            className="bg-slate-50/70 rounded-[1.8rem] p-4 border border-slate-200/60 flex flex-col min-h-[500px] min-w-[400px] flex-1"
           >
             {/* Column Header */}
             <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-200/80">
