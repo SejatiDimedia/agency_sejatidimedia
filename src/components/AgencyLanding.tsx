@@ -208,7 +208,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email) return;
+    if (formSubmitting || !formData.name || !formData.email) return;
     setFormSubmitting(true);
     setFormError(null);
 
@@ -1588,11 +1588,21 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   {/* Dispatch CTA Button */}
                   <button
                     type="submit"
-                    className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-3.5 rounded-xl bg-theme-accent hover:bg-theme-accent-bright text-white text-[11px] sm:text-xs font-sans font-extrabold tracking-widest uppercase shadow-lg shadow-theme-accent/10 active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2 group/submit mx-auto"
+                    disabled={formSubmitting}
+                    className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-3.5 rounded-xl bg-theme-accent hover:bg-theme-accent-bright text-white text-[11px] sm:text-xs font-sans font-extrabold tracking-widest uppercase shadow-lg shadow-theme-accent/10 active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2 group/submit mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
                     id="btn-submit-contact"
                   >
-                    <Icon icon="ph:paper-plane-tilt-fill" className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/submit:translate-x-1 group-hover/submit:-translate-y-0.5 transition-transform" />
-                    <span>{t.contact.formSubmit}</span>
+                    {formSubmitting ? (
+                      <span className="flex items-center gap-2">
+                        <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <span>Mengirim Pesan...</span>
+                      </span>
+                    ) : (
+                      <>
+                        <Icon icon="ph:paper-plane-tilt-fill" className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/submit:translate-x-1 group-hover/submit:-translate-y-0.5 transition-transform" />
+                        <span>{t.contact.formSubmit}</span>
+                      </>
+                    )}
                   </button>
 
                 </motion.form>

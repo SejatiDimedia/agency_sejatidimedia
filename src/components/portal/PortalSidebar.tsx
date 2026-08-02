@@ -47,8 +47,8 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
       <div>
         <div className="flex items-center justify-between mb-7 px-1">
           <div className="flex items-center gap-3 overflow-hidden">
-            <div className="w-10 h-10 rounded-2xl bg-slate-900 text-white flex items-center justify-center font-extrabold text-xl shadow-md shrink-0">
-              <span className="bg-gradient-to-tr from-blue-500 to-cyan-400 bg-clip-text text-transparent">S</span>
+            <div className="w-9 h-9 flex items-center justify-center shrink-0">
+              <img src="/logo.svg" alt="SejatiDimedia Logo" className="w-full h-full object-contain" />
             </div>
             {!collapsed && (
               <div className="flex flex-col truncate">

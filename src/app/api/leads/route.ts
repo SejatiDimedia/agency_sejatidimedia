@@ -9,18 +9,9 @@ let memoryLeads = [...INITIAL_LEADS];
 
 export async function POST(request: Request) {
   try {
-    // 1. IP Rate Limiting Check (Max 3 per hour)
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0] || '127.0.0.1';
-    const rateLimit = checkRateLimit(ip, 3, 3600000);
 
-    if (!rateLimit.success) {
-      return NextResponse.json(
-        { error: 'Batas pengiriman pesan tercapai (maksimal 3 kali/jam per IP).' },
-        { status: 429 }
-      );
-    }
-
-    // 2. Parse & Validate Payload
+    // 1. Parse & Validate Payload
     const body = await request.json();
     const validationResult = createLeadSchema.safeParse(body);
 
@@ -30,6 +21,40 @@ export async function POST(request: Request) {
     }
 
     const { name, email, service, scale, message, honeypot } = validationResult.data;
+
+    // 2. Deduplication Check (Ignore duplicate requests sent within 30 seconds)
+    try {
+      const existingRecentLead = await prisma.lead.findFirst({
+        where: {
+          email,
+          message,
+          createdAt: { gte: new Date(Date.now() - 30000) },
+        },
+      });
+
+      if (existingRecentLead) {
+        return NextResponse.json(
+          {
+            success: true,
+            message: 'Pesan Anda telah diterima. Tim SejatiDimedia akan segera merespons!',
+            leadId: existingRecentLead.id,
+          },
+          { status: 200 }
+        );
+      }
+    } catch {
+      // Continue if DB offline
+    }
+
+    // 3. IP Rate Limiting Check (Max 5 per hour)
+    const rateLimit = checkRateLimit(ip, 5, 3600000);
+
+    if (!rateLimit.success) {
+      return NextResponse.json(
+        { error: 'Batas pengiriman pesan tercapai (maksimal 5 kali/jam per IP).' },
+        { status: 429 }
+      );
+    }
 
     // 3. Honeypot Bot Detection Check
     const isBotSpam = Boolean(honeypot && honeypot.length > 0);

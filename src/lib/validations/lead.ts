@@ -13,6 +13,16 @@ export const DISPOSABLE_DOMAINS = [
   'getnada.com',
 ];
 
+export const normalizeScale = (val: unknown): 'small' | 'medium' | 'large' | 'enterprise' => {
+  if (typeof val !== 'string') return 'small';
+  const lower = val.toLowerCase();
+  if (lower.includes('mvp') || lower.includes('small') || lower.includes('fast')) return 'small';
+  if (lower.includes('medium')) return 'medium';
+  if (lower.includes('high') || lower.includes('large') || lower.includes('custom') || lower.includes('architecture')) return 'large';
+  if (lower.includes('enterprise')) return 'enterprise';
+  return 'small';
+};
+
 export const createLeadSchema = z.object({
   name: z.string().min(2, 'Nama minimal 2 karakter').max(100, 'Nama maksimal 100 karakter'),
   email: z
@@ -26,7 +36,7 @@ export const createLeadSchema = z.object({
       { message: 'Alamat email sekali pakai (disposable email) tidak diizinkan' }
     ),
   service: z.string().min(1, 'Layanan wajib dipilih'),
-  scale: z.enum(['small', 'medium', 'large', 'enterprise']).default('small'),
+  scale: z.preprocess(normalizeScale, z.enum(['small', 'medium', 'large', 'enterprise'])),
   message: z.string().min(10, 'Pesan minimal 10 karakter').max(2000, 'Pesan maksimal 2000 karakter'),
   honeypot: z.string().max(0).optional().or(z.literal('')),
 });
