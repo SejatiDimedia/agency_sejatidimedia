@@ -11,6 +11,8 @@ interface PortalHeaderProps {
   openStyleGuideModal: () => void;
   currentRole: 'Admin' | 'Client';
   setCurrentRole: (role: 'Admin' | 'Client') => void;
+  userName?: string;
+  userEmail?: string;
 }
 
 const TEAM_MEMBERS = [
@@ -29,6 +31,8 @@ export const PortalHeader: React.FC<PortalHeaderProps> = ({
   openStyleGuideModal,
   currentRole,
   setCurrentRole,
+  userName,
+  userEmail,
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -91,16 +95,16 @@ export const PortalHeader: React.FC<PortalHeaderProps> = ({
         <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200/80 shrink-0">
           <Avatar
             src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
-            name={currentRole === 'Admin' ? 'Takiya Baksh' : 'Client User'}
+            name={userName || (currentRole === 'Admin' ? 'Takiya Baksh' : 'Client User')}
             size="sm"
             className="ring-2 ring-blue-500/30"
           />
           <div className="hidden sm:flex flex-col text-left">
             <span className="font-bold text-xs text-slate-900 leading-tight">
-              {currentRole === 'Admin' ? 'Takiya Baksh' : 'Client User'}
+              {userName || (currentRole === 'Admin' ? 'Takiya Baksh' : 'Client User')}
             </span>
             <span className="text-[10px] font-medium text-slate-400">
-              {currentRole === 'Admin' ? 'UI/UX Lead & Admin' : 'Awe Design Studio'}
+              {userEmail || (currentRole === 'Admin' ? 'UI/UX Lead & Admin' : 'Client Portal Access')}
             </span>
           </div>
           <ChevronDown className="w-3.5 h-3.5 text-slate-400 hidden sm:block" />

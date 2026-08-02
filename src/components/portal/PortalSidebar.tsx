@@ -49,6 +49,14 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
     router.push(path);
   };
 
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } finally {
+      router.push('/auth/login');
+    }
+  };
+
   const isDashboardActive = pathname === '/admin/dashboard';
   const isPortalActive = pathname === '/portal';
   const isDesignSystemActive = pathname === '/design-system' || pathname === '/admin/components';
@@ -193,12 +201,12 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
       {/* Bottom Area: Settings, Help & Logout */}
       <div className="pt-4 border-t border-slate-100 space-y-1">
         <button
-          onClick={() => handleNavigate('/admin/dashboard')}
+          onClick={() => handleNavigate('/portal', 'settings')}
           className={`w-full flex items-center ${collapsed ? 'justify-center px-0' : 'justify-start px-3.5'
-            } py-2 rounded-2xl text-xs font-semibold text-slate-600 hover:bg-slate-100/80 transition-colors cursor-pointer`}
+            } py-2 rounded-2xl text-xs font-semibold ${activeSection === 'settings' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80'} transition-colors cursor-pointer`}
         >
-          <Settings className="w-4 h-4 shrink-0 text-slate-500" />
-          {!collapsed && <span className="ml-3 truncate">Settings</span>}
+          <Settings className="w-4 h-4 shrink-0" />
+          {!collapsed && <span className="ml-3 truncate">Settings & Password</span>}
         </button>
 
         <button
@@ -211,7 +219,7 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
         </button>
 
         <button
-          onClick={() => router.push('/')}
+          onClick={handleLogout}
           className={`w-full flex items-center ${collapsed ? 'justify-center px-0' : 'justify-start px-3.5'
             } py-2 rounded-2xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer`}
         >

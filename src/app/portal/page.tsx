@@ -1,15 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { PortalSidebar } from '@/components/portal/PortalSidebar';
 import { PortalHeader } from '@/components/portal/PortalHeader';
 import { StyleGuideModal } from '@/components/portal/StyleGuideModal';
+import { ClientSettingsView } from '@/components/portal/ClientSettingsView';
 import { INITIAL_LEADS, INITIAL_PROJECTS } from '@/lib/portalMockData';
 import { Project, ActiveNavSection } from '@/types/portal';
 import { Card, CardHeader, CardTitle, CardBody, CardFooter, Badge, Button } from '@/components/ui';
 import { FolderKanban, Calendar, Clock, CheckCircle2, ArrowRight } from 'lucide-react';
 
 export default function ClientPortalPage() {
+  const router = useRouter();
   const [activeSection, setActiveSection] = useState<ActiveNavSection>('clients-portal');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -18,6 +21,25 @@ export default function ClientPortalPage() {
 
   const [projects] = useState<Project[]>(INITIAL_PROJECTS);
   const [selectedProject, setSelectedProject] = useState<Project>(INITIAL_PROJECTS[0]);
+  const [userSession, setUserSession] = useState<{ name: string; email: string } | null>(null);
+
+  useEffect(() => {
+    fetch('/api/auth/me')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.authenticated && data.user) {
+          setUserSession({
+            name: data.user.name || 'Client User',
+            email: data.user.email,
+          });
+        } else {
+          router.replace('/auth/login');
+        }
+      })
+      .catch(() => {
+        router.replace('/auth/login');
+      });
+  }, [router]);
 
   return (
     <div className="min-h-screen bg-[#f0f4f8] text-slate-900 p-3 sm:p-5 flex gap-5 font-sans antialiased">
@@ -42,25 +64,35 @@ export default function ClientPortalPage() {
           openStyleGuideModal={() => setIsStyleGuideModalOpen(true)}
           currentRole={currentRole}
           setCurrentRole={setCurrentRole}
+          userName={userSession?.name}
+          userEmail={userSession?.email}
         />
 
-        {/* Page Title */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                Client Portal
-              </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-              <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
-                Authenticated View
-              </span>
+        {/* Settings View */}
+        {activeSection === 'settings' ? (
+          <ClientSettingsView
+            userName={userSession?.name}
+            userEmail={userSession?.email}
+          />
+        ) : (
+          <>
+            {/* Page Title */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                    Client Portal
+                  </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
+                    {userSession ? `Akun Terverifikasi: ${userSession.email}` : 'Authenticated View'}
+                  </span>
+                </div>
+                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                  Project Transparency & Milestone Tracking
+                </h1>
+              </div>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Project Transparency & Milestone Tracking
-            </h1>
-          </div>
-        </div>
 
         {/* Active Project Highlight */}
         {selectedProject && (
@@ -75,7 +107,9 @@ export default function ClientPortalPage() {
 
                 <div>
                   <h2 className="text-xl sm:text-2xl font-black text-white">{selectedProject.projectName}</h2>
-                  <p className="text-xs text-slate-300 mt-1">Klien: {selectedProject.clientName} ({selectedProject.clientCompany})</p>
+                  <p className="text-xs text-slate-300 mt-1">
+                    Klien: <strong className="text-white">{userSession?.name || selectedProject.clientName}</strong> ({userSession?.email || selectedProject.clientEmail})
+                  </p>
                 </div>
 
                 {/* Progress Bar */}
@@ -141,6 +175,8 @@ export default function ClientPortalPage() {
               </div>
             </div>
           </div>
+        )}
+          </>
         )}
       </main>
 
