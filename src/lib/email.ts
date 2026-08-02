@@ -5,8 +5,8 @@ import path from 'path';
 const resendApiKey = process.env.RESEND_API_KEY;
 const resend = resendApiKey ? new Resend(resendApiKey) : null;
 
-// Default sender email (Use Resend onboarding domain or custom verified domain)
-const FROM_EMAIL = process.env.EMAIL_FROM || 'SejatiDimedia <onboarding@resend.dev>';
+// Default sender email (Use custom verified domain sejatidimedia.web.id)
+const FROM_EMAIL = process.env.EMAIL_FROM || 'SejatiDimedia <onboarding@sejatidimedia.web.id>';
 
 // Read logo.png for inline CID attachment (Gmail & Outlook standard)
 let logoBuffer: Buffer | null = null;
