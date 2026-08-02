@@ -22,21 +22,22 @@ export default function AdminDashboardPage() {
   const [activeFilterMonth, setActiveFilterMonth] = useState('November 2024');
   const [showSpamAndLost, setShowSpamAndLost] = useState(false);
 
-  const [leads, setLeads] = useState<Lead[]>(INITIAL_LEADS);
+  const [isLoadingLeads, setIsLoadingLeads] = useState(true);
+  const [leads, setLeads] = useState<Lead[]>([]);
   const [projects, setProjects] = useState<Project[]>(INITIAL_PROJECTS);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
 
   const [isAddLeadModalOpen, setIsAddLeadModalOpen] = useState(false);
   const [isStyleGuideModalOpen, setIsStyleGuideModalOpen] = useState(false);
 
-  // Fetch leads from API on load
+  // Fetch leads from API with loading state
   const fetchLeads = async () => {
+    setIsLoadingLeads(true);
     try {
       const res = await fetch('/api/admin/leads');
       const data = await res.json();
       if (data.success && Array.isArray(data.leads) && data.leads.length > 0) {
-        // Map Prisma or API response to UI Lead format
-        const formatted = data.leads.map((item: any) => ({
+        const formatted: Lead[] = data.leads.map((item: any) => ({
           id: item.id,
           name: item.name,
           company: item.company || 'Inquiry Website',
@@ -58,12 +59,16 @@ export default function AdminDashboardPage() {
           notes: item.notes || '',
           source: 'Website Form',
           message: item.message,
-          timelineHistory: [],
+          timelineHistory: item.timelineHistory || [],
         }));
         setLeads(formatted);
+      } else {
+        setLeads(INITIAL_LEADS);
       }
     } catch {
-      // Fallback to local state if fetch fails
+      setLeads(INITIAL_LEADS);
+    } finally {
+      setIsLoadingLeads(false);
     }
   };
 
@@ -71,7 +76,7 @@ export default function AdminDashboardPage() {
     fetchLeads();
   }, []);
 
-  // Filter leads: hide SPAM / LOST by default from main dashboard (Requirement 6)
+  // Filter leads: hide SPAM / LOST by default from main dashboard
   const filteredLeads = leads.filter((lead) => {
     if (!showSpamAndLost && lead.status === 'Lost/Spam') {
       return false;
@@ -103,7 +108,6 @@ export default function AdminDashboardPage() {
       setSelectedLead((prev) => (prev ? { ...prev, status: newStatus } : null));
     }
 
-    // Persist via API
     try {
       await fetch(`/api/admin/leads/${leadId}`, {
         method: 'PATCH',
@@ -111,7 +115,7 @@ export default function AdminDashboardPage() {
         body: JSON.stringify({ status: newStatus }),
       });
     } catch {
-      // Ignore API failure in offline dev
+      // Ignore API failure
     }
   };
 
@@ -260,14 +264,26 @@ export default function AdminDashboardPage() {
           refreshData={fetchLeads}
         />
 
-        {/* Kanban Board (Main Content) */}
+        {/* Kanban Board / Skeleton Loading State */}
         <div className="mt-6">
-          <LeadKanbanBoard
-            leads={filteredLeads}
-            onSelectLead={(lead) => setSelectedLead(lead)}
-            openAddLeadModal={() => setIsAddLeadModalOpen(true)}
-            updateLeadStatus={handleUpdateLeadStatus}
-          />
+          {isLoadingLeads ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+              {[1, 2, 3, 4].map((col) => (
+                <div key={col} className="bg-slate-100/60 rounded-[1.8rem] p-4 border border-slate-200/60 h-96 animate-pulse space-y-4">
+                  <div className="h-6 bg-slate-200 rounded-xl w-1/2"></div>
+                  <div className="h-28 bg-slate-200/80 rounded-2xl"></div>
+                  <div className="h-28 bg-slate-200/80 rounded-2xl"></div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <LeadKanbanBoard
+              leads={filteredLeads}
+              onSelectLead={(lead) => setSelectedLead(lead)}
+              openAddLeadModal={() => setIsAddLeadModalOpen(true)}
+              updateLeadStatus={handleUpdateLeadStatus}
+            />
+          )}
         </div>
       </main>
 

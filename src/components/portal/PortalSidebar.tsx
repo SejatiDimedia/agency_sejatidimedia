@@ -1,26 +1,28 @@
 'use client';
 
 import React from 'react';
-import { 
-  LayoutDashboard, 
-  FolderKanban, 
-  FolderOpen, 
-  Calendar, 
-  Contact, 
-  MessageSquare, 
-  Settings, 
-  HelpCircle, 
-  LogOut, 
-  ChevronsLeft, 
-  Plus, 
-  Globe 
+import { usePathname, useRouter } from 'next/navigation';
+import {
+  LayoutDashboard,
+  FolderKanban,
+  FolderOpen,
+  Calendar,
+  Contact,
+  MessageSquare,
+  Settings,
+  HelpCircle,
+  LogOut,
+  ChevronsLeft,
+  Plus,
+  Globe,
+  Sparkles
 } from 'lucide-react';
 import { ActiveNavSection } from '@/types/portal';
 import { SidebarItem } from '@/components/ui';
 
 interface PortalSidebarProps {
-  activeSection: ActiveNavSection;
-  setActiveSection: (section: ActiveNavSection) => void;
+  activeSection?: ActiveNavSection;
+  setActiveSection?: (section: ActiveNavSection) => void;
   leadsCount: number;
   projectsCount: number;
   collapsed: boolean;
@@ -29,7 +31,7 @@ interface PortalSidebarProps {
 }
 
 export const PortalSidebar: React.FC<PortalSidebarProps> = ({
-  activeSection,
+  activeSection = 'dashboard-leads',
   setActiveSection,
   leadsCount,
   projectsCount,
@@ -37,16 +39,29 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
   setCollapsed,
   openAddLeadModal,
 }) => {
+  const pathname = usePathname();
+  const router = useRouter();
+
+  const handleNavigate = (path: string, sectionKey?: ActiveNavSection) => {
+    if (setActiveSection && sectionKey) {
+      setActiveSection(sectionKey);
+    }
+    router.push(path);
+  };
+
+  const isDashboardActive = pathname === '/admin/dashboard';
+  const isPortalActive = pathname === '/portal';
+  const isDesignSystemActive = pathname === '/design-system' || pathname === '/admin/components';
+
   return (
     <aside
-      className={`${
-        collapsed ? 'w-20' : 'w-72'
-      } bg-white rounded-[2rem] p-5 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.04)] border border-slate-200/70 flex flex-col justify-between shrink-0 transition-all duration-300 relative z-20`}
+      className={`${collapsed ? 'w-20' : 'w-72'
+        } bg-white rounded-[2rem] p-5 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.04)] border border-slate-200/70 flex flex-col justify-between shrink-0 transition-all duration-300 relative z-20`}
     >
       {/* Top Header & Logo */}
       <div>
         <div className="flex items-center justify-between mb-7 px-1">
-          <div className="flex items-center gap-3 overflow-hidden">
+          <div className="flex items-center gap-3 overflow-hidden cursor-pointer" onClick={() => router.push('/')}>
             <div className="w-9 h-9 flex items-center justify-center shrink-0">
               <img src="/logo.svg" alt="SejatiDimedia Logo" className="w-full h-full object-contain" />
             </div>
@@ -83,59 +98,50 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
             <SidebarItem
               icon={<LayoutDashboard className="w-5 h-5" />}
               label="Dashboard Leads"
-              isActive={activeSection === 'dashboard-leads'}
-              onClick={() => setActiveSection('dashboard-leads')}
+              isActive={isDashboardActive}
+              onClick={() => handleNavigate('/admin/dashboard', 'dashboard-leads')}
               count={leadsCount}
-              collapsed={collapsed}
-            />
-
-            <SidebarItem
-              icon={<FolderKanban className="w-5 h-5" />}
-              label="Daftar Project"
-              isActive={activeSection === 'projects'}
-              onClick={() => setActiveSection('projects')}
-              count={projectsCount}
               collapsed={collapsed}
             />
 
             <SidebarItem
               icon={<Globe className="w-5 h-5" />}
               label="Client Portal"
-              isActive={activeSection === 'clients-portal'}
-              onClick={() => setActiveSection('clients-portal')}
+              isActive={isPortalActive}
+              onClick={() => handleNavigate('/portal', 'clients-portal')}
+              count={projectsCount}
+              collapsed={collapsed}
+            />
+
+            <SidebarItem
+              icon={<Sparkles className="w-5 h-5 text-amber-500" />}
+              label="UI Design Showcase"
+              isActive={isDesignSystemActive}
+              onClick={() => handleNavigate('/admin/components')}
               collapsed={collapsed}
             />
 
             <SidebarItem
               icon={<FolderOpen className="w-5 h-5" />}
               label="File Deliverables"
-              isActive={activeSection === 'file-management'}
-              onClick={() => setActiveSection('file-management')}
+              isActive={false}
+              onClick={() => handleNavigate('/portal', 'file-management')}
               collapsed={collapsed}
             />
 
             <SidebarItem
               icon={<Calendar className="w-5 h-5" />}
               label="Calendar"
-              isActive={activeSection === 'calendar'}
-              onClick={() => setActiveSection('calendar')}
+              isActive={false}
+              onClick={() => handleNavigate('/admin/dashboard', 'calendar')}
               collapsed={collapsed}
             />
 
             <SidebarItem
               icon={<Contact className="w-5 h-5" />}
               label="Team & Clients"
-              isActive={activeSection === 'team'}
-              onClick={() => setActiveSection('team')}
-              collapsed={collapsed}
-            />
-
-            <SidebarItem
-              icon={<MessageSquare className="w-5 h-5" />}
-              label="Message"
               isActive={false}
-              onClick={() => setActiveSection('dashboard-leads')}
-              count={10}
+              onClick={() => handleNavigate('/admin/dashboard', 'team')}
               collapsed={collapsed}
             />
           </nav>
@@ -148,7 +154,7 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
               <p className="text-[11px] font-bold text-slate-400 tracking-wider uppercase">
                 MY WORKSPACE
               </p>
-              <button 
+              <button
                 onClick={openAddLeadModal}
                 className="w-5 h-5 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
                 title="Tambah Item Baru"
@@ -159,21 +165,26 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
           )}
 
           <nav className="space-y-1">
-            <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-start'} px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100/80 rounded-2xl cursor-pointer transition-colors`}>
+            <div
+              onClick={() => handleNavigate('/admin/dashboard')}
+              className={`flex items-center ${collapsed ? 'justify-center' : 'justify-start'} px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100/80 rounded-2xl cursor-pointer transition-colors`}
+            >
               <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
-              {!collapsed && <span className="ml-3 truncate">Shot Dribbble Showcase</span>}
+              {!collapsed && <span className="ml-3 truncate">Leads Pipeline</span>}
             </div>
-            <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-start'} px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100/80 rounded-2xl cursor-pointer transition-colors`}>
+            <div
+              onClick={() => handleNavigate('/portal')}
+              className={`flex items-center ${collapsed ? 'justify-center' : 'justify-start'} px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100/80 rounded-2xl cursor-pointer transition-colors`}
+            >
               <span className="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></span>
-              {!collapsed && <span className="ml-3 truncate">Personal Projects</span>}
+              {!collapsed && <span className="ml-3 truncate">Active Client Projects</span>}
             </div>
-            <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-start'} px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100/80 rounded-2xl cursor-pointer transition-colors`}>
+            <div
+              onClick={() => handleNavigate('/design-system')}
+              className={`flex items-center ${collapsed ? 'justify-center' : 'justify-start'} px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100/80 rounded-2xl cursor-pointer transition-colors`}
+            >
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span>
-              {!collapsed && <span className="ml-3 truncate">Team Projects</span>}
-            </div>
-            <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-start'} px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100/80 rounded-2xl cursor-pointer transition-colors`}>
-              <span className="w-2.5 h-2.5 rounded-full bg-purple-500 shrink-0"></span>
-              {!collapsed && <span className="ml-3 truncate">Agency SOP & Guidelines</span>}
+              {!collapsed && <span className="ml-3 truncate">Design System & UI</span>}
             </div>
           </nav>
         </div>
@@ -182,28 +193,27 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
       {/* Bottom Area: Settings, Help & Logout */}
       <div className="pt-4 border-t border-slate-100 space-y-1">
         <button
-          onClick={() => setActiveSection('settings')}
-          className={`w-full flex items-center ${
-            collapsed ? 'justify-center px-0' : 'justify-start px-3.5'
-          } py-2 rounded-2xl text-xs font-semibold text-slate-600 hover:bg-slate-100/80 transition-colors cursor-pointer`}
+          onClick={() => handleNavigate('/admin/dashboard')}
+          className={`w-full flex items-center ${collapsed ? 'justify-center px-0' : 'justify-start px-3.5'
+            } py-2 rounded-2xl text-xs font-semibold text-slate-600 hover:bg-slate-100/80 transition-colors cursor-pointer`}
         >
           <Settings className="w-4 h-4 shrink-0 text-slate-500" />
           {!collapsed && <span className="ml-3 truncate">Settings</span>}
         </button>
 
         <button
-          className={`w-full flex items-center ${
-            collapsed ? 'justify-center px-0' : 'justify-start px-3.5'
-          } py-2 rounded-2xl text-xs font-semibold text-slate-600 hover:bg-slate-100/80 transition-colors cursor-pointer`}
+          onClick={() => router.push('/')}
+          className={`w-full flex items-center ${collapsed ? 'justify-center px-0' : 'justify-start px-3.5'
+            } py-2 rounded-2xl text-xs font-semibold text-slate-600 hover:bg-slate-100/80 transition-colors cursor-pointer`}
         >
-          <HelpCircle className="w-4 h-4 shrink-0 text-slate-500" />
-          {!collapsed && <span className="ml-3 truncate">Help Center</span>}
+          <Globe className="w-4 h-4 shrink-0 text-slate-500" />
+          {!collapsed && <span className="ml-3 truncate">Ke Landing Page</span>}
         </button>
 
         <button
-          className={`w-full flex items-center ${
-            collapsed ? 'justify-center px-0' : 'justify-start px-3.5'
-          } py-2 rounded-2xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer`}
+          onClick={() => router.push('/')}
+          className={`w-full flex items-center ${collapsed ? 'justify-center px-0' : 'justify-start px-3.5'
+            } py-2 rounded-2xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer`}
         >
           <LogOut className="w-4 h-4 shrink-0 text-rose-500" />
           {!collapsed && <span className="ml-3 truncate">Log out</span>}

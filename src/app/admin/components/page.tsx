@@ -1,5 +1,5 @@
-import DesignSystemShowcasePage from '@/app/design-system/page';
+import { DesignSystemShowcase } from '@/components/portal/DesignSystemShowcase';
 
 export default function AdminComponentsPage() {
-  return <DesignSystemShowcasePage />;
+  return <DesignSystemShowcase />;
 }
