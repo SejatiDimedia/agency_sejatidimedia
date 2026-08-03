@@ -66,8 +66,8 @@ export async function sendOnboardingMagicLink({
                 <td style="vertical-align: middle; padding-right: 12px;">
                   <img src="cid:logo_cid" alt="Logo" width="48" height="26" style="display: block; width: 48px; height: auto;" />
                 </td>
-                <td style="vertical-align: middle; font-size: 22px; font-weight: 900; color: #0f172a; letter-spacing: -0.5px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-                  SejatiDimedia
+                <td style="vertical-align: middle; font-size: 22px; font-weight: 900; color: #0f172a; letter-spacing: -0.5px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-transform: uppercase;">
+                  <span style="color: #2E54A2;">Sejati</span> <span style="color: #23385B;">Dimedia</span>
                 </td>
               </tr>
             </table>
@@ -191,8 +191,8 @@ export async function sendInquiryReceivedEmail({
                 <td style="vertical-align: middle; padding-right: 12px;">
                   <img src="cid:logo_cid" alt="Logo" width="48" height="26" style="display: block; width: 48px; height: auto;" />
                 </td>
-                <td style="vertical-align: middle; font-size: 22px; font-weight: 900; color: #0f172a; letter-spacing: -0.5px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-                  SejatiDimedia
+                <td style="vertical-align: middle; font-size: 22px; font-weight: 900; color: #0f172a; letter-spacing: -0.5px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-transform: uppercase;">
+                  <span style="color: #2E54A2;">Sejati</span> <span style="color: #23385B;">Dimedia</span>
                 </td>
               </tr>
             </table>
@@ -320,8 +320,8 @@ export async function sendMilestoneStatusEmail({
                 <td style="vertical-align: middle; padding-right: 12px;">
                   <img src="cid:logo_cid" alt="Logo" width="48" height="26" style="display: block; width: 48px; height: auto;" />
                 </td>
-                <td style="vertical-align: middle; font-size: 22px; font-weight: 900; color: #0f172a; letter-spacing: -0.5px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
-                  SejatiDimedia
+                <td style="vertical-align: middle; font-size: 22px; font-weight: 900; color: #0f172a; letter-spacing: -0.5px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; text-transform: uppercase;">
+                  <span style="color: #2E54A2;">Sejati</span> <span style="color: #23385B;">Dimedia</span>
                 </td>
               </tr>
             </table>

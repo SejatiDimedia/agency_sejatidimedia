@@ -8,7 +8,7 @@ import { Sparkles, Mail, Lock, ArrowRight, ShieldCheck, CheckCircle2, AlertCircl
 export default function LoginPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<'password' | 'magic-link'>('password');
-  
+
   // Form states
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -95,19 +95,18 @@ export default function LoginPage() {
             <div className="w-10 h-10 flex items-center justify-center shrink-0">
               <img src="/logo.svg" alt="SejatiDimedia Logo" className="w-full h-full object-contain" />
             </div>
-            <span className="font-extrabold text-slate-900 text-xl tracking-tight">SejatiDimedia</span>
+            <span className="font-extrabold text-slate-900 text-xl tracking-tight uppercase">
+              <span style={{ color: '#2E54A2' }}>Sejati</span> <span style={{ color: '#23385B' }}>Dimedia</span>
+            </span>
           </div>
 
-          <h1 className="text-2xl font-black text-slate-900 tracking-tight">
+          {/* <h1 className="text-2xl font-black text-slate-900 tracking-tight">
             Client Portal Login
-          </h1>
-          <p className="text-xs text-slate-500 font-medium">
-            Masuk ke portal klien SejatiDimedia untuk melihat status project & deliverables.
-          </p>
+          </h1> */}
         </div>
 
         {/* Dual Tab Switcher */}
-        <div className="bg-slate-100 p-1 rounded-2xl flex items-center text-xs font-bold">
+        <div className="bg-slate-100 p-1 rounded-2xl flex items-center text-xs font-bold mt-10">
           <button
             type="button"
             onClick={() => {
@@ -115,11 +114,10 @@ export default function LoginPage() {
               setErrorMsg(null);
               setSuccessMsg(null);
             }}
-            className={`flex-1 py-2.5 rounded-xl transition-all text-center cursor-pointer ${
-              activeTab === 'password'
-                ? 'bg-white text-slate-900 shadow-sm'
-                : 'text-slate-500 hover:text-slate-900'
-            }`}
+            className={`flex-1 py-2.5 rounded-xl transition-all text-center cursor-pointer ${activeTab === 'password'
+              ? 'bg-white text-slate-900 shadow-sm'
+              : 'text-slate-500 hover:text-slate-900'
+              }`}
           >
             Password Login
           </button>
@@ -130,11 +128,10 @@ export default function LoginPage() {
               setErrorMsg(null);
               setSuccessMsg(null);
             }}
-            className={`flex-1 py-2.5 rounded-xl transition-all text-center cursor-pointer ${
-              activeTab === 'magic-link'
-                ? 'bg-white text-slate-900 shadow-sm'
-                : 'text-slate-500 hover:text-slate-900'
-            }`}
+            className={`flex-1 py-2.5 rounded-xl transition-all text-center cursor-pointer ${activeTab === 'magic-link'
+              ? 'bg-white text-slate-900 shadow-sm'
+              : 'text-slate-500 hover:text-slate-900'
+              }`}
           >
             Magic Link Email
           </button>
@@ -199,6 +196,9 @@ export default function LoginPage() {
             >
               Masuk ke Portal
             </Button>
+            <p className="text-xs text-slate-500 font-medium text-center">
+              Masuk ke portal klien SejatiDimedia untuk melihat status project & deliverables.
+            </p>
           </form>
         )}
 

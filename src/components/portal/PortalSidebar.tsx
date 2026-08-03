@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { ActiveNavSection } from '@/types/portal';
 import { SidebarItem } from '@/components/ui';
+import { color } from 'framer-motion';
 
 interface PortalSidebarProps {
   activeSection?: ActiveNavSection;
@@ -36,7 +37,7 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
   projectsCount: propProjectsCount,
   collapsed: propCollapsed,
   setCollapsed: propSetCollapsed,
-  openAddLeadModal = () => {},
+  openAddLeadModal = () => { },
   userRole: propUserRole = 'CLIENT',
 }) => {
   const pathname = usePathname();
@@ -78,7 +79,7 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
           setUserRole(data.user.role);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
 
     // Fetch real-time metric counts
     fetch('/api/sidebar-metrics')
@@ -131,24 +132,23 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
 
   return (
     <aside
-      className={`${
-        isCollapsed ? 'w-20' : 'w-72'
-      } bg-white rounded-[2rem] p-5 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.04)] border border-slate-200/70 flex flex-col shrink-0 transition-all duration-300 relative z-20 h-[calc(100vh-2.5rem)] sticky top-5`}
+      className={`${isCollapsed ? 'w-20' : 'w-72'
+        } bg-white rounded-[2rem] p-5 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.04)] border border-slate-200/70 flex flex-col shrink-0 transition-all duration-300 relative z-20 h-[calc(100vh-2.5rem)] sticky top-5`}
     >
       {/* Top Header & Logo - Fixed */}
       <div className="shrink-0">
         <div className="flex items-center justify-between mb-7 px-1">
-          <div className="flex items-center gap-3 overflow-hidden cursor-pointer" onClick={() => router.push('/')}>
-            <div className="w-9 h-9 flex items-center justify-center shrink-0">
+          <div className="flex items-center gap-2 overflow-hidden cursor-pointer" onClick={() => router.push('/')}>
+            <div className="w-8 h-8 flex items-center justify-center shrink-0">
               <img src="/logo.svg" alt="SejatiDimedia Logo" className="w-full h-full object-contain" />
             </div>
             {!isCollapsed && (
               <div className="flex flex-col truncate">
-                <span className="font-bold text-slate-900 text-base leading-snug tracking-tight">
-                  SejatiDimedia
-                </span>
-                <span className="text-[10px] font-bold text-blue-600 tracking-wider uppercase">
-                  {isAdmin ? 'Admin Control Center' : 'Client Portal'}
+                <span
+                  className="font-bold text-slate-900 text-base leading-snug tracking-tight uppercase"
+                  style={{ fontFamily: "'Montserrat', sans-serif" }}
+                >
+                  <span style={{ color: '#2E54A2' }}>Sejati</span> <span style={{ color: '#23385B' }}>Dimedia</span>
                 </span>
               </div>
             )}
@@ -189,7 +189,7 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
 
             {/* CLIENT & ADMIN: Client Portal / Projects */}
             <SidebarItem
-              icon={<FolderKanban className="w-5 h-5 text-blue-600" />}
+              icon={<FolderKanban className="w-5 h-5" />}
               label={isAdmin ? "Client Portal View" : "My Projects & Milestones"}
               isActive={isPortalActive && activeSection !== 'settings'}
               onClick={() => handleNavigate('/portal', 'clients-portal')}
@@ -210,7 +210,7 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
             {isAdmin && (
               <>
                 <SidebarItem
-                  icon={<Sparkles className="w-5 h-5 text-amber-500" />}
+                  icon={<Sparkles className="w-5 h-5" />}
                   label="UI Design Showcase"
                   isActive={isDesignSystemActive}
                   onClick={() => handleNavigate('/admin/components')}
@@ -286,11 +286,9 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
       <div className="shrink-0 pt-4 border-t border-slate-100 space-y-1">
         <button
           onClick={() => handleNavigate('/portal/settings', 'settings')}
-          className={`w-full flex items-center ${
-            isCollapsed ? 'justify-center px-0' : 'justify-start px-3.5'
-          } py-2 rounded-2xl text-xs font-semibold ${
-            activeSection === 'settings' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80'
-          } transition-colors cursor-pointer`}
+          className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-start px-3.5'
+            } py-2 rounded-2xl text-xs font-semibold ${activeSection === 'settings' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80'
+            } transition-colors cursor-pointer`}
         >
           <Settings className="w-4 h-4 shrink-0" />
           {!isCollapsed && <span className="ml-3 truncate">Settings & Password</span>}
@@ -298,9 +296,8 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
 
         <button
           onClick={() => router.push('/')}
-          className={`w-full flex items-center ${
-            isCollapsed ? 'justify-center px-0' : 'justify-start px-3.5'
-          } py-2 rounded-2xl text-xs font-semibold text-slate-600 hover:bg-slate-100/80 transition-colors cursor-pointer`}
+          className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-start px-3.5'
+            } py-2 rounded-2xl text-xs font-semibold text-slate-600 hover:bg-slate-100/80 transition-colors cursor-pointer`}
         >
           <Globe className="w-4 h-4 shrink-0 text-slate-500" />
           {!isCollapsed && <span className="ml-3 truncate">Ke Landing Page</span>}
@@ -308,9 +305,8 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
 
         <button
           onClick={handleLogout}
-          className={`w-full flex items-center ${
-            isCollapsed ? 'justify-center px-0' : 'justify-start px-3.5'
-          } py-2 rounded-2xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer`}
+          className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-start px-3.5'
+            } py-2 rounded-2xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer`}
         >
           <LogOut className="w-4 h-4 shrink-0 text-rose-500" />
           {!isCollapsed && <span className="ml-3 truncate">Log out</span>}
