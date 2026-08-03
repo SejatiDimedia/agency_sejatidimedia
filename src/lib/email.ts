@@ -267,3 +267,129 @@ export async function sendInquiryReceivedEmail({
   }
 }
 
+interface SendMilestoneStatusParams {
+  to: string;
+  name: string;
+  projectName: string;
+  milestoneTitle: string;
+  status: string;
+}
+
+/**
+ * Send automated email to client notifying them about milestone status updates
+ */
+export async function sendMilestoneStatusEmail({
+  to,
+  name,
+  projectName,
+  milestoneTitle,
+  status,
+}: SendMilestoneStatusParams) {
+  const resend = getResendClient();
+  const subject = `🔔 Update Proyek: Milestone "${milestoneTitle}" menjadi "${status}"`;
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const portalUrl = `${baseUrl}/portal`;
+
+  const statusColor = status === 'Done' ? '#16a34a' : status === 'In Progress' ? '#d97706' : '#2563eb';
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f4f7fa; color: #1e293b; margin: 0; padding: 20px; }
+          .card { max-width: 580px; margin: 0 auto; background: #ffffff; border-radius: 20px; padding: 36px; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+          .header { text-align: center; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 1px solid #f1f5f9; }
+          .badge { display: inline-block; background: #eff6ff; color: #2563eb; font-size: 11px; font-weight: 700; padding: 4px 14px; border-radius: 99px; margin-top: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+          .content { font-size: 14px; line-height: 1.6; color: #334155; }
+          .update-card { background: #f8fafc; border-left: 4px solid ${statusColor}; border-radius: 8px; padding: 18px; margin: 20px 0; }
+          .update-title { font-weight: 850; font-size: 15px; color: #0f172a; margin-bottom: 6px; }
+          .update-status { font-weight: 700; color: ${statusColor}; text-transform: uppercase; font-size: 12px; }
+          .btn-container { text-align: center; margin: 32px 0; }
+          .btn { background-color: #2563eb; color: #ffffff !important; font-size: 13px; font-weight: 800; text-decoration: none; padding: 14px 28px; border-radius: 14px; display: inline-block; box-shadow: 0 4px 12px rgba(37,99,235,0.25); text-transform: uppercase; letter-spacing: 0.5px; }
+          .footer { font-size: 11px; color: #94a3b8; text-align: center; margin-top: 32px; border-top: 1px solid #f1f5f9; padding-top: 16px; }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <!-- Kop Header -->
+          <div class="header">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" style="margin: 0 auto; display: inline-table;">
+              <tr>
+                <td style="vertical-align: middle; padding-right: 12px;">
+                  <img src="cid:logo_cid" alt="Logo" width="48" height="26" style="display: block; width: 48px; height: auto;" />
+                </td>
+                <td style="vertical-align: middle; font-size: 22px; font-weight: 900; color: #0f172a; letter-spacing: -0.5px; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+                  SejatiDimedia
+                </td>
+              </tr>
+            </table>
+            <div>
+              <span class="badge">Update Progress Proyek</span>
+            </div>
+          </div>
+          
+          <div class="content">
+            <p>Halo <strong>${name}</strong>,</p>
+            <p>Ada update terbaru mengenai pengerjaan proyek Anda <strong>"${projectName}"</strong>.</p>
+            
+            <div class="update-card">
+              <div class="update-title">${milestoneTitle}</div>
+              <div>Status diubah menjadi: <span class="update-status">${status}</span></div>
+            </div>
+
+            <p>Anda dapat melihat checklist detail dan perkembangan proyek selengkapnya di Client Portal Anda secara real-time.</p>
+            
+            <div class="btn-container">
+              <a href="${portalUrl}" class="btn" target="_blank">Buka Portal Klien</a>
+            </div>
+          </div>
+
+          <div class="footer">
+            &copy; 2026 SejatiDimedia Tech Agency. Seluruh hak cipta dilindungi.
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+  if (resend) {
+    try {
+      const response = await resend.emails.send({
+        from: FROM_EMAIL,
+        to: [to],
+        subject,
+        html: htmlContent,
+        attachments: logoBuffer ? [
+          {
+            filename: 'logo.png',
+            content: logoBuffer,
+            contentId: 'logo_cid',
+          }
+        ] : undefined,
+      });
+
+      if (response.error) {
+        console.warn(`[Resend Milestone Update Fail] ${response.error.message}`);
+        return { success: false, error: response.error.message };
+      }
+
+      console.log(`[Resend] Milestone update email sent successfully to ${to}:`, response.data?.id);
+      return { success: true, messageId: response.data?.id };
+    } catch (error: any) {
+      console.error(`[Resend Error] Failed sending milestone update email to ${to}:`, error?.message || error);
+      return { success: false, error: error?.message || 'Email delivery failed' };
+    }
+  } else {
+    console.log(`\n==================================================`);
+    console.log(`[SIMULATED MILESTONE EMAIL - RESEND_API_KEY NOT SET]`);
+    console.log(`To: ${to}`);
+    console.log(`Subject: ${subject}`);
+    console.log(`Portal Link: ${portalUrl}`);
+    console.log(`==================================================\n`);
+    return { success: true, simulated: true };
+  }
+}
+
+

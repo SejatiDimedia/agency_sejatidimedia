@@ -66,13 +66,37 @@ model MagicToken {
 }
 
 model Project {
-  id          String   @id @default(cuid())
+  id          String      @id @default(cuid())
   name        String
-  status      String   @default("Active")
+  status      String      @default("Active")
   startDate   String?
   endDate     String?
-  user        User     @relation(fields: [userId], references: [id])
+  user        User        @relation(fields: [userId], references: [id])
   userId      String
+  milestones  Milestone[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Milestone {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  status      String   @default("To Do") // "To Do", "In Progress", "Done"
+  dueDate     String?
+  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId   String
+  tasks       Task[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model Task {
+  id          String    @id @default(cuid())
+  title       String
+  isDone      Boolean   @default(false)
+  milestone   Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  milestoneId String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
 }

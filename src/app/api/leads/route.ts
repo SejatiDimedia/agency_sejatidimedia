@@ -130,7 +130,7 @@ export async function POST(request: Request) {
       try {
         const tgText = `🔔 *Pengajuan Project Baru!*\n\n*Nama:* ${name}\n*Email:* ${email}\n*Layanan:* ${service}\n*Skala Proyek:* ${scale || 'Medium'}\n\n*Pesan:*\n"${message}"\n\n_Cek dashboard admin untuk detail selengkapnya._`;
         const dashboardLink = `${process.env.NEXT_PUBLIC_APP_URL}/admin/dashboard`;
-        await notifyOwnerViaTelegram(tgText + `\n\n*Link:* ${dashboardLink}`);
+        await notifyOwnerViaTelegram(tgText + `\n\n*${dashboardLink}`);
         console.log('✅ [Telegram Notification] Sent successfully!');
       } catch (tgErr) {
         console.error('❌ [Telegram Notification Fail] Error sending telegram alert:', tgErr);

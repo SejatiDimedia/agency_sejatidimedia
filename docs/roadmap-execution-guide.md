@@ -6,11 +6,20 @@
 
 ---
 
-## Fase 1 — Contact Form + Anti-Spam + Lead Dashboard Admin
-**Estimasi:** 1-2 minggu
+## Fase 1 — Contact Form + Anti-Spam + Lead Dashboard Admin [✅ COMPLETED]
+**Estimasi:** 1-2 minggu (Selesai pada: 2 Agustus 2026)
 
-### 📌 Scope
-| ID | Task | Prioritas |
+### 📌 Scope & Hasil Eksekusi
+- **FR-1.1 s/d FR-1.6**: Public contact form dengan honeypot, rate limiting, and spam filtering terintegrasi database Neon PostgreSQL.
+- **FR-2.1 s/d FR-2.5**: Lead management dashboard dengan Kanban board (5 kolom: New, Reviewing, Proposal, Won, Lost, Spam).
+- **Tambahan Kustom**:
+  - Auto-response email konfirmasi pengajuan (`sendInquiryReceivedEmail`) dikirimkan secara otomatis dari domain terverifikasi `onboarding@sejatidimedia.web.id` ke inbox klien.
+  - Tombol CTA WhatsApp dinamis ditambahkan di landing page sukses & email untuk mempercepat proses diskusi negosiasi dan proposal.
+  - Integrasi Notifikasi Telegram ke Owner/Admin ketika pengajuan proyek baru masuk.
+  - Perbaikan layout Sidebar Admin/Klien berbasis Role (Admin mendapat full control menu, Client hanya mendapat menu proyek/deliverables).
+  - Optimasi Sidebar: sticky sidebar dengan scrollable navigation area yang dinamis.
+
+| ID | Task | Status |
 |---|---|---|
 | FR-1.1 | Form tangkap: nama, email, jenis layanan, skala proyek, detail kebutuhan | Must |
 | FR-1.2 | Validasi email & panjang minimum (client + server side, Zod) | Must |
@@ -53,20 +62,28 @@ Scope Fase 1:
 ```
 
 ### ✅ Cara verifikasi setelah selesai
-- [ ] Form submit berhasil → lead muncul di database
-- [ ] Honeypot terisi → lead ditandai SPAM
-- [ ] Submit >3x/jam dari IP sama → ditolak (rate limit)
-- [ ] Email disposable → ditolak
-- [ ] Admin bisa lihat, filter, dan ubah status lead
-- [ ] `npm run build` sukses tanpa error
+- [x] Form submit berhasil → lead muncul di database
+- [x] Honeypot terisi → lead ditandai SPAM
+- [x] Submit >3x/jam dari IP sama → ditolak (rate limit)
+- [x] Email disposable → ditolak
+- [x] Admin bisa lihat, filter, dan ubah status lead
+- [x] `npm run build` sukses tanpa error
 
 ---
 
-## Fase 2 — Trigger Otomatis (WON) + Auth Magic Link + Email Onboarding
-**Estimasi:** 1 minggu
+## Fase 2 — Trigger Otomatis (WON) + Auth Magic Link + Email Onboarding [✅ COMPLETED]
+**Estimasi:** 1 minggu (Selesai pada: 2 Agustus 2026)
 
-### 📌 Scope
-| ID | Task | Prioritas |
+### 📌 Scope & Hasil Eksekusi
+- **FR-2.4 & FR-3.1 s/d FR-3.10**: Onboarding klien otomatis ketika dikonversi ke Client Portal Project dari Kanban Won.
+- **Keamanan Tambahan**:
+  - Konfirmasi alert konfirmasi (window alert) saat mengubah lead ke status **Won** (Won Confirmation).
+  - Konfirmasi alert konfirmasi kedua saat menekan tombol **Konversi Ke Client Portal Project** untuk mencegah ketidaksengajaan.
+  - Dynamic Resend Client instantiation di `src/lib/email.ts` untuk memastikan Next.js membaca environment variable secara dinamis di runtime.
+  - Seeding user admin permanen `admin@sejatidimedia.com` dengan password hash terenkripsi.
+  - Double-Layer route protection menggunakan middleware.ts (Server-side & Client-side session checks).
+
+| ID | Task | Status |
 |---|---|---|
 | FR-2.4 | Trigger saat status `WON`: create user + create project + kirim email | Must |
 | FR-3.1 | Generate token aktivasi (hashed, expiry 48 jam) | Must |
@@ -119,18 +136,18 @@ Scope Fase 2:
 ```
 
 ### ✅ Cara verifikasi setelah selesai
-- [ ] Admin ubah lead ke WON → user + project terbuat otomatis
-- [ ] Email onboarding terkirim dengan magic link
-- [ ] Klik magic link → session terbuat → redirect ke /portal
-- [ ] Magic link expired / sudah dipakai → ditolak
-- [ ] Login dengan password berfungsi (setelah set password)
-- [ ] Email sudah terdaftar → project baru terkait akun lama
-- [ ] `npm run build` sukses tanpa error
+- [x] Admin ubah lead ke WON → user + project terbuat otomatis
+- [x] Email onboarding terkirim dengan magic link
+- [x] Klik magic link → session terbuat → redirect ke /portal
+- [x] Magic link expired / sudah dipakai → ditolak
+- [x] Login dengan password berfungsi (setelah set password)
+- [x] Email sudah terdaftar → project baru terkait akun lama
+- [x] `npm run build` sukses tanpa error
 
 ---
 
-## Fase 3 — Client Portal + Notifikasi Email + Cron Retensi Data
-**Estimasi:** 1-2 minggu
+## Fase 3 — Client Portal + Notifikasi Email + Cron Retensi Data [✅ COMPLETED]
+**Estimasi:** 1-2 minggu (Selesai pada: 3 Agustus 2026)
 
 ### 📌 Scope
 | ID | Task | Prioritas |
@@ -189,14 +206,14 @@ Scope Fase 3:
 ```
 
 ### ✅ Cara verifikasi setelah selesai
-- [ ] Klien login → lihat project miliknya saja (bukan milik klien lain)
-- [ ] Progress bar + milestone timeline tampil dengan benar
-- [ ] Task list read-only (klien tidak bisa edit)
-- [ ] Admin CRUD milestone/task berfungsi
-- [ ] Email terkirim saat milestone berubah status
-- [ ] Lead SPAM/LOST > 7 hari terhapus otomatis
-- [ ] Data internal tidak bocor ke portal
-- [ ] `npm run build` sukses tanpa error
+- [x] Klien login → lihat project miliknya saja (bukan milik klien lain)
+- [x] Progress bar + milestone timeline tampil dengan benar
+- [x] Task list read-only (klien tidak bisa edit)
+- [x] Admin CRUD milestone/task berfungsi
+- [x] Email terkirim saat milestone berubah status
+- [x] Lead SPAM/LOST > 7 hari terhapus otomatis
+- [x] Data internal tidak bocor ke portal
+- [x] `npm run build` sukses tanpa error
 
 ---
 
