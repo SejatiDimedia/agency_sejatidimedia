@@ -4,6 +4,8 @@ import { checkRateLimit } from '@/lib/rateLimit';
 import { prisma } from '@/lib/prisma';
 import { INITIAL_LEADS } from '@/lib/portalMockData';
 import { sendInquiryReceivedEmail } from '@/lib/email';
+import { notifyOwnerViaTelegram } from '@/lib/telegram';
+
 
 // Fallback memory store when DATABASE_URL is not connected
 let memoryLeads = [...INITIAL_LEADS];
@@ -122,6 +124,19 @@ export async function POST(request: Request) {
         console.error('❌ [Autoresponder Catch Error] Exception thrown:', emailErr);
       }
     }
+
+    // 6. Notify Owner via Telegram (only if not spam)
+    if (initialStatus !== 'SPAM') {
+      try {
+        const tgText = `🔔 *Pengajuan Project Baru!*\n\n*Nama:* ${name}\n*Email:* ${email}\n*Layanan:* ${service}\n*Skala Proyek:* ${scale || 'Medium'}\n\n*Pesan:*\n"${message}"\n\n_Cek dashboard admin untuk detail selengkapnya._`;
+        const dashboardLink = `${process.env.NEXT_PUBLIC_APP_URL}/admin/dashboard`;
+        await notifyOwnerViaTelegram(tgText + `\n\n*Link:* ${dashboardLink}`);
+        console.log('✅ [Telegram Notification] Sent successfully!');
+      } catch (tgErr) {
+        console.error('❌ [Telegram Notification Fail] Error sending telegram alert:', tgErr);
+      }
+    }
+
 
     return NextResponse.json(
       {
