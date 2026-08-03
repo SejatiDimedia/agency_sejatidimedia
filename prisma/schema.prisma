@@ -10,6 +10,7 @@ generator client {
 enum LeadStatus {
   NEW
   REVIEWING
+  PROPOSAL
   WON
   LOST
   SPAM

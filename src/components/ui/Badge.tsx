@@ -2,7 +2,7 @@
 
 import React from 'react';
 
-export type StatusType = 'New' | 'Reviewing' | 'Won' | 'Lost' | 'Spam' | 'Active' | 'Completed' | 'Pending';
+export type StatusType = 'New' | 'Reviewing' | 'Proposal' | 'Won' | 'Lost' | 'Spam' | 'Active' | 'Completed' | 'Pending';
 
 export interface BadgeProps {
   status?: StatusType;
@@ -26,6 +26,12 @@ const statusStyles: Record<StatusType, { bg: string; text: string; border: strin
     text: 'text-amber-700',
     border: 'border-amber-200/80',
     dot: 'bg-amber-500',
+  },
+  Proposal: {
+    bg: 'bg-indigo-50',
+    text: 'text-indigo-700',
+    border: 'border-indigo-200/80',
+    dot: 'bg-indigo-500',
   },
   Won: {
     bg: 'bg-emerald-50',

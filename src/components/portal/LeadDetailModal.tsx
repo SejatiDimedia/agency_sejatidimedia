@@ -35,6 +35,12 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
   const [isConverting, setIsConverting] = useState(false);
 
   const handleStatusChange = (newStatus: LeadStatus) => {
+    if (newStatus === 'Won') {
+      const confirmWon = window.confirm(
+        'Apakah Anda yakin ingin memindahkan lead ini ke status WON? Pastikan diskusi biaya & detail project sudah selesai disepakati.'
+      );
+      if (!confirmWon) return;
+    }
     const updated: Lead = {
       ...lead,
       status: newStatus,
@@ -73,6 +79,11 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
   };
 
   const handleConvertClick = async () => {
+    const confirmConvert = window.confirm(
+      'Apakah Anda yakin ingin mengonversi lead ini ke Client Portal? Tindakan ini akan membuat user baru dan mengirimkan email onboarding magic link.'
+    );
+    if (!confirmConvert) return;
+
     setIsConverting(true);
     try {
       await onConvertToProject(lead);
@@ -131,7 +142,7 @@ export const LeadDetailModal: React.FC<LeadDetailModalProps> = ({
             Ubah Status Lead
           </h4>
           <div className="flex flex-wrap gap-2">
-            {(['New', 'Reviewing', 'Won', 'Lost', 'Spam'] as LeadStatus[]).map((st) => (
+            {(['New', 'Reviewing', 'Proposal', 'Won', 'Lost', 'Spam'] as LeadStatus[]).map((st) => (
               <button
                 key={st}
                 onClick={() => handleStatusChange(st)}

@@ -20,6 +20,7 @@ interface LeadKanbanBoardProps {
 const KANBAN_COLUMNS: { key: LeadStatus; title: string; color: string; badgeStatus: LeadStatus }[] = [
   { key: 'New', title: 'New Leads', color: 'bg-blue-500', badgeStatus: 'New' },
   { key: 'Reviewing', title: 'Reviewing', color: 'bg-amber-500', badgeStatus: 'Reviewing' },
+  { key: 'Proposal', title: 'Proposal / Negosiasi', color: 'bg-indigo-500', badgeStatus: 'Proposal' },
   { key: 'Won', title: 'Won (Converted)', color: 'bg-emerald-500', badgeStatus: 'Won' },
   { key: 'Lost', title: 'Lost', color: 'bg-slate-400', badgeStatus: 'Lost' },
   { key: 'Spam', title: 'Spam', color: 'bg-rose-500', badgeStatus: 'Spam' },

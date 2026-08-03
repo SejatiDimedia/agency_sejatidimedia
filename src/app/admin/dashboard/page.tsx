@@ -53,11 +53,15 @@ export default function AdminDashboardPage() {
               ? 'New'
               : item.status === 'REVIEWING'
                 ? 'Reviewing'
-                : item.status === 'WON'
-                  ? 'Won'
-                  : item.status === 'LOST'
-                    ? 'Lost'
-                    : 'Spam',
+                : item.status === 'PROPOSAL'
+                  ? 'Proposal'
+                  : item.status === 'WON'
+                    ? 'Won'
+                    : item.status === 'LOST'
+                      ? 'Lost'
+                      : item.status === 'SPAM'
+                        ? 'Spam'
+                        : 'New',
           notes: item.notes || '',
           source: 'Website Form',
           message: item.message,

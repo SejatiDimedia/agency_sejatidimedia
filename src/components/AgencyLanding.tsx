@@ -233,17 +233,14 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
       }
 
       setFormSubmitted(true);
-      setTimeout(() => {
-        setFormSubmitted(false);
-        setFormData({
-          name: '',
-          email: '',
-          service: 'Full-Stack Web App',
-          scope: 'medium',
-          details: '',
-          honeypot: '',
-        });
-      }, 5000);
+      setFormData({
+        name: '',
+        email: '',
+        service: 'Full-Stack Web App',
+        scope: 'medium',
+        details: '',
+        honeypot: '',
+      });
     } catch (err: any) {
       setFormError(err.message || 'Terjadi kesalahan saat mengantarkan pesan.');
     } finally {
@@ -1617,12 +1614,36 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                   <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-500 shadow-lg shadow-emerald-500/5">
                     <Icon icon="ph:check-circle-fill" className="w-7 h-7" />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     <h4 className="text-lg font-sans font-bold text-theme-fore">{t.contact.formSubmitSuccess}</h4>
                     <p className="text-xs text-theme-fore-muted max-w-sm leading-relaxed mx-auto">
                       {t.contact.formSubmitSuccessDesc}
                     </p>
+                    <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
+                      📬 Kami juga telah mengirimkan ringkasan detail pengajuan ke email Anda.
+                    </p>
                   </div>
+
+                  <div className="pt-2 flex flex-col items-center gap-3">
+                    <a
+                      href={`https://wa.me/6289508436275?text=Halo%20SejatiDimedia,%20saya%20${encodeURIComponent(formData.name || 'Klien')}%20ingin%20berdiskusi%20tentang%20project%20${encodeURIComponent(formData.service || 'Web App')}%20yang%20baru%20saya%20ajukan.`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white text-xs font-sans font-extrabold tracking-wider uppercase shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all cursor-pointer"
+                    >
+                      <Icon icon="ic:baseline-whatsapp" className="w-4.5 h-4.5" />
+                      <span>Hubungi via WhatsApp (Negosiasi Cepat)</span>
+                    </a>
+
+                    <button
+                      type="button"
+                      onClick={() => setFormSubmitted(false)}
+                      className="text-[10px] font-mono text-theme-fore-muted hover:text-theme-accent transition-colors underline decoration-dotted underline-offset-4 cursor-pointer mt-1"
+                    >
+                      Kirim Pesan Lain / Reset Form
+                    </button>
+                  </div>
+
                   <div className="text-[10px] font-mono text-theme-fore-subtle bg-theme-elevated/80 border border-theme-border px-3.5 py-2 rounded-lg">
                     REF: {Math.random().toString(36).substring(2, 9).toUpperCase()} • STATUS: PRIORITAS_TINGGI
                   </div>

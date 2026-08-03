@@ -3,6 +3,7 @@ import { createLeadSchema } from '@/lib/validations/lead';
 import { checkRateLimit } from '@/lib/rateLimit';
 import { prisma } from '@/lib/prisma';
 import { INITIAL_LEADS } from '@/lib/portalMockData';
+import { sendInquiryReceivedEmail } from '@/lib/email';
 
 // Fallback memory store when DATABASE_URL is not connected
 let memoryLeads = [...INITIAL_LEADS];
@@ -101,6 +102,25 @@ export async function POST(request: Request) {
         ],
       };
       memoryLeads = [createdLead as any, ...memoryLeads];
+    }
+
+    // 5. Send Autoresponder Email (only if not spam)
+    if (initialStatus !== 'SPAM') {
+      try {
+        const emailResult = await sendInquiryReceivedEmail({
+          to: email,
+          name,
+          service,
+          message,
+        });
+        if (!emailResult.success) {
+          console.error('❌ [Autoresponder Fail] Email not sent:', emailResult.error);
+        } else {
+          console.log('✅ [Autoresponder Success] Email sent successfully!', emailResult.messageId || 'Simulated');
+        }
+      } catch (emailErr) {
+        console.error('❌ [Autoresponder Catch Error] Exception thrown:', emailErr);
+      }
     }
 
     return NextResponse.json(

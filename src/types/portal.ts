@@ -1,4 +1,4 @@
-export type LeadStatus = 'New' | 'Reviewing' | 'Won' | 'Lost' | 'Spam';
+export type LeadStatus = 'New' | 'Reviewing' | 'Proposal' | 'Won' | 'Lost' | 'Spam';
 
 export type ProjectStatus = 'Active' | 'In Progress' | 'Completed' | 'Maintenance';
 
