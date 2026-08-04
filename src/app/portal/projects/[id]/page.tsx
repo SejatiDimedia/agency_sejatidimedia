@@ -27,6 +27,9 @@ import {
   AlertTriangle
 } from 'lucide-react';
 
+import { InvoiceDetailModal } from '@/components/portal/InvoiceDetailModal';
+import { InvoiceModal } from '@/components/portal/InvoiceModal';
+import { Invoice } from '@/types/portal';
 import { ActiveNavSection } from '@/types/portal';
 
 export default function ProjectDetailsPage() {
@@ -45,6 +48,12 @@ export default function ProjectDetailsPage() {
   const [projectsCount, setProjectsCount] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [userSession, setUserSession] = useState<{ id: string; name: string; email: string; role: 'ADMIN' | 'CLIENT' } | null>(null);
+
+  // Invoice States
+  const [projectInvoices, setProjectInvoices] = useState<Invoice[]>([]);
+  const [isInvoiceDetailOpen, setIsInvoiceDetailOpen] = useState(false);
+  const [isInvoiceCreateOpen, setIsInvoiceCreateOpen] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
 
   // Admin Editing State
   const [editMode, setEditMode] = useState(false);
@@ -156,6 +165,13 @@ export default function ProjectDetailsPage() {
         alert('Gagal memuat proyek atau Anda tidak memiliki akses.');
         router.push('/portal');
         return;
+      }
+
+      // Fetch invoices of this project
+      const invRes = await fetch(`/api/projects/invoices?projectId=${projectId}`);
+      const invData = await invRes.json();
+      if (invData.success) {
+        setProjectInvoices(invData.invoices);
       }
 
       // Fetch all projects just to get the total count for the sidebar badge
@@ -574,6 +590,127 @@ export default function ProjectDetailsPage() {
                 })()}
               </div>
             </Card>
+
+            {/* Invoice & Tagihan Proyek Section Card */}
+            <div className="bg-white p-6 rounded-[2rem] border border-slate-200 shadow-sm space-y-4">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                <div>
+                  <h3 className="text-base font-extrabold text-slate-900 flex items-center gap-2">
+                    <FileText className="w-5 h-5 text-blue-600" />
+                    Invoice & Tagihan Proyek
+                  </h3>
+                  <p className="text-xs text-slate-500">Rincian faktur pembayaran, status pelunasan, dan unduh berkas PDF invoice.</p>
+                </div>
+
+                {userSession?.role === 'ADMIN' && (
+                  <Button
+                    type="button"
+                    variant="primary"
+                    onClick={() => {
+                      setSelectedInvoice(null);
+                      setIsInvoiceCreateOpen(true);
+                    }}
+                    icon={<Plus className="w-4 h-4" />}
+                    className="text-xs font-bold shrink-0"
+                  >
+                    Buat Invoice
+                  </Button>
+                )}
+              </div>
+
+              {/* Financial Summary Cards */}
+              {(() => {
+                const totalAmount = projectInvoices.reduce((acc, inv) => acc + inv.total, 0);
+                const paidAmount = projectInvoices
+                  .filter((inv) => inv.status === 'PAID')
+                  .reduce((acc, inv) => acc + inv.total, 0);
+                const outstandingAmount = Math.max(0, totalAmount - paidAmount);
+
+                return (
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+                      <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Tagihan (Nett)</span>
+                      <p className="text-lg font-black text-slate-900 mt-0.5">
+                        Rp {totalAmount.toLocaleString('id-ID')}
+                      </p>
+                    </div>
+
+                    <div className="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-200/60">
+                      <span className="text-[11px] font-bold text-emerald-600 uppercase tracking-wider">Sudah Dibayar (Lunas)</span>
+                      <p className="text-lg font-black text-emerald-700 mt-0.5">
+                        Rp {paidAmount.toLocaleString('id-ID')}
+                      </p>
+                    </div>
+
+                    <div className="bg-amber-50/60 p-4 rounded-2xl border border-amber-200/60">
+                      <span className="text-[11px] font-bold text-amber-600 uppercase tracking-wider">Sisa Tagihan (Outstanding)</span>
+                      <p className="text-lg font-black text-amber-700 mt-0.5">
+                        Rp {outstandingAmount.toLocaleString('id-ID')}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })()}
+
+              {/* Invoices List Table */}
+              {projectInvoices.length === 0 ? (
+                <p className="text-xs text-slate-400 italic py-4 text-center">Belum ada invoice yang diterbitkan untuk proyek ini.</p>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
+                      <tr>
+                        <th className="py-2.5 px-3">No. Invoice</th>
+                        <th className="py-2.5 px-3">Terbit</th>
+                        <th className="py-2.5 px-3">Jatuh Tempo</th>
+                        <th className="py-2.5 px-3 text-right">Total</th>
+                        <th className="py-2.5 px-3 text-center">Status</th>
+                        <th className="py-2.5 px-3 text-center">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 font-medium text-slate-800">
+                      {projectInvoices.map((inv) => (
+                        <tr key={inv.id} className="hover:bg-slate-50/60 transition-colors">
+                          <td className="py-3 px-3 font-bold text-blue-600">{inv.invoiceNumber}</td>
+                          <td className="py-3 px-3 text-slate-600">{inv.issuedDate}</td>
+                          <td className="py-3 px-3 text-slate-600">{inv.dueDate}</td>
+                          <td className="py-3 px-3 text-right font-black text-slate-900">
+                            Rp {inv.total.toLocaleString('id-ID')}
+                          </td>
+                          <td className="py-3 px-3 text-center">
+                            <span
+                              className={`inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                                inv.status === 'PAID'
+                                  ? 'bg-emerald-100 text-emerald-800'
+                                  : inv.status === 'SENT'
+                                  ? 'bg-amber-100 text-amber-800'
+                                  : inv.status === 'OVERDUE'
+                                  ? 'bg-rose-100 text-rose-800'
+                                  : 'bg-slate-100 text-slate-700'
+                              }`}
+                            >
+                              {inv.status}
+                            </span>
+                          </td>
+                          <td className="py-3 px-3 text-center">
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSelectedInvoice(inv);
+                                setIsInvoiceDetailOpen(true);
+                              }}
+                              className="inline-flex items-center gap-1 text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors cursor-pointer"
+                            >
+                              <Eye className="w-3.5 h-3.5" /> Detail & Bayar
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
 
             {/* Title & Admin Editing Switch */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -1223,6 +1360,25 @@ export default function ProjectDetailsPage() {
           </div>
         );
       })()}
+
+      {/* Invoice Modals */}
+      <InvoiceDetailModal
+        isOpen={isInvoiceDetailOpen}
+        onClose={() => setIsInvoiceDetailOpen(false)}
+        invoice={selectedInvoice}
+        userRole={userSession?.role || 'CLIENT'}
+        onInvoiceUpdated={() => loadData(false)}
+      />
+
+      {userSession?.role === 'ADMIN' && (
+        <InvoiceModal
+          isOpen={isInvoiceCreateOpen}
+          onClose={() => setIsInvoiceCreateOpen(false)}
+          onSuccess={() => loadData(false)}
+          projects={project ? [project] : []}
+          preselectedProjectId={projectId}
+        />
+      )}
     </div>
   );
 }

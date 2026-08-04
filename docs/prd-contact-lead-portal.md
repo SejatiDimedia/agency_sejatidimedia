@@ -1,10 +1,16 @@
 # Product Requirements Document (PRD)
 ## Integrasi Contact Form, Lead Management, & Client Portal
 **Produk:** SejatiDimedia — Internal Project Management & Client Portal
-**Versi:** 1.0 (MVP)
-**Tanggal:** 2 Agustus 2026
+**Versi:** 1.1
+**Tanggal:** 4 Agustus 2026
 **Pemilik Produk:** Timur Dian Radha Sejati (Founder & Lead Developer)
 **Status:** Draft untuk review internal
+
+### Changelog
+| Versi | Tanggal | Perubahan |
+|---|---|---|
+| 1.0 | 2 Agustus 2026 | Draft awal MVP |
+| 1.1 | 4 Agustus 2026 | Tambah FR-7 (Bell Notification In-App), FR-8 (Invoice & Billing), Fase 6 & 7 di roadmap, update ER diagram |
 
 ---
 
@@ -29,10 +35,11 @@ Membangun sistem terintegrasi yang menghubungkan:
 
 ### 1.4 Non-Tujuan (Out of Scope untuk MVP)
 - Real-time chat antara klien dan admin di dalam portal.
-- Sistem invoicing/pembayaran otomatis terintegrasi payment gateway.
-- Notifikasi real-time (WebSocket) — cukup polling/refresh manual di MVP.
+- ~~Sistem invoicing/pembayaran otomatis terintegrasi payment gateway.~~ → Dipindahkan ke Fase 7 (invoice manual, tanpa payment gateway otomatis).
+- ~~Notifikasi real-time (WebSocket) — cukup polling/refresh manual di MVP.~~ → Dipindahkan ke Fase 6 (bell notification in-app dengan polling).
 - Multi-admin/multi-role tim (MVP diasumsikan single admin/founder).
 - Mobile app native — cukup responsive web.
+- Integrasi payment gateway otomatis (Midtrans/Xendit/Stripe) — invoice bersifat manual/upload bukti transfer di MVP.
 
 ---
 
@@ -127,6 +134,45 @@ Membangun sistem terintegrasi yang menghubungkan:
 | FR-6.4 | Admin dapat menonaktifkan notifikasi otomatis per project (opsional, untuk kasus khusus) | Could (post-MVP) |
 | FR-6.5 | Frekuensi email dibatasi agar tidak spam ke klien — hanya trigger pada perubahan status milestone, bukan setiap perubahan task kecil | Must |
 
+### 4.7 Bell Notification In-App
+| ID | Requirement | Prioritas |
+|---|---|---|
+| FR-7.1 | Ikon bell (🔔) ditampilkan di header portal (klien) dan dashboard (admin), menunjukkan jumlah notifikasi yang belum dibaca (unread badge count) | Must |
+| FR-7.2 | Klik bell membuka dropdown/panel daftar notifikasi terbaru (maks. 20 item terakhir), dengan indikator baca/belum baca | Must |
+| FR-7.3 | Setiap notifikasi memiliki: ikon tipe, judul ringkas, deskripsi singkat, timestamp relatif ("5 menit lalu"), dan link aksi (navigasi ke halaman terkait) | Must |
+| FR-7.4 | **Trigger notifikasi untuk Klien:** milestone berubah status, file deliverable baru diupload admin, komentar baru dari admin, invoice baru diterbitkan | Must |
+| FR-7.5 | **Trigger notifikasi untuk Admin:** lead baru masuk, klien baru aktivasi portal, komentar baru dari klien, pembayaran/bukti transfer diupload klien | Must |
+| FR-7.6 | Tombol "Tandai semua sudah dibaca" (mark all as read) tersedia di panel notifikasi | Should |
+| FR-7.7 | Notifikasi yang diklik otomatis ditandai sebagai sudah dibaca dan melakukan navigasi ke halaman terkait | Must |
+| FR-7.8 | Data notifikasi diambil via polling periodik (interval 30–60 detik) dari endpoint API, bukan WebSocket di tahap awal | Must |
+| FR-7.9 | API endpoint `GET /api/notifications` mengembalikan daftar notifikasi milik user yang sedang login (row-level security berdasarkan `userId`) | Must |
+| FR-7.10 | API endpoint `PATCH /api/notifications/[id]` untuk menandai notifikasi sebagai sudah dibaca, dan `PATCH /api/notifications/read-all` untuk bulk mark-as-read | Must |
+
+### 4.8 Invoice & Billing Project
+
+**Pendekatan Item Invoice: Hybrid (Auto-populate + Manual)**
+Saat admin membuat invoice baru untuk sebuah project, sistem **auto-populate** item awal berdasarkan data yang sudah ada (nama project, milestone yang sudah selesai). Admin kemudian **bebas mengedit, menambah, menghapus, dan mengatur urutan** setiap line item sebelum mengirim invoice. Pendekatan ini menghemat waktu input tanpa mengorbankan fleksibilitas — karena setiap project punya struktur biaya yang berbeda (flat rate, per-milestone, biaya tambahan seperti domain/hosting/lisensi).
+
+| ID | Requirement | Prioritas |
+|---|---|---|
+| FR-8.1 | Admin dapat membuat invoice untuk project tertentu, berisi: nomor invoice (auto-generate), tanggal terbit, tanggal jatuh tempo, daftar item/deskripsi, jumlah (amount), pajak (opsional), total, dan catatan/keterangan | Must |
+| FR-8.2 | Saat membuat invoice baru, sistem **auto-populate** item awal dari data project: nama project sebagai item utama, dengan opsi breakdown per milestone yang sudah selesai. Admin dapat langsung mengedit semua field yang ter-populate | Must |
+| FR-8.3 | Admin dapat **menambah item baru** secara manual (misal: biaya domain, hosting, lisensi pihak ketiga, revisi tambahan, biaya maintenance) di luar item yang di-generate otomatis | Must |
+| FR-8.4 | Admin dapat **mengedit** (deskripsi, qty, harga satuan) dan **menghapus** setiap line item, serta **mengatur urutan** item via drag-and-drop atau tombol atas/bawah | Must |
+| FR-8.5 | Admin dapat mengedit dan menghapus invoice yang masih berstatus `draft` | Must |
+| FR-8.6 | Invoice memiliki siklus status: `draft` → `sent` → `paid` / `overdue` / `cancelled` | Must |
+| FR-8.7 | Saat admin mengubah status invoice ke `sent`, sistem mengirim email notifikasi ke klien berisi ringkasan invoice dan link ke portal untuk melihat detail | Must |
+| FR-8.8 | Klien dapat melihat daftar semua invoice terkait proyek-proyeknya di portal, lengkap dengan status pembayaran dan tanggal jatuh tempo | Must |
+| FR-8.9 | Klien dapat melihat halaman detail invoice (preview) dengan layout profesional yang juga bisa di-download sebagai PDF | Must |
+| FR-8.10 | Klien dapat mengupload bukti transfer/pembayaran pada invoice yang berstatus `sent` atau `overdue` | Should |
+| FR-8.11 | Admin mendapat notifikasi (bell + email) ketika klien mengupload bukti pembayaran, dan dapat memverifikasi serta mengubah status ke `paid` | Must |
+| FR-8.12 | Invoice mendukung pembayaran bertahap/termin (misal: DP 50%, pelunasan 50%) — satu project dapat memiliki beberapa invoice | Must |
+| FR-8.13 | Nomor invoice auto-generate dengan format: `INV-{YYYY}{MM}-{SEQ}` (contoh: `INV-202608-001`) | Must |
+| FR-8.14 | Subtotal, pajak (PPN opsional, persentase bisa diatur admin), dan grand total dihitung otomatis dari line items | Must |
+| FR-8.15 | Admin dapat melihat ringkasan finansial per project: total nilai kontrak, jumlah sudah dibayar, sisa outstanding | Should |
+| FR-8.16 | Invoice yang melewati tanggal jatuh tempo otomatis berubah status menjadi `overdue` via scheduled job/cron harian | Should |
+| FR-8.17 | Admin dapat mengatur informasi rekening bank/transfer tujuan yang ditampilkan di setiap invoice | Must |
+
 ---
 
 ## 5. Non-Functional Requirements
@@ -160,16 +206,22 @@ Membangun sistem terintegrasi yang menghubungkan:
 ### 6.1 Entity Relationship (ringkas)
 
 ```
-LEADS ||--o| USERS      : "converts_to (saat deal)"
-USERS ||--o{ PROJECTS   : owns
+LEADS ||--o| USERS         : "converts_to (saat deal)"
+USERS ||--o{ PROJECTS      : owns
 PROJECTS ||--o{ MILESTONES : has
-MILESTONES ||--o{ TASKS : contains
+MILESTONES ||--o{ TASKS    : contains
+USERS ||--o{ NOTIFICATIONS : receives
+PROJECTS ||--o{ INVOICES   : billed_via
+INVOICES ||--o{ INVOICE_ITEMS : contains
 
-LEADS       (id, name, email, message, status, created_at)
-USERS       (id, lead_id FK, email, password_hash, activation_token, activated_at)
-PROJECTS    (id, user_id FK, name, status, start_date, end_date)
-MILESTONES  (id, project_id FK, title, status, due_date)
-TASKS       (id, milestone_id FK, title, is_done, assigned_to)
+LEADS          (id, name, email, message, status, created_at)
+USERS          (id, lead_id FK, email, password_hash, activation_token, activated_at)
+PROJECTS       (id, user_id FK, name, status, start_date, end_date)
+MILESTONES     (id, project_id FK, title, status, due_date)
+TASKS          (id, milestone_id FK, title, is_done, assigned_to)
+NOTIFICATIONS  (id, user_id FK, type, title, message, link, is_read, created_at)
+INVOICES       (id, project_id FK, invoice_number, status, issued_date, due_date, subtotal, tax, total, notes, bank_info, created_at)
+INVOICE_ITEMS  (id, invoice_id FK, description, quantity, unit_price, amount)
 ```
 
 **Catatan implementasi:**
@@ -178,6 +230,11 @@ TASKS       (id, milestone_id FK, title, is_done, assigned_to)
 - `USERS.lead_id` nullable (mendukung pembuatan user manual di luar form, misal klien lama)
 - `USERS.email` diberi **unique constraint** — mencegah akun ganda saat klien lama mengajukan project baru (lihat FR-3.10). Satu `user` bisa memiliki banyak `PROJECTS`, sehingga history project sebelumnya tetap utuh
 - `USERS.password_hash` nullable — klien belum tentu set password (login hybrid, lihat bagian 4.3), tetap bisa login via magic link selamanya
+- `NOTIFICATIONS.type`: enum `lead_new`, `milestone_update`, `file_uploaded`, `comment_new`, `invoice_sent`, `payment_uploaded`
+- `NOTIFICATIONS.is_read`: default `false`, diupdate saat user klik atau mark-all-as-read
+- `INVOICES.status`: enum `draft` → `sent` → `paid` / `overdue` / `cancelled`
+- `INVOICES.invoice_number`: auto-generate format `INV-{YYYY}{MM}-{SEQ}` (sequence reset per bulan)
+- `INVOICES.bank_info`: JSON atau text berisi detail rekening tujuan transfer
 
 ---
 
@@ -196,11 +253,13 @@ TASKS       (id, milestone_id FK, title, is_done, assigned_to)
 
 | Fase | Scope | Estimasi |
 |---|---|---|
-| **Fase 1** | Contact form + anti-spam layer + tabel `leads` + dashboard admin sederhana (list & ubah status) | 1-2 minggu |
-| **Fase 2** | Trigger otomatis: create user + project saat status `won` + email onboarding + magic link auth | 1 minggu |
-| **Fase 3** | Client portal read-only: daftar project, progress milestone, status task + notifikasi email saat milestone berubah status + scheduled job hapus lead spam/lost setelah 7 hari | 1-2 minggu |
-| **Fase 4** | Fitur tambahan: upload/download file deliverable, komentar klien | Iterasi berikutnya |
-| **Fase 5** | Analytics dasar (conversion rate leads), audit trail, multi-role admin | Iterasi berikutnya |
+| **Fase 1** | Contact form + anti-spam layer + tabel `leads` + dashboard admin sederhana (list & ubah status) | ✅ Selesai |
+| **Fase 2** | Trigger otomatis: create user + project saat status `won` + email onboarding + magic link auth | ✅ Selesai |
+| **Fase 3** | Client portal read-only: daftar project, progress milestone, status task + notifikasi email saat milestone berubah status + scheduled job hapus lead spam/lost setelah 7 hari | ✅ Selesai |
+| **Fase 4** | Fitur tambahan: upload/download file deliverable, komentar klien, preview berkas, multi-file upload | ✅ Selesai |
+| **Fase 5** | Analytics dasar (conversion rate leads), audit trail perubahan status lead/milestone/task | ✅ Selesai |
+| **Fase 6** | **Bell Notification In-App:** model `Notification`, API endpoint CRUD, polling periodik, badge unread count, dropdown panel notifikasi di header portal & admin, trigger otomatis dari perubahan milestone/file/komentar/invoice (lihat FR-7.1 s/d FR-7.10) | Iterasi berikutnya |
+| **Fase 7** | **Invoice & Billing:** model `Invoice` + `InvoiceItem`, CRUD admin, auto-generate nomor invoice, siklus status (draft → sent → paid/overdue/cancelled), halaman detail invoice + PDF download, upload bukti bayar oleh klien, ringkasan finansial per project, cron overdue checker (lihat FR-8.1 s/d FR-8.13) | Iterasi berikutnya |
 
 ---
 
@@ -231,4 +290,4 @@ TASKS       (id, milestone_id FK, title, is_done, assigned_to)
 
 ---
 
-*Dokumen ini adalah draft awal (v1.0) dan dapat berkembang seiring proses development dan feedback lebih lanjut.*
+*Dokumen ini adalah versi 1.1 dan terus berkembang seiring proses development dan feedback lebih lanjut.*

@@ -66,6 +66,14 @@ model MagicToken {
   createdAt   DateTime  @default(now())
 }
 
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
 model Project {
   id          String      @id @default(cuid())
   name        String
@@ -75,6 +83,7 @@ model Project {
   user        User        @relation(fields: [userId], references: [id])
   userId      String
   milestones  Milestone[]
+  invoices    Invoice[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 }
@@ -129,8 +138,8 @@ model Comment {
 
 model AuditLog {
   id          String   @id @default(cuid())
-  action      String   // e.g. "LEAD_STATUS_CHANGE", "MILESTONE_STATUS_CHANGE", "TASK_STATUS_CHANGE"
-  entityId    String   // The ID of the lead, milestone, or task
+  action      String   // e.g. "LEAD_STATUS_CHANGE", "MILESTONE_STATUS_CHANGE", "TASK_STATUS_CHANGE", "INVOICE_STATUS_CHANGE"
+  entityId    String   // The ID of the lead, milestone, task, or invoice
   entityName  String   // The name/title of the entity
   projectName String?  // Optional name of the associated project
   oldValue    String?
@@ -138,4 +147,40 @@ model AuditLog {
   userId      String?  // The user ID who performed the action
   userName    String?  // The user name who performed the action
   createdAt   DateTime @default(now())
+}
+
+model Invoice {
+  id                String        @id @default(cuid())
+  invoiceNumber     String        @unique // e.g. "INV-202608-001"
+  status            InvoiceStatus @default(DRAFT)
+  issuedDate        String        // e.g. "2026-08-04"
+  dueDate           String        // e.g. "2026-08-18"
+  subtotal          Float
+  taxPercent        Float         @default(0)
+  taxAmount         Float         @default(0)
+  total             Float
+  notes             String?
+  bankInfo          String?
+  paymentProofKey   String?
+  paymentProofUrl   String?
+  paymentUploadedAt DateTime?
+  paidAt            DateTime?
+  project           Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId         String
+  items             InvoiceItem[]
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+}
+
+model InvoiceItem {
+  id          String   @id @default(cuid())
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId   String
+  description String
+  quantity    Int      @default(1)
+  unitPrice   Float
+  amount      Float
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }

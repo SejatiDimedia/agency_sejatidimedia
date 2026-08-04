@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "next dev --port=3000 --hostname=0.0.0.0",
+    "dev": "next dev --port=3001 --hostname=0.0.0.0",
     "build": "prisma generate && node scripts/seed-admin.js && next build",
     "postinstall": "prisma generate",
     "start": "next start",

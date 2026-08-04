@@ -4,6 +4,41 @@ export type ProjectStatus = 'Active' | 'In Progress' | 'Completed' | 'Maintenanc
 
 export type MilestoneStatus = 'To Do' | 'In Progress' | 'Done';
 
+export type InvoiceStatus = 'DRAFT' | 'SENT' | 'PAID' | 'OVERDUE' | 'CANCELLED';
+
+export interface InvoiceItem {
+  id: string;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  amount: number;
+  order?: number;
+}
+
+export interface Invoice {
+  id: string;
+  invoiceNumber: string;
+  status: InvoiceStatus;
+  issuedDate: string;
+  dueDate: string;
+  subtotal: number;
+  taxPercent: number;
+  taxAmount: number;
+  total: number;
+  notes?: string | null;
+  bankInfo?: string | null;
+  paymentProofKey?: string | null;
+  paymentProofUrl?: string | null;
+  paymentUploadedAt?: string | null;
+  paidAt?: string | null;
+  projectId: string;
+  projectName?: string;
+  clientName?: string;
+  clientEmail?: string;
+  items: InvoiceItem[];
+  createdAt?: string;
+}
+
 export interface Task {
   id: string;
   title: string;
@@ -87,6 +122,7 @@ export interface Project {
     role: string;
   }[];
   milestones: Milestone[];
+  invoices?: Invoice[];
 }
 
 export type ViewPage = 

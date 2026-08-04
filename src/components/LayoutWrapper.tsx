@@ -232,13 +232,16 @@ export default function LayoutWrapper({
                 <Image
                   src="/logo.svg"
                   alt="SejatiDimedia Logo"
-                  width={56}
-                  height={28}
+                  width={50}
+                  height={18}
                   className="h-full w-auto object-contain"
                 />
               </div>
-              <span className="font-display font-bold text-base tracking-wider text-theme-accent">
-                SEJATI DIMEDIA
+              <span
+                className="font-bold text-slate-900 md:text-[20px] text-base leading-snug tracking-tight uppercase"
+                style={{ fontFamily: "'Montserrat', sans-serif" }}
+              >
+                <span style={{ color: '#2E54A2' }}>Sejati</span> <span style={{ color: '#23385B' }}>Dimedia</span>
               </span>
             </div>
 

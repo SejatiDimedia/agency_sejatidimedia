@@ -9,9 +9,11 @@ import { LeadDetailModal } from '@/components/portal/LeadDetailModal';
 import { AddLeadModal } from '@/components/portal/AddLeadModal';
 import { StyleGuideModal } from '@/components/portal/StyleGuideModal';
 import { INITIAL_LEADS, INITIAL_PROJECTS } from '@/lib/portalMockData';
-import { Lead, LeadStatus, ActiveNavSection, Project } from '@/types/portal';
-import { Button, Toast } from '@/components/ui';
-import { Plus, Kanban, List, ShieldAlert, BarChart3, History, Search, RefreshCw, Filter, User, ArrowRight, TrendingUp, Clock, CheckSquare } from 'lucide-react';
+import { InvoiceModal } from '@/components/portal/InvoiceModal';
+import { InvoiceDetailModal } from '@/components/portal/InvoiceDetailModal';
+import { Lead, LeadStatus, ActiveNavSection, Project, Invoice } from '@/types/portal';
+import { Button, Toast, ConfirmModal } from '@/components/ui';
+import { Plus, Kanban, List, ShieldAlert, BarChart3, History, Search, RefreshCw, Filter, User, ArrowRight, TrendingUp, Clock, CheckSquare, FileText, DollarSign, CheckCircle2, AlertTriangle, Eye, Edit2, Trash2 } from 'lucide-react';
 
 export default function AdminDashboardPage() {
   const [activeSection, setActiveSection] = useState<ActiveNavSection>('dashboard-leads');
@@ -23,14 +25,25 @@ export default function AdminDashboardPage() {
   const [activeFilterMonth, setActiveFilterMonth] = useState('November 2024');
   const [showSpamAndLost, setShowSpamAndLost] = useState(true);
 
-  // Phase 5 Tabs
-  const [activeTab, setActiveTab] = useState<'leads' | 'analytics' | 'audit'>('leads');
+  // Phase 5 & 7 Tabs
+  const [activeTab, setActiveTab] = useState<'leads' | 'analytics' | 'audit' | 'invoices'>('leads');
   const [analyticsData, setAnalyticsData] = useState<any>(null);
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
   const [isLoadingAnalytics, setIsLoadingAnalytics] = useState(false);
   const [isLoadingAudit, setIsLoadingAudit] = useState(false);
   const [auditSearch, setAuditSearch] = useState('');
   const [auditFilterAction, setAuditFilterAction] = useState('');
+
+  // Invoice States
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [isLoadingInvoices, setIsLoadingInvoices] = useState(false);
+  const [invoiceSearch, setInvoiceSearch] = useState('');
+  const [invoiceFilterStatus, setInvoiceFilterStatus] = useState('');
+  const [isInvoiceModalOpen, setIsInvoiceModalOpen] = useState(false);
+  const [isInvoiceDetailOpen, setIsInvoiceDetailOpen] = useState(false);
+  const [selectedInvoice, setSelectedInvoice] = useState<Invoice | null>(null);
+  const [deleteConfirmInvoice, setDeleteConfirmInvoice] = useState<{ id: string; number: string; projectName?: string } | null>(null);
+  const [isDeletingInvoice, setIsDeletingInvoice] = useState(false);
 
   const [isLoadingLeads, setIsLoadingLeads] = useState(true);
   const [leads, setLeads] = useState<Lead[]>([]);
@@ -74,11 +87,32 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const fetchInvoices = async () => {
+    setIsLoadingInvoices(true);
+    try {
+      const query = new URLSearchParams({
+        search: invoiceSearch,
+        status: invoiceFilterStatus,
+      }).toString();
+      const res = await fetch(`/api/admin/invoices?${query}`);
+      const data = await res.json();
+      if (data.success) {
+        setInvoices(data.invoices);
+      }
+    } catch (err) {
+      console.error('Failed to fetch invoices:', err);
+    } finally {
+      setIsLoadingInvoices(false);
+    }
+  };
+
   useEffect(() => {
     if (activeTab === 'analytics') {
       fetchAnalytics();
     } else if (activeTab === 'audit') {
       fetchAuditLogs();
+    } else if (activeTab === 'invoices') {
+      fetchInvoices();
     }
   }, [activeTab]);
 
@@ -90,6 +124,31 @@ export default function AdminDashboardPage() {
       return () => clearTimeout(delayDebounce);
     }
   }, [auditSearch, auditFilterAction]);
+
+  useEffect(() => {
+    if (activeTab === 'invoices') {
+      const delayDebounce = setTimeout(() => {
+        fetchInvoices();
+      }, 300);
+      return () => clearTimeout(delayDebounce);
+    }
+  }, [invoiceSearch, invoiceFilterStatus]);
+
+  const fetchProjects = async () => {
+    try {
+      const res = await fetch('/api/projects');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.projects)) {
+        setProjects(data.projects);
+      }
+    } catch (err) {
+      console.error('Failed to fetch projects:', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
 
   // Fetch leads from API with loading state
   const fetchLeads = async () => {
@@ -344,6 +403,17 @@ export default function AdminDashboardPage() {
           >
             <History className="w-4 h-4" />
             Log Audit Trail
+          </button>
+          <button
+            onClick={() => setActiveTab('invoices')}
+            className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
+              activeTab === 'invoices'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/10'
+                : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/60'
+            }`}
+          >
+            <FileText className="w-4 h-4" />
+            Invoice & Billing
           </button>
         </div>
 
@@ -721,6 +791,175 @@ export default function AdminDashboardPage() {
             </div>
           </div>
         )}
+
+        {/* Tab 4: Invoice & Billing Management */}
+        {activeTab === 'invoices' && (
+          <div className="space-y-6 animate-in fade-in duration-200">
+            {/* Header & Action Bar */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-xl font-bold text-slate-900 tracking-tight">Manajemen Invoice & Billing</h3>
+                <p className="text-xs text-slate-500">Kelola faktur tagihan proyek, status pembayaran, dan verifikasi bukti transfer klien.</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  onClick={fetchInvoices}
+                  variant="secondary"
+                  className="flex items-center gap-1.5 text-xs"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isLoadingInvoices ? 'animate-spin' : ''}`} /> Refresh
+                </Button>
+                <Button
+                  onClick={() => {
+                    setSelectedInvoice(null);
+                    setIsInvoiceModalOpen(true);
+                  }}
+                  variant="primary"
+                  className="flex items-center gap-1.5 text-xs font-bold"
+                >
+                  <Plus className="w-4 h-4" /> Buat Invoice Baru
+                </Button>
+              </div>
+            </div>
+
+            {/* Invoices Search & Filter Bar */}
+            <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
+              <div className="relative flex-1 w-full">
+                <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Cari nomor invoice, nama proyek, atau nama klien..."
+                  value={invoiceSearch}
+                  onChange={(e) => setInvoiceSearch(e.target.value)}
+                  className="w-full text-xs pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl font-medium focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 w-full md:w-auto">
+                <Filter className="w-4 h-4 text-slate-400 shrink-0" />
+                <select
+                  value={invoiceFilterStatus}
+                  onChange={(e) => setInvoiceFilterStatus(e.target.value)}
+                  className="text-xs bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 font-semibold text-slate-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                >
+                  <option value="">Semua Status Invoice</option>
+                  <option value="DRAFT">Draft</option>
+                  <option value="SENT">Sent (Terbit)</option>
+                  <option value="PAID">Paid (Lunas)</option>
+                  <option value="OVERDUE">Overdue (Jatuh Tempo)</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Invoices Data Table */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+              {isLoadingInvoices ? (
+                <div className="p-12 text-center text-xs font-bold text-slate-400 flex flex-col items-center justify-center space-y-2">
+                  <RefreshCw className="w-6 h-6 animate-spin text-blue-600" />
+                  <span>Memuat data invoice...</span>
+                </div>
+              ) : invoices.length === 0 ? (
+                <div className="p-12 text-center space-y-3">
+                  <FileText className="w-10 h-10 text-slate-300 mx-auto" />
+                  <p className="text-sm font-bold text-slate-700">Belum Ada Invoice</p>
+                  <p className="text-xs text-slate-500">Klik "Buat Invoice Baru" untuk menerbitkan faktur tagihan proyek pertama Anda.</p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs">
+                    <thead className="bg-slate-50 text-slate-600 font-semibold border-b border-slate-200">
+                      <tr>
+                        <th className="py-3 px-4">No. Invoice</th>
+                        <th className="py-3 px-4">Proyek & Klien</th>
+                        <th className="py-3 px-4">Tgl Terbit</th>
+                        <th className="py-3 px-4">Jatuh Tempo</th>
+                        <th className="py-3 px-4 text-right">Total Tagihan</th>
+                        <th className="py-3 px-4 text-center">Status</th>
+                        <th className="py-3 px-4 text-center">Bukti Bayar</th>
+                        <th className="py-3 px-4 text-center">Aksi</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100 font-medium">
+                      {invoices.map((inv) => (
+                        <tr key={inv.id} className="hover:bg-slate-50/60 transition-colors">
+                          <td className="py-3.5 px-4 font-bold text-blue-600">{inv.invoiceNumber}</td>
+                          <td className="py-3.5 px-4">
+                            <div className="font-bold text-slate-900">{inv.projectName}</div>
+                            <div className="text-[11px] text-slate-500">{inv.clientName} ({inv.clientEmail})</div>
+                          </td>
+                          <td className="py-3.5 px-4 text-slate-600">{inv.issuedDate}</td>
+                          <td className="py-3.5 px-4 text-slate-600">{inv.dueDate}</td>
+                          <td className="py-3.5 px-4 text-right font-black text-slate-900">
+                            Rp {inv.total.toLocaleString('id-ID')}
+                          </td>
+                          <td className="py-3.5 px-4 text-center">
+                            <span
+                              className={`inline-flex px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                                inv.status === 'PAID'
+                                  ? 'bg-emerald-100 text-emerald-800'
+                                  : inv.status === 'SENT'
+                                  ? 'bg-amber-100 text-amber-800'
+                                  : inv.status === 'OVERDUE'
+                                  ? 'bg-rose-100 text-rose-800'
+                                  : 'bg-slate-100 text-slate-700'
+                              }`}
+                            >
+                              {inv.status}
+                            </span>
+                          </td>
+                          <td className="py-3.5 px-4 text-center">
+                            {inv.paymentProofUrl ? (
+                              <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md">
+                                <CheckCircle2 className="w-3 h-3" /> Ada Bukti
+                              </span>
+                            ) : (
+                              <span className="text-[11px] text-slate-400 italic">Belum Ada</span>
+                            )}
+                          </td>
+                          <td className="py-3.5 px-4 text-center">
+                            <div className="flex items-center justify-center gap-1">
+                              <button
+                                title="Lihat Preview & PDF"
+                                onClick={() => {
+                                  setSelectedInvoice(inv);
+                                  setIsInvoiceDetailOpen(true);
+                                }}
+                                className="p-1.5 text-slate-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              >
+                                <Eye className="w-4 h-4" />
+                              </button>
+                              <button
+                                title="Edit Invoice"
+                                onClick={() => {
+                                  setSelectedInvoice(inv);
+                                  setIsInvoiceModalOpen(true);
+                                }}
+                                className="p-1.5 text-slate-600 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+                              >
+                                <Edit2 className="w-4 h-4" />
+                              </button>
+                              <button
+                                title="Hapus Invoice"
+                                onClick={() => setDeleteConfirmInvoice({
+                                  id: inv.id,
+                                  number: inv.invoiceNumber,
+                                  projectName: inv.projectName || (inv as any).name || 'Proyek',
+                                })}
+                                className="p-1.5 text-slate-600 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </main>
 
       {/* Modals */}
@@ -742,6 +981,48 @@ export default function AdminDashboardPage() {
       <StyleGuideModal
         isOpen={isStyleGuideModalOpen}
         onClose={() => setIsStyleGuideModalOpen(false)}
+      />
+
+      <InvoiceModal
+        isOpen={isInvoiceModalOpen}
+        onClose={() => setIsInvoiceModalOpen(false)}
+        onSuccess={() => fetchInvoices()}
+        initialInvoice={selectedInvoice}
+        projects={projects}
+      />
+
+      <InvoiceDetailModal
+        isOpen={isInvoiceDetailOpen}
+        onClose={() => setIsInvoiceDetailOpen(false)}
+        invoice={selectedInvoice}
+        userRole="ADMIN"
+        onInvoiceUpdated={() => fetchInvoices()}
+      />
+
+      <ConfirmModal
+        isOpen={Boolean(deleteConfirmInvoice)}
+        onClose={() => setDeleteConfirmInvoice(null)}
+        onConfirm={async () => {
+          if (!deleteConfirmInvoice) return;
+          try {
+            setIsDeletingInvoice(true);
+            const res = await fetch(`/api/admin/invoices/${deleteConfirmInvoice.id}`, { method: 'DELETE' });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Gagal menghapus invoice');
+            setDeleteConfirmInvoice(null);
+            fetchInvoices();
+          } catch (err: any) {
+            alert(err.message || 'Gagal menghapus invoice');
+          } finally {
+            setIsDeletingInvoice(false);
+          }
+        }}
+        isLoading={isDeletingInvoice}
+        title="Hapus Invoice Permanen?"
+        message={`Apakah Anda yakin ingin menghapus invoice ${deleteConfirmInvoice?.number} (${deleteConfirmInvoice?.projectName}) secara permanen? Data yang dihapus tidak dapat dikembalikan.`}
+        confirmText="Ya, Hapus Invoice"
+        cancelText="Batal"
+        variant="danger"
       />
 
       {/* Floating Toast Notification */}

@@ -70,7 +70,14 @@ export async function GET() {
       });
     }
 
-    return NextResponse.json({ success: true, projects });
+    const formattedProjects = projects.map((p) => ({
+      ...p,
+      projectName: p.name,
+      clientName: p.user?.name || 'Klien',
+      clientEmail: p.user?.email || '',
+    }));
+
+    return NextResponse.json({ success: true, projects: formattedProjects });
   } catch (error: any) {
     console.error('[GET /api/projects Error]', error);
     return NextResponse.json(
