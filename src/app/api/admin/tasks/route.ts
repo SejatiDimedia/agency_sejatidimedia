@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth/session';
 import { prisma } from '@/lib/prisma';
+import { logAction } from '@/lib/audit';
 
 export async function POST(request: Request) {
   try {
@@ -16,12 +17,28 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Milestone ID and Title are required' }, { status: 400 });
     }
 
+    const milestone = await prisma.milestone.findUnique({
+      where: { id: milestoneId },
+      include: { project: true }
+    });
+
     const task = await prisma.task.create({
       data: {
         milestoneId,
         title,
         isDone: isDone || false,
       },
+    });
+
+    await logAction({
+      action: 'TASK_STATUS_CHANGE',
+      entityId: task.id,
+      entityName: task.title,
+      projectName: milestone?.project?.name,
+      oldValue: 'None',
+      newValue: task.isDone ? 'Done' : 'To Do',
+      userId: session.id,
+      userName: session.name,
     });
 
     return NextResponse.json({ success: true, task }, { status: 201 });

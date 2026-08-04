@@ -126,3 +126,16 @@ model Comment {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
+
+model AuditLog {
+  id          String   @id @default(cuid())
+  action      String   // e.g. "LEAD_STATUS_CHANGE", "MILESTONE_STATUS_CHANGE", "TASK_STATUS_CHANGE"
+  entityId    String   // The ID of the lead, milestone, or task
+  entityName  String   // The name/title of the entity
+  projectName String?  // Optional name of the associated project
+  oldValue    String?
+  newValue    String
+  userId      String?  // The user ID who performed the action
+  userName    String?  // The user name who performed the action
+  createdAt   DateTime @default(now())
+}

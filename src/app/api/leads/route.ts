@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { INITIAL_LEADS } from '@/lib/portalMockData';
 import { sendInquiryReceivedEmail } from '@/lib/email';
 import { notifyOwnerViaTelegram } from '@/lib/telegram';
+import { logAction } from '@/lib/audit';
 
 
 // Fallback memory store when DATABASE_URL is not connected
@@ -77,6 +78,17 @@ export async function POST(request: Request) {
           honeypot: honeypot || null,
           ipAddress: ip,
         },
+      });
+
+      // Log lead creation status change (from null/None to NEW/SPAM)
+      await logAction({
+        action: 'LEAD_STATUS_CHANGE',
+        entityId: createdLead.id,
+        entityName: createdLead.name,
+        oldValue: 'None',
+        newValue: createdLead.status,
+        userId: null,
+        userName: 'System (Contact Form)',
       });
     } catch {
       // Fallback in-memory lead creation for local dev without DB

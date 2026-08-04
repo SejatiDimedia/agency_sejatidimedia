@@ -11,7 +11,7 @@ import { StyleGuideModal } from '@/components/portal/StyleGuideModal';
 import { INITIAL_LEADS, INITIAL_PROJECTS } from '@/lib/portalMockData';
 import { Lead, LeadStatus, ActiveNavSection, Project } from '@/types/portal';
 import { Button, Toast } from '@/components/ui';
-import { Plus, Kanban, List, ShieldAlert } from 'lucide-react';
+import { Plus, Kanban, List, ShieldAlert, BarChart3, History, Search, RefreshCw, Filter, User, ArrowRight, TrendingUp, Clock, CheckSquare } from 'lucide-react';
 
 export default function AdminDashboardPage() {
   const [activeSection, setActiveSection] = useState<ActiveNavSection>('dashboard-leads');
@@ -23,6 +23,15 @@ export default function AdminDashboardPage() {
   const [activeFilterMonth, setActiveFilterMonth] = useState('November 2024');
   const [showSpamAndLost, setShowSpamAndLost] = useState(true);
 
+  // Phase 5 Tabs
+  const [activeTab, setActiveTab] = useState<'leads' | 'analytics' | 'audit'>('leads');
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
+  const [auditLogs, setAuditLogs] = useState<any[]>([]);
+  const [isLoadingAnalytics, setIsLoadingAnalytics] = useState(false);
+  const [isLoadingAudit, setIsLoadingAudit] = useState(false);
+  const [auditSearch, setAuditSearch] = useState('');
+  const [auditFilterAction, setAuditFilterAction] = useState('');
+
   const [isLoadingLeads, setIsLoadingLeads] = useState(true);
   const [leads, setLeads] = useState<Lead[]>([]);
   const [projects, setProjects] = useState<Project[]>(INITIAL_PROJECTS);
@@ -30,6 +39,57 @@ export default function AdminDashboardPage() {
 
   const [isAddLeadModalOpen, setIsAddLeadModalOpen] = useState(false);
   const [isStyleGuideModalOpen, setIsStyleGuideModalOpen] = useState(false);
+
+  const fetchAnalytics = async () => {
+    setIsLoadingAnalytics(true);
+    try {
+      const res = await fetch('/api/admin/analytics');
+      const data = await res.json();
+      if (data.success) {
+        setAnalyticsData(data.metrics);
+      }
+    } catch (err) {
+      console.error('Failed to fetch analytics:', err);
+    } finally {
+      setIsLoadingAnalytics(false);
+    }
+  };
+
+  const fetchAuditLogs = async () => {
+    setIsLoadingAudit(true);
+    try {
+      const query = new URLSearchParams({
+        search: auditSearch,
+        action: auditFilterAction,
+      }).toString();
+      const res = await fetch(`/api/admin/audit-logs?${query}`);
+      const data = await res.json();
+      if (data.success) {
+        setAuditLogs(data.logs);
+      }
+    } catch (err) {
+      console.error('Failed to fetch audit logs:', err);
+    } finally {
+      setIsLoadingAudit(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'analytics') {
+      fetchAnalytics();
+    } else if (activeTab === 'audit') {
+      fetchAuditLogs();
+    }
+  }, [activeTab]);
+
+  useEffect(() => {
+    if (activeTab === 'audit') {
+      const delayDebounce = setTimeout(() => {
+        fetchAuditLogs();
+      }, 300);
+      return () => clearTimeout(delayDebounce);
+    }
+  }, [auditSearch, auditFilterAction]);
 
   // Fetch leads from API with loading state
   const fetchLeads = async () => {
@@ -250,99 +310,417 @@ export default function AdminDashboardPage() {
           onMenuClick={() => setMobileSidebarOpen(true)}
         />
 
-        {/* Dashboard Title & Top Actions Bar */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                SejatiDimedia Management
-              </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
-              <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
-                Next.js App Router Admin
-              </span>
-            </div>
-            <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-              Dashboard Leads & Inquiry
-            </h1>
-          </div>
-
-          {/* Action Buttons & Filter Toggle */}
-          <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end flex-wrap">
-            <button
-              onClick={() => setShowSpamAndLost(!showSpamAndLost)}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-xs font-bold transition-all border cursor-pointer ${showSpamAndLost
-                  ? 'bg-rose-50 text-rose-700 border-rose-200'
-                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                }`}
-            >
-              <ShieldAlert className="w-3.5 h-3.5" />
-              <span>{showSpamAndLost ? 'Sembunyikan Spam/Lost' : 'Tampilkan Spam/Lost'}</span>
-            </button>
-
-            <div className="bg-slate-200/70 p-1 rounded-2xl flex items-center text-xs font-bold">
-              <button
-                onClick={() => setViewMode('kanban')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${viewMode === 'kanban'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                  }`}
-              >
-                <Kanban className="w-3.5 h-3.5" />
-                <span>Kanban Board</span>
-              </button>
-              <button
-                onClick={() => setViewMode('table')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${viewMode === 'table'
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                  }`}
-              >
-                <List className="w-3.5 h-3.5" />
-                <span>Table List</span>
-              </button>
-            </div>
-
-            <Button
-              variant="primary"
-              onClick={() => setIsAddLeadModalOpen(true)}
-              icon={<Plus className="w-4 h-4" />}
-            >
-              Tambah Lead
-            </Button>
-          </div>
+        {/* Navigation Tabs */}
+        <div className="flex gap-2 border-b border-slate-200 pb-3 mb-6 overflow-x-auto scrollbar-none">
+          <button
+            onClick={() => setActiveTab('leads')}
+            className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
+              activeTab === 'leads'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/10'
+                : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/60'
+            }`}
+          >
+            <Kanban className="w-4 h-4" />
+            Leads Pipeline
+          </button>
+          <button
+            onClick={() => setActiveTab('analytics')}
+            className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
+              activeTab === 'analytics'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/10'
+                : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/60'
+            }`}
+          >
+            <BarChart3 className="w-4 h-4" />
+            Analitik & Insight
+          </button>
+          <button
+            onClick={() => setActiveTab('audit')}
+            className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
+              activeTab === 'audit'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/10'
+                : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/60'
+            }`}
+          >
+            <History className="w-4 h-4" />
+            Log Audit Trail
+          </button>
         </div>
 
-        {/* Metrics Summary Bar */}
-        <DashboardMetrics
-          leads={leads}
-          projects={projects}
-          activeFilterMonth={activeFilterMonth}
-          setActiveFilterMonth={setActiveFilterMonth}
-          refreshData={fetchLeads}
-        />
-
-        {/* Kanban Board / Skeleton Loading State */}
-        <div className="mt-6">
-          {isLoadingLeads ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
-              {[1, 2, 3, 4].map((col) => (
-                <div key={col} className="bg-slate-100/60 rounded-[1.8rem] p-4 border border-slate-200/60 h-96 animate-pulse space-y-4">
-                  <div className="h-6 bg-slate-200 rounded-xl w-1/2"></div>
-                  <div className="h-28 bg-slate-200/80 rounded-2xl"></div>
-                  <div className="h-28 bg-slate-200/80 rounded-2xl"></div>
+        {/* Tab Contents */}
+        {activeTab === 'leads' && (
+          <>
+            {/* Dashboard Title & Top Actions Bar */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                    SejatiDimedia Management
+                  </span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                  <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
+                    Next.js App Router Admin
+                  </span>
                 </div>
-              ))}
+                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                  Dashboard Leads & Inquiry
+                </h1>
+              </div>
+
+              {/* Action Buttons & Filter Toggle */}
+              <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto justify-end flex-wrap">
+                <button
+                  onClick={() => setShowSpamAndLost(!showSpamAndLost)}
+                  className={`flex items-center gap-1.5 px-3 py-2 rounded-2xl text-xs font-bold transition-all border cursor-pointer ${showSpamAndLost
+                      ? 'bg-rose-50 text-rose-700 border-rose-200'
+                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                    }`}
+                >
+                  <ShieldAlert className="w-3.5 h-3.5" />
+                  <span>{showSpamAndLost ? 'Sembunyikan Spam/Lost' : 'Tampilkan Spam/Lost'}</span>
+                </button>
+
+                <div className="bg-slate-200/70 p-1 rounded-2xl flex items-center text-xs font-bold">
+                  <button
+                    onClick={() => setViewMode('kanban')}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${viewMode === 'kanban'
+                        ? 'bg-white text-slate-900 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                  >
+                    <Kanban className="w-3.5 h-3.5" />
+                    <span>Kanban Board</span>
+                  </button>
+                  <button
+                    onClick={() => setViewMode('table')}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl transition-all cursor-pointer ${viewMode === 'table'
+                        ? 'bg-white text-slate-900 shadow-sm'
+                        : 'text-slate-600 hover:text-slate-900'
+                      }`}
+                  >
+                    <List className="w-3.5 h-3.5" />
+                    <span>Table List</span>
+                  </button>
+                </div>
+
+                <Button
+                  variant="primary"
+                  onClick={() => setIsAddLeadModalOpen(true)}
+                  icon={<Plus className="w-4 h-4" />}
+                >
+                  Tambah Lead
+                </Button>
+              </div>
             </div>
-          ) : (
-            <LeadKanbanBoard
-              leads={filteredLeads}
-              onSelectLead={(lead) => setSelectedLead(lead)}
-              openAddLeadModal={() => setIsAddLeadModalOpen(true)}
-              updateLeadStatus={handleUpdateLeadStatus}
+
+            {/* Metrics Summary Bar */}
+            <DashboardMetrics
+              leads={leads}
+              projects={projects}
+              activeFilterMonth={activeFilterMonth}
+              setActiveFilterMonth={setActiveFilterMonth}
+              refreshData={fetchLeads}
             />
-          )}
-        </div>
+
+            {/* Kanban Board / Skeleton Loading State */}
+            <div className="mt-6">
+              {isLoadingLeads ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
+                  {[1, 2, 3, 4].map((col) => (
+                    <div key={col} className="bg-slate-100/60 rounded-[1.8rem] p-4 border border-slate-200/60 h-96 animate-pulse space-y-4">
+                      <div className="h-6 bg-slate-200 rounded-xl w-1/2"></div>
+                      <div className="h-28 bg-slate-200/80 rounded-2xl"></div>
+                      <div className="h-28 bg-slate-200/80 rounded-2xl"></div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <LeadKanbanBoard
+                  leads={filteredLeads}
+                  onSelectLead={(lead) => setSelectedLead(lead)}
+                  openAddLeadModal={() => setIsAddLeadModalOpen(true)}
+                  updateLeadStatus={handleUpdateLeadStatus}
+                />
+              )}
+            </div>
+          </>
+        )}
+
+        {activeTab === 'analytics' && (
+          <div className="space-y-6">
+            {/* Title & Refresh */}
+            <div className="flex justify-between items-center">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                  Analitik & Insights
+                </h1>
+                <p className="text-slate-500 text-xs mt-1">Metrik konversi, tren bulanan, dan waktu pemrosesan lead</p>
+              </div>
+              <button 
+                onClick={fetchAnalytics}
+                disabled={isLoadingAnalytics}
+                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 text-xs font-semibold hover:bg-slate-50 cursor-pointer disabled:opacity-50 transition-all"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${isLoadingAnalytics ? 'animate-spin' : ''}`} />
+                Segarkan
+              </button>
+            </div>
+
+            {isLoadingAnalytics || !analyticsData ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-pulse">
+                <div className="bg-white rounded-[2rem] p-6 border border-slate-200 h-32"></div>
+                <div className="bg-white rounded-[2rem] p-6 border border-slate-200 h-32"></div>
+                <div className="bg-white rounded-[2rem] p-6 border border-slate-200 h-32"></div>
+                <div className="bg-white rounded-[2rem] p-6 border border-slate-200 h-64 md:col-span-3"></div>
+              </div>
+            ) : (
+              <>
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Card 1: Conversion Rate */}
+                  <div className="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.02)] flex flex-col justify-between relative overflow-hidden">
+                    <div className="absolute right-4 top-4 w-12 h-12 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center">
+                      <TrendingUp className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Rasio Konversi</span>
+                      <h2 className="text-3xl font-black text-slate-900 mt-1">{analyticsData.conversionRate}%</h2>
+                    </div>
+                    <div className="mt-4">
+                      <div className="w-full bg-slate-100 rounded-full h-2 mb-2">
+                        <div 
+                          className="bg-blue-600 h-2 rounded-full transition-all duration-500" 
+                          style={{ width: `${analyticsData.conversionRate}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-xs text-slate-500 font-medium">
+                        {analyticsData.wonLeads} dari {analyticsData.totalLeads} lead diubah menjadi project
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Card 2: Average Conversion Time */}
+                  <div className="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.02)] flex flex-col justify-between relative overflow-hidden">
+                    <div className="absolute right-4 top-4 w-12 h-12 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center">
+                      <Clock className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Rata-rata Waktu Konversi</span>
+                      <h2 className="text-3xl font-black text-slate-900 mt-1">
+                        {analyticsData.averageConversionDays} <span className="text-base font-bold text-slate-500">Hari</span>
+                      </h2>
+                    </div>
+                    <div className="mt-4">
+                      <span className="text-xs text-slate-500 font-medium">
+                        Waktu rata-rata dari status Baru (New) ke Menang (Won/Project)
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Card 3: Summary Leads */}
+                  <div className="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.02)] flex flex-col justify-between relative overflow-hidden">
+                    <div className="absolute right-4 top-4 w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center">
+                      <CheckSquare className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Total Leads Aktif</span>
+                      <h2 className="text-3xl font-black text-slate-900 mt-1">{analyticsData.totalLeads}</h2>
+                    </div>
+                    <div className="mt-4 flex gap-4 text-xs text-slate-500 font-semibold">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                        <span>Won: {analyticsData.wonLeads}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                        <span>Pending: {analyticsData.totalLeads - analyticsData.wonLeads}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Monthly Trend Chart */}
+                <div className="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.02)]">
+                  <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 mb-6">Tren Lead Masuk (6 Bulan Terakhir)</h3>
+                  
+                  <div className="h-64 flex items-end justify-around gap-2 px-2 sm:px-6 border-b border-slate-100 pb-2">
+                    {analyticsData.leadsPerMonth.map((item: any, idx: number) => {
+                      const maxVal = Math.max(...analyticsData.leadsPerMonth.map((x: any) => x.count), 1);
+                      const heightPct = Math.max(10, (item.count / maxVal) * 100);
+                      return (
+                        <div key={idx} className="flex-1 flex flex-col items-center group max-w-[60px]">
+                          <span className="text-[10px] font-bold text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity mb-2">
+                            {item.count} Leads
+                          </span>
+                          <div 
+                            style={{ height: `${heightPct}%` }}
+                            className="w-full bg-blue-100 group-hover:bg-blue-600 transition-all duration-300 rounded-t-xl relative flex justify-center items-end"
+                          >
+                            <div className="absolute top-0 left-0 right-0 h-1/2 bg-gradient-to-b from-white/10 to-transparent rounded-t-xl" />
+                          </div>
+                          <span className="text-[11px] font-semibold text-slate-500 mt-3 whitespace-nowrap">
+                            {item.month}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'audit' && (
+          <div className="space-y-6">
+            {/* Title & Filters */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+                  Audit Trail Aktivitas
+                </h1>
+                <p className="text-slate-500 text-xs mt-1">Catatan riwayat perubahan status sistem secara real-time</p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                {/* Search */}
+                <div className="relative">
+                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                  <input
+                    type="text"
+                    placeholder="Cari entitas, proyek, user..."
+                    value={auditSearch}
+                    onChange={(e) => setAuditSearch(e.target.value)}
+                    className="pl-10 pr-4 py-2 text-xs rounded-xl border border-slate-200/80 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 w-full sm:w-56"
+                  />
+                </div>
+
+                {/* Filter Action */}
+                <div className="relative flex items-center bg-white border border-slate-200/80 rounded-xl px-3 py-2 text-xs font-semibold text-slate-600">
+                  <Filter className="w-3.5 h-3.5 text-slate-400 mr-2" />
+                  <select
+                    value={auditFilterAction}
+                    onChange={(e) => setAuditFilterAction(e.target.value)}
+                    className="bg-transparent focus:outline-none cursor-pointer pr-4"
+                  >
+                    <option value="">Semua Aktivitas</option>
+                    <option value="LEAD_STATUS_CHANGE">Perubahan Status Lead</option>
+                    <option value="MILESTONE_STATUS_CHANGE">Perubahan Status Milestone</option>
+                    <option value="TASK_STATUS_CHANGE">Perubahan Status Task</option>
+                  </select>
+                </div>
+
+                {/* Refresh */}
+                <button
+                  onClick={fetchAuditLogs}
+                  disabled={isLoadingAudit}
+                  className="p-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 cursor-pointer disabled:opacity-50 transition-all"
+                  title="Segarkan data log"
+                >
+                  <RefreshCw className={`w-4 h-4 ${isLoadingAudit ? 'animate-spin' : ''}`} />
+                </button>
+              </div>
+            </div>
+
+            {/* Audit Trail List */}
+            <div className="bg-white rounded-[2rem] p-6 border border-slate-200/80 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.02)]">
+              {isLoadingAudit ? (
+                <div className="space-y-4 animate-pulse">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div key={i} className="flex items-center gap-4 h-12 bg-slate-100/80 rounded-xl"></div>
+                  ))}
+                </div>
+              ) : auditLogs.length === 0 ? (
+                <div className="text-center py-12 text-slate-400">
+                  <History className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                  <p className="text-sm font-medium">Belum ada log aktivitas tercatat.</p>
+                </div>
+              ) : (
+                <div className="relative border-l-2 border-slate-100 pl-6 ml-4 space-y-6">
+                  {auditLogs.map((log) => {
+                    // Action formatting
+                    let actionLabel = '';
+                    let actionColor = 'bg-blue-50 text-blue-600 border-blue-100';
+                    let entityTypeLabel = '';
+
+                    if (log.action === 'LEAD_STATUS_CHANGE') {
+                      actionLabel = 'Lead Status';
+                      actionColor = 'bg-blue-50 text-blue-700 border-blue-100';
+                      entityTypeLabel = 'Lead';
+                    } else if (log.action === 'MILESTONE_STATUS_CHANGE') {
+                      actionLabel = 'Milestone Status';
+                      actionColor = 'bg-purple-50 text-purple-700 border-purple-100';
+                      entityTypeLabel = 'Milestone';
+                    } else if (log.action === 'TASK_STATUS_CHANGE') {
+                      actionLabel = 'Task Status';
+                      actionColor = 'bg-emerald-50 text-emerald-700 border-emerald-100';
+                      entityTypeLabel = 'Task';
+                    }
+
+                    return (
+                      <div key={log.id} className="relative group">
+                        {/* Timeline Node */}
+                        <div className={`absolute -left-[35px] top-1 w-6 h-6 rounded-full flex items-center justify-center border shadow-sm ${
+                          log.action === 'LEAD_STATUS_CHANGE' ? 'bg-blue-500 border-blue-600 text-white' :
+                          log.action === 'MILESTONE_STATUS_CHANGE' ? 'bg-purple-500 border-purple-600 text-white' :
+                          'bg-emerald-500 border-emerald-600 text-white'
+                        }`}>
+                          <span className="text-[10px] font-bold">L</span>
+                        </div>
+
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 bg-slate-50/50 hover:bg-slate-50 p-4 rounded-2xl border border-slate-100 transition-all">
+                          <div>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full border ${actionColor}`}>
+                                {actionLabel}
+                              </span>
+                              <span className="text-slate-400 text-[10px]">
+                                {new Date(log.createdAt).toLocaleString('id-ID', {
+                                  day: '2-digit',
+                                  month: 'short',
+                                  year: 'numeric',
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                })}
+                              </span>
+                            </div>
+
+                            <p className="text-sm font-semibold text-slate-800 mt-2">
+                              {entityTypeLabel} <span className="text-slate-900 font-extrabold">{log.entityName}</span>
+                              {log.projectName && (
+                                <>
+                                  {' '}di Proyek <span className="text-slate-900 font-extrabold">{log.projectName}</span>
+                                </>
+                              )}
+                            </p>
+
+                            <div className="flex items-center gap-2 mt-2 text-xs text-slate-500 font-medium">
+                              <span className="bg-slate-200/60 px-2 py-0.5 rounded-md line-through text-slate-400">
+                                {log.oldValue || 'Kosong'}
+                              </span>
+                              <ArrowRight className="w-3.5 h-3.5 text-slate-400" />
+                              <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded-md font-semibold">
+                                {log.newValue}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2 text-xs text-slate-500 font-medium md:self-end">
+                            <span className="text-[11px] text-slate-400">Dipicu oleh:</span>
+                            <span className="bg-white border border-slate-200/80 px-2.5 py-1 rounded-lg text-slate-700 font-bold flex items-center gap-1.5 shadow-sm">
+                              <User className="w-3 h-3 text-slate-400" />
+                              {log.userName}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </main>
 
       {/* Modals */}

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth/session';
 import { prisma } from '@/lib/prisma';
+import { logAction } from '@/lib/audit';
 
 export async function PUT(
   request: Request,
@@ -18,6 +19,13 @@ export async function PUT(
 
     const existingTask = await prisma.task.findUnique({
       where: { id },
+      include: {
+        milestone: {
+          include: {
+            project: true,
+          },
+        },
+      },
     });
 
     if (!existingTask) {
@@ -31,6 +39,21 @@ export async function PUT(
         ...(isDone !== undefined ? { isDone } : {}),
       },
     });
+
+    // Log status change if applicable
+    const isDoneChanged = isDone !== undefined && isDone !== existingTask.isDone;
+    if (isDoneChanged) {
+      await logAction({
+        action: 'TASK_STATUS_CHANGE',
+        entityId: id,
+        entityName: updated.title,
+        projectName: existingTask.milestone?.project?.name,
+        oldValue: existingTask.isDone ? 'Done' : 'To Do',
+        newValue: updated.isDone ? 'Done' : 'To Do',
+        userId: session.id,
+        userName: session.name,
+      });
+    }
 
     return NextResponse.json({ success: true, task: updated });
   } catch (error: any) {

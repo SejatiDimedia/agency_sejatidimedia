@@ -2,12 +2,19 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { generateMagicToken } from '@/lib/auth/magicToken';
 import { sendOnboardingMagicLink } from '@/lib/email';
+import { getSession } from '@/lib/auth/session';
+import { logAction } from '@/lib/audit';
 
 export async function PATCH(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await getSession();
+    if (!session || session.role !== 'ADMIN') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+    }
+
     const { id } = await params;
     const body = await request.json();
     const { status, notes, email, name, service, sendEmail } = body;
@@ -18,6 +25,11 @@ export async function PATCH(
     let targetEmail = email;
     let targetName = name || 'Klien SejatiDimedia';
     let targetService = service || 'Web Development';
+
+    // Fetch the lead before updating to check for status change
+    const oldLead = await prisma.lead.findUnique({
+      where: { id },
+    }).catch(() => null);
 
     // 1. Try DB Lead Update
     try {
@@ -32,6 +44,19 @@ export async function PATCH(
       targetEmail = updatedLead.email || email;
       targetName = updatedLead.name || name;
       targetService = updatedLead.service || service;
+
+      // Log status change if applicable
+      if (normalizedStatus && oldLead && oldLead.status !== normalizedStatus) {
+        await logAction({
+          action: 'LEAD_STATUS_CHANGE',
+          entityId: id,
+          entityName: oldLead.name,
+          oldValue: oldLead.status,
+          newValue: normalizedStatus,
+          userId: session.id,
+          userName: session.name,
+        });
+      }
     } catch {
       // Fallback for mock/local items
       updatedLead = { id, status: normalizedStatus || status, notes, statusSetAt: new Date(), email, name, service };

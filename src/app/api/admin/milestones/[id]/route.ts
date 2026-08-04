@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth/session';
 import { prisma } from '@/lib/prisma';
 import { sendMilestoneStatusEmail } from '@/lib/email';
+import { logAction } from '@/lib/audit';
 
 export async function PUT(
   request: Request,
@@ -51,6 +52,20 @@ export async function PUT(
     // Send email trigger if status changed to 'In Progress' or 'Done'
     const statusChanged = status && status !== existingMilestone.status;
     const isNotifyStatus = status === 'In Progress' || status === 'Done';
+
+    // Log status change if applicable
+    if (statusChanged) {
+      await logAction({
+        action: 'MILESTONE_STATUS_CHANGE',
+        entityId: id,
+        entityName: updated.title,
+        projectName: existingMilestone.project.name,
+        oldValue: existingMilestone.status,
+        newValue: updated.status,
+        userId: session.id,
+        userName: session.name,
+      });
+    }
 
     let emailSent = false;
     let emailError = null;
