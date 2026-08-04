@@ -53,6 +53,7 @@ model User {
   leads       Lead[]
   projects    Project[]
   magicTokens MagicToken[]
+  comments    Comment[]
 }
 
 model MagicToken {
@@ -84,11 +85,13 @@ model Milestone {
   description String?
   status      String   @default("To Do") // "To Do", "In Progress", "Done"
   dueDate     String?
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  projectId   String
-  tasks       Task[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  project      Project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId    String
+  tasks        Task[]
+  deliverables Deliverable[]
+  comments     Comment[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
 model Task {
@@ -97,6 +100,29 @@ model Task {
   isDone      Boolean   @default(false)
   milestone   Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
   milestoneId String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Deliverable {
+  id          String    @id @default(cuid())
+  name        String
+  key         String    @unique
+  size        Int
+  mimeType    String
+  milestone   Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  milestoneId String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Comment {
+  id          String    @id @default(cuid())
+  content     String
+  milestone   Milestone @relation(fields: [milestoneId], references: [id], onDelete: Cascade)
+  milestoneId String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }

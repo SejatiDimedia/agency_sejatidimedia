@@ -30,6 +30,25 @@ export async function GET(
                 createdAt: 'asc',
               },
             },
+            deliverables: {
+              orderBy: {
+                createdAt: 'desc',
+              },
+            },
+            comments: {
+              include: {
+                user: {
+                  select: {
+                    id: true,
+                    name: true,
+                    role: true,
+                  },
+                },
+              },
+              orderBy: {
+                createdAt: 'asc',
+              },
+            },
           },
           orderBy: {
             createdAt: 'asc',

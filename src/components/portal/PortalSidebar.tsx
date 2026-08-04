@@ -201,8 +201,8 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
             <SidebarItem
               icon={<FolderOpen className="w-5 h-5" />}
               label="File Deliverables"
-              isActive={false}
-              onClick={() => handleNavigate('/portal', 'file-management')}
+              isActive={activeSection === 'file-management' || pathname === '/portal/files'}
+              onClick={() => handleNavigate('/portal/files', 'file-management')}
               collapsed={isCollapsed}
             />
 
