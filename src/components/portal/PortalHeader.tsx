@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Bell, Share2, UserPlus, Check, Sparkles, ChevronDown } from 'lucide-react';
+import { Bell, Share2, UserPlus, Check, Sparkles, ChevronDown, Menu } from 'lucide-react';
 import { SearchInput, Button, AvatarGroup, Avatar } from '@/components/ui';
 
 interface PortalHeaderProps {
@@ -13,6 +13,7 @@ interface PortalHeaderProps {
   setCurrentRole: (role: 'Admin' | 'Client') => void;
   userName?: string;
   userEmail?: string;
+  onMenuClick?: () => void;
 }
 
 const TEAM_MEMBERS = [
@@ -33,6 +34,7 @@ export const PortalHeader: React.FC<PortalHeaderProps> = ({
   setCurrentRole,
   userName,
   userEmail,
+  onMenuClick,
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -46,14 +48,25 @@ export const PortalHeader: React.FC<PortalHeaderProps> = ({
   };
 
   return (
-    <header className="w-full flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
-      {/* Search Input using reusable SearchInput */}
-      <div className="w-full md:w-80 shrink-0">
-        <SearchInput
-          value={searchTerm}
-          onSearchChange={setSearchTerm}
-          placeholder="Search leads, projects, client email..."
-        />
+    <header className="w-full flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6">
+      {/* Search & Hamburger Menu Row */}
+      <div className="flex items-center gap-3 w-full md:w-auto">
+        {onMenuClick && (
+          <button
+            onClick={onMenuClick}
+            className="lg:hidden p-2.5 rounded-2xl bg-white border border-slate-200/80 text-slate-600 hover:bg-slate-50 transition-all shadow-sm shrink-0 flex items-center justify-center cursor-pointer"
+            title="Buka Menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+        )}
+        <div className="flex-1 md:w-80 shrink-0">
+          <SearchInput
+            value={searchTerm}
+            onSearchChange={setSearchTerm}
+            placeholder="Search leads, projects, client email..."
+          />
+        </div>
       </div>
 
       {/* Right Controls Area */}

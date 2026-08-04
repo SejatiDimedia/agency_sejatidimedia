@@ -13,7 +13,8 @@ import {
   Plus,
   Globe,
   Sparkles,
-  FolderKanban
+  FolderKanban,
+  X
 } from 'lucide-react';
 import { ActiveNavSection } from '@/types/portal';
 import { SidebarItem } from '@/components/ui';
@@ -28,6 +29,8 @@ interface PortalSidebarProps {
   setCollapsed?: (collapsed: boolean) => void;
   openAddLeadModal?: () => void;
   userRole?: 'ADMIN' | 'CLIENT';
+  mobileOpen?: boolean;
+  onMobileClose?: () => void;
 }
 
 export const PortalSidebar: React.FC<PortalSidebarProps> = ({
@@ -39,6 +42,8 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
   setCollapsed: propSetCollapsed,
   openAddLeadModal = () => { },
   userRole: propUserRole = 'CLIENT',
+  mobileOpen = false,
+  onMobileClose = () => {},
 }) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -131,38 +136,64 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
   const finalProjectsCount = metrics.projectsCount || propProjectsCount || 0;
 
   return (
-    <aside
-      className={`${isCollapsed ? 'w-20' : 'w-72'
-        } bg-white rounded-[2rem] p-5 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.04)] border border-slate-200/70 flex flex-col shrink-0 transition-all duration-300 relative z-20 h-[calc(100vh-2.5rem)] sticky top-5`}
-    >
-      {/* Top Header & Logo - Fixed */}
-      <div className="shrink-0">
-        <div className="flex items-center justify-between mb-7 px-1">
-          <div className="flex items-center gap-2 overflow-hidden cursor-pointer" onClick={() => router.push('/')}>
-            <div className="w-8 h-8 flex items-center justify-center shrink-0">
-              <img src="/logo.svg" alt="SejatiDimedia Logo" className="w-full h-full object-contain" />
-            </div>
-            {!isCollapsed && (
-              <div className="flex flex-col truncate">
-                <span
-                  className="font-bold text-slate-900 text-base leading-snug tracking-tight uppercase"
-                  style={{ fontFamily: "'Montserrat', sans-serif" }}
-                >
-                  <span style={{ color: '#2E54A2' }}>Sejati</span> <span style={{ color: '#23385B' }}>Dimedia</span>
-                </span>
+    <>
+      {/* Mobile Sidebar Backdrop Overlay */}
+      {mobileOpen && (
+        <div
+          className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[50] lg:hidden animate-fade-in"
+          onClick={onMobileClose}
+        />
+      )}
+
+      <aside
+        className={
+          mobileOpen
+            ? "fixed top-0 left-0 bottom-0 z-[55] h-screen w-72 bg-white p-5 border-r border-slate-200 shadow-2xl flex flex-col transition-all duration-300"
+            : `hidden lg:flex ${
+                isCollapsed ? 'w-20' : 'w-72'
+              } bg-white rounded-[2rem] p-5 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.04)] border border-slate-200/70 flex flex-col shrink-0 transition-all duration-300 relative z-20 h-[calc(100vh-2.5rem)] sticky top-5`
+        }
+      >
+        {/* Top Header & Logo - Fixed */}
+        <div className="shrink-0">
+          <div className="flex items-center justify-between mb-7 px-1">
+            <div className="flex items-center gap-2 overflow-hidden cursor-pointer" onClick={() => router.push('/')}>
+              <div className="w-8 h-8 flex items-center justify-center shrink-0">
+                <img src="/logo.svg" alt="SejatiDimedia Logo" className="w-full h-full object-contain" />
               </div>
+              {(!isCollapsed || mobileOpen) && (
+                <div className="flex flex-col truncate">
+                  <span
+                    className="font-bold text-slate-900 text-base leading-snug tracking-tight uppercase"
+                    style={{ fontFamily: "'Montserrat', sans-serif" }}
+                  >
+                    <span style={{ color: '#2E54A2' }}>Sejati</span> <span style={{ color: '#23385B' }}>Dimedia</span>
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Desktop Collapse Toggle */}
+            <button
+              onClick={toggleCollapse}
+              className="hidden lg:flex w-8 h-8 rounded-xl bg-slate-100/80 hover:bg-slate-200/70 text-slate-500 items-center justify-center transition-colors shrink-0 cursor-pointer"
+              title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+            >
+              <ChevronsLeft className={`w-4 h-4 transition-transform duration-300 ${isCollapsed ? 'rotate-180' : ''}`} />
+            </button>
+
+            {/* Mobile Close Button */}
+            {mobileOpen && (
+              <button
+                onClick={onMobileClose}
+                className="lg:hidden w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors shrink-0 cursor-pointer"
+                title="Tutup Menu"
+              >
+                <X className="w-4 h-4" />
+              </button>
             )}
           </div>
-
-          <button
-            onClick={toggleCollapse}
-            className="w-8 h-8 rounded-xl bg-slate-100/80 hover:bg-slate-200/70 text-slate-500 flex items-center justify-center transition-colors shrink-0 cursor-pointer"
-            title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            <ChevronsLeft className={`w-4 h-4 transition-transform duration-300 ${isCollapsed ? 'rotate-180' : ''}`} />
-          </button>
         </div>
-      </div>
 
       {/* Scrollable Navigation Area */}
       <div className="flex-1 overflow-y-auto min-h-0 pr-1 -mr-1">
@@ -313,5 +344,6 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
         </button>
       </div>
     </aside>
+  </>
   );
 };

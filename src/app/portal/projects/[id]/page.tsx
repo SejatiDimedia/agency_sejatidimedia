@@ -36,6 +36,7 @@ export default function ProjectDetailsPage() {
 
   const [activeSection, setActiveSection] = useState<ActiveNavSection>('clients-portal');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentRole, setCurrentRole] = useState<'Admin' | 'Client'>('Client');
   const [isStyleGuideModalOpen, setIsStyleGuideModalOpen] = useState(false);
@@ -480,7 +481,7 @@ export default function ProjectDetailsPage() {
   };
 
   return (
-    <div className="h-screen bg-[#f0f4f8] text-slate-900 p-3 sm:p-5 flex gap-5 font-sans antialiased w-full overflow-hidden">
+    <div className="h-screen bg-[#f0f4f8] text-slate-900 p-3 sm:p-5 flex gap-0 lg:gap-5 font-sans antialiased w-full overflow-hidden">
       {/* Sidebar */}
       <PortalSidebar
         activeSection="clients-portal"
@@ -491,6 +492,8 @@ export default function ProjectDetailsPage() {
         setCollapsed={setSidebarCollapsed}
         openAddLeadModal={() => {}}
         userRole={userSession?.role || 'CLIENT'}
+        mobileOpen={mobileSidebarOpen}
+        onMobileClose={() => setMobileSidebarOpen(false)}
       />
 
       {/* Main Content */}
@@ -505,6 +508,7 @@ export default function ProjectDetailsPage() {
           setCurrentRole={setCurrentRole}
           userName={userSession?.name}
           userEmail={userSession?.email}
+          onMenuClick={() => setMobileSidebarOpen(true)}
         />
 
         {isLoading ? (

@@ -16,6 +16,7 @@ import { Plus, Kanban, List, ShieldAlert } from 'lucide-react';
 export default function AdminDashboardPage() {
   const [activeSection, setActiveSection] = useState<ActiveNavSection>('dashboard-leads');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentRole, setCurrentRole] = useState<'Admin' | 'Client'>('Admin');
   const [viewMode, setViewMode] = useState<'kanban' | 'table'>('kanban');
@@ -221,7 +222,7 @@ export default function AdminDashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f0f4f8] text-slate-900 p-3 sm:p-5 flex gap-5 font-sans antialiased">
+    <div className="min-h-screen bg-[#f0f4f8] text-slate-900 p-3 sm:p-5 flex gap-0 lg:gap-5 font-sans antialiased">
       {/* Left Floating Sidebar */}
       <PortalSidebar
         activeSection={activeSection}
@@ -232,6 +233,8 @@ export default function AdminDashboardPage() {
         setCollapsed={setSidebarCollapsed}
         openAddLeadModal={() => setIsAddLeadModalOpen(true)}
         userRole="ADMIN"
+        mobileOpen={mobileSidebarOpen}
+        onMobileClose={() => setMobileSidebarOpen(false)}
       />
 
       {/* Main Content Area */}
@@ -244,6 +247,7 @@ export default function AdminDashboardPage() {
           openStyleGuideModal={() => setIsStyleGuideModalOpen(true)}
           currentRole={currentRole}
           setCurrentRole={setCurrentRole}
+          onMenuClick={() => setMobileSidebarOpen(true)}
         />
 
         {/* Dashboard Title & Top Actions Bar */}

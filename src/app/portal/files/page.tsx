@@ -27,6 +27,7 @@ export default function PortalFilesPage() {
   const [userSession, setUserSession] = useState<{ id: string; name: string; email: string; role: 'ADMIN' | 'CLIENT' } | null>(null);
   const [currentRole, setCurrentRole] = useState<'Admin' | 'Client'>('Client');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [isStyleGuideModalOpen, setIsStyleGuideModalOpen] = useState(false);
 
   // Deliverables states
@@ -50,7 +51,7 @@ export default function PortalFilesPage() {
     isOpen: false,
     title: '',
     message: '',
-    onConfirm: () => {}
+    onConfirm: () => { }
   });
 
   // File Preview Modal State
@@ -64,13 +65,13 @@ export default function PortalFilesPage() {
       setPreviewTextContent('');
       return;
     }
-    const isTextFile = previewFile.mimeType.startsWith('text/') || 
-                       previewFile.name.endsWith('.txt') || 
-                       previewFile.name.endsWith('.json') || 
-                       previewFile.name.endsWith('.md') || 
-                       previewFile.name.endsWith('.js') || 
-                       previewFile.name.endsWith('.ts');
-                       
+    const isTextFile = previewFile.mimeType.startsWith('text/') ||
+      previewFile.name.endsWith('.txt') ||
+      previewFile.name.endsWith('.json') ||
+      previewFile.name.endsWith('.md') ||
+      previewFile.name.endsWith('.js') ||
+      previewFile.name.endsWith('.ts');
+
     if (isTextFile) {
       setLoadingPreviewText(true);
       setPreviewTextContent('');
@@ -179,7 +180,7 @@ export default function PortalFilesPage() {
   });
 
   return (
-    <div className="h-screen bg-[#f0f4f8] text-slate-900 p-3 sm:p-5 flex gap-5 font-sans antialiased w-full overflow-hidden">
+    <div className="h-screen bg-[#f0f4f8] text-slate-900 p-3 sm:p-5 flex gap-0 lg:gap-5 font-sans antialiased w-full overflow-hidden">
       {/* Sidebar */}
       <PortalSidebar
         activeSection={activeSection}
@@ -188,8 +189,10 @@ export default function PortalFilesPage() {
         projectsCount={projectsCount}
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
-        openAddLeadModal={() => {}}
+        openAddLeadModal={() => { }}
         userRole={userSession?.role || 'CLIENT'}
+        mobileOpen={mobileSidebarOpen}
+        onMobileClose={() => setMobileSidebarOpen(false)}
       />
 
       {/* Main Content Pane */}
@@ -198,26 +201,23 @@ export default function PortalFilesPage() {
         <PortalHeader
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
-          openAddLeadModal={() => {}}
+          openAddLeadModal={() => { }}
           openStyleGuideModal={() => setIsStyleGuideModalOpen(true)}
           currentRole={currentRole}
           setCurrentRole={setCurrentRole}
           userName={userSession?.name}
           userEmail={userSession?.email}
+          onMenuClick={() => setMobileSidebarOpen(true)}
         />
 
         {/* Inner Scroll container */}
         <div className="h-[calc(100vh-2.5rem)] overflow-y-auto pr-1 space-y-6 mt-4">
-          
+
           {/* Header Title */}
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
                 Penyimpanan Awan
-              </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 animate-pulse"></span>
-              <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100 uppercase tracking-wide">
-                Cloudflare R2 Storage
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
@@ -397,13 +397,13 @@ export default function PortalFilesPage() {
       {previewFile && (() => {
         const isImage = previewFile.mimeType.startsWith('image/');
         const isPdf = previewFile.mimeType === 'application/pdf' || previewFile.name.endsWith('.pdf');
-        const isText = previewFile.mimeType.startsWith('text/') || 
-                       previewFile.name.endsWith('.txt') || 
-                       previewFile.name.endsWith('.json') || 
-                       previewFile.name.endsWith('.md') || 
-                       previewFile.name.endsWith('.js') || 
-                       previewFile.name.endsWith('.ts');
-        
+        const isText = previewFile.mimeType.startsWith('text/') ||
+          previewFile.name.endsWith('.txt') ||
+          previewFile.name.endsWith('.json') ||
+          previewFile.name.endsWith('.md') ||
+          previewFile.name.endsWith('.js') ||
+          previewFile.name.endsWith('.ts');
+
         return (
           <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-[60] p-4 sm:p-6 animate-fade-in">
             <motion.div
@@ -421,7 +421,7 @@ export default function PortalFilesPage() {
                     Tipe: {previewFile.mimeType || 'Unknown'}
                   </span>
                 </div>
-                
+
                 <div className="flex items-center gap-2 shrink-0">
                   <a
                     href={`/api/projects/deliverables/${previewFile.id}/download`}

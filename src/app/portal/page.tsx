@@ -6,11 +6,11 @@ import { PortalSidebar } from '@/components/portal/PortalSidebar';
 import { PortalHeader } from '@/components/portal/PortalHeader';
 import { StyleGuideModal } from '@/components/portal/StyleGuideModal';
 import { Card, Badge } from '@/components/ui';
-import { 
-  FolderKanban, 
-  Calendar, 
-  Loader2, 
-  User, 
+import {
+  FolderKanban,
+  Calendar,
+  Loader2,
+  User,
   ArrowRight,
   Plus
 } from 'lucide-react';
@@ -21,6 +21,7 @@ export default function ClientPortalDashboard() {
   const router = useRouter();
   const [activeSection, setActiveSection] = useState<ActiveNavSection>('clients-portal');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentRole, setCurrentRole] = useState<'Admin' | 'Client'>('Client');
   const [isStyleGuideModalOpen, setIsStyleGuideModalOpen] = useState(false);
@@ -79,7 +80,7 @@ export default function ClientPortalDashboard() {
     return Math.round((completed / project.milestones.length) * 100);
   };
   return (
-    <div className="h-screen bg-[#f0f4f8] text-slate-900 p-3 sm:p-5 flex gap-5 font-sans antialiased w-full overflow-hidden">
+    <div className="h-screen bg-[#f0f4f8] text-slate-900 p-3 sm:p-5 flex gap-0 lg:gap-5 font-sans antialiased w-full overflow-hidden">
       {/* Sidebar */}
       <PortalSidebar
         activeSection="clients-portal"
@@ -88,8 +89,10 @@ export default function ClientPortalDashboard() {
         projectsCount={projects.length}
         collapsed={sidebarCollapsed}
         setCollapsed={setSidebarCollapsed}
-        openAddLeadModal={() => {}}
+        openAddLeadModal={() => { }}
         userRole={userSession?.role || 'CLIENT'}
+        mobileOpen={mobileSidebarOpen}
+        onMobileClose={() => setMobileSidebarOpen(false)}
       />
 
       {/* Main Content */}
@@ -98,12 +101,13 @@ export default function ClientPortalDashboard() {
         <PortalHeader
           searchTerm={searchTerm}
           setSearchTerm={setSearchTerm}
-          openAddLeadModal={() => {}}
+          openAddLeadModal={() => { }}
           openStyleGuideModal={() => setIsStyleGuideModalOpen(true)}
           currentRole={currentRole}
           setCurrentRole={setCurrentRole}
           userName={userSession?.name}
           userEmail={userSession?.email}
+          onMenuClick={() => setMobileSidebarOpen(true)}
         />
 
         {/* Page Title */}
@@ -112,10 +116,6 @@ export default function ClientPortalDashboard() {
             <div className="flex items-center gap-2 mb-1">
               <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
                 Client Portal
-              </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-              <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-100">
-                {userSession ? `Akun Terverifikasi: ${userSession.email}` : 'Loading session...'}
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
@@ -145,19 +145,19 @@ export default function ClientPortalDashboard() {
             {projects.map((project) => {
               const progress = calculateProgress(project);
               const nextMilestone = project.milestones.find((m: any) => m.status !== 'Done') || project.milestones[project.milestones.length - 1];
-              
+
               return (
-                <Card 
-                  key={project.id} 
+                <Card
+                  key={project.id}
                   className="bg-white border border-slate-200/80 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer flex flex-col justify-between"
                   onClick={() => router.push(`/portal/projects/${project.id}`)}
                 >
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
-                      <Badge 
-                        variant="custom" 
-                        colorClass="bg-blue-50 text-blue-700 border-blue-200" 
-                        label={project.status} 
+                      <Badge
+                        variant="custom"
+                        colorClass="bg-blue-50 text-blue-700 border-blue-200"
+                        label={project.status}
                       />
                       <span className="text-[10px] font-bold text-slate-400">
                         Mulai: {project.startDate || 'Segera'}

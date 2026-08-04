@@ -14,6 +14,7 @@ export default function SettingsPage() {
   const router = useRouter();
   const [activeSection, setActiveSection] = useState<ActiveNavSection>('settings');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [currentRole, setCurrentRole] = useState<'Admin' | 'Client'>('Client');
   const [isStyleGuideModalOpen, setIsStyleGuideModalOpen] = useState(false);
@@ -66,7 +67,7 @@ export default function SettingsPage() {
   }, [userSession]);
 
   return (
-    <div className="h-screen bg-[#f0f4f8] text-slate-900 p-3 sm:p-5 flex gap-5 font-sans antialiased w-full overflow-hidden">
+    <div className="h-screen bg-[#f0f4f8] text-slate-900 p-3 sm:p-5 flex gap-0 lg:gap-5 font-sans antialiased w-full overflow-hidden">
       {/* Sidebar */}
       <PortalSidebar
         activeSection="settings"
@@ -77,6 +78,8 @@ export default function SettingsPage() {
         setCollapsed={setSidebarCollapsed}
         openAddLeadModal={() => {}}
         userRole={userSession?.role || 'CLIENT'}
+        mobileOpen={mobileSidebarOpen}
+        onMobileClose={() => setMobileSidebarOpen(false)}
       />
 
       {/* Main Content */}
@@ -91,6 +94,7 @@ export default function SettingsPage() {
           setCurrentRole={setCurrentRole}
           userName={userSession?.name}
           userEmail={userSession?.email}
+          onMenuClick={() => setMobileSidebarOpen(true)}
         />
 
         {isLoading ? (
