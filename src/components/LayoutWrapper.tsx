@@ -335,7 +335,7 @@ export default function LayoutWrapper({
                     className="h-full w-auto object-contain"
                   />
                 </div>
-                <h3 className="text-xl sm:text-2xl font-sans font-extrabold tracking-tight text-theme-fore max-w-lg leading-snug">
+                <h3 className="text-xl sm:text-2xl font-display font-extrabold tracking-tight text-theme-fore max-w-lg leading-snug">
                   {t.footer.tagline}
                 </h3>
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono text-theme-fore-muted">
@@ -420,7 +420,7 @@ export default function LayoutWrapper({
 
             {/* Middle Row: Massive Wordmark */}
             <div className="relative py-6 select-none border-t border-b border-theme-border/20 overflow-hidden flex items-center justify-center">
-              <h2 className="text-[9vw] sm:text-[10vw] md:text-[10.5vw] lg:text-[105px] xl:text-[115px] font-sans font-black tracking-tighter uppercase leading-none bg-gradient-to-b from-theme-accent to-transparent bg-clip-text text-transparent text-center select-none w-full transition-all duration-300 opacity-90 dark:opacity-85 py-3 px-6 whitespace-nowrap">
+              <h2 className="text-[9vw] sm:text-[10vw] md:text-[10.5vw] lg:text-[105px] xl:text-[115px] font-display font-black tracking-tighter uppercase leading-none bg-gradient-to-b from-theme-accent to-transparent bg-clip-text text-transparent text-center select-none w-full transition-all duration-300 opacity-90 dark:opacity-85 py-3 px-6 whitespace-nowrap">
                 SEJATIDIMEDIA
               </h2>
             </div>

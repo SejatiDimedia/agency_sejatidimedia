@@ -474,7 +474,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 <div className="bg-slate-100/80 dark:bg-slate-800/40 p-2 sm:p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 sm:gap-0 text-[9px] sm:text-[10px] text-slate-700 dark:text-slate-300">
                   <div className="flex items-center gap-1.5 sm:gap-2">
                     <Icon icon="ph:seal-check-duotone" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400 shrink-0" />
-                    <span>Digital Stamp: <strong className="text-slate-900 dark:text-white">Verified & Signed</strong></span>
+                    <span>INV-202607-001: <strong className="text-slate-900 dark:text-white">Draft</strong></span>
                   </div>
                   <button className="px-2 sm:px-2.5 py-1 rounded-lg bg-blue-600/15 hover:bg-blue-600/30 text-blue-700 dark:bg-blue-600/30 dark:hover:bg-blue-600/50 dark:text-blue-300 border border-blue-400/30 dark:border-blue-400/40 text-[8px] sm:text-[9px] font-bold transition-all flex items-center gap-1 cursor-pointer">
                     <Icon icon="ph:download-simple-bold" className="w-3 h-3" />
@@ -497,14 +497,11 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                 className="space-y-4"
               >
-                <h1 className="text-[40px] sm:text-5xl md:text-6xl lg:text-5xl xl:text-6.5xl font-sans font-extrabold tracking-tight leading-[1.08] text-theme-fore">
-                  <>
-                    {t.hero.title} <motion.span
-                      animate={{ textShadow: ["0px 0px 0px rgba(0,0,0,0)", "0px 0px 25px var(--theme-accent)", "0px 0px 0px rgba(0,0,0,0)"] }}
-                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                      className="font-serif italic font-normal text-theme-accent relative inline-block"
-                    >{t.hero.titleHighlight}</motion.span>.
-                  </>
+                <h1 className="text-[40px] sm:text-5xl md:text-6xl lg:text-5xl xl:text-6.5xl font-display font-bold tracking-tight leading-[1.08] text-theme-fore">
+                  {t.hero.title}{' '}
+                  <span className="bg-gradient-to-r from-slate-900 via-blue-600 via-35% to-[#38BDF8] dark:from-white dark:via-blue-500 dark:via-35% dark:to-[#38BDF8] bg-clip-text text-transparent inline-block drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]">
+                    {t.hero.titleHighlight}
+                  </span>.
                 </h1>
               </motion.div>
 
@@ -563,7 +560,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
               <div className="space-y-1.5 flex-1 group">
                 <div className="flex items-baseline gap-1.5">
                   <span className="text-4xl sm:text-5xl font-sans font-black tracking-tight text-theme-fore">
-                    <AnimatedCounter to={6} />
+                    <AnimatedCounter to={5} />
                   </span>
                   <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">+</span>
                   <span className="text-xs font-black text-theme-fore-muted uppercase tracking-widest ml-1">
@@ -621,7 +618,6 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 <div>
                   <div className="text-xs font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1.5">
                     <span>{language === 'en' ? 'Client Portal Included' : 'Fitur Client Portal'}</span>
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
                   </div>
                   <p className="text-[11px] text-theme-fore-muted font-medium">
                     {language === 'en' ? 'Live Progress & PDF Invoices' : 'Pantau Progres & Invoice Live'}
@@ -695,15 +691,14 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         variants={sectionFadeIn}
       >
         <div className="space-y-4">
-          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
-            <span className="w-6 h-[1px] bg-theme-accent" />
+          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
             <span>{t.nav.services}</span>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
             <div className="lg:col-span-7">
-              <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore text-left">
+              <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore text-left">
                 {t.nav.services}{' '}
-                <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright to-theme-accent-bright dark:to-[#9BC2FA] bg-clip-text text-transparent font-black">
+                <span className="bg-gradient-to-r from-slate-900 via-blue-600 via-35% to-[#38BDF8] dark:from-white dark:via-blue-500 dark:via-35% dark:to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]">
                   {t.services.mainHeadingHighlight}
                 </span>
               </h2>
@@ -822,15 +817,14 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         variants={sectionFadeIn}
       >
         <div className="space-y-4">
-          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
-            <span className="w-6 h-[1px] bg-theme-accent" />
+          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
             <span>Teknologi</span>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
             <div className="lg:col-span-7">
-              <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore text-left">
+              <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore text-left">
                 {t.tech.mainHeading}{' '}
-                <span className="bg-gradient-to-r from-theme-accent to-theme-accent-bright bg-clip-text text-transparent font-black">
+                <span className="bg-gradient-to-r from-slate-900 via-blue-600 via-35% to-[#38BDF8] dark:from-white dark:via-blue-500 dark:via-35% dark:to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]">
                   {t.tech.mainHeadingHighlight}
                 </span>
               </h2>
@@ -1012,13 +1006,12 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
       >
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
           <div className="space-y-4">
-            <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
-              <span className="w-6 h-[1px] bg-theme-accent" />
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
               <span>{t.nav.portfolio}</span>
             </div>
-            <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-2xl text-left">
+            <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.15] text-theme-fore max-w-2xl text-left">
               {t.portfolio.mainHeading}{' '}
-              <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright dark:via-[#6AA0F2] to-theme-accent-bright dark:to-[#9BC2FA] bg-clip-text text-transparent font-black">
+              <span className="bg-gradient-to-r from-slate-900 via-blue-600 via-35% to-[#38BDF8] dark:from-white dark:via-blue-500 dark:via-35% dark:to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]">
                 {t.portfolio.mainHeadingHighlight}
               </span>
             </h2>
@@ -1120,12 +1113,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         variants={sectionFadeIn}
       >
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="flex items-center justify-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
-            <span className="w-6 h-[1px] bg-theme-accent" />
+          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold text-center">
             <span>{t.pricing.label}</span>
-            <span className="w-6 h-[1px] bg-theme-accent" />
           </div>
-          <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore text-center">
+          <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore text-center">
             {t.pricing.badge}
           </h2>
           <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-2xl mx-auto text-center">
@@ -1293,12 +1284,14 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         variants={sectionFadeIn}
       >
         <div className="space-y-4">
-          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
-            <span className="w-6 h-[1px] bg-theme-accent" />
+          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
             <span>{t.trust?.badge || "Kenapa Klien Percaya"}</span>
           </div>
-          <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-3xl text-left">
-            {t.trust?.mainHeading || "Kenapa Klien Percaya"} <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright dark:via-[#6AA0F2] to-theme-accent-bright dark:to-[#9BC2FA] bg-clip-text text-transparent font-black">{t.trust?.mainHeadingHighlight || "Bekerja Sama Dengan Saya"}</span>
+          <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.15] text-theme-fore max-w-3xl text-left">
+            {t.trust?.mainHeading || "Kenapa Klien Percaya"}{' '}
+            <span className="bg-gradient-to-r from-slate-900 via-blue-600 via-35% to-[#38BDF8] dark:from-white dark:via-blue-500 dark:via-35% dark:to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]">
+              {t.trust?.mainHeadingHighlight || "Bekerja Sama Dengan Saya"}
+            </span>
           </h2>
         </div>
 
@@ -1341,11 +1334,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         variants={sectionFadeIn}
       >
         <div className="space-y-4">
-          <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
-            <span className="w-6 h-[1px] bg-theme-accent" />
+          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
             <span>{t.process.badge}</span>
           </div>
-          <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.15] text-theme-fore max-w-2xl">
+          <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.15] text-theme-fore max-w-2xl">
             {t.process.mainHeading}
           </h2>
         </div>
@@ -1441,11 +1433,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           {/* Left Column: Any Question Box */}
           <div className="lg:col-span-5 space-y-7 lg:sticky lg:top-24">
             <div className="space-y-4">
-              <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
-                <span className="w-6 h-[1px] bg-theme-accent" />
+              <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
                 <span>FAQ</span>
               </div>
-              <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore text-left">
+              <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore text-left">
                 {t.faq.mainHeading}
               </h2>
             </div>
@@ -1598,9 +1589,9 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 &nbsp;
               </div>
 
-              <h2 className="text-3xl sm:text-4.5xl font-sans font-extrabold tracking-tight leading-[1.12] text-theme-fore">
+              <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore">
                 {t.contact.mainHeading}{' '}
-                <span className="bg-gradient-to-r from-theme-accent via-theme-accent-bright to-theme-accent-bright dark:to-[#9BC2FA] bg-clip-text text-transparent font-black italic">
+                <span className="bg-gradient-to-r from-slate-900 via-blue-600 via-35% to-[#38BDF8] dark:from-white dark:via-blue-500 dark:via-35% dark:to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]">
                   {t.contact.mainHeadingHighlight}
                 </span>
               </h2>
