@@ -29,7 +29,7 @@ const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
   ariaLabel = "Animated aurora background",
 }) => {
   const [colorA, colorB] = gradientColors
-  
+
   // Interactive Mouse Tracking
   const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 })
 
@@ -38,7 +38,7 @@ const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
       // Use pageX/pageY so it works when the user scrolls down the page
       setMousePos({ x: e.pageX, y: e.pageY })
     }
-    
+
     window.addEventListener("mousemove", handleMouseMove)
     return () => window.removeEventListener("mousemove", handleMouseMove)
   }, [])
@@ -72,7 +72,7 @@ const AuroraBackground: React.FC<AuroraBackgroundProps> = ({
           transition={{ duration: 1, ease: "easeInOut" }}
         >
           <motion.div
-            className="absolute -top-1/4 -left-1/4 w-1/2 h-1/2 bg-theme-accent rounded-full filter blur-3xl opacity-40"
+            className="absolute top-20 -left-1/4 w-1/2 h-1/4 bg-theme-accent rounded-full filter blur-3xl opacity-40"
             animate={{
               x: [-50, 50, -50],
               y: [-20, 20, -20],

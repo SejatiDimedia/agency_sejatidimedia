@@ -8,19 +8,19 @@ import Pusher from 'pusher-js';
 
 // Custom Sedia AI Icon based on user's new SVG/image
 const SediaIcon = ({ className }: { className?: string }) => (
-  <svg 
-    viewBox="0 0 24 24" 
-    fill="currentColor" 
+  <svg
+    viewBox="0 0 24 24"
+    fill="currentColor"
     className={className}
     xmlns="http://www.w3.org/2000/svg"
   >
     {/* Head, Antenna, and Cutout Eyes */}
-    <path 
-      fillRule="evenodd" 
-      clipRule="evenodd" 
-      d="M11 3V1.5a1.5 1.5 0 0 1 3 0V3h1.5A3.5 3.5 0 0 1 19 6.5v4A3.5 3.5 0 0 1 15.5 14H8.5A3.5 3.5 0 0 1 5 10.5v-4A3.5 3.5 0 0 1 8.5 3H11zM9 10.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm6 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" 
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M11 3V1.5a1.5 1.5 0 0 1 3 0V3h1.5A3.5 3.5 0 0 1 19 6.5v4A3.5 3.5 0 0 1 15.5 14H8.5A3.5 3.5 0 0 1 5 10.5v-4A3.5 3.5 0 0 1 8.5 3H11zM9 10.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm6 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
     />
-    
+
     {/* Bottom Body */}
     <path d="M4 17.5C4 16.12 5.12 15 6.5 15h11c1.38 0 2.5 1.12 2.5 2.5 0 3.5-3.5 5.5-8 5.5s-8-2-8-5.5z" />
   </svg>
@@ -41,7 +41,7 @@ export default function AiChatWidget() {
   const [sessionId, setSessionId] = useState<string>('');
   const [isHandoffMode, setIsHandoffMode] = useState(false);
   const [isWaitingForName, setIsWaitingForName] = useState(false);
-  
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Initialize Session ID and Pusher
@@ -57,7 +57,7 @@ export default function AiChatWidget() {
     // Initialize Pusher Client
     const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
     const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
-    
+
     if (pusherKey && pusherCluster) {
       const pusher = new Pusher(pusherKey, {
         cluster: pusherCluster,
@@ -86,7 +86,7 @@ export default function AiChatWidget() {
     if (!input.trim() || isLoading) return;
     const userMessage = input.trim();
     setInput('');
-    
+
     if (isWaitingForName) {
       setIsWaitingForName(false);
       await performChat(userMessage, `/chatowner ${userMessage}`);
@@ -97,12 +97,12 @@ export default function AiChatWidget() {
 
   const performChat = async (displayMessage: string, hiddenPayload?: string) => {
     if (isLoading) return;
-    
+
     // Only display user message if it's not a system command
     if (!displayMessage.startsWith('/')) {
       setMessages(prev => [...prev, { role: 'user', text: displayMessage }]);
     }
-    
+
     setIsLoading(true);
 
     try {
@@ -129,7 +129,7 @@ export default function AiChatWidget() {
       }
 
       setMessages(prev => [...prev, { role: 'ai', text: data.response }]);
-      
+
       // Update handoff state from server response
       if (data.isHandoff !== undefined) {
         setIsHandoffMode(data.isHandoff);
@@ -158,12 +158,12 @@ export default function AiChatWidget() {
             onClick={() => setIsOpen(true)}
             className="fixed bottom-24 right-4 md:bottom-8 md:right-8 z-[100] w-14 h-14 rounded-full bg-theme-accent hover:bg-theme-accent-bright text-white shadow-lg shadow-theme-accent/20 flex items-center justify-center cursor-pointer transition-colors border border-white/10 group p-0 overflow-hidden"
           >
-            <img 
-              src="/ai-gif.gif" 
-              alt="Chat with us" 
+            <img
+              src="/ai-gif2.gif"
+              alt="Chat with us"
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
             />
-            
+
             {/* Ping animation behind button */}
             <span className="absolute inset-0 rounded-full bg-theme-accent animate-ping opacity-20 pointer-events-none" />
           </motion.button>
@@ -206,7 +206,7 @@ export default function AiChatWidget() {
                   }}
                   disabled={isLoading || isWaitingForName}
                   className={
-                    isHandoffMode 
+                    isHandoffMode
                       ? "px-3 py-1.5 rounded-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white transition-colors text-[10px] font-bold tracking-wide uppercase disabled:opacity-50 cursor-pointer border border-red-500/20 flex items-center gap-1.5"
                       : "px-3 py-1.5 rounded-full bg-theme-accent/10 hover:bg-theme-accent text-theme-accent hover:text-white transition-colors text-[10px] font-bold tracking-wide uppercase disabled:opacity-50 cursor-pointer border border-theme-accent/20 flex items-center gap-1.5"
                   }
@@ -216,7 +216,7 @@ export default function AiChatWidget() {
                   )}
                   {isHandoffMode ? "Akhiri Sesi" : "Hubungi Tim"}
                 </button>
-                <button 
+                <button
                   onClick={() => setIsOpen(false)}
                   className="w-8 h-8 rounded-full bg-theme-elevated hover:bg-theme-border/50 flex items-center justify-center text-theme-fore-muted hover:text-theme-fore transition-colors cursor-pointer"
                 >
@@ -233,13 +233,12 @@ export default function AiChatWidget() {
                   <div className={`shrink-0 w-7 h-7 rounded-full overflow-hidden flex items-center justify-center shadow-sm ${msg.role === 'user' ? 'bg-theme-fore text-theme-base' : 'bg-theme-accent/10 border border-theme-accent/20'}`}>
                     {msg.role === 'user' ? <User className="w-3.5 h-3.5" /> : <img src="/ai-gif2.gif" className="w-full h-full object-cover scale-110" />}
                   </div>
-                  
+
                   {/* Bubble */}
-                  <div className={`max-w-[75%] px-4 py-3 rounded-2xl text-xs leading-relaxed ${
-                    msg.role === 'user' 
-                      ? 'bg-theme-fore text-theme-base rounded-br-sm' 
+                  <div className={`max-w-[75%] px-4 py-3 rounded-2xl text-xs leading-relaxed ${msg.role === 'user'
+                      ? 'bg-theme-fore text-theme-base rounded-br-sm'
                       : 'bg-theme-elevated border border-theme-border text-theme-fore rounded-bl-sm'
-                  }`}>
+                    }`}>
                     {msg.role === 'user' ? (
                       <p>{msg.text}</p>
                     ) : (

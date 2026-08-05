@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Project } from '../lib/api/glio-projects';
@@ -254,6 +254,26 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
     return base.toLocaleString();
   };
 
+  function AnimatedCounter({ from = 0, to, duration = 2, suffix = '' }: { from?: number; to: number; duration?: number; suffix?: string }) {
+    const [count, setCount] = useState(from);
+
+    useEffect(() => {
+      let startTimestamp: number | null = null;
+      const step = (timestamp: number) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / (duration * 1000), 1);
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
+        setCount(Math.floor(easedProgress * (to - from) + from));
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
+    }, [from, to, duration]);
+
+    return <span>{count}{suffix}</span>;
+  }
+
   return (
     <div className="space-y-24">
       {/* SECTION 1: BESPOKE SLICED HERO STAGE (AS PER REFERENCE IMAGE) */}
@@ -292,132 +312,224 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         <GlintStar className="bottom-[22%] right-[12%] opacity-50 scale-150 select-none" delay={1.5} />
         <GlintStar className="top-[45%] left-[45%] opacity-35 scale-90 select-none" delay={3} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-12 items-stretch text-left">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-10 items-center text-left">
 
-          {/* LEFT COLUMN: Main Typography & Bottom Left Stats Card (lg:col-span-7) */}
-          <div className="lg:col-span-7 flex flex-col justify-between space-y-12 min-h-full">
+          {/* LEFT COLUMN: Hero Illustration (lg:col-span-6) */}
+          <div className="lg:col-span-6 flex flex-col justify-center min-h-full lg:py-4 order-2 lg:order-1">
 
-            {/* Huge Display Heading */}
+            {/* Middle Left Dedicated Hero Stage: Straight & Level Floating Badge Stage */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-4"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full relative mx-auto flex justify-center items-center py-5 sm:py-7 px-1 sm:px-4"
             >
-              <h1 className="text-[40px] sm:text-5xl md:text-6xl lg:text-5xl xl:text-6.5xl font-sans font-extrabold tracking-tight leading-[1.08] text-theme-fore">
-                <>
-                  {t.hero.title} <motion.span
-                    animate={{ textShadow: ["0px 0px 0px rgba(0,0,0,0)", "0px 0px 25px var(--theme-accent)", "0px 0px 0px rgba(0,0,0,0)"] }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    className="font-serif italic font-normal text-theme-accent relative inline-block"
-                  >{t.hero.titleHighlight}</motion.span>.
-                </>
-              </h1>
-            </motion.div>
-
-            {/* Bottom Left Cards */}
-            <motion.div
-              initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-8 lg:mt-auto flex flex-col sm:flex-row gap-4"
-              id="hero-stats-cards"
-            >
-              {/* Card 1: 6+ Years Experience */}
+              {/* Single Hero Floating Advantage Badge: Top-Right (Straight & Level - 24/7 Live Tracking & Milestones) */}
               <motion.div
-                animate={{ y: [0, -15, 0], rotate: [0, 1, -1, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                className="flex-1 max-w-[340px] p-6 rounded-3xl bg-theme-elevated/70 backdrop-blur-xl border border-theme-border shadow-2xl relative overflow-hidden group hover:border-theme-border-accent transition-all duration-300"
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+                className="absolute -top-3 right-1 sm:-top-5 sm:right-2 z-30 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-blue-500/30 dark:border-blue-500/50 shadow-xl backdrop-blur-xl flex items-center gap-2 pointer-events-none"
               >
-                {/* Soft decorative glow */}
-                <div className="absolute top-0 right-0 w-28 h-28 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
-                <div className="space-y-2 relative z-10">
-                  <div className="text-xl sm:text-2xl font-sans font-black tracking-tight text-theme-accent">
-                    {language === 'en' ? 'Industry Experience' : 'Pengalaman Industri'}
-                  </div>
-                  <div className="text-xs font-bold text-theme-fore">
-                    {t.hero.card1Title}
-                  </div>
-                  <p className="text-xs text-theme-fore-muted leading-relaxed">
-                    {t.hero.card1Desc}
-                  </p>
+                <div className="w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-lg bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
+                  <Icon icon="ph:clock-clockwise-bold" className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                </div>
+                <div>
+                  <p className="text-[9px] sm:text-[10px] font-black text-slate-900 dark:text-white leading-none">24/7 Live Tracking & Milestones</p>
+                  <p className="text-[7px] sm:text-[8px] font-medium text-slate-500 dark:text-blue-300 mt-0.5 hidden sm:block">Real-Time Development Status</p>
                 </div>
               </motion.div>
 
-              {/* Card 2: Independent Projects */}
+              {/* Standalone Enlarged Client Portal Window (max-w-[520px]) */}
               <motion.div
-                animate={{ y: [0, -15, 0], rotate: [0, -1, 1, 0] }}
-                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 0.8 }}
-                className="flex-1 max-w-[340px] p-6 rounded-3xl bg-theme-elevated/70 backdrop-blur-xl border border-theme-border shadow-2xl relative overflow-hidden group hover:border-theme-border-accent transition-all duration-300"
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="w-full max-w-[520px] mx-auto p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white/90 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-200/90 dark:border-slate-700/80 shadow-[0_20px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_25px_75px_rgba(0,0,0,0.6)] space-y-3 sm:space-y-4 relative group hover:border-blue-500/50 transition-all duration-300 overflow-hidden z-20"
               >
-                {/* Soft decorative glow */}
-                <div className="absolute top-0 right-0 w-28 h-28 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
-                <div className="space-y-2 relative z-10">
-                  <div className="text-xl sm:text-2xl font-sans font-black tracking-tight text-theme-fore">
-                    {projects?.length || 31} {language === 'en' ? 'Independent Projects' : 'Proyek Independen'}
+                {/* Laser Moving Shimmer Accent */}
+                <motion.div
+                  className="absolute top-0 left-0 h-[2px] w-36 bg-gradient-to-r from-transparent via-blue-500 dark:via-cyan-400 to-transparent z-30"
+                  animate={{ x: ['-100%', '350%'] }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
+                />
+
+                {/* macOS Browser Header Bar */}
+                <div className="space-y-2.5 border-b border-slate-200/80 dark:border-slate-800/80 pb-2.5 sm:pb-3">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                      <div className="flex items-center gap-1 sm:gap-1.5">
+                        <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-rose-500 inline-block" />
+                        <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-amber-500 inline-block" />
+                        <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500 inline-block" />
+                      </div>
+                      <div className="flex items-center gap-1 sm:gap-1.5 bg-slate-100 dark:bg-slate-800/90 px-2.5 sm:px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-700/60 ml-1 sm:ml-2">
+                        <img src="/logo.svg" alt="SejatiDimedia Logo" className="h-3.5 sm:h-4 w-auto object-contain" />
+                        <span className="text-[9px] sm:text-[11px] font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1 truncate max-w-[180px] sm:max-w-none">
+                          <Icon icon="ph:lock-key-duotone" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
+                          sejatidimedia.id/portal/projects
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-xs font-bold text-theme-fore">
-                    {t.hero.card2Title}
+
+                  {/* Multi-Tab Pills */}
+                  <div className="flex items-center justify-between gap-2 pt-0.5 sm:pt-1">
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                      <span className="px-2 sm:px-2.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-bold bg-blue-500/15 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300 border border-blue-400/30 dark:border-blue-400/40 flex items-center gap-1">
+                        <Icon icon="ph:squares-four-duotone" className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-blue-600 dark:text-blue-400" />
+                        Dashboard
+                      </span>
+                      <span className="px-2 sm:px-2.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-1">
+                        <Icon icon="ph:folder-duotone" className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                        Deliverables
+                      </span>
+                      <span className="px-2 sm:px-2.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-1">
+                        <Icon icon="ph:receipt-duotone" className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                        Invoices
+                      </span>
+                    </div>
                   </div>
-                  <p className="text-xs text-theme-fore-muted leading-relaxed">
-                    {t.hero.card2Desc}
-                  </p>
+                </div>
+
+                {/* 1. Active Project Progress & Milestone Tasks Section */}
+                <div className="space-y-2.5 sm:space-y-3 bg-slate-50/80 dark:bg-slate-800/60 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200/80 dark:border-slate-700/60 relative overflow-hidden">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20 dark:border-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
+                        <Icon icon="ph:kanban-duotone" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                      </div>
+                      <div>
+                        <p className="text-[11px] sm:text-sm font-extrabold text-slate-900 dark:text-white leading-tight">Enterprise Web & Custom SaaS</p>
+                        <p className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-medium">Client: Timur Dian • Live Status</p>
+                      </div>
+                    </div>
+                    <motion.span
+                      animate={{ scale: [1, 1.05, 1] }}
+                      transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                      className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-blue-500/15 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-400/30 shrink-0"
+                    >
+                      88% Completed
+                    </motion.span>
+                  </div>
+
+                  {/* Milestone Task Checklist Row */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[9px] font-extrabold pt-0.5">
+                    <div className="flex items-center gap-1 text-slate-700 dark:text-slate-300 bg-white/90 dark:bg-slate-900/60 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700/50">
+                      <Icon icon="ph:check-circle-fill" className="w-3 h-3 text-blue-600 dark:text-blue-400 shrink-0" />
+                      <span>Phase 1-3: UI/UX & DB Architecture</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/40 p-1.5 rounded-lg border border-blue-200 dark:border-blue-500/30">
+                      <span className="w-2 h-2 rounded-full bg-blue-500 dark:bg-blue-400 animate-pulse shrink-0" />
+                      <span>Phase 4: QA & Production Release</span>
+                    </div>
+                  </div>
+
+                  {/* Animated Progress Bar */}
+                  <div className="w-full bg-slate-200/80 dark:bg-slate-900 h-2 rounded-full overflow-hidden p-0.5 border border-slate-200 dark:border-slate-700/60">
+                    <motion.div
+                      className="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400 rounded-full"
+                      animate={{ width: ['70%', '88%', '70%'] }}
+                      transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                    />
+                  </div>
+                </div>
+
+                {/* 2. Invoice & Financial Settlement Row */}
+                <div className="bg-slate-50/80 dark:bg-slate-800/60 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-blue-500/30 dark:border-blue-500/40 space-y-2 sm:space-y-2.5 relative">
+                  <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800/80 pb-1.5 sm:pb-2">
+                    <span className="text-[9px] sm:text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1 sm:gap-1.5">
+                      <Icon icon="ph:receipt-duotone" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400" />
+                      Project Billing & Invoices
+                    </span>
+                    <motion.span
+                      animate={{ opacity: [0.75, 1, 0.75] }}
+                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                      className="px-2 py-0.5 rounded-full text-[8px] sm:text-[9px] font-black bg-blue-500/15 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-400/30 flex items-center gap-1"
+                    >
+                      <Icon icon="ph:check-circle-fill" className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-blue-600 dark:text-blue-400" />
+                      100% Settled
+                    </motion.span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-1.5 sm:gap-2 text-center">
+                    <div className="bg-white dark:bg-slate-900/90 p-2 sm:p-2.5 rounded-lg sm:rounded-xl border border-slate-200 dark:border-slate-700/60">
+                      <p className="text-[7px] sm:text-[9px] font-extrabold text-slate-500 dark:text-slate-400 uppercase">Total Billed</p>
+                      <p className="text-[11px] sm:text-sm font-black text-slate-900 dark:text-white mt-0.5">Rp 37.2M</p>
+                    </div>
+                    <div className="bg-blue-50 dark:bg-blue-950/50 p-2 sm:p-2.5 rounded-lg sm:rounded-xl border border-blue-200 dark:border-blue-500/40 relative overflow-hidden">
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-blue-400/20 to-blue-500/10 pointer-events-none"
+                        animate={{ x: ['-100%', '100%'] }}
+                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                      />
+                      <p className="text-[7px] sm:text-[9px] font-extrabold text-blue-600 dark:text-blue-400 uppercase">Amount Paid</p>
+                      <p className="text-[11px] sm:text-sm font-black text-blue-700 dark:text-blue-300 mt-0.5">Rp 37.2M</p>
+                    </div>
+                    <div className="bg-white dark:bg-slate-900/90 p-2 sm:p-2.5 rounded-lg sm:rounded-xl border border-slate-200 dark:border-slate-700/60">
+                      <p className="text-[7px] sm:text-[9px] font-extrabold text-slate-500 dark:text-slate-400 uppercase">Balance Due</p>
+                      <p className="text-[11px] sm:text-sm font-black text-slate-900 dark:text-white mt-0.5">Rp 0</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 3. Real-Time Activity Feed & Digital Signature Download Bar */}
+                <div className="bg-slate-100/80 dark:bg-slate-800/40 p-2 sm:p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 sm:gap-0 text-[9px] sm:text-[10px] text-slate-700 dark:text-slate-300">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <Icon icon="ph:seal-check-duotone" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                    <span>Digital Stamp: <strong className="text-slate-900 dark:text-white">Verified & Signed</strong></span>
+                  </div>
+                  <button className="px-2 sm:px-2.5 py-1 rounded-lg bg-blue-600/15 hover:bg-blue-600/30 text-blue-700 dark:bg-blue-600/30 dark:hover:bg-blue-600/50 dark:text-blue-300 border border-blue-400/30 dark:border-blue-400/40 text-[8px] sm:text-[9px] font-bold transition-all flex items-center gap-1 cursor-pointer">
+                    <Icon icon="ph:download-simple-bold" className="w-3 h-3" />
+                    PDF Invoice
+                  </button>
                 </div>
               </motion.div>
             </motion.div>
 
           </div>
 
-          {/* RIGHT COLUMN: Intro Text, Middle Stats Card, Conclusion & Orange CTA Button (lg:col-span-5) */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-12 lg:space-y-0 min-h-full lg:py-4">
+          {/* RIGHT COLUMN: Main Typography, Subheadline, CTA Buttons & Bottom Stats (lg:col-span-6) */}
+          <div className="lg:col-span-6 flex flex-col justify-between space-y-8 min-h-full order-1 lg:order-2">
 
-            {/* Middle Right Card: Hero Illustration */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full relative lg:ml-auto lg:my-4 flex justify-end"
-            >
+            <div className="space-y-6">
+              {/* Huge Display Heading */}
               <motion.div
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="relative w-full max-w-[400px] aspect-[4/3] rounded-3xl overflow-hidden shadow-2xl border border-theme-border/50 group"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                className="space-y-4"
               >
-                <div className="absolute inset-0 bg-theme-accent/20 mix-blend-overlay z-10 group-hover:bg-transparent transition-colors duration-500" />
-                <Image
-                  src="/hero-illustration.jpg"
-                  alt="Modern Tech Workspace"
-                  fill
-                  priority
-                  className="object-cover scale-105 group-hover:scale-110 transition-transform duration-700"
-                  sizes="(max-w-768px) 100vw, 400px"
-                />
+                <h1 className="text-[40px] sm:text-5xl md:text-6xl lg:text-5xl xl:text-6.5xl font-sans font-extrabold tracking-tight leading-[1.08] text-theme-fore">
+                  <>
+                    {t.hero.title} <motion.span
+                      animate={{ textShadow: ["0px 0px 0px rgba(0,0,0,0)", "0px 0px 25px var(--theme-accent)", "0px 0px 0px rgba(0,0,0,0)"] }}
+                      transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                      className="font-serif italic font-normal text-theme-accent relative inline-block"
+                    >{t.hero.titleHighlight}</motion.span>.
+                  </>
+                </h1>
               </motion.div>
 
-              {/* Floating AI GIF Top Right - Transparent */}
-              <motion.div 
-                className="absolute -top-8 -right-8 sm:-top-12 sm:-right-12 w-24 h-24 sm:w-36 sm:h-36 z-30 drop-shadow-2xl pointer-events-none"
-                animate={{ y: [-15, 5, -15] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+              {/* Subheadline (Placed directly below headline as requested!) */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                className="max-w-2xl"
               >
-                <img src="/ai-gif2.gif" alt="AI Assistant" className="w-full h-full object-contain" />
+                <p className="text-sm sm:text-base text-theme-fore-muted leading-relaxed">
+                  {t.hero.subtitle}
+                </p>
               </motion.div>
-            </motion.div>
 
-            {/* Bottom Right Description & CTA Button */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="space-y-6 max-w-sm lg:ml-auto"
-            >
-              <p className="text-xs text-theme-fore-muted leading-relaxed">
-                {t.hero.subtitle}
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3">
+              {/* CTA Buttons (Placed directly below subheadline as requested!) */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="flex flex-wrap sm:flex-row gap-3 pt-2"
+              >
                 <button
                   onClick={() => scrollToId('contact-section')}
-                  className="relative px-6 py-3.5 rounded-full text-xs font-bold bg-theme-accent hover:bg-theme-accent-bright text-white shadow-lg shadow-theme-accent/10 hover:shadow-theme-accent/20 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 flex-grow sm:flex-grow-0"
+                  className="relative px-7 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-theme-accent hover:bg-theme-accent-bright text-white shadow-xl shadow-theme-accent/20 hover:shadow-theme-accent/30 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
                   id="hero-btn-book-call"
                 >
                   {/* Subtle pulse ring behind button */}
@@ -431,11 +543,90 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 </button>
                 <button
                   onClick={() => scrollToId('projects-section')}
-                  className="px-6 py-3.5 rounded-full text-xs font-bold border border-theme-border hover:border-theme-accent text-theme-fore hover:bg-theme-surface/50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 flex-grow sm:flex-grow-0"
+                  className="px-7 py-3.5 rounded-full text-xs sm:text-sm font-bold border border-theme-border hover:border-theme-accent text-theme-fore hover:bg-theme-surface/50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
                   id="hero-btn-view-projects"
                 >
                   <span>{t.hero.btnSecondary}</span>
                 </button>
+              </motion.div>
+            </div>
+
+            {/* Bottom Right Ultra-Clean Minimalist Stat Row (100% Theme-Adaptive Light & Dark Mode) */}
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+              className="mt-6 pt-6 border-t border-theme-border/60 flex flex-wrap sm:flex-nowrap items-center justify-between gap-6 sm:gap-8"
+              id="hero-stats-counters"
+            >
+              {/* Counter 1: 6+ Years Industry Experience */}
+              <div className="space-y-1.5 flex-1 group">
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-4xl sm:text-5xl font-sans font-black tracking-tight text-theme-fore">
+                    <AnimatedCounter to={6} />
+                  </span>
+                  <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">+</span>
+                  <span className="text-xs font-black text-theme-fore-muted uppercase tracking-widest ml-1">
+                    {language === 'en' ? 'Years' : 'Tahun'}
+                  </span>
+                </div>
+                <div>
+                  <div className="text-xs font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {language === 'en' ? 'Industry Experience' : 'Pengalaman Industri'}
+                  </div>
+                  <p className="text-[11px] text-theme-fore-muted font-medium">
+                    {language === 'en' ? 'Real Enterprise Systems' : 'Standar Sistem Manufaktur'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Thin Elegant Vertical Divider */}
+              <div className="h-12 w-[1px] bg-theme-border/60 shrink-0 hidden sm:block" />
+
+              {/* Counter 2: 32+ Independent Projects */}
+              <div className="space-y-1.5 flex-1 group">
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-4xl sm:text-5xl font-sans font-black tracking-tight text-theme-fore">
+                    <AnimatedCounter to={projects?.length || 32} />
+                  </span>
+                  <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">+</span>
+                  <span className="text-xs font-black text-theme-fore-muted uppercase tracking-widest ml-1">
+                    {language === 'en' ? 'Projects' : 'Proyek'}
+                  </span>
+                </div>
+                <div>
+                  <div className="text-xs font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {language === 'en' ? 'Independent Work' : 'Proyek Independen'}
+                  </div>
+                  <p className="text-[11px] text-theme-fore-muted font-medium">
+                    {language === 'en' ? 'Live & Transparent Code' : 'Aplikasi & Repositori Active'}
+                  </p>
+                </div>
+              </div>
+
+              {/* Thin Elegant Vertical Divider */}
+              <div className="h-12 w-[1px] bg-theme-border/60 shrink-0 hidden sm:block" />
+
+              {/* Counter 3: Client Portal Feature */}
+              <div className="space-y-1.5 flex-1 group">
+                <div className="flex items-baseline gap-1.5">
+                  <span className="text-4xl sm:text-5xl font-sans font-black tracking-tight text-theme-fore">
+                    <AnimatedCounter to={100} />
+                  </span>
+                  <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">%</span>
+                  <span className="text-xs font-black text-theme-fore-muted uppercase tracking-widest ml-1">
+                    {language === 'en' ? 'Portal' : 'Transparan'}
+                  </span>
+                </div>
+                <div>
+                  <div className="text-xs font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1.5">
+                    <span>{language === 'en' ? 'Client Portal Included' : 'Fitur Client Portal'}</span>
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 animate-pulse" />
+                  </div>
+                  <p className="text-[11px] text-theme-fore-muted font-medium">
+                    {language === 'en' ? 'Live Progress & PDF Invoices' : 'Pantau Progres & Invoice Live'}
+                  </p>
+                </div>
               </div>
             </motion.div>
 
