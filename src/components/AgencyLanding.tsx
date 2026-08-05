@@ -39,9 +39,7 @@ const GlintStar = ({ className, delay = 0 }: { className?: string; delay?: numbe
   </motion.div>
 );
 
-
-
-
+const SERVICE_IMAGES = ['/service_web_app.jpg', '/service_mobile_app.jpg', '/service_saas_app.jpg'];
 
 const sectionFadeIn = {
   hidden: { opacity: 0, y: 30 },
@@ -117,6 +115,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
   const [quickService, setQuickService] = useState<'web' | 'mobile' | 'api'>('web');
   const [quickComplexity, setQuickComplexity] = useState<'standard' | 'complex'>('standard');
   const [activeMilestone, setActiveMilestone] = useState<number>(0);
+  const [openServiceIndex, setOpenServiceIndex] = useState<number | null>(0);
 
   // FAQ interactive states
   const [activeFaq, setActiveFaq] = useState<number | null>(0); // First item expanded by default
@@ -690,121 +689,114 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         viewport={{ once: true, margin: "-100px" }}
         variants={sectionFadeIn}
       >
-        <div className="space-y-4">
+        <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
             <span>{t.nav.services}</span>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
-            <div className="lg:col-span-7">
-              <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore text-left">
-                {t.nav.services}{' '}
-                <span className="bg-gradient-to-r from-slate-900 via-blue-600 via-35% to-[#38BDF8] dark:from-white dark:via-blue-500 dark:via-35% dark:to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]">
-                  {t.services.mainHeadingHighlight}
-                </span>
-              </h2>
-            </div>
-            <div className="lg:col-span-5">
-              <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed text-left">
-                {t.services.desc}
-              </p>
-            </div>
-          </div>
+          <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore">
+            {t.nav.services}{' '}
+            <span className="bg-gradient-to-r from-slate-900 via-blue-600 via-35% to-[#38BDF8] dark:from-white dark:via-blue-500 dark:via-35% dark:to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]">
+              {t.services.mainHeadingHighlight}
+            </span>
+          </h2>
+          <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-2xl mx-auto">
+            {t.services.desc}
+          </p>
         </div>
 
-        {/* High-Fidelity Eye-Catching Modern Grid */}
-        <motion.div
-          className="grid grid-cols-1 lg:grid-cols-3 gap-6"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-        >
+        {/* Reference Image Style Accordion Services List */}
+        <div className="max-w-5xl mx-auto space-y-4 pt-4">
+          {(t.services.items || []).map((item: any, idx: number) => {
+            const isOpen = openServiceIndex === idx;
+            const itemNum = `(${String(idx + 1).padStart(2, '0')})`;
+            const imageSrc = SERVICE_IMAGES[idx] || '/service_web_app.jpg';
 
-          {/* Card 1: Web App Development */}
-          <motion.div
-            className="group relative p-8 rounded-3xl bg-theme-elevated/80 border border-theme-border/80 shadow-2xl hover:border-theme-border-accent/60 transition-all duration-300 flex flex-col justify-between overflow-hidden min-h-[250px]"
-            variants={cardSlideUp}
-          >
-            {/* Ambient Background Glow Accent */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-theme-accent-glow/5 rounded-full blur-3xl pointer-events-none group-hover:bg-theme-accent-glow/15 transition-all duration-500" />
+            return (
+              <motion.div
+                key={idx}
+                layout
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                onMouseEnter={() => setOpenServiceIndex(idx)}
+                className={`rounded-3xl transition-all duration-300 overflow-hidden ${
+                  isOpen
+                    ? 'bg-white/95 dark:bg-slate-900/95 border border-blue-500/30 dark:border-blue-500/40 shadow-[0_20px_50px_rgba(43,84,149,0.12)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl p-6 sm:p-8 text-slate-900 dark:text-white relative'
+                    : 'bg-white/70 dark:bg-theme-elevated/70 border border-slate-200/80 dark:border-theme-border/80 hover:border-blue-500/40 p-5 sm:p-7 cursor-pointer group hover:bg-white dark:hover:bg-theme-elevated shadow-sm hover:shadow-md'
+                }`}
+              >
+                {isOpen ? (
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                      {/* Left: Number & Title (4 cols) */}
+                      <div className="lg:col-span-4 space-y-3 text-left">
+                        <span className="font-mono text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400">
+                          {itemNum}
+                        </span>
+                        <h3 className="text-2xl sm:text-3.5xl font-display font-bold text-slate-900 dark:text-white leading-tight">
+                          {item.title}
+                        </h3>
+                      </div>
 
-            {/* Classic Swiss Layering Typography (Absolute Number) */}
-            <div className="absolute top-4 right-6 text-7xl font-sans font-black text-theme-fore/[0.03] group-hover:text-theme-accent/[0.06] select-none transition-colors duration-350">
-              01
-            </div>
+                      {/* Center: High-End UI Mockup Image (5 cols) */}
+                      <div className="lg:col-span-5 relative group/img overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-xl bg-slate-950">
+                        <img
+                          src={imageSrc}
+                          alt={item.title}
+                          className="w-full h-44 sm:h-52 object-cover object-center group-hover/img:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 dark:from-slate-950/80 via-transparent to-transparent opacity-60 pointer-events-none" />
+                      </div>
 
-            <div className="space-y-6 relative z-10 text-left">
-              <div className="w-11 h-11 rounded-2xl bg-theme-accent/5 border border-theme-border/80 flex items-center justify-center text-theme-accent group-hover:bg-theme-accent group-hover:text-theme-base group-hover:scale-105 transition-all duration-350 shadow-md">
-                <Icon icon="ph:laptop-duotone" className="w-5 h-5" />
-              </div>
-              <div className="space-y-3">
-                <h3 className="text-lg sm:text-xl font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors duration-300">
-                  {t.services.items[0].title}
-                </h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  {t.services.items[0].desc}
-                </p>
-              </div>
-            </div>
-          </motion.div>
+                      {/* Right: Description & CTA Button (3 cols) */}
+                      <div className="lg:col-span-3 space-y-4 text-left flex flex-col justify-between h-full">
+                        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-sans">
+                          {item.desc}
+                        </p>
+                        <div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              scrollToId('contact-section');
+                            }}
+                            className="px-5 py-2.5 rounded-full bg-theme-accent hover:bg-theme-accent-bright text-white font-bold text-xs sm:text-sm transition-all duration-300 shadow-lg shadow-theme-accent/25 hover:shadow-theme-accent/40 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
+                          >
+                            <span>{language === 'en' ? 'Contact Us' : 'Hubungi Kami'}</span>
+                            <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
 
-          {/* Card 2: Mobile App Development */}
-          <motion.div
-            className="group relative p-8 rounded-3xl bg-theme-elevated/80 border border-theme-border/80 shadow-2xl hover:border-theme-border-accent/60 transition-all duration-300 flex flex-col justify-between overflow-hidden min-h-[250px]"
-            variants={cardSlideUp}
-          >
-            {/* Ambient Background Glow Accent */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-theme-accent-glow/5 rounded-full blur-3xl pointer-events-none group-hover:bg-theme-accent-glow/15 transition-all duration-500" />
-
-            {/* Classic Swiss Layering Typography (Absolute Number) */}
-            <div className="absolute top-4 right-6 text-7xl font-sans font-black text-theme-fore/[0.03] group-hover:text-theme-accent/[0.06] select-none transition-colors duration-350">
-              02
-            </div>
-
-            <div className="space-y-6 relative z-10 text-left">
-              <div className="w-11 h-11 rounded-2xl bg-theme-accent/5 border border-theme-border/80 flex items-center justify-center text-theme-accent group-hover:bg-theme-accent group-hover:text-theme-base group-hover:scale-105 transition-all duration-350 shadow-md">
-                <Icon icon="ph:device-mobile-speaker-duotone" className="w-5 h-5" />
-              </div>
-              <div className="space-y-3">
-                <h3 className="text-lg sm:text-xl font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors duration-300">
-                  {t.services.items[1].title}
-                </h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  {t.services.items[1].desc}
-                </p>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Card 3: {t.services.items[2].title} */}
-          <motion.div
-            className="group relative p-8 rounded-3xl bg-theme-elevated/80 border border-theme-border/80 shadow-2xl hover:border-theme-border-accent/60 transition-all duration-300 flex flex-col justify-between overflow-hidden min-h-[250px]"
-            variants={cardSlideUp}
-          >
-            {/* Ambient Background Glow Accent */}
-            <div className="absolute top-0 right-0 w-32 h-32 bg-theme-accent-glow/5 rounded-full blur-3xl pointer-events-none group-hover:bg-theme-accent-glow/15 transition-all duration-500" />
-
-            {/* Classic Swiss Layering Typography (Absolute Number) */}
-            <div className="absolute top-4 right-6 text-7xl font-sans font-black text-theme-fore/[0.03] group-hover:text-theme-accent/[0.06] select-none transition-colors duration-350">
-              03
-            </div>
-
-            <div className="space-y-6 relative z-10 text-left">
-              <div className="w-11 h-11 rounded-2xl bg-theme-accent/5 border border-theme-border/80 flex items-center justify-center text-theme-accent group-hover:bg-theme-accent group-hover:text-theme-base group-hover:scale-105 transition-all duration-350 shadow-md">
-                <Icon icon="ph:cpu-duotone" className="w-5 h-5" />
-              </div>
-              <div className="space-y-3">
-                <h3 className="text-lg sm:text-xl font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors duration-300">
-                  {t.services.items[2].title}
-                </h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  {t.services.items[2].desc}
-                </p>
-              </div>
-            </div>
-          </motion.div>
-
-        </motion.div>
+                    {/* Top Right Collapse Minus Button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setOpenServiceIndex(null);
+                      }}
+                      className="absolute top-6 right-6 w-8 h-8 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-blue-400 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer shadow-sm"
+                      title="Collapse"
+                    >
+                      <Icon icon="ph:minus-bold" className="w-4 h-4" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-4 sm:gap-6 text-left">
+                      <span className="font-mono text-xs sm:text-sm font-bold text-slate-400 dark:text-theme-fore-subtle">
+                        {itemNum}
+                      </span>
+                      <h3 className="text-xl sm:text-2.5xl font-display font-bold text-slate-800 dark:text-theme-fore group-hover:text-blue-600 dark:group-hover:text-theme-accent transition-colors">
+                        {item.title}
+                      </h3>
+                    </div>
+                    <div className="w-9 h-9 rounded-full border border-slate-200 dark:border-theme-border flex items-center justify-center text-blue-600 dark:text-theme-accent bg-blue-500/10 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shrink-0 shadow-sm">
+                      <Icon icon="ph:plus-bold" className="w-4 h-4" />
+                    </div>
+                  </div>
+                )}
+              </motion.div>
+            );
+          })}
+        </div>
       </motion.section>
 
       {/* SECTION 9: TECHNOLOGY (REVISED TO CATEGORIES) */}
