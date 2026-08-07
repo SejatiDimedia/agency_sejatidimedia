@@ -89,7 +89,7 @@ function MagicLinkActivator() {
         <div className="w-10 h-10 flex items-center justify-center shrink-0">
           <img src="/logo.svg" alt="SejatiDimedia Logo" className="w-full h-full object-contain" />
         </div>
-        <span className="font-extrabold text-slate-900 text-xl tracking-tight">SejatiDimedia</span>
+        <span className="font-extrabold text-slate-900 text-xl tracking-tight font-sora" style={{ fontFamily: "'Sora', sans-serif" }}>SejatiDimedia</span>
       </div>
 
       {loading && (

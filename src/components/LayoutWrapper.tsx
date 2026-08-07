@@ -180,7 +180,7 @@ export default function LayoutWrapper({
                       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                     >
-                      <span className="font-sans font-extrabold text-[11px] tracking-[0.3em] text-theme-fore uppercase">
+                      <span className="font-sora font-extrabold text-[11px] tracking-[0.3em] text-theme-fore uppercase">
                         SejatiDimedia
                       </span>
                     </motion.div>
@@ -238,8 +238,8 @@ export default function LayoutWrapper({
                 />
               </div>
               <span
-                className="font-bold text-slate-900 md:text-[20px] text-base leading-snug tracking-tight uppercase"
-                style={{ fontFamily: "'Montserrat', sans-serif" }}
+                className="font-bold text-slate-900 md:text-[20px] text-base leading-snug tracking-tight uppercase font-sora"
+                style={{ fontFamily: "'Sora', sans-serif" }}
               >
                 <span style={{ color: '#2E54A2' }}>Sejati</span> <span style={{ color: '#23385B' }}>Dimedia</span>
               </span>

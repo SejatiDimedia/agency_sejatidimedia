@@ -42,12 +42,19 @@ const GlintStar = ({ className, delay = 0 }: { className?: string; delay?: numbe
 const SERVICE_IMAGES = ['/service_web_app.jpg', '/service_mobile_app.jpg', '/service_saas_app.jpg'];
 
 const sectionFadeIn = {
-  hidden: { opacity: 0, y: 30 },
+  hidden: { 
+    opacity: 0, 
+    y: 45,
+    scale: 0.98,
+    filter: "blur(4px)"
+  },
   visible: {
     opacity: 1,
     y: 0,
+    scale: 1,
+    filter: "blur(0px)",
     transition: {
-      duration: 0.8,
+      duration: 0.7,
       ease: [0.16, 1, 0.3, 1] as const
     }
   }
@@ -58,20 +65,23 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.15
+      staggerChildren: 0.12,
+      delayChildren: 0.05
     }
   }
 };
 
 const cardSlideUp = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 35, scale: 0.96, filter: "blur(2px)" },
   visible: {
     opacity: 1,
     y: 0,
+    scale: 1,
+    filter: "blur(0px)",
     transition: {
       type: "spring" as const,
-      stiffness: 80,
-      damping: 15
+      stiffness: 85,
+      damping: 16
     }
   }
 };
@@ -115,6 +125,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
   const [quickService, setQuickService] = useState<'web' | 'mobile' | 'api'>('web');
   const [quickComplexity, setQuickComplexity] = useState<'standard' | 'complex'>('standard');
   const [activeMilestone, setActiveMilestone] = useState<number>(0);
+  const [activePortalStep, setActivePortalStep] = useState<number>(0);
   const [openServiceIndex, setOpenServiceIndex] = useState<number | null>(0);
 
   // FAQ interactive states
@@ -306,31 +317,6 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           }}
         />
 
-        {/* Cinematic Glint Star lens-flares from reference image */}
-        <GlintStar className="top-[10%] left-[2%] opacity-60 scale-125 select-none" delay={0} />
-        <GlintStar className="bottom-[22%] right-[12%] opacity-50 scale-150 select-none" delay={1.5} />
-        <GlintStar className="top-[45%] left-[45%] opacity-35 scale-90 select-none" delay={3} />
-
-        {/* a) Social Proof Row (Above headline, centered) */}
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-theme-surface/60 border border-theme-border/60 shadow-sm backdrop-blur-md"
-        >
-          {/* 5 Yellow/Gold Stars */}
-          <div className="flex items-center gap-0.5 text-amber-400">
-            <Icon icon="ph:star-fill" className="w-3.5 h-3.5" />
-            <Icon icon="ph:star-fill" className="w-3.5 h-3.5" />
-            <Icon icon="ph:star-fill" className="w-3.5 h-3.5" />
-            <Icon icon="ph:star-fill" className="w-3.5 h-3.5" />
-            <Icon icon="ph:star-fill" className="w-3.5 h-3.5" />
-          </div>
-          <span className="text-[11px] sm:text-xs font-semibold text-theme-fore-muted">
-            {t.hero.socialProof || "5 Tahun Pengalaman · 32 Proyek Diselesaikan"}
-          </span>
-        </motion.div>
-
         {/* b) Headline (Large, bold, centered) */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
@@ -388,7 +374,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         className="space-y-10 pt-4 pb-12 max-w-5xl mx-auto"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: false, amount: 0.15 }}
         variants={sectionFadeIn}
       >
         {/* 1. Centered Section Header */}
@@ -569,91 +555,64 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           </div>
         </div>
 
-        {/* 3. Horizontal Connected Stepper Pipeline (01, 02, 03) */}
-        <div className="relative pt-6 pb-2 text-left max-w-5xl mx-auto">
-          {/* Glowing Laser Connector Rail Line (Desktop) */}
-          <div className="hidden md:block absolute top-[52px] left-[16%] right-[16%] h-[3px] bg-slate-200 dark:bg-slate-800 rounded-full z-0 overflow-hidden" />
-          <motion.div
-            className="hidden md:block absolute top-[52px] left-[16%] right-[50%] h-[3px] bg-gradient-to-r from-blue-600 via-cyan-400 to-indigo-500 rounded-full z-0 shadow-[0_0_12px_rgba(59,130,246,0.6)]"
-            animate={{ opacity: [0.7, 1, 0.7] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-            {/* Step 01 */}
-            <div className="group/step p-5 sm:p-6 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800/90 backdrop-blur-xl shadow-lg hover:border-blue-500/50 hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full relative overflow-hidden">
-              {/* Stepper Node Header Bar */}
-              <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-200/60 dark:border-slate-800/60">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-11 h-11 rounded-2xl bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-mono font-black text-sm flex items-center justify-center border-2 border-blue-500/40 shrink-0 shadow-md group-hover/step:border-blue-500 group-hover/step:scale-105 transition-all">
+        {/* 3. Unified Segmented Glass Stepper Track */}
+        <div className="pt-6 pb-2 text-left max-w-5xl mx-auto">
+          <div className="p-3 sm:p-4 rounded-3xl bg-theme-elevated/80 border border-theme-border/80 backdrop-blur-xl shadow-xl grid grid-cols-1 md:grid-cols-3 gap-3 relative">
+            
+            {/* Step 1 Segment */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-theme-surface/40 hover:bg-theme-surface/70 border border-theme-border/50 hover:border-blue-500/40 transition-all duration-300 flex flex-col justify-between group">
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-lg text-xs font-mono font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0">
                     01
-                  </div>
+                  </span>
+                  <h4 className="text-xs sm:text-sm font-sans font-bold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {t.clientPortal?.point1Title || "Progress Real-Time"}
+                  </h4>
                 </div>
-                <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
-                  <Icon icon="ph:chart-line-up-duotone" className="w-5 h-5" />
-                </div>
+                <Icon icon="ph:chart-line-up-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
               </div>
-
-              {/* Title & Description */}
-              <div className="space-y-1.5 pt-3">
-                <h3 className="text-sm sm:text-base font-bold text-theme-fore group-hover/step:text-blue-600 dark:group-hover/step:text-blue-400 transition-colors">
-                  {t.clientPortal?.point1Title || "Progress Real-Time"}
-                </h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed font-sans">
-                  {t.clientPortal?.point1Desc || "Lihat status setiap fase pengerjaan — dari planning, development, hingga testing."}
-                </p>
-              </div>
+              <p className="text-[11px] text-theme-fore-muted leading-relaxed font-sans">
+                {t.clientPortal?.point1Desc || "Lihat status setiap fase pengerjaan — dari planning, development, hingga testing."}
+              </p>
             </div>
 
-            {/* Step 02 */}
-            <div className="group/step p-5 sm:p-6 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800/90 backdrop-blur-xl shadow-lg hover:border-blue-500/50 hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full relative overflow-hidden">
-              {/* Stepper Node Header Bar */}
-              <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-200/60 dark:border-slate-800/60">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-11 h-11 rounded-2xl bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-mono font-black text-sm flex items-center justify-center border-2 border-blue-500/40 shrink-0 shadow-md group-hover/step:border-blue-500 group-hover/step:scale-105 transition-all">
+            {/* Step 2 Segment */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-theme-surface/40 hover:bg-theme-surface/70 border border-theme-border/50 hover:border-blue-500/40 transition-all duration-300 flex flex-col justify-between group">
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-lg text-xs font-mono font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0">
                     02
-                  </div>
+                  </span>
+                  <h4 className="text-xs sm:text-sm font-sans font-bold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {t.clientPortal?.point2Title || "Invoice & Pembayaran Transparan"}
+                  </h4>
                 </div>
-                <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
-                  <Icon icon="ph:receipt-duotone" className="w-5 h-5" />
-                </div>
+                <Icon icon="ph:receipt-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
               </div>
-
-              {/* Title & Description */}
-              <div className="space-y-1.5 pt-3">
-                <h3 className="text-sm sm:text-base font-bold text-theme-fore group-hover/step:text-blue-600 dark:group-hover/step:text-blue-400 transition-colors">
-                  {t.clientPortal?.point2Title || "Invoice & Pembayaran Transparan"}
-                </h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed font-sans">
-                  {t.clientPortal?.point2Desc || "Riwayat billing dan status pembayaran tercatat jelas, tidak ada biaya tersembunyi."}
-                </p>
-              </div>
+              <p className="text-[11px] text-theme-fore-muted leading-relaxed font-sans">
+                {t.clientPortal?.point2Desc || "Riwayat billing dan status pembayaran tercatat jelas, tidak ada biaya tersembunyi."}
+              </p>
             </div>
 
-            {/* Step 03 */}
-            <div className="group/step p-5 sm:p-6 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800/90 backdrop-blur-xl shadow-lg hover:border-blue-500/50 hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full relative overflow-hidden">
-              {/* Stepper Node Header Bar */}
-              <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-200/60 dark:border-slate-800/60">
-                <div className="flex items-center gap-2.5">
-                  <div className="w-11 h-11 rounded-2xl bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-mono font-black text-sm flex items-center justify-center border-2 border-blue-500/40 shrink-0 shadow-md group-hover/step:border-blue-500 group-hover/step:scale-105 transition-all">
+            {/* Step 3 Segment */}
+            <div className="p-4 sm:p-5 rounded-2xl bg-theme-surface/40 hover:bg-theme-surface/70 border border-theme-border/50 hover:border-blue-500/40 transition-all duration-300 flex flex-col justify-between group">
+              <div className="flex items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="w-7 h-7 rounded-lg text-xs font-mono font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0">
                     03
-                  </div>
+                  </span>
+                  <h4 className="text-xs sm:text-sm font-sans font-bold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {t.clientPortal?.point3Title || "Update Tanpa Perlu Bertanya"}
+                  </h4>
                 </div>
-                <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
-                  <Icon icon="ph:bell-simple-ringing-duotone" className="w-5 h-5" />
-                </div>
+                <Icon icon="ph:bell-simple-ringing-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
               </div>
-
-              {/* Title & Description */}
-              <div className="space-y-1.5 pt-3">
-                <h3 className="text-sm sm:text-base font-bold text-theme-fore group-hover/step:text-blue-600 dark:group-hover/step:text-blue-400 transition-colors">
-                  {t.clientPortal?.point3Title || "Update Tanpa Perlu Bertanya"}
-                </h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed font-sans">
-                  {t.clientPortal?.point3Desc || "Setiap milestone selesai, Anda mendapat notifikasi — bukan Anda yang harus mengejar update."}
-                </p>
-              </div>
+              <p className="text-[11px] text-theme-fore-muted leading-relaxed font-sans">
+                {t.clientPortal?.point3Desc || "Setiap milestone selesai, Anda mendapat notifikasi — bukan Anda yang harus mengejar update."}
+              </p>
             </div>
+
           </div>
         </div>
       </motion.section>
@@ -664,7 +623,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         className="space-y-8 pt-4 pb-4"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: false, amount: 0.15 }}
         variants={sectionFadeIn}
       >
         <div className="max-w-6xl mx-auto rounded-3xl bg-theme-elevated/70 border border-theme-border/80 p-6 sm:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden">
@@ -731,7 +690,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         className="space-y-12 pt-6"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: false, amount: 0.15 }}
         variants={sectionFadeIn}
       >
         <div className="text-center max-w-3xl mx-auto space-y-4">
@@ -849,7 +808,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         className="space-y-8 pt-6 relative overflow-hidden"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: false, amount: 0.15 }}
         variants={sectionFadeIn}
       >
         {/* MOBILE & TABLET HEADER (Below MD) */}
@@ -1075,7 +1034,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: false, amount: 0.15 }}
         >
           {/* Card 1: Frontend */}
           <motion.div
@@ -1219,7 +1178,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         className="space-y-12 pt-12"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: false, amount: 0.15 }}
         variants={sectionFadeIn}
       >
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
@@ -1250,7 +1209,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: false, amount: 0.15 }}
         >
           {projects && projects.length > 0 ? (
             projects.slice(0, 6).map((project) => {
@@ -1327,7 +1286,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         className="space-y-16 pt-8"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: false, amount: 0.15 }}
         variants={sectionFadeIn}
       >
         <div className="text-center max-w-3xl mx-auto space-y-4">
@@ -1348,7 +1307,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: false, amount: 0.15 }}
         >
 
           {/* Card 1: Starter - MVP Prototype */}
@@ -1498,7 +1457,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         className="space-y-12 pt-12"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: false, amount: 0.15 }}
         variants={sectionFadeIn}
       >
         <div className="space-y-4">
@@ -1519,7 +1478,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
+          viewport={{ once: false, amount: 0.15 }}
         >
           {(t.trust?.items || []).map((item: any, idx: number) => (
             <motion.div
@@ -1542,91 +1501,149 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           ))}
         </motion.div>
       </motion.section>
-      {/* SECTION 4: THE PROCESSES LOOP (FROM UPLOADED REFERENCE) */}
+      {/* SECTION 4: THE PROCESSES / METHODOLOGY STEPPER */}
       <motion.section
         id="methodology-section"
-        className="space-y-12"
+        className="space-y-10 pt-6"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: false, amount: 0.15 }}
         variants={sectionFadeIn}
       >
-        <div className="space-y-4">
+        <div className="space-y-3 text-left">
           <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
             <span>{t.process.badge}</span>
           </div>
           <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.15] text-theme-fore max-w-2xl">
             {t.process.mainHeading}
           </h2>
+          <p className="text-xs sm:text-sm text-theme-fore-muted max-w-xl leading-relaxed">
+            {t.process.desc}
+          </p>
         </div>
 
-        {/* Dynamic Split Layout matching reference block 2 */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+        {/* Dynamic Split Layout: Stepper Menu (Left 5 Cols) + Active Detail Display (Right 7 Cols) */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
 
-          {/* Left Column: Clean vertical list with line delimiters (5 cols) */}
-          <div className="lg:col-span-6 flex flex-col">
-            {MILESTONES.map((milestone, idx) => {
+          {/* Left Column: Interactive Vertical Timeline Stepper (5 cols) */}
+          <div className="lg:col-span-5 relative flex flex-col justify-between space-y-3">
+            {/* Vertical Background Line Track */}
+            <div className="absolute left-[27px] top-[30px] bottom-[30px] w-0.5 bg-gradient-to-b from-blue-500/80 via-purple-500/40 to-theme-border/40 pointer-events-none -z-0" />
+
+            {(t.milestones || MILESTONES).map((milestone: any, idx: number) => {
               const isActive = activeMilestone === idx;
               return (
                 <button
-                  key={milestone.step}
+                  key={milestone.step || idx}
                   onClick={() => setActiveMilestone(idx)}
-                  className={`w-full py-4 text-left cursor-pointer border-b border-theme-border/60 transition-all duration-300 flex items-center justify-between group ${isActive ? 'border-theme-accent' : 'hover:border-theme-border-hover'
-                    }`}
+                  className={`w-full text-left p-3.5 sm:p-4 rounded-2xl border transition-all duration-300 flex items-center gap-4 relative z-10 cursor-pointer group ${
+                    isActive
+                      ? 'bg-theme-elevated/95 border-blue-500/60 shadow-[0_4px_25px_-5px_rgba(59,130,246,0.25)] text-theme-fore'
+                      : 'bg-theme-surface/40 border-theme-border/60 hover:bg-theme-elevated/60 hover:border-theme-border text-theme-fore-muted'
+                  }`}
                   id={`processes-step-${milestone.step}`}
                 >
-                  <span className={`text-base font-sans font-bold transition-all duration-300 ${isActive
-                    ? 'text-theme-accent translate-x-1.5'
-                    : 'text-theme-fore/60 group-hover:text-theme-fore group-hover:translate-x-1'
-                    }`}>
-                    {t.milestones[idx].title}
-                  </span>
-                  <span className={`text-xs font-mono font-bold transition-colors flex items-center gap-2 ${isActive ? 'text-theme-accent' : 'text-theme-fore-subtle group-hover:text-theme-fore'
-                    }`}>
-                    <Icon icon={MILESTONE_ICONS[idx]} className="w-4 h-4" />
-                  </span>
+                  {/* Step Number Circle Badge */}
+                  <div
+                    className={`w-9 h-9 rounded-xl flex items-center justify-center font-mono text-xs font-bold shrink-0 transition-all duration-300 ${
+                      isActive
+                        ? 'bg-gradient-to-tr from-blue-600 to-indigo-500 text-white shadow-[0_0_15px_rgba(59,130,246,0.5)] scale-105'
+                        : 'bg-theme-surface border border-theme-border text-theme-fore-subtle group-hover:border-blue-500/40 group-hover:text-theme-fore'
+                    }`}
+                  >
+                    {milestone.step}
+                  </div>
+
+                  {/* Title & Tag */}
+                  <div className="flex-grow min-w-0">
+                    <div className="flex items-center justify-between gap-2">
+                      <h4 className={`text-sm font-sans font-bold truncate transition-colors ${
+                        isActive ? 'text-theme-fore font-extrabold' : 'text-theme-fore-muted group-hover:text-theme-fore'
+                      }`}>
+                        {milestone.title}
+                      </h4>
+                      <Icon
+                        icon={MILESTONE_ICONS[idx] || 'ph:circle-duotone'}
+                        className={`w-4 h-4 shrink-0 transition-transform ${
+                          isActive ? 'text-blue-500 scale-110' : 'text-theme-fore-subtle opacity-60'
+                        }`}
+                      />
+                    </div>
+                    <span className="text-[10px] font-mono text-theme-fore-subtle block truncate">
+                      {milestone.tag}
+                    </span>
+                  </div>
                 </button>
               );
             })}
           </div>
 
-          {/* Right Column: Giant display digits details (6 cols) */}
-          <div className="lg:col-span-6 p-8 rounded-3xl bg-theme-elevated border border-theme-border shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[250px]">
-            <div className="absolute -top-12 -right-12 w-48 h-48 bg-theme-accent-glow rounded-full blur-3xl pointer-events-none opacity-40" />
+          {/* Right Column: Active Step Card Detail (7 cols) */}
+          <div className="lg:col-span-7 p-7 sm:p-9 rounded-3xl bg-theme-elevated/80 border border-theme-border/80 shadow-2xl backdrop-blur-xl relative overflow-hidden flex flex-col justify-between min-h-[380px]">
+            {/* Ambient Spotlight */}
+            <div className="absolute -top-12 -right-12 w-56 h-56 bg-blue-500/15 rounded-full blur-3xl pointer-events-none" />
 
             <AnimatePresence mode="wait">
               <motion.div
                 key={activeMilestone}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-8 flex-grow flex flex-col justify-between relative z-10"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                className="space-y-6 flex-grow flex flex-col justify-between relative z-10 text-left"
               >
-                <div className="space-y-6">
-                  {/* Giant floating number digits */}
-                  <div className="text-8xl sm:text-9xl font-sans font-black tracking-tighter text-gradient leading-none bg-gradient-to-b from-theme-accent to-transparent bg-clip-text text-transparent select-none opacity-70">
-                    {MILESTONES[activeMilestone].step}
+                <div className="space-y-5">
+                  {/* Top Badge & Step Counter Row */}
+                  <div className="flex items-center justify-between gap-3 border-b border-theme-border/50 pb-4">
+                    <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
+                      {(t.milestones || MILESTONES)[activeMilestone].tag}
+                    </span>
+                    <span className="text-xs font-mono font-extrabold text-theme-fore-subtle">
+                      Fase {(t.milestones || MILESTONES)[activeMilestone].step} dari 06
+                    </span>
                   </div>
 
-                  <div className="space-y-3">
-                    <h3 className="text-2xl font-sans font-bold text-theme-fore">
-                      {t.milestones[activeMilestone].title}
+                  {/* Title & Main Description */}
+                  <div className="space-y-2.5 text-left">
+                    <h3 className="text-2xl sm:text-3xl font-display font-extrabold text-theme-fore">
+                      {(t.milestones || MILESTONES)[activeMilestone].title}
                     </h3>
-                    <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-lg">
-                      {t.milestones[activeMilestone].description}
+                    <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed">
+                      {(t.milestones || MILESTONES)[activeMilestone].description}
                     </p>
                   </div>
+
+                  {/* Deliverables List (Hasil Kerja) */}
+                  {((t.milestones || MILESTONES)[activeMilestone].deliverables) && (
+                    <div className="pt-2 space-y-2 text-left">
+                      <span className="text-[10px] font-mono font-extrabold uppercase tracking-widest text-theme-accent">
+                        Hasil Kerja / Deliverables:
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {((t.milestones || MILESTONES)[activeMilestone].deliverables).map((item: string, dIdx: number) => (
+                          <div key={dIdx} className="flex items-center gap-2 p-2.5 rounded-xl bg-theme-surface/50 border border-theme-border/50 text-xs text-theme-fore">
+                            <div className="w-4 h-4 rounded-full bg-blue-500/10 text-blue-500 flex items-center justify-center shrink-0">
+                              <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
+                            </div>
+                            <span className="font-medium text-[11px] truncate">{item}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
 
-                {/* White/Dark Solid Rectangle Button 'GET STARTED' */}
-                <div>
+                {/* Bottom CTA Action Button */}
+                <div className="pt-4 border-t border-theme-border/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                  <span className="text-[11px] text-theme-fore-subtle font-mono">
+                    Siap memulai fase ini?
+                  </span>
                   <button
                     onClick={() => scrollToId('contact-section')}
-                    className="px-6 py-3 bg-theme-accent text-white hover:bg-theme-accent-bright rounded-lg text-xs font-sans font-extrabold tracking-widest uppercase transition-all duration-300 shadow-lg cursor-pointer flex items-center gap-2 group/btn"
-                    id={`processes-get-started-${MILESTONES[activeMilestone].step}`}
+                    className="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-sans font-bold tracking-wide transition-all duration-300 shadow-lg hover:shadow-blue-500/25 cursor-pointer flex items-center justify-center gap-2 group/btn"
+                    id={`processes-get-started-${(t.milestones || MILESTONES)[activeMilestone].step}`}
                   >
-                    <span>Get Started</span>
+                    <span>Mulai Konsultasi Projek</span>
                     <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
                   </button>
                 </div>
@@ -1643,7 +1660,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         className="space-y-16 pt-8"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: false, amount: 0.15 }}
         variants={sectionFadeIn}
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start max-w-6xl mx-auto">
@@ -1782,25 +1799,6 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             })}
           </div>
 
-          {/* FAQ Bottom Direct Email Section */}
-          <div className="lg:col-span-12 pt-6 mt-4 border-t border-theme-border/40 flex flex-col sm:flex-row items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 backdrop-blur-xl shadow-lg">
-            <div className="space-y-1 text-center sm:text-left">
-              <h4 className="text-base sm:text-lg font-display font-extrabold text-theme-fore">
-                {t.faq.otherQuestions}
-              </h4>
-              <p className="text-xs text-theme-fore-muted">
-                {t.faq.otherQuestionsSub}
-              </p>
-            </div>
-            <a
-              href="mailto:sejatidimedia@gmail.com"
-              className="px-6 py-3 rounded-2xl bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-600 dark:text-blue-400 font-mono text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-2.5 group shrink-0 shadow-sm hover:scale-[1.02]"
-            >
-              <Icon icon="ph:envelope-simple-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform" />
-              <span>sejatidimedia@gmail.com</span>
-            </a>
-          </div>
-
         </div>
       </motion.section>
 
@@ -1810,7 +1808,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         className="p-4 sm:p-8 md:p-14 rounded-3xl bg-theme-elevated border border-theme-border shadow-2xl space-y-8 relative overflow-hidden"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: "-100px" }}
+        viewport={{ once: false, amount: 0.15 }}
         variants={sectionFadeIn}
       >
         {/* Supporting decorative premium ambient background spotlight */}
@@ -2079,7 +2077,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         className="w-full max-w-4xl mx-auto pt-6 pb-6 px-4 sm:px-6"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true }}
+        viewport={{ once: false, amount: 0.15 }}
         variants={sectionFadeIn}
       >
         <div className="relative group overflow-hidden rounded-2xl bg-theme-elevated/80 backdrop-blur-xl border border-theme-border/80 p-4.5 sm:p-5.5 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-theme-border-accent/40 transition-all duration-300">

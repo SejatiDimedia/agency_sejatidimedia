@@ -163,8 +163,8 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
               {(!isCollapsed || mobileOpen) && (
                 <div className="flex flex-col truncate">
                   <span
-                    className="font-bold text-slate-900 text-base leading-snug tracking-tight uppercase"
-                    style={{ fontFamily: "'Montserrat', sans-serif" }}
+                    className="font-bold text-slate-900 text-base leading-snug tracking-tight uppercase font-sora"
+                    style={{ fontFamily: "'Sora', sans-serif" }}
                   >
                     <span style={{ color: '#2E54A2' }}>Sejati</span> <span style={{ color: '#23385B' }}>Dimedia</span>
                   </span>

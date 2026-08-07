@@ -319,8 +319,8 @@ export function InvoiceDetailModal({
                     <img src="/logo.svg" alt="SejatiDimedia Logo" className="w-full h-full object-contain" />
                   </div>
                   <span
-                    className="text-xl font-extrabold text-slate-900 tracking-tight uppercase"
-                    style={{ fontFamily: "'Montserrat', sans-serif" }}
+                    className="text-xl font-extrabold text-slate-900 tracking-tight uppercase font-sora"
+                    style={{ fontFamily: "'Sora', sans-serif" }}
                   >
                     <span style={{ color: '#2E54A2' }}>Sejati</span>{' '}
                     <span style={{ color: '#23385B' }}>Dimedia</span>
