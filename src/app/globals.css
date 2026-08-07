@@ -33,11 +33,27 @@
   --color-theme-border-accent: var(--border-accent);
 }
 
-body, p, span, li, button, input, textarea, .font-sans, .font-jakarta {
+body,
+p,
+span,
+li,
+button,
+input,
+textarea,
+.font-sans,
+.font-jakarta {
   font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6, .font-sora, .font-display, .font-brand {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.font-sora,
+.font-display,
+.font-brand {
   font-family: 'Sora', sans-serif;
 }
 

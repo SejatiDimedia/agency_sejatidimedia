@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Timur Dian Radha Sejati" }],
   creator: "Timur Dian Radha Sejati",
-    openGraph: {
+  openGraph: {
     type: "website",
     locale: "id_ID",
     url: "https://sejatidimedia.web.id",
