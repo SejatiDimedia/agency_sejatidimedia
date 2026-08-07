@@ -15,22 +15,50 @@ export const id = {
   },
   hero: {
     badge: "TERSEDIA UNTUK KLIEN BARU",
-    title: "Software Developer Independen untuk Bisnis yang Butuh Sistem, Bukan Sekadar",
+    badgeText: "Software Developer Independen · Fokus Sistem Bisnis Manufaktur & Operasional",
+    socialProof: "5 Tahun Pengalaman · 32 Proyek Diselesaikan",
+    title: "Bangun Sistem yang Benar-Benar Dibutuhkan Bisnis Anda, Bukan Sekadar",
     titleHighlight: "Website",
-    subtitle: "Dari latar belakang industri manufaktur ke proyek independen — saya membangun aplikasi web, mobile, dan backend dengan standar yang sama seperti sistem yang menangani operasional bisnis nyata setiap hari.",
+    subtitle: "Dengan 5 tahun pengalaman langsung di industri manufaktur, saya membantu bisnis mengubah proses operasional manual menjadi sistem digital terintegrasi.",
     card1Title: "Sistem Manufaktur Nyata",
     card1Desc: "Terbiasa membangun sistem berskala enterprise di industri manufaktur yang menangani transaksi, inventori, dan proses kerja harian secara akurat.",
     card2Title: "Bisa Diuji Langsung",
     card2Desc: "Kode dapat diaudit di GitHub, aplikasi aktif dan bisa dicoba langsung — memberikan bukti konkret, tidak hanya sebatas screenshot portofolio.",
-    btnPrimary: "Kontak Saya",
-    btnSecondary: "Lihat Portofolio",
+    btnPrimary: "Konsultasi Kebutuhan Sistem Anda",
+    btnSecondary: "Lihat Studi Kasus Proyek",
+    stat1Title: "Pengalaman Operasional di Industri Manufaktur",
+    stat2Title: "Sistem & Aplikasi Diselesaikan End-to-End",
+    stat3Title: "Akses Progress via Client Portal Real-Time",
+  },
+  clientPortal: {
+    eyebrow: "FITUR UNGGULAN",
+    title: "Pantau Progress Proyek Anda, Kapan Saja",
+    subtitle: "Setiap klien mendapat akses ke portal khusus untuk memantau progress pengerjaan, milestone, hingga invoice — tanpa perlu menunggu update manual atau bertanya 'sampai mana progressnya?'",
+    mockupTitle: "Dashboard Klien — Proyek Aktif",
+    point1Title: "Progress Real-Time",
+    point1Desc: "Lihat status setiap fase pengerjaan — dari planning, development, hingga testing.",
+    point2Title: "Invoice & Pembayaran Transparan",
+    point2Desc: "Riwayat billing dan status pembayaran tercatat jelas, tidak ada biaya tersembunyi.",
+    point3Title: "Update Tanpa Perlu Bertanya",
+    point3Desc: "Setiap milestone selesai, Anda mendapat notifikasi — bukan Anda yang harus mengejar update."
+  },
+  about: {
+    eyebrow: "TENTANG SAYA",
+    title: "Dari Developer, Menjadi Founder",
+    p1: "Selama 5 tahun, saya bekerja sebagai software developer di industri manufaktur — membangun dan memelihara sistem yang digunakan langsung dalam operasional harian, mulai dari manajemen produksi, inventory, hingga koordinasi antar tim.",
+    p2: "Dari sana saya belajar satu hal penting: sistem yang baik bukan yang paling canggih secara teknis, tapi yang benar-benar dipakai dan menyelesaikan masalah nyata di lapangan.",
+    p3: "Kini melalui SejatiDimedia, saya membawa pengalaman itu untuk membantu bisnis lain — merancang dan membangun sistem yang sesuai dengan cara kerja mereka yang sebenarnya, bukan sekadar mengikuti tren teknologi.",
+    card1Title: "5+ Tahun Pengalaman Manufaktur",
+    card1Desc: "ERP, Production, Inventory & Operational Workflow",
+    card2Title: "Sistem Digital Terintegrasi",
+    card2Desc: "Bukan sekadar website, tapi sistem operasional nyata"
   },
   services: {
     sectionTitle: "Layanan",
     portfolio: "Portofolio",
     mainHeading: "Dari ide hingga production. Saya menangani seluruh siklus pengembangan.",
     mainHeadingHighlight: "Pengembangan Perangkat Lunak",
-    desc: "Setiap proyek dimulai dari kebutuhan bisnis Anda, bukan dari template siap pakai. Arsitektur, keamanan, dan performa dirancang agar sistem tetap relevan seiring bisnis Anda berkembang.",
+    desc: "Setiap sistem saya bangun dari kebutuhan operasional nyata — bukan template generik. Arsitektur bersih, keamanan terjaga, dan performa yang dirancang untuk tumbuh bersama bisnis Anda.",
     items: [
       {
         title: "Web Application Development",
@@ -357,7 +385,7 @@ export const id = {
     terms: "SYARAT & KETENTUAN"
   },
   platforms: {
-    availableOn: "Juga tersedia untuk disewa melalui platform:",
+    availableOn: "Rekam jejak proyek saya juga dapat dilihat di Upwork & Fastwork",
     secure: "Transaksi aman & terjamin"
   },
   footer: {
@@ -378,12 +406,12 @@ export const id = {
     mainHeading: "Kenapa Klien Percaya",
     mainHeadingHighlight: "Bekerja Sama Dengan Saya",
     items: [
-      { title: "Komunikasi Langsung Tanpa Perantara", desc: "Anda berbicara langsung dengan pengembang utama yang memahami visi teknis Anda, memastikan setiap instruksi dan masukan dieksekusi tanpa distorsi." },
+      { title: "Komunikasi Langsung Tanpa Perantara", desc: "Anda bicara langsung dengan yang mengerjakan sistem Anda — bukan lewat account manager atau tim support berlapis." },
       { title: "Kode Bersih & Terstruktur", desc: "Arsitektur dibangun dengan standar industri terbaik, rapi, dan terdokumentasi, sehingga mudah diskalakan atau diserahkan ke tim lain di masa depan." },
       { title: "Pendampingan Pasca-Launch", desc: "Mendampingi Anda selama fase kritis pasca-peluncuran untuk memastikan sistem berjalan stabil, memperbaiki bug, dan menjaga performa." },
       { title: "Revisi Terstruktur", desc: "Proses feedback yang terstruktur di setiap milestone (tahapan), mencegah rombak total di akhir dan menjaga proyek tetap on-track." },
       { title: "Pembayaran Bertahap", desc: "Skema pembayaran termin berbasis milestone (berkala). Anda hanya membayar saat fitur yang disepakati benar-benar selesai dan lulus uji coba." },
-      { title: "100% Hak Cipta Anda", desc: "Setelah pelunasan selesai, seluruh source code, kekayaan intelektual, dan akses infrastruktur sepenuhnya diserahkan menjadi milik Anda seutuhnya." }
+      { title: "100% Hak Cipta Anda", desc: "Seluruh source code dan hak cipta sepenuhnya milik Anda setelah proyek selesai — bukan disewakan atau di-lock ke platform saya." }
     ]
   }
 };

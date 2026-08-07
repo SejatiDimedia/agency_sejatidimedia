@@ -15,22 +15,50 @@ export const en = {
   },
   hero: {
     badge: "AVAILABLE FOR NEW CLIENTS",
-    title: "Independent Software Developer for Businesses That Need Systems, Not Just",
-    titleHighlight: "Websites",
-    subtitle: "From a manufacturing industry background to independent projects — I build web, mobile, and backend applications with the same standards as systems handling real daily business operations.",
+    badgeText: "Independent Software Developer · Focus on Manufacturing & Operational Business Systems",
+    socialProof: "5 Years Experience · 32 Projects Completed",
+    title: "Build the System Your Business Truly Needs, Not Just a",
+    titleHighlight: "Website",
+    subtitle: "With 5 years of direct experience in the manufacturing industry, I help businesses transform manual operational processes into integrated digital systems.",
     card1Title: "Real Manufacturing Systems",
     card1Desc: "Accustomed to building enterprise-scale systems in the manufacturing industry that handle transactions, inventory, and daily workflows accurately.",
     card2Title: "Testable Products",
     card2Desc: "Code can be audited on GitHub, applications are active and can be tested directly — providing concrete evidence, not just portfolio screenshots.",
-    btnPrimary: "Contact Me",
-    btnSecondary: "View Portfolio",
+    btnPrimary: "Consult Your System Needs",
+    btnSecondary: "View Project Case Studies",
+    stat1Title: "Operational Experience in Manufacturing Industry",
+    stat2Title: "Systems & Apps Completed End-to-End",
+    stat3Title: "Progress Access via Real-Time Client Portal",
+  },
+  clientPortal: {
+    eyebrow: "KEY FEATURE",
+    title: "Track Your Project Progress, Anytime",
+    subtitle: "Every client gets access to a dedicated portal to monitor development progress, milestones, and invoices — no manual status calls required.",
+    mockupTitle: "Client Dashboard — Active Project",
+    point1Title: "Real-Time Progress",
+    point1Desc: "View the status of every development phase — from planning, development, to testing.",
+    point2Title: "Transparent Invoices & Billing",
+    point2Desc: "Billing history and payment status are clearly logged with no hidden fees.",
+    point3Title: "Proactive Updates",
+    point3Desc: "Get notified automatically when milestones complete — no need to chase for progress."
+  },
+  about: {
+    eyebrow: "ABOUT ME",
+    title: "From Developer to Founder",
+    p1: "For 5 years, I worked as a software developer in the manufacturing industry — building and maintaining systems used directly in daily operations, from production management and inventory to inter-team coordination.",
+    p2: "From that experience I learned one crucial truth: a good system isn't the one that is technically most complex, but the one that is actually used and solves real problems on the ground.",
+    p3: "Now through SejatiDimedia, I bring that experience to help other businesses — designing and building systems tailored to how they actually work, not just following tech trends.",
+    card1Title: "5+ Years Manufacturing Experience",
+    card1Desc: "ERP, Production, Inventory & Operational Workflow",
+    card2Title: "Integrated Digital Systems",
+    card2Desc: "Not just a website, but a real operational system"
   },
   services: {
     sectionTitle: "Services",
     portfolio: "Portfolio",
     mainHeading: "From idea to production. I handle the entire development cycle.",
     mainHeadingHighlight: "Software Development",
-    desc: "Every project starts from your business needs, not off-the-shelf templates. Architecture, security, and performance are designed so the system remains relevant as your business grows.",
+    desc: "Every system I build starts from real operational needs — not generic templates. Clean architecture, ironclad security, and performance designed to grow with your business.",
     items: [
       {
         title: "Web Application Development",
@@ -357,7 +385,7 @@ export const en = {
     terms: "TERMS & CONDITIONS"
   },
   platforms: {
-    availableOn: "Also available for hire on these platforms:",
+    availableOn: "My project track record can also be viewed on Upwork & Fastwork",
     secure: "Secure & guaranteed transactions"
   },
   footer: {
@@ -378,12 +406,12 @@ export const en = {
     mainHeading: "Why Clients Trust",
     mainHeadingHighlight: "Working With Me",
     items: [
-      { title: "Direct Communication Without Intermediaries", desc: "You speak directly with the main developer who understands your technical vision, ensuring every instruction and feedback is executed without distortion." },
+      { title: "Direct Communication Without Intermediaries", desc: "You speak directly with the person building your system — not through account managers or layered support teams." },
       { title: "Clean & Structured Code", desc: "The architecture is built with the best industry standards, neat, and documented, making it easy to scale or hand over to another team in the future." },
       { title: "Post-Launch Support", desc: "Accompanying you during the critical post-launch phase to ensure the system runs stably, fixing bugs, and maintaining performance." },
       { title: "Structured Revisions", desc: "A structured feedback process at each milestone, preventing a total overhaul at the end and keeping the project on-track." },
       { title: "Gradual Payments", desc: "A milestone-based payment scheme. You only pay when the agreed features are fully completed and pass testing." },
-      { title: "100% Your Copyright", desc: "After full payment is complete, all source code, intellectual property, and infrastructure access are fully handed over to you." }
+      { title: "100% Your Copyright", desc: "All source code and copyright belong entirely to you after project completion — not rented or locked to my platform." }
     ]
   }
 };

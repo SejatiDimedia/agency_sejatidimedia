@@ -275,8 +275,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
   return (
     <div className="space-y-24">
-      {/* SECTION 1: BESPOKE SLICED HERO STAGE (AS PER REFERENCE IMAGE) */}
-      <section className="relative py-8 md:py-16 min-h-[85vh] flex flex-col justify-center overflow-visible z-0">
+      {/* SECTION 1: HERO (SIMPLE TEXT-CENTERED LAYOUT) */}
+      <section id="hero-section" className="relative py-8 md:py-16 min-h-[70vh] flex flex-col items-center justify-center text-center max-w-4xl mx-auto space-y-6 sm:space-y-8 overflow-visible z-0">
 
         {/* Animated Background Orb */}
         <motion.div
@@ -311,371 +311,416 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         <GlintStar className="bottom-[22%] right-[12%] opacity-50 scale-150 select-none" delay={1.5} />
         <GlintStar className="top-[45%] left-[45%] opacity-35 scale-90 select-none" delay={3} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 xl:gap-10 items-center text-left">
+        {/* a) Social Proof Row (Above headline, centered) */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="inline-flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-theme-surface/60 border border-theme-border/60 shadow-sm backdrop-blur-md"
+        >
+          {/* 5 Yellow/Gold Stars */}
+          <div className="flex items-center gap-0.5 text-amber-400">
+            <Icon icon="ph:star-fill" className="w-3.5 h-3.5" />
+            <Icon icon="ph:star-fill" className="w-3.5 h-3.5" />
+            <Icon icon="ph:star-fill" className="w-3.5 h-3.5" />
+            <Icon icon="ph:star-fill" className="w-3.5 h-3.5" />
+            <Icon icon="ph:star-fill" className="w-3.5 h-3.5" />
+          </div>
+          <span className="text-[11px] sm:text-xs font-semibold text-theme-fore-muted">
+            {t.hero.socialProof || "5 Tahun Pengalaman · 32 Proyek Diselesaikan"}
+          </span>
+        </motion.div>
 
-          {/* LEFT COLUMN: Hero Illustration (lg:col-span-6) */}
-          <div className="lg:col-span-6 flex flex-col justify-center min-h-full lg:py-4 order-2 lg:order-1">
+        {/* b) Headline (Large, bold, centered) */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <h1 className="text-[38px] sm:text-5xl md:text-6xl lg:text-6.5xl font-display font-bold tracking-tight leading-[1.08] text-theme-fore">
+            {t.hero.title}{' '}
+            <span className="text-theme-accent inline-block">
+              {t.hero.titleHighlight}
+            </span>.
+          </h1>
+        </motion.div>
 
-            {/* Middle Left Dedicated Hero Stage: Straight & Level Floating Badge Stage */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="w-full relative mx-auto flex justify-center items-center py-5 sm:py-7 px-1 sm:px-4"
-            >
-              {/* Single Hero Floating Advantage Badge: Top-Right (Straight & Level - 24/7 Live Tracking & Milestones) */}
-              <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -top-3 right-1 sm:-top-5 sm:right-2 z-30 px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl sm:rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-blue-500/30 dark:border-blue-500/50 shadow-xl backdrop-blur-xl flex items-center gap-2 pointer-events-none"
-              >
-                <div className="w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-lg bg-blue-500/10 dark:bg-blue-500/20 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
-                  <Icon icon="ph:clock-clockwise-bold" className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                </div>
-                <div>
-                  <p className="text-[9px] sm:text-[10px] font-black text-slate-900 dark:text-white leading-none">24/7 Live Tracking & Milestones</p>
-                  <p className="text-[7px] sm:text-[8px] font-medium text-slate-500 dark:text-blue-300 mt-0.5 hidden sm:block">Real-Time Development Status</p>
-                </div>
-              </motion.div>
+        {/* c) Subheadline (Centered, smaller, muted text) */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="max-w-2xl mx-auto"
+        >
+          <p className="text-sm sm:text-base text-theme-fore-muted leading-relaxed font-sans">
+            {t.hero.subtitle}
+          </p>
+        </motion.div>
 
-              {/* Standalone Enlarged Client Portal Window (max-w-[520px]) */}
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                className="w-full max-w-[520px] mx-auto p-4 sm:p-6 rounded-2xl sm:rounded-3xl bg-white/90 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-200/90 dark:border-slate-700/80 shadow-[0_20px_60px_rgba(0,0,0,0.08)] dark:shadow-[0_25px_75px_rgba(0,0,0,0.6)] space-y-3 sm:space-y-4 relative group hover:border-blue-500/50 transition-all duration-300 overflow-hidden z-20"
-              >
-                {/* Laser Moving Shimmer Accent */}
-                <motion.div
-                  className="absolute top-0 left-0 h-[2px] w-36 bg-gradient-to-r from-transparent via-blue-500 dark:via-cyan-400 to-transparent z-30"
-                  animate={{ x: ['-100%', '350%'] }}
-                  transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
-                />
+        {/* d) CTA Row (Two buttons side-by-side, centered) */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2"
+        >
+          <button
+            onClick={() => scrollToId('contact-section')}
+            className="relative w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-theme-accent hover:bg-theme-accent-bright text-white shadow-xl shadow-theme-accent/25 hover:shadow-theme-accent/35 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
+            id="hero-btn-book-call"
+          >
+            <span>{t.hero.btnPrimary}</span>
+            <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
+          </button>
+          <button
+            onClick={() => scrollToId('projects-section')}
+            className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold border border-theme-border hover:border-theme-accent text-theme-fore hover:bg-theme-surface/50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
+            id="hero-btn-view-projects"
+          >
+            <span>{t.hero.btnSecondary}</span>
+          </button>
+        </motion.div>
 
-                {/* macOS Browser Header Bar */}
-                <div className="space-y-2.5 border-b border-slate-200/80 dark:border-slate-800/80 pb-2.5 sm:pb-3">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-1.5 sm:gap-2">
-                      <div className="flex items-center gap-1 sm:gap-1.5">
-                        <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-rose-500 inline-block" />
-                        <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-amber-500 inline-block" />
-                        <span className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full bg-emerald-500 inline-block" />
-                      </div>
-                      <div className="flex items-center gap-1 sm:gap-1.5 bg-slate-100 dark:bg-slate-800/90 px-2.5 sm:px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-700/60 ml-1 sm:ml-2">
-                        <img src="/logo.svg" alt="SejatiDimedia Logo" className="h-3.5 sm:h-4 w-auto object-contain" />
-                        <span className="text-[9px] sm:text-[11px] font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1 truncate max-w-[180px] sm:max-w-none">
-                          <Icon icon="ph:lock-key-duotone" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
-                          sejatidimedia.id/portal/projects
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Multi-Tab Pills */}
-                  <div className="flex items-center justify-between gap-2 pt-0.5 sm:pt-1">
-                    <div className="flex items-center gap-1.5 sm:gap-2">
-                      <span className="px-2 sm:px-2.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-bold bg-blue-500/15 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300 border border-blue-400/30 dark:border-blue-400/40 flex items-center gap-1">
-                        <Icon icon="ph:squares-four-duotone" className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-blue-600 dark:text-blue-400" />
-                        Dashboard
-                      </span>
-                      <span className="px-2 sm:px-2.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-1">
-                        <Icon icon="ph:folder-duotone" className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                        Deliverables
-                      </span>
-                      <span className="px-2 sm:px-2.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-1">
-                        <Icon icon="ph:receipt-duotone" className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                        Invoices
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 1. Active Project Progress & Milestone Tasks Section */}
-                <div className="space-y-2.5 sm:space-y-3 bg-slate-50/80 dark:bg-slate-800/60 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200/80 dark:border-slate-700/60 relative overflow-hidden">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="flex items-center gap-2 sm:gap-3">
-                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20 dark:border-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
-                        <Icon icon="ph:kanban-duotone" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                      </div>
-                      <div>
-                        <p className="text-[11px] sm:text-sm font-extrabold text-slate-900 dark:text-white leading-tight">Enterprise Web & Custom SaaS</p>
-                        <p className="text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400 font-medium">Client: Timur Dian • Live Status</p>
-                      </div>
-                    </div>
-                    <motion.span
-                      animate={{ scale: [1, 1.05, 1] }}
-                      transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                      className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-blue-500/15 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-400/30 shrink-0"
-                    >
-                      88% Completed
-                    </motion.span>
-                  </div>
-
-                  {/* Milestone Task Checklist Row */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[9px] font-extrabold pt-0.5">
-                    <div className="flex items-center gap-1 text-slate-700 dark:text-slate-300 bg-white/90 dark:bg-slate-900/60 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700/50">
-                      <Icon icon="ph:check-circle-fill" className="w-3 h-3 text-blue-600 dark:text-blue-400 shrink-0" />
-                      <span>Phase 1-3: UI/UX & DB Architecture</span>
-                    </div>
-                    <div className="flex items-center gap-1 text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/40 p-1.5 rounded-lg border border-blue-200 dark:border-blue-500/30">
-                      <span className="w-2 h-2 rounded-full bg-blue-500 dark:bg-blue-400 animate-pulse shrink-0" />
-                      <span>Phase 4: QA & Production Release</span>
-                    </div>
-                  </div>
-
-                  {/* Animated Progress Bar */}
-                  <div className="w-full bg-slate-200/80 dark:bg-slate-900 h-2 rounded-full overflow-hidden p-0.5 border border-slate-200 dark:border-slate-700/60">
-                    <motion.div
-                      className="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400 rounded-full"
-                      animate={{ width: ['70%', '88%', '70%'] }}
-                      transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                    />
-                  </div>
-                </div>
-
-                {/* 2. Invoice & Financial Settlement Row */}
-                <div className="bg-slate-50/80 dark:bg-slate-800/60 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-blue-500/30 dark:border-blue-500/40 space-y-2 sm:space-y-2.5 relative">
-                  <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800/80 pb-1.5 sm:pb-2">
-                    <span className="text-[9px] sm:text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1 sm:gap-1.5">
-                      <Icon icon="ph:receipt-duotone" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400" />
-                      Project Billing & Invoices
-                    </span>
-                    <motion.span
-                      animate={{ opacity: [0.75, 1, 0.75] }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                      className="px-2 py-0.5 rounded-full text-[8px] sm:text-[9px] font-black bg-blue-500/15 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-400/30 flex items-center gap-1"
-                    >
-                      <Icon icon="ph:check-circle-fill" className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-blue-600 dark:text-blue-400" />
-                      100% Settled
-                    </motion.span>
-                  </div>
-                  <div className="grid grid-cols-3 gap-1.5 sm:gap-2 text-center">
-                    <div className="bg-white dark:bg-slate-900/90 p-2 sm:p-2.5 rounded-lg sm:rounded-xl border border-slate-200 dark:border-slate-700/60">
-                      <p className="text-[7px] sm:text-[9px] font-extrabold text-slate-500 dark:text-slate-400 uppercase">Total Billed</p>
-                      <p className="text-[11px] sm:text-sm font-black text-slate-900 dark:text-white mt-0.5">Rp 37.2M</p>
-                    </div>
-                    <div className="bg-blue-50 dark:bg-blue-950/50 p-2 sm:p-2.5 rounded-lg sm:rounded-xl border border-blue-200 dark:border-blue-500/40 relative overflow-hidden">
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-blue-400/20 to-blue-500/10 pointer-events-none"
-                        animate={{ x: ['-100%', '100%'] }}
-                        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                      />
-                      <p className="text-[7px] sm:text-[9px] font-extrabold text-blue-600 dark:text-blue-400 uppercase">Amount Paid</p>
-                      <p className="text-[11px] sm:text-sm font-black text-blue-700 dark:text-blue-300 mt-0.5">Rp 37.2M</p>
-                    </div>
-                    <div className="bg-white dark:bg-slate-900/90 p-2 sm:p-2.5 rounded-lg sm:rounded-xl border border-slate-200 dark:border-slate-700/60">
-                      <p className="text-[7px] sm:text-[9px] font-extrabold text-slate-500 dark:text-slate-400 uppercase">Balance Due</p>
-                      <p className="text-[11px] sm:text-sm font-black text-slate-900 dark:text-white mt-0.5">Rp 0</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* 3. Real-Time Activity Feed & Digital Signature Download Bar */}
-                <div className="bg-slate-100/80 dark:bg-slate-800/40 p-2 sm:p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 sm:gap-0 text-[9px] sm:text-[10px] text-slate-700 dark:text-slate-300">
-                  <div className="flex items-center gap-1.5 sm:gap-2">
-                    <Icon icon="ph:seal-check-duotone" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400 shrink-0" />
-                    <span>INV-202607-001: <strong className="text-slate-900 dark:text-white">Draft</strong></span>
-                  </div>
-                  <button className="px-2 sm:px-2.5 py-1 rounded-lg bg-blue-600/15 hover:bg-blue-600/30 text-blue-700 dark:bg-blue-600/30 dark:hover:bg-blue-600/50 dark:text-blue-300 border border-blue-400/30 dark:border-blue-400/40 text-[8px] sm:text-[9px] font-bold transition-all flex items-center gap-1 cursor-pointer">
-                    <Icon icon="ph:download-simple-bold" className="w-3 h-3" />
-                    PDF Invoice
-                  </button>
-                </div>
-              </motion.div>
-            </motion.div>
-
+      </section>
+      {/* SECTION 2: CLIENT PORTAL & TRANSPARANSI (CENTERED FEATURE SHOWCASE LAYOUT) */}
+      <motion.section
+        id="client-portal-section"
+        className="space-y-10 pt-4 pb-12 max-w-5xl mx-auto"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={sectionFadeIn}
+      >
+        {/* 1. Centered Section Header */}
+        <div className="text-center max-w-3xl mx-auto space-y-3.5">
+          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
+            <span>{t.clientPortal?.eyebrow || "FITUR UNGGULAN"}</span>
           </div>
 
-          {/* RIGHT COLUMN: Main Typography, Subheadline, CTA Buttons & Bottom Stats (lg:col-span-6) */}
-          <div className="lg:col-span-6 flex flex-col justify-between space-y-8 min-h-full order-1 lg:order-2">
+          <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore">
+            {t.clientPortal?.title || "Pantau Progress Proyek Anda, Kapan Saja"}
+          </h2>
 
-            <div className="space-y-6">
-              {/* Huge Display Heading */}
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-                className="space-y-4"
-              >
-                <h1 className="text-[40px] sm:text-5xl md:text-6xl lg:text-5xl xl:text-6.5xl font-display font-bold tracking-tight leading-[1.08] text-theme-fore">
-                  {t.hero.title}{' '}
-                  <span className="bg-gradient-to-r from-slate-900 via-blue-600 via-35% to-[#38BDF8] dark:from-white dark:via-blue-500 dark:via-35% dark:to-[#38BDF8] bg-clip-text text-transparent inline-block drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]">
-                    {t.hero.titleHighlight}
-                  </span>.
-                </h1>
-              </motion.div>
+          <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed font-sans max-w-2xl mx-auto">
+            {t.clientPortal?.subtitle || "Setiap klien mendapat akses ke portal khusus untuk memantau progress pengerjaan, milestone, hingga invoice — tanpa perlu menunggu update manual atau bertanya 'sampai mana progressnya?'"}
+          </p>
+        </div>
 
-              {/* Subheadline (Placed directly below headline as requested!) */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                className="max-w-2xl"
-              >
-                <p className="text-sm sm:text-base text-theme-fore-muted leading-relaxed">
-                  {t.hero.subtitle}
-                </p>
-              </motion.div>
+        {/* 2. Main Dashboard Mockup Showcase (Clean Level Showcase Window) */}
+        <div className="relative flex justify-center items-center py-4">
+          {/* Ambient Background Radial Glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-blue-600/20 via-cyan-500/15 to-indigo-600/20 rounded-full blur-[100px] pointer-events-none -z-10" />
 
-              {/* CTA Buttons (Placed directly below subheadline as requested!) */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                className="flex flex-wrap sm:flex-row gap-3 pt-2"
-              >
-                <button
-                  onClick={() => scrollToId('contact-section')}
-                  className="relative px-7 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-theme-accent hover:bg-theme-accent-bright text-white shadow-xl shadow-theme-accent/20 hover:shadow-theme-accent/30 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
-                  id="hero-btn-book-call"
-                >
-                  {/* Subtle pulse ring behind button */}
-                  <motion.div
-                    className="absolute inset-0 rounded-full bg-theme-accent -z-10"
-                    animate={{ scale: [1, 1.15, 1], opacity: [0.5, 0, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                  <span>{t.hero.btnPrimary}</span>
-                  <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => scrollToId('projects-section')}
-                  className="px-7 py-3.5 rounded-full text-xs sm:text-sm font-bold border border-theme-border hover:border-theme-accent text-theme-fore hover:bg-theme-surface/50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
-                  id="hero-btn-view-projects"
-                >
-                  <span>{t.hero.btnSecondary}</span>
-                </button>
-              </motion.div>
+          {/* Floating Micro Badge #1 (Top Right Live Badge) */}
+          <motion.div
+            animate={{ y: [0, -6, 0] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute -top-3 right-2 sm:right-8 z-30 px-4 py-2 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-blue-500/40 shadow-xl backdrop-blur-2xl flex items-center gap-2.5 pointer-events-none"
+          >
+            <div className="w-6 h-6 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+              <Icon icon="ph:clock-clockwise-bold" className="w-3.5 h-3.5" />
+            </div>
+            <div>
+              <p className="text-[10px] font-extrabold text-slate-900 dark:text-white leading-none">24/7 Live Tracking & Milestones</p>
+              <p className="text-[8px] font-medium text-blue-600 dark:text-blue-300 mt-0.5 hidden sm:block">Real-Time Development Status</p>
+            </div>
+          </motion.div>
+
+          {/* Clean Level Client Portal Window */}
+          <div className="w-full max-w-[640px] p-4 sm:p-6 rounded-3xl bg-white/90 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-200/90 dark:border-slate-700/80 shadow-2xl space-y-3 sm:space-y-4 relative group overflow-hidden z-20 hover:border-blue-500/60 transition-all duration-300">
+            {/* Laser Moving Shimmer Accent */}
+            <motion.div
+              className="absolute top-0 left-0 h-[2px] w-44 bg-gradient-to-r from-transparent via-blue-500 dark:via-cyan-400 to-transparent z-30"
+              animate={{ x: ['-100%', '350%'] }}
+              transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
+            />
+
+            {/* macOS Browser Header Bar */}
+            <div className="space-y-2.5 border-b border-slate-200/80 dark:border-slate-800/80 pb-2.5 sm:pb-3">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <div className="flex items-center gap-1 sm:gap-1.5">
+                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block shadow-sm" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block shadow-sm" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-sm" />
+                  </div>
+                  <div className="flex items-center gap-1 sm:gap-1.5 bg-slate-100 dark:bg-slate-800/90 px-2.5 sm:px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-700/60 ml-1 sm:ml-2">
+                    <img src="/logo.svg" alt="SejatiDimedia Logo" className="h-3.5 sm:h-4 w-auto object-contain" />
+                    <span className="text-[9px] sm:text-[11px] font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1 truncate max-w-[180px] sm:max-w-none">
+                      <Icon icon="ph:lock-key-duotone" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
+                      sejatidimedia.id/portal/projects
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Multi-Tab Pills */}
+              <div className="flex items-center justify-between gap-2 pt-0.5 sm:pt-1">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                  <span className="px-2 sm:px-2.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-bold bg-blue-500/15 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300 border border-blue-400/30 dark:border-blue-400/40 flex items-center gap-1">
+                    <Icon icon="ph:squares-four-duotone" className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-blue-600 dark:text-blue-400" />
+                    Dashboard
+                  </span>
+                  <span className="px-2 sm:px-2.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-1">
+                    <Icon icon="ph:folder-duotone" className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                    Deliverables
+                  </span>
+                  <span className="px-2 sm:px-2.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-1">
+                    <Icon icon="ph:receipt-duotone" className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                    Invoices
+                  </span>
+                </div>
+              </div>
             </div>
 
-            {/* Bottom Right Ultra-Clean Minimalist Stat Row (100% Theme-Adaptive Light & Dark Mode) */}
-            <motion.div
-              initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="mt-6 pt-6 border-t border-theme-border/60 flex flex-wrap sm:flex-nowrap items-center justify-between gap-6 sm:gap-8"
-              id="hero-stats-counters"
-            >
-              {/* Counter 1: 6+ Years Industry Experience */}
-              <div className="space-y-1.5 flex-1 group">
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-4xl sm:text-5xl font-sans font-black tracking-tight text-theme-fore">
-                    <AnimatedCounter to={5} />
-                  </span>
-                  <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">+</span>
-                  <span className="text-xs font-black text-theme-fore-muted uppercase tracking-widest ml-1">
-                    {language === 'en' ? 'Years' : 'Tahun'}
-                  </span>
-                </div>
-                <div>
-                  <div className="text-xs font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {language === 'en' ? 'Industry Experience' : 'Pengalaman Industri'}
+            {/* 1. Active Project Progress & Milestone Tasks Section */}
+            <div className="space-y-2.5 sm:space-y-3 bg-slate-50/80 dark:bg-slate-800/60 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200/80 dark:border-slate-700/60 relative overflow-hidden text-left shadow-inner">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20 dark:border-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
+                    <Icon icon="ph:kanban-duotone" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                   </div>
-                  <p className="text-[11px] text-theme-fore-muted font-medium">
-                    {language === 'en' ? 'Real Enterprise Systems' : 'Standar Sistem Manufaktur'}
-                  </p>
+                  <div>
+                    <p className="text-[10px] sm:text-xs font-bold text-slate-900 dark:text-white leading-tight">
+                      {t.clientPortal?.mockupTitle || "Dashboard Klien — Proyek Aktif"}
+                    </p>
+                    <p className="text-[8px] sm:text-[9px] text-slate-500 dark:text-slate-400 font-medium">Client: Timur Dian • Live Status</p>
+                  </div>
+                </div>
+                <motion.span
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                  className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-blue-500/15 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-400/30 shrink-0 shadow-sm"
+                >
+                  88% Completed
+                </motion.span>
+              </div>
+
+              {/* Milestone Task Checklist Row */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[9px] font-extrabold pt-0.5">
+                <div className="flex items-center gap-1 text-slate-700 dark:text-slate-300 bg-white/90 dark:bg-slate-900/60 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700/50">
+                  <Icon icon="ph:check-circle-fill" className="w-3 h-3 text-blue-600 dark:text-blue-400 shrink-0" />
+                  <span>Phase 1-3: UI/UX & DB Architecture</span>
+                </div>
+                <div className="flex items-center gap-1 text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/40 p-1.5 rounded-lg border border-blue-200 dark:border-blue-500/30">
+                  <span className="w-2 h-2 rounded-full bg-blue-500 dark:bg-blue-400 animate-pulse shrink-0" />
+                  <span>Phase 4: QA & Production Release</span>
                 </div>
               </div>
 
-              {/* Thin Elegant Vertical Divider */}
-              <div className="h-12 w-[1px] bg-theme-border/60 shrink-0 hidden sm:block" />
+              {/* Animated Progress Bar */}
+              <div className="w-full bg-slate-200/80 dark:bg-slate-900 h-2 rounded-full overflow-hidden p-0.5 border border-slate-200 dark:border-slate-700/60">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400 rounded-full"
+                  animate={{ width: ['70%', '88%', '70%'] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                />
+              </div>
+            </div>
 
-              {/* Counter 2: 32+ Independent Projects */}
-              <div className="space-y-1.5 flex-1 group">
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-4xl sm:text-5xl font-sans font-black tracking-tight text-theme-fore">
-                    <AnimatedCounter to={projects?.length || 32} />
-                  </span>
-                  <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">+</span>
-                  <span className="text-xs font-black text-theme-fore-muted uppercase tracking-widest ml-1">
-                    {language === 'en' ? 'Projects' : 'Proyek'}
-                  </span>
+            {/* 2. Invoice & Financial Settlement Row */}
+            <div className="bg-slate-50/80 dark:bg-slate-800/60 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-blue-500/30 dark:border-blue-500/40 space-y-2 sm:space-y-2.5 relative text-left shadow-inner">
+              <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800/80 pb-1.5 sm:pb-2">
+                <span className="text-[9px] sm:text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1 sm:gap-1.5">
+                  <Icon icon="ph:receipt-duotone" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400" />
+                  Project Billing & Invoices
+                </span>
+                <motion.span
+                  animate={{ opacity: [0.75, 1, 0.75] }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  className="px-2 py-0.5 rounded-full text-[8px] sm:text-[9px] font-black bg-blue-500/15 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-400/30 flex items-center gap-1 shadow-sm"
+                >
+                  <Icon icon="ph:check-circle-fill" className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-blue-600 dark:text-blue-400" />
+                  100% Settled
+                </motion.span>
+              </div>
+              <div className="grid grid-cols-3 gap-1.5 sm:gap-2 text-center">
+                <div className="bg-white dark:bg-slate-900/90 p-2 sm:p-2.5 rounded-lg sm:rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                  <p className="text-[7px] sm:text-[9px] font-extrabold text-slate-500 dark:text-slate-400 uppercase">Total Billed</p>
+                  <p className="text-[11px] sm:text-sm font-black text-slate-900 dark:text-white mt-0.5">Rp 37.2M</p>
                 </div>
-                <div>
-                  <div className="text-xs font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {language === 'en' ? 'Independent Work' : 'Proyek Independen'}
-                  </div>
-                  <p className="text-[11px] text-theme-fore-muted font-medium">
-                    {language === 'en' ? 'Live & Transparent Code' : 'Aplikasi & Repositori Active'}
-                  </p>
+                <div className="bg-blue-50 dark:bg-blue-950/50 p-2 sm:p-2.5 rounded-lg sm:rounded-xl border border-blue-200 dark:border-blue-500/40 relative overflow-hidden shadow-sm">
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-blue-400/20 to-blue-500/10 pointer-events-none"
+                    animate={{ x: ['-100%', '100%'] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                  <p className="text-[7px] sm:text-[9px] font-extrabold text-blue-600 dark:text-blue-400 uppercase">Amount Paid</p>
+                  <p className="text-[11px] sm:text-sm font-black text-blue-700 dark:text-blue-300 mt-0.5">Rp 37.2M</p>
+                </div>
+                <div className="bg-white dark:bg-slate-900/90 p-2 sm:p-2.5 rounded-lg sm:rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
+                  <p className="text-[7px] sm:text-[9px] font-extrabold text-slate-500 dark:text-slate-400 uppercase">Balance Due</p>
+                  <p className="text-[11px] sm:text-sm font-black text-slate-900 dark:text-white mt-0.5">Rp 0</p>
                 </div>
               </div>
+            </div>
 
-              {/* Thin Elegant Vertical Divider */}
-              <div className="h-12 w-[1px] bg-theme-border/60 shrink-0 hidden sm:block" />
-
-              {/* Counter 3: Client Portal Feature */}
-              <div className="space-y-1.5 flex-1 group">
-                <div className="flex items-baseline gap-1.5">
-                  <span className="text-4xl sm:text-5xl font-sans font-black tracking-tight text-theme-fore">
-                    <AnimatedCounter to={100} />
-                  </span>
-                  <span className="text-2xl font-extrabold text-blue-600 dark:text-blue-400">%</span>
-                  <span className="text-xs font-black text-theme-fore-muted uppercase tracking-widest ml-1">
-                    {language === 'en' ? 'Portal' : 'Transparan'}
-                  </span>
-                </div>
-                <div>
-                  <div className="text-xs font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors flex items-center gap-1.5">
-                    <span>{language === 'en' ? 'Client Portal Included' : 'Fitur Client Portal'}</span>
-                  </div>
-                  <p className="text-[11px] text-theme-fore-muted font-medium">
-                    {language === 'en' ? 'Live Progress & PDF Invoices' : 'Pantau Progres & Invoice Live'}
-                  </p>
-                </div>
+            {/* 3. Real-Time Activity Feed & Digital Signature Download Bar */}
+            <div className="bg-slate-100/80 dark:bg-slate-800/40 p-2 sm:p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 sm:gap-0 text-[9px] sm:text-[10px] text-slate-700 dark:text-slate-300">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                <Icon icon="ph:seal-check-duotone" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                <span>INV-202607-001: <strong className="text-slate-900 dark:text-white">Draft</strong></span>
               </div>
-            </motion.div>
-
+              <button className="px-2 sm:px-2.5 py-1 rounded-lg bg-blue-600/15 hover:bg-blue-600/30 text-blue-700 dark:bg-blue-600/30 dark:hover:bg-blue-600/50 dark:text-blue-300 border border-blue-400/30 dark:border-blue-400/40 text-[8px] sm:text-[9px] font-bold transition-all flex items-center gap-1 cursor-pointer">
+                <Icon icon="ph:download-simple-bold" className="w-3 h-3" />
+                PDF Invoice
+              </button>
+            </div>
           </div>
-
         </div>
-      </section>
 
-      {/* SECTION 1.5: AVAILABLE ON FREELANCE PLATFORMS BANNER */}
-      <motion.section
-        className="w-full max-w-4xl mx-auto pt-6 pb-10 sm:pb-20 px-4 sm:px-6"
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      >
-        <div className="relative group overflow-hidden rounded-3xl bg-theme-surface/30 backdrop-blur-xl border border-theme-border/50 shadow-2xl p-5 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6 hover:border-theme-border-accent/30 transition-all duration-500">
-          {/* Subtle moving glow inside the banner */}
-          <div className="absolute inset-0 bg-gradient-to-r from-theme-accent/5 via-transparent to-theme-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
+        {/* 3. Horizontal Connected Stepper Pipeline (01, 02, 03) */}
+        <div className="relative pt-6 pb-2 text-left max-w-5xl mx-auto">
+          {/* Glowing Laser Connector Rail Line (Desktop) */}
+          <div className="hidden md:block absolute top-[52px] left-[16%] right-[16%] h-[3px] bg-slate-200 dark:bg-slate-800 rounded-full z-0 overflow-hidden" />
+          <motion.div
+            className="hidden md:block absolute top-[52px] left-[16%] right-[50%] h-[3px] bg-gradient-to-r from-blue-600 via-cyan-400 to-indigo-500 rounded-full z-0 shadow-[0_0_12px_rgba(59,130,246,0.6)]"
+            animate={{ opacity: [0.7, 1, 0.7] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          />
 
-          <div className="flex flex-col items-center sm:items-start text-center sm:text-left z-10">
-            <span className="text-[10px] font-mono text-theme-accent font-bold uppercase tracking-[0.3em] mb-1.5">
-              {t.platforms?.secure || "Transaksi aman & terjamin"}
-            </span>
-            <h3 className="text-sm sm:text-base font-sans font-semibold text-theme-fore">
-              {t.platforms?.availableOn || "Tersedia juga di:"}
-            </h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
+            {/* Step 01 */}
+            <div className="group/step p-5 sm:p-6 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800/90 backdrop-blur-xl shadow-lg hover:border-blue-500/50 hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full relative overflow-hidden">
+              {/* Stepper Node Header Bar */}
+              <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-200/60 dark:border-slate-800/60">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-11 h-11 rounded-2xl bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-mono font-black text-sm flex items-center justify-center border-2 border-blue-500/40 shrink-0 shadow-md group-hover/step:border-blue-500 group-hover/step:scale-105 transition-all">
+                    01
+                  </div>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+                  <Icon icon="ph:chart-line-up-duotone" className="w-5 h-5" />
+                </div>
+              </div>
+
+              {/* Title & Description */}
+              <div className="space-y-1.5 pt-3">
+                <h3 className="text-sm sm:text-base font-bold text-theme-fore group-hover/step:text-blue-600 dark:group-hover/step:text-blue-400 transition-colors">
+                  {t.clientPortal?.point1Title || "Progress Real-Time"}
+                </h3>
+                <p className="text-xs text-theme-fore-muted leading-relaxed font-sans">
+                  {t.clientPortal?.point1Desc || "Lihat status setiap fase pengerjaan — dari planning, development, hingga testing."}
+                </p>
+              </div>
+            </div>
+
+            {/* Step 02 */}
+            <div className="group/step p-5 sm:p-6 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800/90 backdrop-blur-xl shadow-lg hover:border-blue-500/50 hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full relative overflow-hidden">
+              {/* Stepper Node Header Bar */}
+              <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-200/60 dark:border-slate-800/60">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-11 h-11 rounded-2xl bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-mono font-black text-sm flex items-center justify-center border-2 border-blue-500/40 shrink-0 shadow-md group-hover/step:border-blue-500 group-hover/step:scale-105 transition-all">
+                    02
+                  </div>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+                  <Icon icon="ph:receipt-duotone" className="w-5 h-5" />
+                </div>
+              </div>
+
+              {/* Title & Description */}
+              <div className="space-y-1.5 pt-3">
+                <h3 className="text-sm sm:text-base font-bold text-theme-fore group-hover/step:text-blue-600 dark:group-hover/step:text-blue-400 transition-colors">
+                  {t.clientPortal?.point2Title || "Invoice & Pembayaran Transparan"}
+                </h3>
+                <p className="text-xs text-theme-fore-muted leading-relaxed font-sans">
+                  {t.clientPortal?.point2Desc || "Riwayat billing dan status pembayaran tercatat jelas, tidak ada biaya tersembunyi."}
+                </p>
+              </div>
+            </div>
+
+            {/* Step 03 */}
+            <div className="group/step p-5 sm:p-6 rounded-2xl bg-white/80 dark:bg-slate-900/80 border border-slate-200/90 dark:border-slate-800/90 backdrop-blur-xl shadow-lg hover:border-blue-500/50 hover:shadow-xl transition-all duration-300 flex flex-col justify-between h-full relative overflow-hidden">
+              {/* Stepper Node Header Bar */}
+              <div className="flex items-center justify-between gap-3 pb-3 border-b border-slate-200/60 dark:border-slate-800/60">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-11 h-11 rounded-2xl bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 font-mono font-black text-sm flex items-center justify-center border-2 border-blue-500/40 shrink-0 shadow-md group-hover/step:border-blue-500 group-hover/step:scale-105 transition-all">
+                    03
+                  </div>
+                </div>
+                <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+                  <Icon icon="ph:bell-simple-ringing-duotone" className="w-5 h-5" />
+                </div>
+              </div>
+
+              {/* Title & Description */}
+              <div className="space-y-1.5 pt-3">
+                <h3 className="text-sm sm:text-base font-bold text-theme-fore group-hover/step:text-blue-600 dark:group-hover/step:text-blue-400 transition-colors">
+                  {t.clientPortal?.point3Title || "Update Tanpa Perlu Bertanya"}
+                </h3>
+                <p className="text-xs text-theme-fore-muted leading-relaxed font-sans">
+                  {t.clientPortal?.point3Desc || "Setiap milestone selesai, Anda mendapat notifikasi — bukan Anda yang harus mengejar update."}
+                </p>
+              </div>
+            </div>
           </div>
+        </div>
+      </motion.section>
 
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-3 sm:gap-4 w-full sm:w-auto z-10">
-            {/* Upwork */}
-            <a
-              href="https://www.upwork.com/freelancers/~017698b392e21b4b6c"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto flex items-center justify-center gap-3 px-5 py-3 rounded-2xl bg-[#14A800]/10 dark:bg-[#14A800]/5 border border-[#14A800]/20 hover:bg-[#14A800]/20 dark:hover:bg-[#14A800]/15 hover:border-[#14A800]/40 transition-all duration-300 group/btn"
-            >
-              <div className="w-8 h-8 rounded-full bg-[#14A800] flex items-center justify-center text-white font-black text-sm shadow-lg shadow-[#14A800]/30 group-hover/btn:scale-110 transition-transform duration-300">
-                <Icon icon="simple-icons:upwork" className="w-4 h-4" />
-              </div>
-              <span className="font-sans font-bold text-sm text-theme-fore">Upwork</span>
-            </a>
+      {/* SECTION: TENTANG SAYA (FROM FACTORY FLOOR TO LINES OF CODE) */}
+      <motion.section
+        id="about-section"
+        className="space-y-8 pt-4 pb-4"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+        variants={sectionFadeIn}
+      >
+        <div className="max-w-6xl mx-auto rounded-3xl bg-theme-elevated/70 border border-theme-border/80 p-6 sm:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+          {/* Ambient Glow Background Accent */}
+          <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 dark:bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
 
-            {/* Fastwork */}
-            <a
-              href="https://fastwork.id/en/user/timurradhadian?source=web_marketplace_profile-menu_profile"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto flex items-center justify-center gap-3 px-5 py-3 rounded-2xl bg-[#1D4ED8]/10 dark:bg-[#1D4ED8]/5 border border-[#1D4ED8]/20 hover:bg-[#1D4ED8]/20 dark:hover:bg-[#1D4ED8]/15 hover:border-[#1D4ED8]/40 transition-all duration-300 group/btn"
-            >
-              <div className="w-8 h-8 rounded-full bg-[#1D4ED8] flex items-center justify-center text-white font-black text-sm shadow-lg shadow-[#1D4ED8]/30 group-hover/btn:scale-110 transition-transform duration-300">
-                <Icon icon="ph:lightning-fill" className="w-4 h-4" />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center relative z-10">
+            {/* Left Column: Copy & Story (7 Cols) */}
+            <div className="lg:col-span-7 space-y-4 text-left">
+              <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
+                <span>{t.about?.eyebrow || "TENTANG SAYA"}</span>
               </div>
-              <span className="font-sans font-bold text-sm text-theme-fore">Fastwork</span>
-            </a>
+
+              <h2 className="text-3xl sm:text-4xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore">
+                {t.about?.title || "Dari Lantai Produksi ke Baris Kode"}
+              </h2>
+
+              <div className="space-y-3 text-xs sm:text-sm text-theme-fore-muted leading-relaxed font-sans">
+                <p>{t.about?.p1}</p>
+                <p>{t.about?.p2}</p>
+                {t.about?.p3 && <p>{t.about?.p3}</p>}
+              </div>
+            </div>
+
+            {/* Right Column: Visual Accent Card / Illustration (5 Cols) */}
+            <div className="lg:col-span-5 relative">
+              <div className="rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white/60 dark:bg-slate-900/80 p-6 shadow-xl space-y-4 backdrop-blur-md">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+                    <Icon icon="ph:factory-duotone" className="w-5 h-5" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="text-xs sm:text-sm font-bold text-theme-fore">
+                      {t.about?.card1Title || "5+ Tahun Pengalaman Manufaktur"}
+                    </h3>
+                    <p className="text-[10px] sm:text-xs text-theme-fore-muted">
+                      {t.about?.card1Desc || "ERP, Production, Inventory & Operational Workflow"}
+                    </p>
+                  </div>
+                </div>
+                <div className="h-[1px] bg-theme-border/60" />
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+                    <Icon icon="ph:cpu-duotone" className="w-5 h-5" />
+                  </div>
+                  <div className="text-left">
+                    <h3 className="text-xs sm:text-sm font-bold text-theme-fore">
+                      {t.about?.card2Title || "Sistem Digital Terintegrasi"}
+                    </h3>
+                    <p className="text-[10px] sm:text-xs text-theme-fore-muted">
+                      {t.about?.card2Desc || "Bukan sekadar website, tapi sistem operasional nyata"}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </motion.section>
@@ -695,7 +740,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           </div>
           <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore">
             {t.nav.services}{' '}
-            <span className="bg-gradient-to-r from-slate-900 via-blue-600 via-35% to-[#38BDF8] dark:from-white dark:via-blue-500 dark:via-35% dark:to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]">
+            <span className="text-theme-accent">
               {t.services.mainHeadingHighlight}
             </span>
           </h2>
@@ -717,11 +762,10 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 layout
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
                 onMouseEnter={() => setOpenServiceIndex(idx)}
-                className={`rounded-3xl transition-all duration-300 overflow-hidden ${
-                  isOpen
-                    ? 'bg-white/95 dark:bg-slate-900/95 border border-blue-500/30 dark:border-blue-500/40 shadow-[0_20px_50px_rgba(43,84,149,0.12)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl p-6 sm:p-8 text-slate-900 dark:text-white relative'
-                    : 'bg-white/70 dark:bg-theme-elevated/70 border border-slate-200/80 dark:border-theme-border/80 hover:border-blue-500/40 p-5 sm:p-7 cursor-pointer group hover:bg-white dark:hover:bg-theme-elevated shadow-sm hover:shadow-md'
-                }`}
+                className={`rounded-3xl transition-all duration-300 overflow-hidden ${isOpen
+                  ? 'bg-white/95 dark:bg-slate-900/95 border border-blue-500/30 dark:border-blue-500/40 shadow-[0_20px_50px_rgba(43,84,149,0.12)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl p-6 sm:p-8 text-slate-900 dark:text-white relative'
+                  : 'bg-white/70 dark:bg-theme-elevated/70 border border-slate-200/80 dark:border-theme-border/80 hover:border-blue-500/40 p-5 sm:p-7 cursor-pointer group hover:bg-white dark:hover:bg-theme-elevated shadow-sm hover:shadow-md'
+                  }`}
               >
                 {isOpen ? (
                   <div className="space-y-6">
@@ -816,7 +860,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             <div className="lg:col-span-7">
               <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore text-left">
                 {t.tech.mainHeading}{' '}
-                <span className="bg-gradient-to-r from-slate-900 via-blue-600 via-35% to-[#38BDF8] dark:from-white dark:via-blue-500 dark:via-35% dark:to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]">
+                <span className="text-theme-accent">
                   {t.tech.mainHeadingHighlight}
                 </span>
               </h2>
@@ -1003,7 +1047,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             </div>
             <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.15] text-theme-fore max-w-2xl text-left">
               {t.portfolio.mainHeading}{' '}
-              <span className="bg-gradient-to-r from-slate-900 via-blue-600 via-35% to-[#38BDF8] dark:from-white dark:via-blue-500 dark:via-35% dark:to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]">
+              <span className="text-theme-accent">
                 {t.portfolio.mainHeadingHighlight}
               </span>
             </h2>
@@ -1281,7 +1325,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           </div>
           <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.15] text-theme-fore max-w-3xl text-left">
             {t.trust?.mainHeading || "Kenapa Klien Percaya"}{' '}
-            <span className="bg-gradient-to-r from-slate-900 via-blue-600 via-35% to-[#38BDF8] dark:from-white dark:via-blue-500 dark:via-35% dark:to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]">
+            <span className="text-theme-accent">
               {t.trust?.mainHeadingHighlight || "Bekerja Sama Dengan Saya"}
             </span>
           </h2>
@@ -1583,7 +1627,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
 
               <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore">
                 {t.contact.mainHeading}{' '}
-                <span className="bg-gradient-to-r from-slate-900 via-blue-600 via-35% to-[#38BDF8] dark:from-white dark:via-blue-500 dark:via-35% dark:to-[#38BDF8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]">
+                <span className="text-theme-accent">
                   {t.contact.mainHeadingHighlight}
                 </span>
               </h2>
@@ -1826,6 +1870,54 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             </AnimatePresence>
           </div>
 
+        </div>
+      </motion.section>
+
+      {/* SECTION: FREELANCE PLATFORMS TRUST BADGE (PROPORTIONED & CLEAN) */}
+      <motion.section
+        className="w-full max-w-4xl mx-auto pt-6 pb-6 px-4 sm:px-6"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={sectionFadeIn}
+      >
+        <div className="relative group overflow-hidden rounded-2xl bg-theme-elevated/80 backdrop-blur-xl border border-theme-border/80 p-4.5 sm:p-5.5 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-theme-border-accent/40 transition-all duration-300">
+          {/* Subtle glow background */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-theme-accent/5 rounded-full blur-3xl pointer-events-none" />
+
+          <div className="space-y-1 text-center md:text-left z-10">
+            <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.25em] text-theme-accent font-bold">
+              {t.platforms?.secure || "TRANSAKSI AMAN & TERJAMIN"}
+            </span>
+            <h3 className="text-xs sm:text-base font-semibold text-theme-fore leading-snug">
+              {t.platforms?.availableOn || "Rekam jejak proyek saya juga dapat dilihat di Upwork & Fastwork"}
+            </h3>
+          </div>
+
+          <div className="flex flex-wrap sm:flex-nowrap items-center justify-center gap-2.5 sm:gap-3 shrink-0 z-10 w-full sm:w-auto">
+            <a
+              href="https://www.upwork.com/freelancers/~017698b392e21b4b6c"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#14A800]/10 dark:bg-[#14A800]/15 border border-[#14A800]/30 hover:bg-[#14A800]/20 hover:border-[#14A800]/50 transition-all text-xs sm:text-sm font-bold text-theme-fore shadow-sm group/upwork"
+            >
+              <div className="w-5.5 h-5.5 rounded-lg bg-[#14A800] text-white flex items-center justify-center group-hover/upwork:scale-110 transition-transform shadow-sm">
+                <Icon icon="simple-icons:upwork" className="w-3.5 h-3.5" />
+              </div>
+              <span>Upwork</span>
+            </a>
+            <a
+              href="https://fastwork.id/en/user/timurradhadian?source=web_marketplace_profile-menu_profile"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#1D4ED8]/10 dark:bg-[#1D4ED8]/15 border border-[#1D4ED8]/30 hover:bg-[#1D4ED8]/20 hover:border-[#1D4ED8]/50 transition-all text-xs sm:text-sm font-bold text-theme-fore shadow-sm group/fastwork"
+            >
+              <div className="w-5.5 h-5.5 rounded-lg bg-[#1D4ED8] text-white flex items-center justify-center group-hover/fastwork:scale-110 transition-transform shadow-sm">
+                <Icon icon="ph:lightning-fill" className="w-3.5 h-3.5" />
+              </div>
+              <span>Fastwork</span>
+            </a>
+          </div>
         </div>
       </motion.section>
 
