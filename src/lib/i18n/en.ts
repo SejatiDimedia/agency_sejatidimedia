@@ -357,6 +357,8 @@ export const en = {
     askPlaceholder: "Type here...",
     askSuccess: "Consultation Sent Successfully!",
     askSuccessDesc: "I will reply to your question to the email you registered within a maximum of 24 working hours.",
+    otherQuestions: "Have another question?",
+    otherQuestionsSub: "Contact me directly via the official SejatiDimedia email.",
     items: [
       {
         q: "What is the estimated timeline for a project?",

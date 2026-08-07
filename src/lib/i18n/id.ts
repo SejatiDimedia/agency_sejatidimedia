@@ -357,6 +357,8 @@ export const id = {
     askPlaceholder: "Tulis di sini...",
     askSuccess: "Konsultasi Berhasil Dikirim!",
     askSuccessDesc: "Saya akan membalas pertanyaan Anda ke email yang Anda daftarkan maksimal dalam 24 jam kerja.",
+    otherQuestions: "Ada pertanyaan lain?",
+    otherQuestionsSub: "Hubungi saya secara langsung melalui email resmi SejatiDimedia.",
     items: [
       {
         q: "Berapa lama estimasi pengerjaan sebuah proyek?",

@@ -843,187 +843,369 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         </div>
       </motion.section>
 
-      {/* SECTION 9: TECHNOLOGY (REVISED TO CATEGORIES) */}
+      {/* SECTION 9: TECHNOLOGY (CIRCULAR RADIAL HUB REDESIGN) */}
       <motion.section
         id="technology-section"
-        className="space-y-12 pt-6"
+        className="space-y-8 pt-6 relative overflow-hidden"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={sectionFadeIn}
       >
-        <div className="space-y-4">
+        {/* MOBILE & TABLET HEADER (Below MD) */}
+        <div className="space-y-3 block md:hidden text-left">
           <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
-            <span>Teknologi</span>
+            <span>{t.tech.badge || "Teknologi"}</span>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-end">
-            <div className="lg:col-span-7">
-              <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore text-left">
-                {t.tech.mainHeading}{' '}
-                <span className="text-theme-accent">
-                  {t.tech.mainHeadingHighlight}
-                </span>
-              </h2>
+          <h2 className="text-2xl sm:text-3.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore">
+            {t.tech.mainHeading}{' '}
+            <span className="text-theme-accent">
+              {t.tech.mainHeadingHighlight}
+            </span>
+          </h2>
+          <p className="text-xs text-theme-fore-muted leading-relaxed max-w-xl">
+            {t.tech.desc}
+          </p>
+        </div>
+
+        {/* DESKTOP CIRCULAR RADIAL HUB LAYOUT (MD & UP) */}
+        <div className="hidden md:block relative max-w-6xl mx-auto py-8 px-2 sm:px-4">
+          {/* Ambient Radial Background Glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-tr from-blue-600/10 via-purple-600/10 to-indigo-600/15 rounded-full blur-[130px] pointer-events-none -z-10" />
+
+          {/* Hub Stage: 3 Columns Grid (Left 4 Cols - Center Spaced Hub 4 Cols - Right 4 Cols) */}
+          <div className="grid grid-cols-12 gap-8 lg:gap-10 items-center relative z-10">
+            {/* LEFT COLUMN: 3 Category Cards (col-span-4) */}
+            <div className="col-span-4 space-y-6 text-left">
+              {/* Card 1: Frontend */}
+              <motion.div
+                variants={cardSlideUp}
+                className="group p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.25)] backdrop-blur-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+              >
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <h3 className="text-base font-sans font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    Frontend
+                  </h3>
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+                    <Icon icon="ph:layout-duotone" className="w-4 h-4" />
+                  </div>
+                </div>
+                <p className="text-xs text-theme-fore-muted mb-4 font-sans leading-relaxed">{t.tech.frontendDesc}</p>
+                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-theme-border/50">
+                  {["React", "Vue", "Angular", "Next.js", "Vite", "TypeScript", "Tailwind CSS"].map((tech) => (
+                    <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 text-slate-800 dark:text-slate-200 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-sm">
+                      <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
+                      <span>{tech}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Card 3: Database */}
+              <motion.div
+                variants={cardSlideUp}
+                className="group p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.25)] backdrop-blur-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+              >
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <h3 className="text-base font-sans font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {t.tech.database}
+                  </h3>
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+                    <Icon icon="ph:database-duotone" className="w-4 h-4" />
+                  </div>
+                </div>
+                <p className="text-xs text-theme-fore-muted mb-4 font-sans leading-relaxed">{t.tech.databaseDesc}</p>
+                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-theme-border/50">
+                  {["MySQL", "PostgreSQL", "MongoDB", "Firestore", "Redis"].map((tech) => (
+                    <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 text-slate-800 dark:text-slate-200 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-sm">
+                      <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
+                      <span>{tech}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Card 5: Infrastructure */}
+              <motion.div
+                variants={cardSlideUp}
+                className="group p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.25)] backdrop-blur-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+              >
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <h3 className="text-base font-sans font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {t.tech.infra}
+                  </h3>
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+                    <Icon icon="ph:cloud-duotone" className="w-4 h-4" />
+                  </div>
+                </div>
+                <p className="text-xs text-theme-fore-muted mb-4 font-sans leading-relaxed">{t.tech.infraDesc}</p>
+                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-theme-border/50">
+                  {["Docker", "AWS", "Google Cloud", "Firebase"].map((tech) => (
+                    <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 text-slate-800 dark:text-slate-200 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-sm">
+                      <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
+                      <span>{tech}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
             </div>
-            <div className="lg:col-span-5">
-              <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed text-left">
-                {t.tech.desc}
-              </p>
+
+            {/* CENTER HUB STAGE (col-span-4 with Generous Distance & SVG Connectors) */}
+            <div className="col-span-4 flex flex-col items-center justify-center relative py-6 px-4">
+              {/* SVG Connecting Spoke Lines linking Cards to Central Hub */}
+              <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible" viewBox="0 0 200 400" preserveAspectRatio="none">
+                <line x1="0" y1="60" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1.5" strokeDasharray="4 4" />
+                <line x1="0" y1="200" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1.5" strokeDasharray="4 4" />
+                <line x1="0" y1="340" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1.5" strokeDasharray="4 4" />
+                <line x1="200" y1="60" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1.5" strokeDasharray="4 4" />
+                <line x1="200" y1="200" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1.5" strokeDasharray="4 4" />
+                <line x1="200" y1="340" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1.5" strokeDasharray="4 4" />
+              </svg>
+
+              {/* Spaced Central Hub Window with Rotating Orbital Rings */}
+              <div className="w-44 h-44 lg:w-48 lg:h-48 rounded-full bg-white/95 dark:bg-slate-900/95 border-2 border-blue-500/40 dark:border-blue-400/50 backdrop-blur-2xl shadow-[0_0_60px_rgba(59,130,246,0.3)] flex flex-col items-center justify-center text-center p-5 relative z-20 group hover:border-blue-500 hover:scale-105 transition-all duration-500">
+                
+                {/* 1. OUTER ROTATING DASHED ORBITAL RING (CLOCKWISE SPIN 20s) */}
+                <div className="absolute -inset-6 rounded-full border border-dashed border-blue-500/35 animate-[spin_20s_linear_infinite] pointer-events-none flex items-center justify-center">
+                  {/* Orbiting Satellite Glowing Dot (Top) */}
+                  <div className="absolute -top-1.5 w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_12px_rgba(59,130,246,0.9)]" />
+                  {/* Orbiting Satellite Glowing Dot (Bottom) */}
+                  <div className="absolute -bottom-1.5 w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.9)]" />
+                </div>
+
+                {/* 2. INNER COUNTER-ROTATING RING (REVERSE SPIN 12s) */}
+                <div className="absolute -inset-2.5 rounded-full border-2 border-blue-500/40 border-t-transparent border-b-transparent animate-[spin_12s_linear_infinite_reverse] pointer-events-none" />
+
+                {/* 3. GLOWING PULSE RING */}
+                <div className="absolute -inset-1 rounded-full border border-blue-500/20 animate-pulse pointer-events-none" />
+
+                {/* Center Content */}
+                <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold mb-1.5 shadow-inner group-hover:rotate-12 transition-transform duration-300">
+                  <Icon icon="ph:cpu-duotone" className="w-5 h-5 animate-pulse" />
+                </div>
+                <span className="text-[8px] font-mono font-extrabold uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-0.5">
+                  Tech Stack
+                </span>
+                <h3 className="text-sm lg:text-base font-display font-extrabold text-theme-fore leading-tight">
+                  Stack Of<br />Technology
+                </h3>
+              </div>
+            </div>
+
+            {/* RIGHT COLUMN: 3 Category Cards (col-span-4) */}
+            <div className="col-span-4 space-y-6 text-left">
+              {/* Card 2: Backend & API */}
+              <motion.div
+                variants={cardSlideUp}
+                className="group p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.25)] backdrop-blur-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+              >
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <h3 className="text-base font-sans font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {t.tech.backend}
+                  </h3>
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+                    <Icon icon="ph:hard-drives-duotone" className="w-4 h-4" />
+                  </div>
+                </div>
+                <p className="text-xs text-theme-fore-muted mb-4 font-sans leading-relaxed">{t.tech.backendDesc}</p>
+                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-theme-border/50">
+                  {["Laravel", "Node.js", "Golang", "Python", "Express", "GraphQL"].map((tech) => (
+                    <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 text-slate-800 dark:text-slate-200 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-sm">
+                      <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
+                      <span>{tech}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Card 4: Mobile */}
+              <motion.div
+                variants={cardSlideUp}
+                className="group p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.25)] backdrop-blur-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+              >
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <h3 className="text-base font-sans font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {t.tech.mobile}
+                  </h3>
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+                    <Icon icon="ph:device-mobile-speaker-duotone" className="w-4 h-4" />
+                  </div>
+                </div>
+                <p className="text-xs text-theme-fore-muted mb-4 font-sans leading-relaxed">{t.tech.mobileDesc}</p>
+                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-theme-border/50">
+                  {["React Native", "Flutter"].map((tech) => (
+                    <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 text-slate-800 dark:text-slate-200 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-sm">
+                      <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
+                      <span>{tech}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
+
+              {/* Card 6: Third-Party Integration */}
+              <motion.div
+                variants={cardSlideUp}
+                className="group p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.25)] backdrop-blur-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+              >
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <h3 className="text-base font-sans font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    {t.tech.integrationTitle}
+                  </h3>
+                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
+                    <Icon icon="ph:share-network-duotone" className="w-4 h-4" />
+                  </div>
+                </div>
+                <p className="text-xs text-theme-fore-muted mb-4 font-sans leading-relaxed">{t.tech.integrationDesc}</p>
+                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-theme-border/50">
+                  {["Rest API", "Payment Integration", "Cloud Storage", "OAuth Providers"].map((tech) => (
+                    <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 text-slate-800 dark:text-slate-200 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-sm">
+                      <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
+                      <span>{tech}</span>
+                    </div>
+                  ))}
+                </div>
+              </motion.div>
             </div>
           </div>
         </div>
 
-        {/* Grouped Category Cards Grid - Modern Bento Layout */}
+        {/* MOBILE RESPONSIVE FALLBACK: STANDARD GRID (BELOW MD) */}
         <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-5 block md:hidden text-left pt-2"
           variants={staggerContainer}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          {/* Frontend - Wide Card */}
+          {/* Card 1: Frontend */}
           <motion.div
-            className="group md:col-span-2 p-6 md:p-8 rounded-3xl bg-theme-elevated/60 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
             variants={cardSlideUp}
+            className="p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 space-y-3"
           >
-            <div className="absolute -top-12 -right-12 w-48 h-48 bg-theme-accent-glow/20 rounded-full blur-3xl pointer-events-none group-hover:bg-theme-accent-glow/40 transition-colors duration-500" />
-            <div className="space-y-4 relative z-10">
-              <div className="w-10 h-10 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent shadow-sm group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300">
-                <Icon icon="ph:layout-duotone" className="w-5 h-5" />
-              </div>
-              <div className="space-y-1.5">
-                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">Frontend</h3>
-                <p className="text-xs text-theme-fore-muted max-w-sm leading-relaxed">{t.tech.frontendDesc}</p>
-              </div>
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-sans font-extrabold text-theme-fore">
+                Frontend
+              </h3>
+              <Icon icon="ph:layout-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </div>
-            <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
+            <p className="text-xs text-theme-fore-muted font-sans leading-relaxed">{t.tech.frontendDesc}</p>
+            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-theme-border/40">
               {["React", "Vue", "Angular", "Next.js", "Vite", "TypeScript", "Tailwind CSS"].map((tech) => (
-                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-black dark:text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent dark:hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech shadow-sm">
-                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
+                <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 flex items-center gap-1">
+                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
                   <span>{tech}</span>
-                </div>))}
+                </div>
+              ))}
             </div>
           </motion.div>
 
-          {/* Backend - Square Card */}
+          {/* Card 2: Backend */}
           <motion.div
-            className="group p-6 md:p-8 rounded-3xl bg-theme-elevated/60 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
             variants={cardSlideUp}
+            className="p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 space-y-3"
           >
-            <div className="absolute -bottom-12 -left-12 w-32 h-32 bg-theme-accent-glow/20 rounded-full blur-2xl pointer-events-none group-hover:bg-theme-accent-glow/40 transition-colors duration-500" />
-            <div className="space-y-4 relative z-10">
-              <div className="w-10 h-10 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent shadow-sm group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300">
-                <Icon icon="ph:hard-drives-duotone" className="w-5 h-5" />
-              </div>
-              <div className="space-y-1.5">
-                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">{t.tech.backend}</h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">{t.tech.backendDesc}</p>
-              </div>
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-sans font-extrabold text-theme-fore">
+                {t.tech.backend}
+              </h3>
+              <Icon icon="ph:hard-drives-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </div>
-            <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
+            <p className="text-xs text-theme-fore-muted font-sans leading-relaxed">{t.tech.backendDesc}</p>
+            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-theme-border/40">
               {["Laravel", "Node.js", "Golang", "Python", "Express", "GraphQL"].map((tech) => (
-                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-black dark:text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent dark:hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech shadow-sm">
-                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
+                <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 flex items-center gap-1">
+                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
                   <span>{tech}</span>
-                </div>))}
+                </div>
+              ))}
             </div>
           </motion.div>
 
-          {/* Database - Square Card */}
+          {/* Card 3: Database */}
           <motion.div
-            className="group p-6 md:p-8 rounded-3xl bg-theme-elevated/60 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
             variants={cardSlideUp}
+            className="p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 space-y-3"
           >
-            <div className="absolute top-0 right-0 w-32 h-32 bg-theme-accent-glow/10 rounded-full blur-2xl pointer-events-none group-hover:bg-theme-accent-glow/30 transition-colors duration-500" />
-            <div className="space-y-4 relative z-10">
-              <div className="w-10 h-10 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent shadow-sm group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300">
-                <Icon icon="ph:database-duotone" className="w-5 h-5" />
-              </div>
-              <div className="space-y-1.5">
-                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">{t.tech.database}</h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">{t.tech.databaseDesc}</p>
-              </div>
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-sans font-extrabold text-theme-fore">
+                {t.tech.database}
+              </h3>
+              <Icon icon="ph:database-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </div>
-            <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
+            <p className="text-xs text-theme-fore-muted font-sans leading-relaxed">{t.tech.databaseDesc}</p>
+            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-theme-border/40">
               {["MySQL", "PostgreSQL", "MongoDB", "Firestore", "Redis"].map((tech) => (
-                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-black dark:text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent dark:hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech shadow-sm">
-                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
+                <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 flex items-center gap-1">
+                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
                   <span>{tech}</span>
-                </div>))}
+                </div>
+              ))}
             </div>
           </motion.div>
 
-          {/* Mobile - Square Card */}
+          {/* Card 4: Mobile */}
           <motion.div
-            className="group p-6 md:p-8 rounded-3xl bg-theme-elevated/60 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
             variants={cardSlideUp}
+            className="p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 space-y-3"
           >
-            <div className="absolute top-1/2 right-1/2 w-32 h-32 bg-theme-accent-glow/10 rounded-full blur-2xl pointer-events-none group-hover:bg-theme-accent-glow/30 transition-colors duration-500" />
-            <div className="space-y-4 relative z-10">
-              <div className="w-10 h-10 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent shadow-sm group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300">
-                <Icon icon="ph:device-mobile-speaker-duotone" className="w-5 h-5" />
-              </div>
-              <div className="space-y-1.5">
-                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">{t.tech.mobile}</h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">{t.tech.mobileDesc}</p>
-              </div>
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-sans font-extrabold text-theme-fore">
+                {t.tech.mobile}
+              </h3>
+              <Icon icon="ph:device-mobile-speaker-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </div>
-            <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
+            <p className="text-xs text-theme-fore-muted font-sans leading-relaxed">{t.tech.mobileDesc}</p>
+            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-theme-border/40">
               {["React Native", "Flutter"].map((tech) => (
-                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-black dark:text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent dark:hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech shadow-sm">
-                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
+                <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 flex items-center gap-1">
+                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
                   <span>{tech}</span>
-                </div>))}
+                </div>
+              ))}
             </div>
           </motion.div>
 
-          {/* Infrastructure - Square Card */}
+          {/* Card 5: Infrastructure */}
           <motion.div
-            className="group p-6 md:p-8 rounded-3xl bg-theme-elevated/60 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
             variants={cardSlideUp}
+            className="p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 space-y-3"
           >
-            <div className="absolute bottom-0 right-0 w-32 h-32 bg-theme-accent-glow/10 rounded-full blur-2xl pointer-events-none group-hover:bg-theme-accent-glow/30 transition-colors duration-500" />
-            <div className="space-y-4 relative z-10">
-              <div className="w-10 h-10 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent shadow-sm group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300">
-                <Icon icon="ph:cloud-duotone" className="w-5 h-5" />
-              </div>
-              <div className="space-y-1.5">
-                <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">{t.tech.infra}</h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">{t.tech.infraDesc}</p>
-              </div>
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-sans font-extrabold text-theme-fore">
+                {t.tech.infra}
+              </h3>
+              <Icon icon="ph:cloud-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             </div>
-            <div className="flex flex-wrap gap-2 pt-6 mt-6 border-t border-theme-border/40 relative z-10">
+            <p className="text-xs text-theme-fore-muted font-sans leading-relaxed">{t.tech.infraDesc}</p>
+            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-theme-border/40">
               {["Docker", "AWS", "Google Cloud", "Firebase"].map((tech) => (
-                <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-black dark:text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent dark:hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech shadow-sm">
-                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
+                <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 flex items-center gap-1">
+                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
                   <span>{tech}</span>
-                </div>))}
+                </div>
+              ))}
             </div>
           </motion.div>
 
-          {/* Integrasi - Super Wide Card */}
+          {/* Card 6: Third-Party Integration */}
           <motion.div
-            className="group md:col-span-2 lg:col-span-3 p-6 md:p-8 rounded-3xl bg-theme-elevated/60 border border-theme-border hover:border-theme-border-accent/40 hover:shadow-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
             variants={cardSlideUp}
+            className="p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 space-y-3 sm:col-span-2"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-theme-accent-glow/5 via-transparent to-theme-accent-glow/5 pointer-events-none group-hover:from-theme-accent-glow/10 group-hover:to-theme-accent-glow/10 transition-colors duration-500" />
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
-              <div className="space-y-4 max-w-lg">
-                <div className="w-10 h-10 rounded-xl bg-theme-surface border border-theme-border flex items-center justify-center text-theme-accent shadow-sm group-hover:scale-110 group-hover:border-theme-accent/50 transition-all duration-300">
-                  <Icon icon="ph:share-network-duotone" className="w-5 h-5" />
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-sans font-extrabold text-theme-fore">
+                {t.tech.integrationTitle}
+              </h3>
+              <Icon icon="ph:share-network-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+            </div>
+            <p className="text-xs text-theme-fore-muted font-sans leading-relaxed">{t.tech.integrationDesc}</p>
+            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-theme-border/40">
+              {["Rest API", "Payment Integration", "Cloud Storage", "OAuth Providers"].map((tech) => (
+                <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 flex items-center gap-1">
+                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
+                  <span>{tech}</span>
                 </div>
-                <div className="space-y-1.5">
-                  <h3 className="text-lg font-sans font-extrabold text-theme-fore group-hover:text-theme-accent transition-colors">{t.tech.integrationTitle}</h3>
-                  <p className="text-xs text-theme-fore-muted leading-relaxed">{t.tech.integrationDesc}</p>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-2 justify-start md:justify-end flex-grow w-full md:max-w-md">
-                {["Rest API", "Payment Integration", "Cloud Storage", "OAuth Providers"].map((tech) => (
-                  <div key={tech} className="px-3 py-1.5 rounded-xl text-[10px] font-mono font-medium bg-theme-surface border border-theme-border/60 text-black dark:text-theme-fore-muted hover:border-theme-accent/50 hover:text-theme-accent dark:hover:text-theme-accent hover:bg-theme-accent/5 transition-all duration-300 cursor-default flex items-center gap-1.5 group/tech shadow-sm">
-                    <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
-                    <span>{tech}</span>
-                  </div>))}
-              </div>
+              ))}
             </div>
           </motion.div>
         </motion.div>
@@ -1598,6 +1780,25 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 </div>
               );
             })}
+          </div>
+
+          {/* FAQ Bottom Direct Email Section */}
+          <div className="lg:col-span-12 pt-6 mt-4 border-t border-theme-border/40 flex flex-col sm:flex-row items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 backdrop-blur-xl shadow-lg">
+            <div className="space-y-1 text-center sm:text-left">
+              <h4 className="text-base sm:text-lg font-display font-extrabold text-theme-fore">
+                {t.faq.otherQuestions}
+              </h4>
+              <p className="text-xs text-theme-fore-muted">
+                {t.faq.otherQuestionsSub}
+              </p>
+            </div>
+            <a
+              href="mailto:sejatidimedia@gmail.com"
+              className="px-6 py-3 rounded-2xl bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30 text-blue-600 dark:text-blue-400 font-mono text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-2.5 group shrink-0 shadow-sm hover:scale-[1.02]"
+            >
+              <Icon icon="ph:envelope-simple-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400 group-hover:scale-110 transition-transform" />
+              <span>sejatidimedia@gmail.com</span>
+            </a>
           </div>
 
         </div>
