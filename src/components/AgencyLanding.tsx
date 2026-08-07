@@ -830,7 +830,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
         {/* DESKTOP CIRCULAR RADIAL HUB LAYOUT (MD & UP) */}
         <div className="hidden md:block relative max-w-6xl mx-auto py-8 px-2 sm:px-4">
           {/* Ambient Radial Background Glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-gradient-to-tr from-blue-600/10 via-purple-600/10 to-indigo-600/15 rounded-full blur-[130px] pointer-events-none -z-10" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none -z-10" />
 
           {/* Hub Stage: 3 Columns Grid (Left 4 Cols - Center Spaced Hub 4 Cols - Right 4 Cols) */}
           <div className="grid grid-cols-12 gap-8 lg:gap-10 items-center relative z-10">
