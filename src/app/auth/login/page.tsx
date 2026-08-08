@@ -95,8 +95,8 @@ export default function LoginPage() {
             <div className="w-10 h-10 flex items-center justify-center shrink-0">
               <img src="/logo.svg" alt="SejatiDimedia Logo" className="w-full h-full object-contain" />
             </div>
-            <span className="font-extrabold text-slate-900 text-xl tracking-tight uppercase font-sora" style={{ fontFamily: "'Sora', sans-serif" }}>
-              <span style={{ color: '#2E54A2' }}>Sejati</span> <span style={{ color: '#23385B' }}>Dimedia</span>
+            <span className="font-extrabold text-slate-900 text-xl tracking-tight uppercase">
+              <span className='font-sora' style={{ color: '#2E54A2' }}>Sejati</span> <span className='font-sora' style={{ color: '#23385B' }}>Dimedia</span>
             </span>
           </div>
 

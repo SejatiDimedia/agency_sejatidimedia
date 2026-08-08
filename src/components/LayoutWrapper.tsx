@@ -238,10 +238,9 @@ export default function LayoutWrapper({
                 />
               </div>
               <span
-                className="font-bold text-slate-900 md:text-[20px] text-base leading-snug tracking-tight uppercase font-sora"
-                style={{ fontFamily: "'Sora', sans-serif" }}
+                className="font-bold text-slate-900 md:text-[20px] text-base leading-snug tracking-tight uppercase"
               >
-                <span style={{ color: '#2E54A2' }}>Sejati</span> <span style={{ color: '#23385B' }}>Dimedia</span>
+                <span className="font-sora" style={{ color: '#2E54A2' }}>Sejati</span> <span className="font-sora" style={{ color: '#23385B' }}>Dimedia</span>
               </span>
             </div>
 
