@@ -669,12 +669,12 @@ export default function LayoutWrapper({
           </header>
 
           {/* Core Body Content */}
-          <main className="relative z-10 flex-grow w-full max-w-7xl mx-auto px-6 pt-28 sm:pt-32 pb-10">
+          <main className={`relative z-10 flex-grow w-full ${pathname === "/" ? "pt-16 sm:pt-20 pb-0" : "max-w-7xl mx-auto px-6 pt-28 sm:pt-32 pb-12"}`}>
             {children}
           </main>
 
           {/* Clean Portal Footer */}
-          <footer className="relative z-10 w-full bg-white/80 backdrop-blur-xl border-t border-slate-200/80 pt-16 pb-28 md:pb-12 text-slate-800">
+          <footer className="relative z-10 w-full bg-[#F8FAFC] border-t border-slate-200/80 pt-16 pb-28 md:pb-12 text-slate-800">
             <div className="max-w-7xl mx-auto px-6 space-y-16">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
                 <div className="md:col-span-7 space-y-6 text-left">
