@@ -1,6 +1,7 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import NextTopLoader from 'nextjs-toploader';
+import Script from 'next/script';
 import LayoutWrapper from "../components/LayoutWrapper";
 
 export const metadata: Metadata = {
@@ -129,6 +130,22 @@ export default function RootLayout({
           speed={200}
           shadow="0 0 10px #4A85D9,0 0 5px #4A85D9"
         />
+        {/* Google tag (gtag.js) - Google Analytics 4 */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-003JB1NX1M"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-003JB1NX1M', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
