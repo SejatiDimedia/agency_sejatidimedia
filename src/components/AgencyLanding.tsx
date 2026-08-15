@@ -40,10 +40,10 @@ const GlintStar = ({ className, delay = 0 }: { className?: string; delay?: numbe
 );
 
 const SERVICE_IMAGES = [
-  '/service_web_app.jpg',
-  '/service_mobile_app.jpg',
-  '/service_saas_app.jpg',
-  '/service_ai_llm.jpg',
+  '/service_web_app.webp',
+  '/service_mobile_app.webp',
+  '/service_saas_app.webp',
+  '/service_ai_llm.webp',
 ];
 
 const sectionFadeIn = {
@@ -718,7 +718,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           {(t.services.items || []).map((item: any, idx: number) => {
             const isOpen = openServiceIndex === idx;
             const itemNum = `(${String(idx + 1).padStart(2, '0')})`;
-            const imageSrc = SERVICE_IMAGES[idx] || '/service_web_app.jpg';
+            const imageSrc = SERVICE_IMAGES[idx] || '/service_web_app.webp';
 
             return (
               <motion.div
@@ -728,14 +728,14 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                 onMouseEnter={() => setOpenServiceIndex(idx)}
                 className={`rounded-3xl transition-all duration-300 overflow-hidden ${isOpen
                   ? 'bg-white/95 dark:bg-slate-900/95 border border-blue-500/30 dark:border-blue-500/40 shadow-[0_20px_50px_rgba(43,84,149,0.12)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl p-6 sm:p-8 text-slate-900 dark:text-white relative'
-                  : 'bg-white/70 dark:bg-theme-elevated/70 border border-slate-200/80 dark:border-theme-border/80 hover:border-blue-500/40 p-5 sm:p-7 cursor-pointer group hover:bg-white dark:hover:bg-theme-elevated shadow-sm hover:shadow-md'
+                  : 'bg-white/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 p-5 sm:p-6 hover:bg-white/80 dark:hover:bg-slate-900/80 backdrop-blur-md shadow-xs'
                   }`}
               >
                 {isOpen ? (
                   <div className="space-y-6">
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                       {/* Left: Number & Title (4 cols) */}
-                      <div className="lg:col-span-4 space-y-3 text-left">
+                      <div className="lg:col-span-4 space-y-2 text-left">
                         <span className="font-mono text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400">
                           {itemNum}
                         </span>
@@ -750,6 +750,8 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
                           src={imageSrc}
                           alt={item.title}
                           className="w-full h-44 sm:h-52 object-cover object-center group-hover/img:scale-105 transition-transform duration-500"
+                          loading="lazy"
+                          decoding="async"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 dark:from-slate-950/80 via-transparent to-transparent opacity-60 pointer-events-none" />
                       </div>

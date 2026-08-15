@@ -4,6 +4,8 @@ import { getSession } from '@/lib/auth/session';
 import { logAction } from '@/lib/audit';
 import { sendInvoiceEmail } from '@/lib/email';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }

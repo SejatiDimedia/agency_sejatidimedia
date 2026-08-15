@@ -15,10 +15,10 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from
 import { Icon } from '@iconify/react';
 
 const SERVICE_IMAGES = [
-  '/service_web_app.jpg',
-  '/service_mobile_app.jpg',
-  '/service_saas_app.jpg',
-  '/service_ai_llm.jpg',
+  '/service_web_app.webp',
+  '/service_mobile_app.webp',
+  '/service_saas_app.webp',
+  '/service_ai_llm.webp',
 ];
 
 function ClientPortalMockup3D({ t }: { t: any }) {
@@ -526,9 +526,11 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
         {/* Minimalist Serene Horizon Background */}
         <div className="absolute inset-x-0 top-0 h-[480px] sm:h-[600px] lg:h-[680px] overflow-hidden pointer-events-none -z-0">
           <img
-            src="/hero_minimal_horizon.jpg"
+            src="/hero_minimal_horizon.webp"
             alt="SejatiDimedia Serene Horizon"
             className="w-full h-full object-cover object-top opacity-80"
+            fetchPriority="high"
+            decoding="async"
           />
           {/* Top Navbar Soft Light Blend */}
           <div className="absolute inset-x-0 top-0 h-24 sm:h-32 bg-gradient-to-b from-white/80 via-white/30 to-transparent" />
@@ -1274,6 +1276,8 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                             src={imageSrc}
                             alt={item.title}
                             className="w-full h-44 sm:h-52 object-cover object-center"
+                            loading="lazy"
+                            decoding="async"
                           />
                         </div>
 

@@ -51,7 +51,36 @@ export const viewport: Viewport = {
   themeColor: "#050506",
 };
 
+import { Plus_Jakarta_Sans, Sora, JetBrains_Mono, Inter } from "next/font/google";
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const sora = Sora({
+  subsets: ["latin"],
+  variable: "--font-sora",
+  display: "swap",
+  weight: ["400", "500", "600", "700", "800"],
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+  weight: ["400", "500", "600"],
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+  weight: ["400", "500", "600", "700"],
+});
 
 export default function RootLayout({
   children,
@@ -59,12 +88,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className={`dark ${plusJakarta.variable} ${sora.variable} ${jetbrainsMono.variable} ${inter.variable}`}>
       <head>
         <meta name="google-site-verification" content="VDJFy4jlvNQW0Xibu-TmVqJt9ZuNH-hBwIPG3W8TIn8" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Montserrat:wght@700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+        <link rel="preload" href="/hero_minimal_horizon.webp" as="image" type="image/webp" fetchPriority="high" />
       </head>
       <body className="antialiased bg-theme-deep text-theme-fore">
         <NextTopLoader

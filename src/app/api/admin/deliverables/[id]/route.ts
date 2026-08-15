@@ -4,6 +4,8 @@ import { prisma } from '@/lib/prisma';
 import { s3Client, R2_BUCKET } from '@/lib/r2';
 import { DeleteObjectCommand } from '@aws-sdk/client-s3';
 
+export const dynamic = 'force-dynamic';
+
 export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
