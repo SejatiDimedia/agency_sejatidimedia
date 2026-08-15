@@ -523,19 +523,19 @@ export default function LayoutWrapper({
       ) : (
         /* PROFESSIONAL V2: Clean Light Workspace Container (No Aurora) */
         <div className="min-h-screen relative w-full flex flex-col font-sans overflow-x-clip bg-[#f0f4f8] text-slate-900">
-          {/* Header for V2 (Floating Island Modern Navbar) */}
+          {/* Header for V2 (Fullwidth at Top, Floating Island when Scrolled) */}
           <header
-            className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 pointer-events-none flex flex-col items-center ${scrolled ? 'pt-2 sm:pt-3' : 'pt-3 sm:pt-4'
+            className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 flex flex-col items-center ${scrolled ? 'pt-2 sm:pt-3 pointer-events-none' : 'pt-0 pointer-events-auto'
               }`}
           >
-            {/* Top Announcement Pill */}
+            {/* Top Announcement Bar: Fullwidth at Top, Smoothly Collapses on Scroll */}
             <div
-              className={`pointer-events-auto mb-2 transition-all duration-300 overflow-hidden ${scrolled ? 'max-h-0 opacity-0 mb-0' : 'max-h-10 opacity-100'
+              className={`w-full bg-[#1E315B] text-white transition-all duration-300 ease-out overflow-hidden ${scrolled ? 'max-h-0 opacity-0 py-0 shadow-none' : 'max-h-12 opacity-100 py-2 sm:py-2.5 px-4 shadow-2xs'
                 }`}
             >
-              <div className="px-3.5 py-1 rounded-full bg-[#1E315B] text-white shadow-sm flex items-center gap-2 text-[9px] sm:text-[10px] font-sans font-bold tracking-widest uppercase">
+              <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 text-[9px] sm:text-[10px] font-sans font-bold tracking-widest uppercase">
                 <Icon icon="ph:sparkle-fill" className="w-3 h-3 text-amber-300 shrink-0" />
-                <span>{language === 'id' ? 'Tersedia Sesi Konsultasi Gratis' : 'Limited Free Consultation'}</span>
+                <span>{language === 'id' ? 'Tersedia Sesi Konsultasi Gratis' : 'Limited Free Consultation Available'}</span>
                 <span className="opacity-40 hidden sm:inline">•</span>
                 <button
                   onClick={() => handleNavClick('contact-section')}
@@ -546,122 +546,129 @@ export default function LayoutWrapper({
               </div>
             </div>
 
-            {/* Main Floating Island Navbar */}
+            {/* Navbar Wrapper: Fullwidth at Top, Floating Capsule when Scrolled */}
             <div
-              className={`pointer-events-auto w-[92%] max-w-6xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3 rounded-2xl sm:rounded-full transition-all duration-300 flex items-center justify-between gap-4 border ${scrolled
-                  ? 'bg-white/95 backdrop-blur-2xl border-slate-200 shadow-md shadow-slate-900/5'
-                  : 'bg-white/85 backdrop-blur-xl border-slate-200/80 shadow-xs'
+              className={`w-full transition-all duration-300 ease-out flex items-center justify-center border-t-0 border-l-0 border-r-0 ${scrolled
+                ? 'px-4 bg-transparent border-b border-transparent shadow-none'
+                : 'bg-white/95 backdrop-blur-xl border-b border-slate-200/80 shadow-xs'
                 }`}
             >
-              {/* Brand Logo */}
               <div
-                className="flex items-center gap-2 cursor-pointer select-none shrink-0"
-                onClick={() => handleNavClick("home")}
-                id="logo-header-trigger"
+                className={`pointer-events-auto transition-all duration-300 ease-out flex items-center justify-between gap-4 border ${scrolled
+                  ? 'w-[92%] max-w-6xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white/95 backdrop-blur-2xl border-slate-200 shadow-md shadow-slate-900/5'
+                  : 'w-full max-w-7xl mx-auto px-6 py-3 sm:py-3.5 rounded-none bg-transparent border-transparent shadow-none'
+                  }`}
               >
-                <div className="h-5 sm:h-5.5 w-auto hover:scale-105 transition-transform duration-200 flex items-center justify-center shrink-0">
-                  <Image
-                    src="/logo.svg"
-                    alt="SejatiDimedia Logo"
-                    width={40}
-                    height={14}
-                    className="h-full w-auto object-contain"
-                  />
-                </div>
-                <span className="font-bold text-slate-900 text-xs sm:text-sm tracking-tight uppercase whitespace-nowrap shrink-0">
-                  <span className="font-sora" style={{ color: '#2E54A2' }}>Sejati</span>{' '}
-                  <span className="font-sora" style={{ color: '#23385B' }}>Dimedia</span>
-                </span>
-              </div>
-
-              {/* Center Navigation Links */}
-              <nav className="hidden md:flex items-center gap-1">
-                <button
+                {/* Brand Logo */}
+                <div
+                  className="flex items-center gap-2 cursor-pointer select-none shrink-0"
                   onClick={() => handleNavClick("home")}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${pathname === "/"
-                      ? "text-blue-600 bg-blue-50/80 font-bold"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
-                    }`}
+                  id="logo-header-trigger"
                 >
-                  {t.nav.home}
-                </button>
-                <button
-                  onClick={() => handleNavClick("capabilities-section")}
-                  className="px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 cursor-pointer transition-all duration-200"
-                >
-                  {t.nav.services}
-                </button>
-                <button
-                  onClick={() => handleNavClick("methodology-section")}
-                  className="px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 cursor-pointer transition-all duration-200"
-                >
-                  {t.nav.workflow}
-                </button>
-                <button
-                  onClick={() => router.push("/projects")}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${pathname.startsWith("/projects")
-                      ? "text-blue-600 bg-blue-50/80 font-bold"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
-                    }`}
-                >
-                  {t.nav.portfolio}
-                </button>
-                <button
-                  onClick={() => handleNavClick("faq-section")}
-                  className="px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 cursor-pointer transition-all duration-200"
-                >
-                  FAQ
-                </button>
-              </nav>
-
-              {/* Right Side: Language Switcher & Quick CTA */}
-              <div className="flex items-center gap-2.5 sm:gap-3">
-                {/* Language Switcher */}
-                <div className="flex items-center relative bg-slate-100/90 border border-slate-200 rounded-full p-0.5 shadow-inner h-[32px]">
-                  <div
-                    className={`absolute top-0.5 bottom-0.5 w-[28px] bg-white border border-slate-200 rounded-full transition-all duration-300 ease-[0.16,1,0.3,1] shadow-xs ${language === 'id' ? 'left-0.5' : 'left-[31px]'
-                      }`}
-                  />
-                  <button
-                    onClick={() => setLanguage('id')}
-                    className="relative z-10 w-[28px] h-[24px] flex items-center justify-center rounded-full transition-all duration-200 hover:scale-105"
-                    title="Bahasa Indonesia"
-                  >
-                    <img
-                      src="/flags/id.svg"
-                      alt="ID"
-                      className={`w-4 h-4 rounded-full object-cover shadow-xs border border-slate-200 transition-all ${language === 'id' ? 'opacity-100' : 'opacity-40 grayscale-[50%]'
-                        }`}
+                  <div className="h-5 sm:h-5.5 w-auto hover:scale-105 transition-transform duration-200 flex items-center justify-center shrink-0">
+                    <Image
+                      src="/logo.svg"
+                      alt="SejatiDimedia Logo"
+                      width={40}
+                      height={14}
+                      className="h-full w-auto object-contain"
                     />
-                  </button>
-                  <button
-                    onClick={() => setLanguage('en')}
-                    className="relative z-10 w-[28px] h-[24px] flex items-center justify-center rounded-full transition-all duration-200 hover:scale-105"
-                    title="English"
-                  >
-                    <img
-                      src="/flags/gb.svg"
-                      alt="EN"
-                      className={`w-4 h-4 rounded-full object-cover shadow-xs border border-slate-200 transition-all ${language === 'en' ? 'opacity-100' : 'opacity-40 grayscale-[50%]'
-                        }`}
-                    />
-                  </button>
+                  </div>
+                  <span className="font-bold text-slate-900 text-xs sm:text-sm tracking-tight uppercase whitespace-nowrap shrink-0">
+                    <span className="font-sora" style={{ color: '#2E54A2' }}>Sejati</span>{' '}
+                    <span className="font-sora" style={{ color: '#23385B' }}>Dimedia</span>
+                  </span>
                 </div>
 
-                {/* Navbar CTA Button */}
-                <button
-                  onClick={() => handleNavClick("contact-section")}
-                  className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-xs shadow-blue-600/20 active:scale-95 transition-all duration-200 cursor-pointer flex items-center gap-1.5 shrink-0"
-                >
-                  <span>{language === 'en' ? 'Estimate' : 'Konsultasi'}</span>
-                  <Icon icon="ph:arrow-up-right-bold" className="w-3 h-3 hidden sm:inline" />
-                </button>
+                {/* Center Navigation Links */}
+                <nav className="hidden md:flex items-center gap-1">
+                  <button
+                    onClick={() => handleNavClick("home")}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${pathname === "/"
+                      ? "text-blue-600 bg-blue-50/80 font-bold"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
+                      }`}
+                  >
+                    {t.nav.home}
+                  </button>
+                  <button
+                    onClick={() => handleNavClick("capabilities-section")}
+                    className="px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 cursor-pointer transition-all duration-200"
+                  >
+                    {t.nav.services}
+                  </button>
+                  <button
+                    onClick={() => handleNavClick("methodology-section")}
+                    className="px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 cursor-pointer transition-all duration-200"
+                  >
+                    {t.nav.workflow}
+                  </button>
+                  <button
+                    onClick={() => router.push("/projects")}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${pathname.startsWith("/projects")
+                      ? "text-blue-600 bg-blue-50/80 font-bold"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
+                      }`}
+                  >
+                    {t.nav.portfolio}
+                  </button>
+                  <button
+                    onClick={() => handleNavClick("faq-section")}
+                    className="px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 cursor-pointer transition-all duration-200"
+                  >
+                    FAQ
+                  </button>
+                </nav>
+
+                {/* Right Side: Language Switcher & Quick CTA */}
+                <div className="flex items-center gap-2.5 sm:gap-3">
+                  {/* Language Switcher */}
+                  <div className="flex items-center relative bg-slate-100/90 border border-slate-200 rounded-full p-0.5 shadow-inner h-[32px]">
+                    <div
+                      className={`absolute top-0.5 bottom-0.5 w-[28px] bg-white border border-slate-200 rounded-full transition-all duration-300 ease-[0.16,1,0.3,1] shadow-xs ${language === 'id' ? 'left-0.5' : 'left-[31px]'
+                        }`}
+                    />
+                    <button
+                      onClick={() => setLanguage('id')}
+                      className="relative z-10 w-[28px] h-[24px] flex items-center justify-center rounded-full transition-all duration-200 hover:scale-105"
+                      title="Bahasa Indonesia"
+                    >
+                      <img
+                        src="/flags/id.svg"
+                        alt="ID"
+                        className={`w-4 h-4 rounded-full object-cover shadow-xs border border-slate-200 transition-all ${language === 'id' ? 'opacity-100' : 'opacity-40 grayscale-[50%]'
+                          }`}
+                      />
+                    </button>
+                    <button
+                      onClick={() => setLanguage('en')}
+                      className="relative z-10 w-[28px] h-[24px] flex items-center justify-center rounded-full transition-all duration-200 hover:scale-105"
+                      title="English"
+                    >
+                      <img
+                        src="/flags/gb.svg"
+                        alt="EN"
+                        className={`w-4 h-4 rounded-full object-cover shadow-xs border border-slate-200 transition-all ${language === 'en' ? 'opacity-100' : 'opacity-40 grayscale-[50%]'
+                          }`}
+                      />
+                    </button>
+                  </div>
+
+                  {/* Navbar CTA Button */}
+                  <button
+                    onClick={() => handleNavClick("contact-section")}
+                    className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-xs shadow-blue-600/20 active:scale-95 transition-all duration-200 cursor-pointer flex items-center gap-1.5 shrink-0"
+                  >
+                    <span>{language === 'en' ? 'Consultation' : 'Konsultasi'}</span>
+                    <Icon icon="ph:arrow-up-right-bold" className="w-3 h-3 hidden sm:inline" />
+                  </button>
+                </div>
               </div>
             </div>
           </header>
 
           {/* Core Body Content */}
-          <main className="relative z-10 flex-grow w-full max-w-7xl mx-auto px-6 pt-28 pb-10">
+          <main className="relative z-10 flex-grow w-full max-w-7xl mx-auto px-6 pt-28 sm:pt-32 pb-10">
             {children}
           </main>
 
