@@ -34,12 +34,12 @@ export const TEMPLATES: TemplateInfo[] = [
 export const TEMPLATE_STORAGE_KEY = 'sejatidimedia-template';
 
 export function getActiveTemplate(): TemplateId {
-  if (typeof window === 'undefined') return 'classic';
+  if (typeof window === 'undefined') return 'professional';
   const saved = localStorage.getItem(TEMPLATE_STORAGE_KEY);
   if (saved === 'professional' || saved === 'classic') {
     return saved;
   }
-  return 'classic';
+  return 'professional';
 }
 
 export function setActiveTemplate(template: TemplateId): void {

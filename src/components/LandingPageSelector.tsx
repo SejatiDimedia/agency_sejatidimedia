@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import { TemplateId, getActiveTemplate } from '@/lib/templates';
+import { TemplateId } from '@/lib/templates';
 import { Project } from '@/lib/api/glio-projects';
 
 // Dynamic import of both landing page versions
@@ -15,17 +15,28 @@ const AgencyLandingV2 = dynamic(() => import('./AgencyLandingV2'), {
 });
 
 interface LandingPageSelectorProps {
+  initialTemplate?: TemplateId;
   copy?: any;
   projects?: Project[];
 }
 
-export default function LandingPageSelector({ copy, projects }: LandingPageSelectorProps) {
-  const [template, setTemplate] = useState<TemplateId>('classic');
-  const [mounted, setMounted] = useState(false);
+export default function LandingPageSelector({
+  initialTemplate = 'professional',
+  copy,
+  projects
+}: LandingPageSelectorProps) {
+  const [template, setTemplate] = useState<TemplateId>(initialTemplate);
 
   useEffect(() => {
-    setTemplate(getActiveTemplate());
-    setMounted(true);
+    // Fetch live global template setting from server API
+    fetch('/api/settings/template')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && (data.template === 'classic' || data.template === 'professional')) {
+          setTemplate(data.template);
+        }
+      })
+      .catch(() => {});
 
     const handleTemplateChange = (e: CustomEvent<TemplateId>) => {
       setTemplate(e.detail);
@@ -37,10 +48,10 @@ export default function LandingPageSelector({ copy, projects }: LandingPageSelec
     };
   }, []);
 
-  // Before mount, render V1 by default to ensure perfect SEO/SSR markup
-  if (!mounted || template === 'classic') {
+  if (template === 'classic') {
     return <AgencyLandingV1 copy={copy} projects={projects} />;
   }
 
   return <AgencyLandingV2 copy={copy} projects={projects} />;
 }
+

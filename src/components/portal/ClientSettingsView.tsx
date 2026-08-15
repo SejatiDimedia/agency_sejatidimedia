@@ -21,10 +21,20 @@ export const ClientSettingsView: React.FC<ClientSettingsViewProps> = ({
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-  const [currentTemplate, setCurrentTemplate] = useState<TemplateId>('classic');
+  const [currentTemplate, setCurrentTemplate] = useState<TemplateId>('professional');
 
   useEffect(() => {
-    setCurrentTemplate(getActiveTemplate());
+    // 1. Load active template from server API
+    fetch('/api/settings/template')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && (data.template === 'classic' || data.template === 'professional')) {
+          setCurrentTemplate(data.template);
+        }
+      })
+      .catch(() => {
+        setCurrentTemplate(getActiveTemplate());
+      });
 
     const handleTemplateChange = (e: CustomEvent<TemplateId>) => {
       setCurrentTemplate(e.detail);
@@ -36,13 +46,34 @@ export const ClientSettingsView: React.FC<ClientSettingsViewProps> = ({
     };
   }, []);
 
-  const handleSelectTemplate = (templateId: TemplateId) => {
-    setActiveTemplate(templateId);
+  const handleSelectTemplate = async (templateId: TemplateId) => {
     setCurrentTemplate(templateId);
-    setToast({
-      message: t.templateSettings?.activatedToast || 'Template berhasil diubah! Kunjungi halaman utama untuk melihat perubahannya.',
-      type: 'success',
-    });
+    setActiveTemplate(templateId);
+
+    try {
+      const res = await fetch('/api/settings/template', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ template: templateId }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setToast({
+          message: 'Template berhasil diaktifkan ke semua perangkat (Laptop, HP & Tablet)!',
+          type: 'success',
+        });
+      } else {
+        setToast({
+          message: 'Gagal memperbarui pengaturan template server.',
+          type: 'error',
+        });
+      }
+    } catch {
+      setToast({
+        message: 'Template berhasil diubah secara lokal.',
+        type: 'success',
+      });
+    }
   };
 
   const handleUpdatePassword = async (e: React.FormEvent) => {
