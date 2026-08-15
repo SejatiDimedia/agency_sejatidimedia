@@ -162,3 +162,9 @@ h6,
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* Rendering performance improvements */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 500px;
+}

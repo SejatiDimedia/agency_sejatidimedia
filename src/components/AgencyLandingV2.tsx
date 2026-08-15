@@ -546,39 +546,24 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
           <div className="flex-1 flex flex-col items-center justify-center space-y-6 sm:space-y-8 w-full pt-16 sm:pt-24 lg:pt-28">
 
             {/* Main Headline */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-              className="max-w-4xl"
-            >
+            <div className="max-w-4xl">
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-sans font-bold tracking-tight leading-[1.12] text-slate-900 drop-shadow-2xs">
                 {t.hero.title}{' '}
                 <span className="text-blue-600 inline-block">
                   {t.hero.titleHighlight}
                 </span>.
               </h1>
-            </motion.div>
+            </div>
 
             {/* Subheadline */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="max-w-2xl mx-auto"
-            >
+            <div className="max-w-2xl mx-auto">
               <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-sans font-medium">
                 {t.hero.subtitle}
               </p>
-            </motion.div>
+            </div>
 
             {/* Hero CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2 w-full sm:w-auto"
-            >
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2 w-full sm:w-auto">
               <button
                 onClick={() => scrollToId('contact-section')}
                 className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/25 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
@@ -594,7 +579,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
               >
                 <span>{t.hero.btnSecondary}</span>
               </button>
-            </motion.div>
+            </div>
           </div>
 
           {/* Hero Bottom Anchor / Scroll Prompt */}
