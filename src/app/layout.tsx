@@ -7,9 +7,9 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://sejatidimedia.web.id"),
   title: {
     template: "%s | SejatiDimedia",
-    default: "SejatiDimedia - Premium Software Agency & Development",
+    default: "SejatiDimedia - Software Agency & Development",
   },
-  description: "SejatiDimedia adalah software agency premium di Balikpapan. Kami membangun sistem produksi, aplikasi SaaS, dan produk mobile kustom berkinerja tinggi.",
+  description: "SejatiDimedia adalah software agency di Balikpapan. Kami membangun sistem produksi, aplikasi SaaS, dan produk mobile kustom berkinerja tinggi.",
   keywords: [
     "sejatidimedia",
     "sejati dimedia",
@@ -28,17 +28,17 @@ export const metadata: Metadata = {
     type: "website",
     locale: "id_ID",
     url: "https://sejatidimedia.web.id",
-    title: "SejatiDimedia - Premium Software Agency Balikpapan",
-    description: "Software agency premium di Balikpapan yang berfokus pada aplikasi SaaS, web, dan produk mobile berkualitas tinggi.",
+    title: "SejatiDimedia - Software Agency Balikpapan",
+    description: "Software agency di Balikpapan yang berfokus pada aplikasi SaaS, web, dan produk mobile berkualitas tinggi.",
     siteName: "SejatiDimedia",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SejatiDimedia - Premium Software Agency",
+    title: "SejatiDimedia - Software Agency",
     description: "Membangun sistem produksi, aplikasi SaaS, dan produk mobile kustom.",
   },
   verification: {
-    google: "VDJFy4jlvNQW0Xibu-TmVqJt9ZuNH-hBwIPG3W8TIn8",
+    google: "Wm-o9TjYVWYqL5cxsP8hRnHGlRbdCPbpsNv0pEQN_QY",
   },
   icons: {
     icon: "/logo.svg",
@@ -94,7 +94,7 @@ export default function RootLayout({
       className={`${plusJakarta.variable} ${sora.variable} ${jetbrainsMono.variable} ${inter.variable}`}
     >
       <head>
-        <meta name="google-site-verification" content="VDJFy4jlvNQW0Xibu-TmVqJt9ZuNH-hBwIPG3W8TIn8" />
+        <meta name="google-site-verification" content="Wm-o9TjYVWYqL5cxsP8hRnHGlRbdCPbpsNv0pEQN_QY" />
         <link rel="preload" href="/hero_minimal_horizon.webp" as="image" type="image/webp" fetchPriority="high" />
         <script
           dangerouslySetInnerHTML={{
