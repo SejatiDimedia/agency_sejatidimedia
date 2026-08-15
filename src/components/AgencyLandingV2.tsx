@@ -449,6 +449,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [copiedEmail, setCopiedEmail] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -457,6 +458,14 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
     details: '',
     honeypot: '',
   });
+
+  const handleCopyEmail = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText('timurdian.business@gmail.com');
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2000);
+    }
+  };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1830,276 +1839,409 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
           ========================================================================= */}
       <motion.section
         id="contact-section"
-        className="p-6 sm:p-10 md:p-14 rounded-3xl bg-white border border-slate-200 shadow-xl space-y-8 relative overflow-hidden max-w-6xl mx-auto"
+        className="space-y-10 max-w-6xl mx-auto"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 relative z-10 text-left">
-          {/* Left Block */}
-          <div className="lg:col-span-5 space-y-6 flex flex-col justify-between">
-            <div className="space-y-4">
-
-              <h2 className="mt-4 text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
-                {t.contact.mainHeading}{' '}
-                <span className="text-blue-600">
-                  {t.contact.mainHeadingHighlight}
-                </span>
-              </h2>
-
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                {t.contact.desc}
-              </p>
-
-            </div>
+        {/* Standard Centered Section Header */}
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 font-bold">
+            <span>{t.contact.badge || "KONTAK & KONSULTASI"}</span>
           </div>
 
-          {/* Right Block: Consultation Form */}
-          <div className="lg:col-span-7 p-5 sm:p-7 rounded-3xl bg-slate-50 border border-slate-200 shadow-xs relative">
-            <AnimatePresence mode="wait">
-              {!formSubmitted ? (
-                <form
-                  onSubmit={handleFormSubmit}
-                  className="space-y-5"
-                  id="contact-form-element"
+          <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
+            {t.contact.mainHeading}{' '}
+            <span className="text-blue-600">
+              {t.contact.mainHeadingHighlight}
+            </span>
+          </h2>
+
+          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans max-w-2xl mx-auto">
+            {t.contact.desc}
+          </p>
+        </div>
+
+        {/* Master Card Wrapper */}
+        <div className="rounded-3xl bg-white border border-slate-200 shadow-sm p-6 sm:p-10 md:p-12 relative overflow-hidden">
+          {/* 2-Column Luxury Layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 text-left items-start">
+            {/* Left Column: Direct Communication Channels & Value Commitments (4.5 cols) */}
+            <div className="lg:col-span-5 space-y-6">
+              <div className="space-y-2 mt-18">
+                <h3 className="text-lg sm:text-xl font-sans font-bold text-slate-900 leading-snug">
+                  {language === 'en' ? 'Need a quick answer or consultation?' : 'Perlu konsultasi atau respons lebih cepat?'}
+                </h3>
+              </div>
+
+              {/* Direct Channel Tiles */}
+              <div className="space-y-3.5">
+                {/* WhatsApp Fast-Track */}
+                <a
+                  href="https://wa.me/6289508436275?text=Halo%20SejatiDimedia,%20saya%20ingin%20berkonsultasi%20mengenai%20proyek%20aplikasi."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center justify-between p-4 rounded-2xl bg-slate-50/70 border border-slate-200 hover:border-emerald-500/80 hover:bg-emerald-50/20 hover:shadow-sm transition-all"
                 >
-                  {/* Honeypot */}
-                  <div style={{ position: 'absolute', left: '-9999px' }} aria-hidden="true">
-                    <input
-                      type="text"
-                      name="website_url_check"
-                      tabIndex={-1}
-                      value={formData.honeypot || ''}
-                      onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
-                      autoComplete="off"
-                    />
-                  </div>
-
-                  {formError && (
-                    <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-600 text-xs font-semibold">
-                      ⚠️ {formError}
+                  <div className="flex items-center gap-3.5">
+                    <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold shrink-0 group-hover:scale-105 transition-transform">
+                      <Icon icon="ic:baseline-whatsapp" className="w-6 h-6" />
                     </div>
-                  )}
-
-                  {/* Name and Email */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-mono text-slate-500 uppercase font-bold tracking-wider" htmlFor="form-name">
-                        {t.contact.formNameLabel}
-                      </label>
-                      <input
-                        id="form-name"
-                        type="text"
-                        required
-                        placeholder={t.contact.formNamePlaceholder}
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="text-[10px] font-mono text-slate-500 uppercase font-bold tracking-wider" htmlFor="form-email">
-                        {t.contact.formEmailLabel}
-                      </label>
-                      <input
-                        id="form-email"
-                        type="email"
-                        required
-                        placeholder={t.contact.formEmailPlaceholder}
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
-                      />
+                    <div className="text-left">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">WhatsApp Direct</span>
+                        <span className="px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-mono text-[9px] font-bold">Fast Response</span>
+                      </div>
+                      <div className="text-sm font-sans font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">+62 895-0843-6275</div>
                     </div>
                   </div>
+                  <Icon icon="ph:arrow-up-right-bold" className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                </a>
 
-                  {/* Service Selector */}
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-mono text-slate-500 uppercase font-bold tracking-wider block">
-                      {t.contact.formServiceLabel}
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                      {[
-                        { id: 'Full-Stack Web App', label: t.contact.formService1Title, desc: t.contact.formService1Desc },
-                        { id: 'Native iOS/Android App', label: t.contact.formService2Title, desc: t.contact.formService2Desc },
-                        { id: 'API Gateway & Cloud Integration', label: t.contact.formService3Title, desc: t.contact.formService3Desc },
-                        { id: 'Comprehensive Hybrid Pipeline', label: t.contact.formService4Title, desc: t.contact.formService4Desc }
-                      ].map((svc) => {
-                        const isSelected = formData.service === svc.id;
-                        return (
-                          <button
-                            type="button"
-                            key={svc.id}
-                            onClick={() => setFormData({ ...formData, service: svc.id })}
-                            className={`p-3 text-left rounded-xl border text-xs transition-all cursor-pointer flex flex-col justify-between min-h-[72px] ${isSelected
-                              ? 'bg-blue-50 border-2 border-blue-600 shadow-xs'
-                              : 'bg-white border-slate-200 hover:border-slate-300'
-                              }`}
-                          >
-                            <span className={`font-sans font-bold ${isSelected ? 'text-blue-700' : 'text-slate-900'}`}>
-                              {svc.label}
-                            </span>
-                            <span className="text-[10px] text-slate-500 truncate">
-                              {svc.desc}
-                            </span>
-                          </button>
-                        );
-                      })}
+                {/* Email Direct with 1-Click Copy */}
+                <div className="group flex items-center justify-between p-4 rounded-2xl bg-slate-50/70 border border-slate-200 hover:border-blue-500/80 hover:bg-blue-50/20 hover:shadow-sm transition-all">
+                  <div className="flex items-center gap-3.5 min-w-0">
+                    <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold shrink-0">
+                      <Icon icon="ph:envelope-simple-fill" className="w-6 h-6" />
+                    </div>
+                    <div className="text-left min-w-0">
+                      <div className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">Email Kontak</div>
+                      <div className="text-xs sm:text-sm font-sans font-bold text-slate-900 truncate">
+                        sejatidimedia@gmail.com
+                      </div>
                     </div>
                   </div>
-
-                  {/* Scope Selector */}
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-mono text-slate-500 uppercase font-bold tracking-wider block">
-                      {t.contact.formScopeLabel}
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                      {[
-                        { id: 'SaaS MVP (Fast Turnaround)', label: t.contact.formScope1Title, desc: t.contact.formScope1Desc },
-                        { id: 'Medium Scale Production', label: t.contact.formScope2Title, desc: t.contact.formScope2Desc },
-                        { id: 'High-Scale Custom Architecture', label: t.contact.formScope3Title, desc: t.contact.formScope3Desc }
-                      ].map((sc) => {
-                        const isSelected = formData.scope === sc.id;
-                        return (
-                          <button
-                            type="button"
-                            key={sc.id}
-                            onClick={() => setFormData({ ...formData, scope: sc.id })}
-                            className={`p-3 text-left rounded-xl border text-xs transition-all cursor-pointer flex flex-col justify-between min-h-[68px] ${isSelected
-                              ? 'bg-blue-50 border-2 border-blue-600 shadow-xs'
-                              : 'bg-white border-slate-200 hover:border-slate-300'
-                              }`}
-                          >
-                            <span className={`font-sans font-bold ${isSelected ? 'text-blue-700' : 'text-slate-900'}`}>
-                              {sc.label}
-                            </span>
-                            <span className="text-[9px] text-slate-500 truncate">
-                              {sc.desc}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Project Details */}
-                  <div className="space-y-1.5">
-                    <label className="text-[10px] font-mono text-slate-500 uppercase font-bold tracking-wider" htmlFor="form-details">
-                      {t.contact.formDetailsLabel}
-                    </label>
-                    <textarea
-                      id="form-details"
-                      rows={3}
-                      placeholder={t.contact.formDetailsPlaceholder}
-                      value={formData.details}
-                      onChange={(e) => setFormData({ ...formData, details: e.target.value })}
-                      className="w-full px-3.5 py-2.5 text-xs rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all resize-none"
-                    />
-                  </div>
-
-                  {/* Submit Button */}
                   <button
-                    type="submit"
-                    disabled={formSubmitting}
-                    className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold uppercase tracking-wider shadow-md shadow-blue-600/20 active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50"
-                    id="btn-submit-contact"
+                    type="button"
+                    onClick={handleCopyEmail}
+                    className="shrink-0 px-2.5 py-1.5 rounded-lg bg-white hover:bg-blue-50 hover:text-blue-600 text-slate-600 text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1 border border-slate-200"
+                    title="Copy email to clipboard"
                   >
-                    {formSubmitting ? (
-                      <span className="flex items-center gap-2">
-                        <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>Mengirim Pesan...</span>
-                      </span>
+                    {copiedEmail ? (
+                      <>
+                        <Icon icon="ph:check-bold" className="w-3.5 h-3.5 text-emerald-600" />
+                        <span className="text-emerald-600">Tersalin!</span>
+                      </>
                     ) : (
                       <>
-                        <Icon icon="ph:paper-plane-tilt-fill" className="w-4 h-4" />
-                        <span>{t.contact.formSubmit}</span>
+                        <Icon icon="ph:copy-bold" className="w-3.5 h-3.5" />
+                        <span>Salin</span>
                       </>
                     )}
                   </button>
-                </form>
-              ) : (
-                <div className="py-12 flex flex-col items-center justify-center text-center space-y-4">
-                  <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shadow-xs">
-                    <Icon icon="ph:check-circle-fill" className="w-6 h-6" />
-                  </div>
-                  <div className="space-y-1.5">
-                    <h4 className="text-base font-sans font-bold text-slate-900">{t.contact.formSubmitSuccess}</h4>
-                    <p className="text-xs text-slate-600 max-w-sm leading-relaxed mx-auto">
-                      {t.contact.formSubmitSuccessDesc}
-                    </p>
-                  </div>
-
-                  <div className="pt-2 flex flex-col items-center gap-2.5">
-                    <a
-                      href={`https://wa.me/6289508436275?text=Halo%20SejatiDimedia,%20saya%20${encodeURIComponent(formData.name || 'Klien')}%20ingin%20berdiskusi%20tentang%20project%20${encodeURIComponent(formData.service || 'Web App')}%20yang%20baru%20saya%20ajukan.`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm transition-all"
-                    >
-                      <Icon icon="ic:baseline-whatsapp" className="w-4 h-4" />
-                      <span>Hubungi via WhatsApp</span>
-                    </a>
-
-                    <button
-                      type="button"
-                      onClick={() => setFormSubmitted(false)}
-                      className="text-[10px] font-mono text-slate-500 hover:text-blue-600 underline cursor-pointer"
-                    >
-                      Kirim Pesan Lain / Reset Form
-                    </button>
-                  </div>
                 </div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-      </motion.section>
-
-      {/* =========================================================================
-          SECTION 12: TRUST BADGES (UPWORK & FASTWORK)
-          ========================================================================= */}
-      <motion.section
-        className="w-full max-w-4xl mx-auto pt-6 pb-2 px-4"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
-        variants={sectionFadeIn}
-      >
-        <div className="rounded-2xl bg-white border border-slate-200 p-5 shadow-sm flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="space-y-1 text-center md:text-left">
-            <span className="text-[10px] font-mono uppercase tracking-wider text-blue-600 font-bold block">
-              {t.platforms?.secure || "TRANSAKSI AMAN & TERJAMIN"}
-            </span>
-            <h3 className="text-xs sm:text-sm font-semibold text-slate-800 leading-snug">
-              {t.platforms?.availableOn || "Rekam jejak proyek saya juga dapat dilihat di Upwork & Fastwork"}
-            </h3>
-          </div>
-
-          <div className="flex flex-wrap sm:flex-nowrap items-center justify-center gap-2.5 shrink-0 w-full sm:w-auto">
-            <a
-              href="https://www.upwork.com/freelancers/~017698b392e21b4b6c"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-[#14A800]/10 border border-[#14A800]/25 hover:bg-[#14A800]/20 transition-all text-xs font-bold text-slate-800 shadow-2xs"
-            >
-              <div className="w-5 h-5 rounded-md bg-[#14A800] text-white flex items-center justify-center shadow-2xs">
-                <Icon icon="simple-icons:upwork" className="w-3 h-3" />
               </div>
-              <span>Upwork</span>
-            </a>
-            <a
-              href="https://fastwork.id/en/user/timurradhadian?source=web_marketplace_profile-menu_profile"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 rounded-xl bg-blue-50 border border-blue-200 hover:bg-blue-100 transition-all text-xs font-bold text-slate-800 shadow-2xs"
-            >
-              <div className="w-5 h-5 rounded-md bg-blue-600 text-white flex items-center justify-center shadow-2xs">
-                <Icon icon="ph:lightning-fill" className="w-3 h-3" />
+
+              {/* Freelance Platform Direct Badges */}
+              <div className="pt-4 border-t border-slate-100 space-y-2.5">
+                <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                  <span>{language === 'en' ? 'FREELANCE PLATFORMS' : 'SALURAN PLATFORM LAIN'}</span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2.5">
+                  {/* Upwork Capsule */}
+                  <a
+                    href="https://www.upwork.com/freelancers/~017698b392e21b4b6c"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-between p-2.5 px-3 rounded-xl bg-slate-50/80 hover:bg-emerald-50/40 border border-slate-200/80 hover:border-emerald-500/70 hover:shadow-2xs transition-all cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-6 h-6 rounded-md bg-emerald-100/70 text-[#14A800] flex items-center justify-center shrink-0 group-hover:bg-[#14A800] group-hover:text-white transition-all">
+                        <Icon icon="simple-icons:upwork" className="w-3.5 h-3.5" />
+                      </div>
+                      <span className="text-xs font-sans font-bold text-slate-800 group-hover:text-emerald-700 transition-colors truncate">
+                        Upwork
+                      </span>
+                    </div>
+                    <Icon icon="ph:arrow-up-right-bold" className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+                  </a>
+
+                  {/* Fastwork Capsule */}
+                  <a
+                    href="https://fastwork.id/en/user/timurradhadian?source=web_marketplace_profile-menu_profile"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-between p-2.5 px-3 rounded-xl bg-slate-50/80 hover:bg-blue-50/40 border border-slate-200/80 hover:border-blue-500/70 hover:shadow-2xs transition-all cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <div className="w-6 h-6 rounded-md bg-blue-100/70 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                        <Icon icon="ph:lightning-fill" className="w-3.5 h-3.5" />
+                      </div>
+                      <span className="text-xs font-sans font-bold text-slate-800 group-hover:text-blue-700 transition-colors truncate">
+                        Fastwork
+                      </span>
+                    </div>
+                    <Icon icon="ph:arrow-up-right-bold" className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+                  </a>
+                </div>
               </div>
-              <span>Fastwork</span>
-            </a>
+            </div>
+
+            {/* Right Column: Premium Form (7.5 cols) */}
+            <div className="lg:col-span-7">
+              <AnimatePresence mode="wait">
+                {!formSubmitted ? (
+                  <form
+                    onSubmit={handleFormSubmit}
+                    className="space-y-6"
+                    id="contact-form-element"
+                  >
+                    {/* Honeypot */}
+                    <div style={{ position: 'absolute', left: '-9999px' }} aria-hidden="true">
+                      <input
+                        type="text"
+                        name="website_url_check"
+                        tabIndex={-1}
+                        value={formData.honeypot || ''}
+                        onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+                        autoComplete="off"
+                      />
+                    </div>
+
+                    {formError && (
+                      <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold flex items-center gap-2.5">
+                        <Icon icon="ph:warning-circle-fill" className="w-4 h-4 text-rose-600 shrink-0" />
+                        <span>{formError}</span>
+                      </div>
+                    )}
+
+                    {/* Section 01: Name and Email in Luxury Modular Surfaces */}
+                    <div className="space-y-2 text-left">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+                        01 // IDENTITAS & KONTAK
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        {/* Name Field */}
+                        <div className="p-3.5 rounded-2xl bg-slate-50/70 border border-slate-200/90 hover:border-slate-300 focus-within:bg-white focus-within:border-blue-600 focus-within:ring-4 focus-within:ring-blue-50 transition-all shadow-2xs space-y-1">
+                          <label className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider block" htmlFor="form-name">
+                            {t.contact.formNameLabel} <span className="text-blue-600">*</span>
+                          </label>
+                          <div className="flex items-center gap-2.5">
+                            <Icon icon="ph:user-bold" className="w-4 h-4 text-slate-400 shrink-0" />
+                            <input
+                              id="form-name"
+                              type="text"
+                              required
+                              placeholder={t.contact.formNamePlaceholder}
+                              value={formData.name}
+                              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                              className="w-full bg-transparent text-xs sm:text-sm font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-normal focus:outline-none"
+                            />
+                          </div>
+                        </div>
+
+                        {/* Email Field */}
+                        <div className="p-3.5 rounded-2xl bg-slate-50/70 border border-slate-200/90 hover:border-slate-300 focus-within:bg-white focus-within:border-blue-600 focus-within:ring-4 focus-within:ring-blue-50 transition-all shadow-2xs space-y-1">
+                          <label className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider block" htmlFor="form-email">
+                            {t.contact.formEmailLabel} <span className="text-blue-600">*</span>
+                          </label>
+                          <div className="flex items-center gap-2.5">
+                            <Icon icon="ph:envelope-simple-bold" className="w-4 h-4 text-slate-400 shrink-0" />
+                            <input
+                              id="form-email"
+                              type="email"
+                              required
+                              placeholder={t.contact.formEmailPlaceholder}
+                              value={formData.email}
+                              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                              className="w-full bg-transparent text-xs sm:text-sm font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-normal focus:outline-none"
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Section 02: Service Selection (Rich Interactive Vector Chips) */}
+                    <div className="space-y-2 text-left">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+                        02 // PILIH JENIS LAYANAN
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        {[
+                          {
+                            id: 'Full-Stack Web App',
+                            label: t.contact.formService1Title || 'Web Application',
+                            desc: t.contact.formService1Desc || 'SaaS & Dashboard',
+                            icon: 'ph:browsers-duotone'
+                          },
+                          {
+                            id: 'Native iOS/Android App',
+                            label: t.contact.formService2Title || 'Mobile App',
+                            desc: t.contact.formService2Desc || 'iOS & Android',
+                            icon: 'ph:device-mobile-camera-duotone'
+                          },
+                          {
+                            id: 'API Gateway & Cloud Integration',
+                            label: t.contact.formService3Title || 'REST API & Cloud',
+                            desc: t.contact.formService3Desc || 'Backend & Database',
+                            icon: 'ph:cloud-arrow-up-duotone'
+                          },
+                          {
+                            id: 'AI & LLM Integration',
+                            label: t.contact.formService4Title || 'Integrasi AI / LLM',
+                            desc: t.contact.formService4Desc || 'Custom AI Agent & Automasi',
+                            icon: 'ph:sparkle-duotone'
+                          }
+                        ].map((svc) => {
+                          const isSelected = formData.service === svc.id;
+                          return (
+                            <button
+                              type="button"
+                              key={svc.id}
+                              onClick={() => setFormData({ ...formData, service: svc.id })}
+                              className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-3 ${isSelected
+                                ? 'bg-blue-50/90 border-2 border-blue-600 text-blue-950 shadow-2xs'
+                                : 'bg-slate-50/70 hover:bg-slate-100/80 border-slate-200 text-slate-800'
+                                }`}
+                            >
+                              <div className="flex items-center gap-3 min-w-0">
+                                <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${isSelected ? 'bg-blue-600 text-white' : 'bg-white border border-slate-200 text-slate-600'
+                                  }`}>
+                                  <Icon icon={svc.icon} className="w-5 h-5" />
+                                </div>
+                                <div className="min-w-0">
+                                  <div className="text-xs font-sans font-bold truncate">{svc.label}</div>
+                                  <div className="text-[10px] text-slate-500 truncate">{svc.desc}</div>
+                                </div>
+                              </div>
+                              {isSelected && (
+                                <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0">
+                                  <Icon icon="ph:check-bold" className="w-3 h-3" />
+                                </div>
+                              )}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Section 03: Project Scale (Interactive 3-Pill Switcher) */}
+                    <div className="space-y-2 text-left">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+                        03 // ESTIMASI SKALA PROYEK
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                        {[
+                          {
+                            id: 'MVP / Starter',
+                            label: t.contact.formScope1Title || 'MVP / Starter',
+                            desc: t.contact.formScope1Desc || 'Validasi Cepat',
+                            icon: 'ph:rocket-launch-duotone'
+                          },
+                          {
+                            id: 'Medium Scale Production',
+                            label: t.contact.formScope2Title || 'Skala Menengah',
+                            desc: t.contact.formScope2Desc || 'Sistem Bisnis',
+                            icon: 'ph:chart-line-up-duotone'
+                          },
+                          {
+                            id: 'High-Scale Custom Architecture',
+                            label: t.contact.formScope3Title || 'Custom / Enterprise',
+                            desc: t.contact.formScope3Desc || 'Arsitektur Besar',
+                            icon: 'ph:buildings-duotone'
+                          }
+                        ].map((sc) => {
+                          const isSelected = formData.scope === sc.id;
+                          return (
+                            <button
+                              type="button"
+                              key={sc.id}
+                              onClick={() => setFormData({ ...formData, scope: sc.id })}
+                              className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[64px] ${isSelected
+                                ? 'bg-slate-900 border-2 border-slate-900 text-white shadow-2xs'
+                                : 'bg-slate-50/70 hover:bg-slate-100/80 border-slate-200 text-slate-800'
+                                }`}
+                            >
+                              <div className="flex items-center justify-between gap-2">
+                                <span className={`text-xs font-sans font-bold ${isSelected ? 'text-white' : 'text-slate-900'}`}>{sc.label}</span>
+                                <Icon icon={sc.icon} className={`w-4 h-4 shrink-0 ${isSelected ? 'text-blue-300' : 'text-slate-400'}`} />
+                              </div>
+                              <span className={`text-[10px] truncate ${isSelected ? 'text-slate-300' : 'text-slate-500'}`}>{sc.desc}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Section 04: Project Details Textarea */}
+                    <div className="space-y-2 text-left">
+                      <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+                        04 // DETAIL & KEBUTUHAN KHUSUS
+                      </span>
+                      <div className="p-3.5 rounded-2xl bg-slate-50/70 border border-slate-200/90 hover:border-slate-300 focus-within:bg-white focus-within:border-blue-600 focus-within:ring-4 focus-within:ring-blue-50 transition-all shadow-2xs space-y-1">
+                        <label className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider block" htmlFor="form-details">
+                          {t.contact.formDetailsLabel}
+                        </label>
+                        <textarea
+                          id="form-details"
+                          rows={3}
+                          placeholder={t.contact.formDetailsPlaceholder}
+                          value={formData.details}
+                          onChange={(e) => setFormData({ ...formData, details: e.target.value })}
+                          className="w-full bg-transparent text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none resize-none leading-relaxed"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Submit Button & Guarantees */}
+                    <div className="pt-2 space-y-3">
+                      <button
+                        type="submit"
+                        disabled={formSubmitting}
+                        className="w-full py-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-sans font-bold tracking-wider shadow-lg shadow-blue-600/20 active:scale-[0.99] transition-all cursor-pointer flex items-center justify-center gap-3 disabled:opacity-50"
+                        id="btn-submit-contact"
+                      >
+                        {formSubmitting ? (
+                          <span className="flex items-center gap-2">
+                            <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                            <span>Mengirim Pesan...</span>
+                          </span>
+                        ) : (
+                          <>
+                            <span>{t.contact.formSubmit}</span>
+                            <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <div className="py-14 px-6 rounded-3xl bg-slate-50/70 border border-slate-200 shadow-2xs flex flex-col items-center justify-center text-center space-y-4">
+                    <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shadow-xs">
+                      <Icon icon="ph:check-circle-fill" className="w-7 h-7" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <h4 className="text-lg font-sans font-bold text-slate-900">{t.contact.formSubmitSuccess}</h4>
+                      <p className="text-xs text-slate-600 max-w-sm leading-relaxed mx-auto">
+                        {t.contact.formSubmitSuccessDesc}
+                      </p>
+                    </div>
+
+                    <div className="pt-3 flex flex-col items-center gap-3">
+                      <a
+                        href={`https://wa.me/6289508436275?text=Halo%20SejatiDimedia,%20saya%20${encodeURIComponent(formData.name || 'Klien')}%20ingin%20berdiskusi%20tentang%20project%20${encodeURIComponent(formData.service || 'Web App')}%20yang%20baru%20saya%20ajukan.`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition-all"
+                      >
+                        <Icon icon="ic:baseline-whatsapp" className="w-4 h-4" />
+                        <span>Hubungi Langsung via WhatsApp</span>
+                      </a>
+
+                      <button
+                        type="button"
+                        onClick={() => setFormSubmitted(false)}
+                        className="text-[10px] font-mono text-slate-500 hover:text-blue-600 underline cursor-pointer"
+                      >
+                        Kirim Pesan Lain / Reset Form
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </motion.section>
