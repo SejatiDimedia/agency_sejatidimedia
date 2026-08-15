@@ -44,10 +44,20 @@ export const en = {
   },
   about: {
     eyebrow: "ABOUT ME",
-    title: "From Developer to Founder",
-    p1: "For 5 years, I worked as a software developer in the manufacturing industry — building and maintaining systems used directly in daily operations, from production management and inventory to inter-team coordination.",
-    p2: "From that experience I learned one crucial truth: a good system isn't the one that is technically most complex, but the one that is actually used and solves real problems on the ground.",
-    p3: "Now through SejatiDimedia, I bring that experience to help other businesses — designing and building systems tailored to how they actually work, not just following tech trends.",
+    title: "Background & Work Approach",
+    subtitle: "5 years of managing operational systems taught me to build neat, stable, and user-friendly software tailored to your business needs.",
+    p1: "During my 5 years as a software developer in manufacturing, I regularly managed ERP, inventory, and production workflows used daily by operational teams.",
+    p2: "From that experience I learned: the best systems aren't the most complex, but the ones that are easy to understand, pleasant to use, and truly helpful in daily work.",
+    p3: "At SejatiDimedia, I apply the same principles: clean code, direct developer communication, and clear, transparent progress updates.",
+    phase1Label: "01 / BACKGROUND",
+    phase1Title: "5 Years in Operations & ERP Systems",
+    phase1Tags: ["Well-Organized Data", "Stable & Minimal Errors", "Familiar with Operations"],
+    phase2Label: "02 / CORE PRINCIPLE",
+    phase2Title: "Practical & Purpose-Built Systems",
+    phase2Tags: ["Focus on Real Solutions", "Easy Long-Term Maintenance", "Pleasant for Your Team"],
+    phase3Label: "03 / HOW I WORK",
+    phase3Title: "Approach at SejatiDimedia",
+    phase3Tags: ["100% Code Ownership", "Direct Developer Discussion", "Client Portal Tracking"],
     card1Title: "5+ Years Manufacturing Experience",
     card1Desc: "ERP, Production, Inventory & Operational Workflow",
     card2Title: "Integrated Digital Systems",
@@ -73,8 +83,8 @@ export const en = {
         desc: "Secure, structured, and scalable Backend APIs — complete with authentication, payment integration, and real-time systems.",
       },
       {
-        title: "System Integration & Automation",
-        desc: "Connecting various third-party systems (Payment Gateways, ERPs, CRMs) to automate your business workflows.",
+        title: "AI & LLM Integration",
+        desc: "Integrating artificial intelligence, custom AI agents, intelligent workflows, and Large Language Models (LLM) directly into your business application stack.",
       }
     ]
   },
@@ -415,5 +425,16 @@ export const en = {
       { title: "Gradual Payments", desc: "A milestone-based payment scheme. You only pay when the agreed features are fully completed and pass testing." },
       { title: "100% Your Copyright", desc: "All source code and copyright belong entirely to you after project completion — not rented or locked to my platform." }
     ]
+  },
+  templateSettings: {
+    title: "Landing Page Template",
+    subtitle: "Select the theme and visual style for your main website landing page",
+    classic: "Classic",
+    classicDesc: "Dark/light theme with dynamic Aurora lighting & futuristic neon visuals.",
+    professional: "Professional",
+    professionalDesc: "Light theme styled after portal workspace, clean, elegant & without Aurora effect.",
+    activeBadge: "Currently Active",
+    activateBtn: "Use Template",
+    activatedToast: "Template successfully updated! Visit the home page to see the changes."
   }
 };

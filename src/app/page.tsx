@@ -1,4 +1,4 @@
-import AgencyLanding from "../components/AgencyLanding";
+import LandingPageSelector from "../components/LandingPageSelector";
 import { getHomePageCopy } from "../lib/sanity/client";
 import { getProjects } from "../lib/api/glio-projects";
 
@@ -12,5 +12,5 @@ export default async function HomePage() {
     getProjects(),
   ]);
 
-  return <AgencyLanding copy={copy} projects={projects} />;
+  return <LandingPageSelector copy={copy} projects={projects} />;
 }

@@ -39,7 +39,12 @@ const GlintStar = ({ className, delay = 0 }: { className?: string; delay?: numbe
   </motion.div>
 );
 
-const SERVICE_IMAGES = ['/service_web_app.jpg', '/service_mobile_app.jpg', '/service_saas_app.jpg'];
+const SERVICE_IMAGES = [
+  '/service_web_app.jpg',
+  '/service_mobile_app.jpg',
+  '/service_saas_app.jpg',
+  '/service_ai_llm.jpg',
+];
 
 const sectionFadeIn = {
   hidden: {

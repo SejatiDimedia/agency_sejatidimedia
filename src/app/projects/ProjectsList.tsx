@@ -41,43 +41,57 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
   });
 
   return (
-    <div className="space-y-12 py-8">
-      {/* Header */}
+    <div className="space-y-12 py-6 sm:py-10">
+      {/* Header Section */}
       <div className="space-y-6">
         <div className="space-y-4">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-mono text-theme-fore-muted hover:text-theme-accent transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-mono text-slate-500 hover:text-blue-600 dark:text-theme-fore-muted dark:hover:text-theme-accent transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>{language === 'en' ? 'Back to Home' : 'Kembali ke Beranda'}</span>
           </Link>
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-widest text-theme-accent font-semibold">
-              <span className="w-6 h-[1px] bg-theme-accent" />
-              <span>{language === 'en' ? 'Portfolio' : 'Portofolio'}</span>
+
+          <div className="space-y-3 text-left">
+            {/* Section Eyebrow matching the landing page theme */}
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 dark:text-theme-accent font-bold">
+              <span>{language === 'en' ? 'PROJECT SHOWCASE' : 'PORTOFOLIO PROYEK'}</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl font-sans font-black tracking-tight text-theme-fore text-left">
-              {language === 'en' ? 'Software Portfolio' : 'Portofolio Perangkat Lunak'}
+
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-sora font-extrabold tracking-tight text-slate-900 dark:text-theme-fore leading-tight">
+              {language === 'en' ? (
+                <>
+                  Software & System{' '}
+                  <span className="text-blue-600 inline-block">Portfolio</span>
+                </>
+              ) : (
+                <>
+                  Portofolio Sistem &{' '}
+                  <span className="text-blue-600 inline-block">Aplikasi</span>
+                </>
+              )}
             </h1>
-            <p className="text-sm text-theme-fore-muted max-w-xl leading-relaxed text-left">
+
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-theme-fore-muted max-w-2xl leading-relaxed font-sans">
               {language === 'en'
-                ? 'Explore a catalog of production systems, SaaS applications, and custom mobile products built with precision.'
-                : 'Jelajahi katalog sistem produksi, aplikasi SaaS, dan produk mobile kustom yang dibangun dengan presisi.'}
+                ? 'Explore our production-grade systems, multi-tenant SaaS platforms, and enterprise web & mobile solutions built for real business impact.'
+                : 'Koleksi sistem operasional, aplikasi SaaS, dan produk digital siap produksi yang dibangun dengan standar keandalan tinggi dan arsitektur modern.'}
             </p>
           </div>
         </div>
 
-        {/* Filter Pills */}
+        {/* Category Filter Pills */}
         <div className="flex flex-wrap gap-2 pt-2">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveCategory(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-sans font-bold transition-all duration-300 ${activeCategory === cat
-                ? "bg-theme-accent text-white shadow-md shadow-theme-accent/20"
-                : "bg-theme-surface text-theme-fore-muted hover:bg-theme-elevated hover:text-theme-fore border border-theme-border"
-                }`}
+              className={`px-4 py-2 rounded-full text-xs font-sans font-bold transition-all duration-200 cursor-pointer ${
+                activeCategory === cat
+                  ? "bg-blue-600 text-white shadow-sm shadow-blue-600/25"
+                  : "bg-white dark:bg-theme-surface text-slate-600 dark:text-theme-fore-muted hover:bg-slate-50 dark:hover:bg-theme-elevated hover:text-slate-900 dark:hover:text-theme-fore border border-slate-200 dark:border-theme-border shadow-2xs"
+              }`}
             >
               {cat}
             </button>
@@ -85,8 +99,8 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
         </div>
       </div>
 
-      {/* Grid */}
-      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Projects Grid */}
+      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         <AnimatePresence mode="popLayout">
           {filteredProjects.length > 0 ? (
             filteredProjects.map((project) => {
@@ -100,44 +114,47 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
               return (
                 <motion.div
                   layout
-                  initial={{ opacity: 0, scale: 0.95 }}
+                  initial={{ opacity: 0, scale: 0.96 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
+                  exit={{ opacity: 0, scale: 0.96 }}
                   transition={{ duration: 0.3 }}
                   key={project.slug}
-                  className="group flex flex-col justify-between p-5 rounded-2xl bg-theme-elevated border border-theme-border hover:border-theme-border-accent hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
+                  className="group flex flex-col justify-between p-5 rounded-3xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border hover:border-blue-300 dark:hover:border-theme-border-accent hover:shadow-xl transition-all duration-300 relative overflow-hidden"
                 >
                   <div className="space-y-4">
                     {/* Thumbnail */}
-                    <div className="relative w-full h-48 rounded-xl overflow-hidden bg-theme-surface border border-theme-border/40">
+                    <div className="relative w-full h-48 rounded-2xl overflow-hidden bg-slate-50 dark:bg-theme-surface border border-slate-200/80 dark:border-theme-border/40">
                       <Image
                         src={displayThumbnail}
                         alt={project.name}
                         fill
                         className={
                           isDummy
-                            ? "object-contain p-8 bg-theme-surface/40"
+                            ? "object-contain p-8 bg-slate-50 dark:bg-theme-surface/40"
                             : "object-cover group-hover:scale-[1.03] transition-transform duration-500"
                         }
                         sizes="(max-w-768px) 100vw, 33vw"
                       />
                     </div>
 
-                    {/* Title & Desc */}
+                    {/* Title & Description */}
                     <div className="space-y-2 text-left">
                       {project.categories && project.categories.length > 0 && (
                         <div className="flex flex-wrap gap-1.5 pb-1">
                           {project.categories.map((cat) => (
-                            <span key={cat} className="inline-block text-[8px] font-mono uppercase tracking-widest font-bold text-theme-accent bg-theme-accent/10 border border-theme-accent/20 px-2 py-0.5 rounded-full">
+                            <span
+                              key={cat}
+                              className="inline-block text-[8px] font-mono uppercase tracking-widest font-bold text-blue-700 dark:text-theme-accent bg-blue-50 dark:bg-theme-accent/10 border border-blue-200/60 dark:border-theme-accent/20 px-2.5 py-0.5 rounded-full"
+                            >
                               {getCategoryName(cat)}
                             </span>
                           ))}
                         </div>
                       )}
-                      <h3 className="text-base font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors">
+                      <h3 className="text-base font-sora font-bold text-slate-900 dark:text-theme-fore group-hover:text-blue-600 transition-colors">
                         {project.name}
                       </h3>
-                      <p className="text-xs text-theme-fore-muted leading-relaxed line-clamp-3">
+                      <p className="text-xs text-slate-600 dark:text-theme-fore-muted leading-relaxed line-clamp-3 font-sans">
                         {language === 'en'
                           ? (project.summaryEn || project.descriptionEn || project.summary || project.description)
                           : (project.summaryId || project.descriptionId || project.summary || project.description)}
@@ -145,12 +162,12 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
                     </div>
                   </div>
 
-                  <div className="space-y-4 pt-4 border-t border-theme-border/30 mt-4">
+                  <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-theme-border/30 mt-4">
                     <div className="flex flex-wrap gap-1.5">
                       {project.technologies.map((tech) => (
                         <span
                           key={tech}
-                          className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-mono bg-theme-surface text-theme-fore-muted border border-theme-border/40"
+                          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono bg-slate-50 dark:bg-theme-surface text-slate-600 dark:text-theme-fore-muted border border-slate-200/60 dark:border-theme-border/40"
                         >
                           {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5 opacity-80" />}
                           {tech}
@@ -160,7 +177,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
 
                     <Link
                       href={`/projects/${project.slug}`}
-                      className="flex items-center justify-center gap-1.5 w-full py-2 rounded-xl bg-theme-surface hover:bg-theme-accent hover:text-white text-xs font-sans font-bold text-theme-fore transition-all duration-300 border border-theme-border/80 hover:border-theme-accent"
+                      className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-full bg-slate-50 dark:bg-theme-surface hover:bg-blue-600 hover:text-white text-xs font-sans font-bold text-slate-700 dark:text-theme-fore transition-all duration-300 border border-slate-200 dark:border-theme-border/80 hover:border-blue-600 shadow-2xs cursor-pointer"
                     >
                       <span>{language === 'en' ? 'View Details' : 'Lihat Detail'}</span>
                       <ChevronRight className="w-3.5 h-3.5" />
@@ -175,9 +192,9 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="col-span-1 md:col-span-3 p-12 text-center rounded-2xl bg-theme-elevated border border-theme-border"
+              className="col-span-1 md:col-span-3 p-12 text-center rounded-3xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border shadow-xs"
             >
-              <span className="text-xs font-mono text-theme-fore-muted">
+              <span className="text-xs font-mono text-slate-500 dark:text-theme-fore-muted">
                 {language === 'en' ? 'No projects found in this category.' : 'Tidak ada proyek ditemukan dalam kategori ini.'}
               </span>
             </motion.div>

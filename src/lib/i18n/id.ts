@@ -44,10 +44,20 @@ export const id = {
   },
   about: {
     eyebrow: "TENTANG SAYA",
-    title: "Dari Developer, Menjadi Founder",
-    p1: "Selama 5 tahun, saya bekerja sebagai software developer di industri manufaktur — membangun dan memelihara sistem yang digunakan langsung dalam operasional harian, mulai dari manajemen produksi, inventory, hingga koordinasi antar tim.",
-    p2: "Dari sana saya belajar satu hal penting: sistem yang baik bukan yang paling canggih secara teknis, tapi yang benar-benar dipakai dan menyelesaikan masalah nyata di lapangan.",
-    p3: "Kini melalui SejatiDimedia, saya membawa pengalaman itu untuk membantu bisnis lain — merancang dan membangun sistem yang sesuai dengan cara kerja mereka yang sebenarnya, bukan sekadar mengikuti tren teknologi.",
+    title: "Latar Belakang & Cara Kerja",
+    subtitle: "5 tahun menangani sistem operasional membuat saya terbiasa membangun software yang rapi, stabil, dan mudah digunakan untuk kebutuhan bisnis Anda.",
+    p1: "Selama 5 tahun sebagai software developer di industri manufaktur, saya terbiasa mengelola sistem seperti ERP, inventori, dan alur produksi yang digunakan setiap hari oleh tim operasional.",
+    p2: "Dari pengalaman itu saya belajar: sistem terbaik bukan yang paling rumit, tetapi yang mudah dipahami, nyaman digunakan, dan benar-benar membantu pekerjaan harian.",
+    p3: "Di SejatiDimedia, saya menerapkan prinsip yang sama: penulisan kode yang rapi, komunikasi langsung tanpa perantara, dan laporan progres yang jelas dan terbuka.",
+    phase1Label: "01 / LATAR BELAKANG",
+    phase1Title: "5 Tahun di Sistem Operasional & ERP",
+    phase1Tags: ["Data Tertata Rapi", "Sistem Stabil & Minim Kendala", "Terbiasa dengan Kebutuhan Operasional"],
+    phase2Label: "02 / PRINSIP UTAMA",
+    phase2Title: "Sistem yang Praktis & Tepat Guna",
+    phase2Tags: ["Fokus Solusi Nyata", "Mudah Dirawat ke Depan", "Nyaman Digunakan Tim"],
+    phase3Label: "03 / CARA KERJA",
+    phase3Title: "Pendekatan di SejatiDimedia",
+    phase3Tags: ["Kode Sepenuhnya Milik Anda", "Diskusi Langsung dengan Developer", "Pantau Progres di Portal Klien"],
     card1Title: "5+ Tahun Pengalaman Manufaktur",
     card1Desc: "ERP, Production, Inventory & Operational Workflow",
     card2Title: "Sistem Digital Terintegrasi",
@@ -73,8 +83,8 @@ export const id = {
         desc: "Backend API yang aman, terstruktur, dan siap menangani skala — lengkap dengan autentikasi, integrasi pembayaran, dan sistem real-time.",
       },
       {
-        title: "Sistem Integrasi & Otomasi",
-        desc: "Menghubungkan berbagai sistem pihak ketiga (Payment Gateway, ERP, CRM) untuk mengotomatisasi alur kerja bisnis Anda.",
+        title: "Integrasi AI / LLM",
+        desc: "Mengintegrasikan kecerdasan buatan, custom AI agent, workflow otomatisasi cerdas, dan Large Language Models (LLM) langsung ke dalam sistem aplikasi bisnis Anda.",
       }
     ]
   },
@@ -415,5 +425,16 @@ export const id = {
       { title: "Pembayaran Bertahap", desc: "Skema pembayaran termin berbasis milestone (berkala). Anda hanya membayar saat fitur yang disepakati benar-benar selesai dan lulus uji coba." },
       { title: "100% Hak Cipta Anda", desc: "Seluruh source code dan hak cipta sepenuhnya milik Anda setelah proyek selesai — bukan disewakan atau di-lock ke platform saya." }
     ]
+  },
+  templateSettings: {
+    title: "Template Landing Page",
+    subtitle: "Pilih tema dan tampilan landing page utama website Anda",
+    classic: "Classic",
+    classicDesc: "Tema gelap/terang dengan efek pencahayaan Aurora & visual neon futuristik.",
+    professional: "Professional",
+    professionalDesc: "Tema terang bergaya portal workspace, bersih, elegan & tanpa efek Aurora.",
+    activeBadge: "Sedang Aktif",
+    activateBtn: "Gunakan Template",
+    activatedToast: "Template berhasil diubah! Kunjungi halaman utama untuk melihat perubahannya."
   }
 };
