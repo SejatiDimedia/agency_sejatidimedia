@@ -3,9 +3,13 @@ import { getGlobalActiveTemplate, setGlobalActiveTemplate } from '@/lib/server-t
 import { TemplateId } from '@/lib/templates';
 import { revalidatePath } from 'next/cache';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
-  const template = getGlobalActiveTemplate();
-  return NextResponse.json({ success: true, template });
+  const template = await getGlobalActiveTemplate();
+  const res = NextResponse.json({ success: true, template });
+  res.headers.set('Cache-Control', 'no-store, max-age=0, must-revalidate');
+  return res;
 }
 
 export async function POST(req: NextRequest) {
@@ -16,10 +20,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: 'Invalid template ID' }, { status: 400 });
     }
 
-    const success = setGlobalActiveTemplate(template as TemplateId);
-    if (!success) {
-      return NextResponse.json({ success: false, error: 'Failed to save template setting' }, { status: 500 });
-    }
+    await setGlobalActiveTemplate(template as TemplateId);
 
     try {
       revalidatePath('/', 'page');
@@ -27,7 +28,15 @@ export async function POST(req: NextRequest) {
       // Revalidation fallback
     }
 
-    return NextResponse.json({ success: true, template });
+    const res = NextResponse.json({ success: true, template });
+    // Root cookie fallback so Next.js server components / middleware can also read across devices
+    res.cookies.set('sejatidimedia-template', template, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 365,
+      sameSite: 'lax',
+      httpOnly: false,
+    });
+    return res;
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error?.message || 'Server error' }, { status: 500 });
   }
