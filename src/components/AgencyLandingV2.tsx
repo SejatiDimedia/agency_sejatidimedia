@@ -1869,7 +1869,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 text-left items-start">
             {/* Left Column: Direct Communication Channels & Value Commitments (4.5 cols) */}
             <div className="lg:col-span-5 space-y-6">
-              <div className="space-y-2 mt-18">
+              <div className="space-y-2 mt-4 lg:mt-18">
                 <h3 className="text-lg sm:text-xl font-sans font-bold text-slate-900 leading-snug">
                   {language === 'en' ? 'Need a quick answer or consultation?' : 'Perlu konsultasi atau respons lebih cepat?'}
                 </h3>
