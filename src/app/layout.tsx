@@ -88,12 +88,36 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`dark ${plusJakarta.variable} ${sora.variable} ${jetbrainsMono.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${plusJakarta.variable} ${sora.variable} ${jetbrainsMono.variable} ${inter.variable}`}
+    >
       <head>
         <meta name="google-site-verification" content="VDJFy4jlvNQW0Xibu-TmVqJt9ZuNH-hBwIPG3W8TIn8" />
         <link rel="preload" href="/hero_minimal_horizon.webp" as="image" type="image/webp" fetchPriority="high" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var tmpl = localStorage.getItem('sejatidimedia-active-template');
+                  var theme = localStorage.getItem('sejatidimedia-theme');
+                  var isLight = tmpl === 'professional' || (!tmpl && (!theme || theme === 'light')) || theme === 'light';
+                  if (isLight) {
+                    document.documentElement.classList.remove('dark');
+                    document.documentElement.classList.add('light');
+                  } else {
+                    document.documentElement.classList.add('dark');
+                    document.documentElement.classList.remove('light');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
       </head>
-      <body className="antialiased bg-theme-deep text-theme-fore">
+      <body className="antialiased bg-theme-deep text-theme-fore" suppressHydrationWarning>
         <NextTopLoader
           color="#4A85D9"
           initialPosition={0.08}

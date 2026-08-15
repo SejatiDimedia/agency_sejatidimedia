@@ -6,8 +6,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 import { Home, Layers, GitMerge, FolderOpen, MessageCircle } from "lucide-react";
+import dynamic from "next/dynamic";
 import ThemeToggle from "./ThemeToggle";
-import AiChatWidget from "./AiChatWidget";
+const AiChatWidget = dynamic(() => import("./AiChatWidget"), { ssr: false });
 import AuroraBackground from "./ui/aurora-background";
 import { ThemeMode } from "../types";
 import { useLanguage, Language } from "@/lib/i18n/LanguageContext";
@@ -54,17 +55,18 @@ export default function LayoutWrapper({
     };
   }, []);
 
+  // Smooth Branded Loading Screen Animation
   useEffect(() => {
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-          setTimeout(() => setLoading(false), 1400); // Extended to allow the text animation to play out
+          setTimeout(() => setLoading(false), 500);
           return 100;
         }
-        return prev + 2;
+        return prev + 4;
       });
-    }, 25);
+    }, 20);
     return () => clearInterval(interval);
   }, []);
 
@@ -165,17 +167,27 @@ export default function LayoutWrapper({
             initial={{ opacity: 1 }}
             exit={{
               opacity: 0,
-              transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+              transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
             }}
-            className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-theme-deep text-theme-fore transition-colors duration-300"
+            className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center ${
+              template === 'professional' || theme === 'light'
+                ? 'bg-[#F4F4F6] text-slate-900'
+                : 'bg-[#020203] text-white'
+            }`}
           >
-            <div className="absolute w-[400px] h-[400px] rounded-full bg-theme-accent/5 blur-[100px] pointer-events-none transition-colors duration-300" />
+            <div
+              className={`absolute w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none ${
+                template === 'professional' || theme === 'light'
+                  ? 'bg-blue-600/5'
+                  : 'bg-blue-500/10'
+              }`}
+            />
 
             {/* Premium Minimalist Logo Reveal */}
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
               className="z-10 flex flex-col items-center gap-8"
             >
               <Image
@@ -189,12 +201,22 @@ export default function LayoutWrapper({
 
               <div className="relative flex flex-col items-center">
                 {/* Ultra-thin elegant progress line */}
-                <div className="w-32 h-[1px] bg-theme-border/50 overflow-hidden rounded-full relative">
+                <div
+                  className={`w-32 h-[1.5px] overflow-hidden rounded-full relative ${
+                    template === 'professional' || theme === 'light'
+                      ? 'bg-slate-200'
+                      : 'bg-slate-800'
+                  }`}
+                >
                   <motion.div
-                    className="absolute top-0 left-0 h-full bg-theme-accent shadow-[0_0_8px_rgba(74,133,217,0.8)]"
+                    className={`absolute top-0 left-0 h-full ${
+                      template === 'professional' || theme === 'light'
+                        ? 'bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.6)]'
+                        : 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]'
+                    }`}
                     initial={{ width: "0%" }}
                     animate={{ width: `${progress}%` }}
-                    transition={{ ease: "easeOut", duration: 0.2 }}
+                    transition={{ ease: "easeOut", duration: 0.15 }}
                   />
                 </div>
 
@@ -204,9 +226,15 @@ export default function LayoutWrapper({
                     <motion.div
                       initial={{ opacity: 0, y: -8, filter: "blur(4px)" }}
                       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                      transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     >
-                      <span className="font-sora font-extrabold text-[11px] tracking-[0.3em] text-theme-fore uppercase">
+                      <span
+                        className={`font-sora font-extrabold text-[11px] tracking-[0.3em] uppercase ${
+                          template === 'professional' || theme === 'light'
+                            ? 'text-slate-800'
+                            : 'text-slate-200'
+                        }`}
+                      >
                         SejatiDimedia
                       </span>
                     </motion.div>
