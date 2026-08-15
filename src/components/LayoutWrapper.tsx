@@ -549,32 +549,32 @@ export default function LayoutWrapper({
             {/* Navbar Wrapper: Fullwidth at Top, Floating Capsule when Scrolled */}
             <div
               className={`w-full transition-all duration-300 ease-out flex items-center justify-center border-t-0 border-l-0 border-r-0 ${scrolled
-                ? 'px-4 bg-transparent border-b border-transparent shadow-none'
+                ? 'px-3 sm:px-4 bg-transparent border-b border-transparent shadow-none'
                 : 'bg-white/95 backdrop-blur-xl border-b border-slate-200/80 shadow-xs'
                 }`}
             >
               <div
-                className={`pointer-events-auto transition-all duration-300 ease-out flex items-center justify-between gap-4 border ${scrolled
-                  ? 'w-[92%] max-w-6xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-white/95 backdrop-blur-2xl border-slate-200 shadow-md shadow-slate-900/5'
-                  : 'w-full max-w-7xl mx-auto px-6 py-3 sm:py-3.5 rounded-none bg-transparent border-transparent shadow-none'
+                className={`pointer-events-auto transition-all duration-300 ease-out flex items-center justify-between gap-2 sm:gap-4 border ${scrolled
+                  ? 'w-[95%] sm:w-[92%] max-w-6xl mx-auto px-3 sm:px-6 py-2 sm:py-2.5 rounded-full bg-white/95 backdrop-blur-2xl border-slate-200 shadow-md shadow-slate-900/5'
+                  : 'w-full max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-none bg-transparent border-transparent shadow-none'
                   }`}
               >
                 {/* Brand Logo */}
                 <div
-                  className="flex items-center gap-2 cursor-pointer select-none shrink-0"
+                  className="flex items-center gap-1.5 sm:gap-2 cursor-pointer select-none shrink-0 min-w-0"
                   onClick={() => handleNavClick("home")}
                   id="logo-header-trigger"
                 >
-                  <div className="h-5 sm:h-5.5 w-auto hover:scale-105 transition-transform duration-200 flex items-center justify-center shrink-0">
+                  <div className="h-4.5 sm:h-5.5 w-auto hover:scale-105 transition-transform duration-200 flex items-center justify-center shrink-0">
                     <Image
                       src="/logo.svg"
                       alt="SejatiDimedia Logo"
-                      width={40}
+                      width={38}
                       height={14}
                       className="h-full w-auto object-contain"
                     />
                   </div>
-                  <span className="font-bold text-slate-900 text-xs sm:text-sm tracking-tight uppercase whitespace-nowrap shrink-0">
+                  <span className="font-bold text-slate-900 text-[11px] sm:text-sm tracking-tight uppercase whitespace-nowrap shrink-0">
                     <span className="font-sora" style={{ color: '#2E54A2' }}>Sejati</span>{' '}
                     <span className="font-sora" style={{ color: '#23385B' }}>Dimedia</span>
                   </span>
@@ -621,34 +621,34 @@ export default function LayoutWrapper({
                 </nav>
 
                 {/* Right Side: Language Switcher & Quick CTA */}
-                <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
                   {/* Language Switcher */}
-                  <div className="flex items-center relative bg-slate-100/90 border border-slate-200 rounded-full p-0.5 shadow-inner h-[32px]">
+                  <div className="flex items-center relative bg-slate-100/90 border border-slate-200 rounded-full p-0.5 shadow-inner h-[28px] sm:h-[32px] shrink-0">
                     <div
-                      className={`absolute top-0.5 bottom-0.5 w-[28px] bg-white border border-slate-200 rounded-full transition-all duration-300 ease-[0.16,1,0.3,1] shadow-xs ${language === 'id' ? 'left-0.5' : 'left-[31px]'
+                      className={`absolute top-0.5 bottom-0.5 w-[22px] sm:w-[28px] bg-white border border-slate-200 rounded-full transition-all duration-300 ease-[0.16,1,0.3,1] shadow-xs ${language === 'id' ? 'left-0.5' : 'left-[24px] sm:left-[31px]'
                         }`}
                     />
                     <button
                       onClick={() => setLanguage('id')}
-                      className="relative z-10 w-[28px] h-[24px] flex items-center justify-center rounded-full transition-all duration-200 hover:scale-105"
+                      className="relative z-10 w-[22px] sm:w-[28px] h-[20px] sm:h-[24px] flex items-center justify-center rounded-full transition-all duration-200 hover:scale-105"
                       title="Bahasa Indonesia"
                     >
                       <img
                         src="/flags/id.svg"
                         alt="ID"
-                        className={`w-4 h-4 rounded-full object-cover shadow-xs border border-slate-200 transition-all ${language === 'id' ? 'opacity-100' : 'opacity-40 grayscale-[50%]'
+                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full object-cover shadow-xs border border-slate-200 transition-all ${language === 'id' ? 'opacity-100' : 'opacity-40 grayscale-[50%]'
                           }`}
                       />
                     </button>
                     <button
                       onClick={() => setLanguage('en')}
-                      className="relative z-10 w-[28px] h-[24px] flex items-center justify-center rounded-full transition-all duration-200 hover:scale-105"
+                      className="relative z-10 w-[22px] sm:w-[28px] h-[20px] sm:h-[24px] flex items-center justify-center rounded-full transition-all duration-200 hover:scale-105"
                       title="English"
                     >
                       <img
                         src="/flags/gb.svg"
                         alt="EN"
-                        className={`w-4 h-4 rounded-full object-cover shadow-xs border border-slate-200 transition-all ${language === 'en' ? 'opacity-100' : 'opacity-40 grayscale-[50%]'
+                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 rounded-full object-cover shadow-xs border border-slate-200 transition-all ${language === 'en' ? 'opacity-100' : 'opacity-40 grayscale-[50%]'
                           }`}
                       />
                     </button>
@@ -657,9 +657,10 @@ export default function LayoutWrapper({
                   {/* Navbar CTA Button */}
                   <button
                     onClick={() => handleNavClick("contact-section")}
-                    className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-xs shadow-blue-600/20 active:scale-95 transition-all duration-200 cursor-pointer flex items-center gap-1.5 shrink-0"
+                    className="px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-xs shadow-blue-600/20 active:scale-95 transition-all duration-200 cursor-pointer flex items-center gap-1 sm:gap-1.5 shrink-0"
                   >
-                    <span>{language === 'en' ? 'Consultation' : 'Konsultasi'}</span>
+                    <span>{language === 'en' ? 'Consult' : 'Konsul'}</span>
+                    <span className="hidden xs:inline">{language === 'en' ? 'ation' : 'tasi'}</span>
                     <Icon icon="ph:arrow-up-right-bold" className="w-3 h-3 hidden sm:inline" />
                   </button>
                 </div>
