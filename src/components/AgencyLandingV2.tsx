@@ -517,15 +517,32 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
     <div className="w-full text-slate-900 font-sans [&_h1]:font-sans [&_h2]:font-sans [&_h3]:font-sans [&_h4]:font-sans [&_h5]:font-sans [&_h6]:font-sans">
 
       {/* =========================================================================
-          SECTION 1: HERO SECTION (#hero-section) - PURE WHITE (#FFFFFF)
+          SECTION 1: HERO SECTION (#hero-section) - AMBIENT 3D CORE & PURE WHITE
           ========================================================================= */}
       <section
         id="hero-section"
-        className="w-full bg-white py-16 sm:py-24 lg:py-28"
+        className="w-full relative overflow-hidden bg-white pt-10 sm:pt-14 pb-16 sm:pb-24 lg:pb-28"
       >
-        <div className="relative min-h-[calc(100vh-14rem)] flex flex-col items-center justify-between text-center max-w-4xl mx-auto px-4 sm:px-6 overflow-visible">
+        {/* Minimalist Serene Horizon Background */}
+        <div className="absolute inset-x-0 top-0 h-[480px] sm:h-[600px] lg:h-[680px] overflow-hidden pointer-events-none -z-0">
+          <img
+            src="/hero_minimal_horizon.jpg"
+            alt="SejatiDimedia Serene Horizon"
+            className="w-full h-full object-cover object-top opacity-80"
+          />
+          {/* Top Navbar Soft Light Blend */}
+          <div className="absolute inset-x-0 top-0 h-24 sm:h-32 bg-gradient-to-b from-white/80 via-white/30 to-transparent" />
+          {/* Bottom Smooth Fade-to-White Transition */}
+          <div className="absolute inset-x-0 bottom-0 h-64 sm:h-80 lg:h-96 bg-gradient-to-t from-white via-white/90 to-transparent" />
+          {/* Soft Side Falloff */}
+          <div className="absolute inset-y-0 left-0 w-24 sm:w-48 bg-gradient-to-r from-white/50 to-transparent" />
+          <div className="absolute inset-y-0 right-0 w-24 sm:w-48 bg-gradient-to-l from-white/50 to-transparent" />
+        </div>
+
+        <div className="relative z-10 min-h-[calc(100vh-14rem)] flex flex-col items-center justify-between text-center max-w-4xl mx-auto px-4 sm:px-6">
           {/* Main Center Content Container */}
-          <div className="flex-1 flex flex-col items-center justify-center space-y-6 sm:space-y-8 w-full">
+          <div className="flex-1 flex flex-col items-center justify-center space-y-6 sm:space-y-8 w-full pt-16 sm:pt-24 lg:pt-28">
+
             {/* Main Headline */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -533,7 +550,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
               transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="max-w-4xl"
             >
-              <h1 className="text-3xl sm:text-5xl md:text-6xl font-sans font-bold tracking-tight leading-[1.12] text-slate-900">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-sans font-bold tracking-tight leading-[1.12] text-slate-900 drop-shadow-2xs">
                 {t.hero.title}{' '}
                 <span className="text-blue-600 inline-block">
                   {t.hero.titleHighlight}
@@ -548,7 +565,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
               transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               className="max-w-2xl mx-auto"
             >
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-sans">
+              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-sans font-medium">
                 {t.hero.subtitle}
               </p>
             </motion.div>
@@ -562,7 +579,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
             >
               <button
                 onClick={() => scrollToId('contact-section')}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-md shadow-blue-600/20 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/25 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
                 id="hero-btn-book-call"
               >
                 <span>{t.hero.btnPrimary}</span>
@@ -570,7 +587,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
               </button>
               <button
                 onClick={() => scrollToId('projects-section')}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-white hover:bg-slate-50 text-slate-700 border border-slate-200 hover:border-slate-300 shadow-sm active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-white/90 backdrop-blur-md hover:bg-white text-slate-700 hover:text-slate-900 border border-slate-200/90 hover:border-slate-300 shadow-sm active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
                 id="hero-btn-view-projects"
               >
                 <span>{t.hero.btnSecondary}</span>
@@ -659,15 +676,13 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 <button
                   key={tab.idx}
                   onClick={() => setPortalActiveTab(tab.idx)}
-                  className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl font-sans text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-2 sm:gap-2.5 cursor-pointer relative ${
-                    isActive
-                      ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 scale-[1.02]'
-                      : 'bg-white text-slate-700 hover:text-slate-900 border border-slate-200/80 hover:border-blue-300 hover:bg-slate-50 shadow-2xs'
-                  }`}
+                  className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl font-sans text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-2 sm:gap-2.5 cursor-pointer relative ${isActive
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 scale-[1.02]'
+                    : 'bg-white text-slate-700 hover:text-slate-900 border border-slate-200/80 hover:border-blue-300 hover:bg-slate-50 shadow-2xs'
+                    }`}
                 >
-                  <span className={`w-5 h-5 rounded-md text-[10px] font-mono font-bold flex items-center justify-center ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
-                  }`}>
+                  <span className={`w-5 h-5 rounded-md text-[10px] font-mono font-bold flex items-center justify-center ${isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
+                    }`}>
                     {tab.num}
                   </span>
                   <Icon icon={tab.icon} className={`w-4 h-4 ${isActive ? 'text-white' : 'text-blue-600'}`} />
@@ -1044,32 +1059,6 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                           </div>
                         </div>
                       </div>
-                    </div>
-
-                    {/* Interactive Simulator Button */}
-                    <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2 border-t border-slate-100">
-                      <span className="text-xs text-slate-500 font-sans">
-                        Trigger a test dispatch signal to the simulator:
-                      </span>
-                      <button
-                        onClick={() => {
-                          setTestAlertSent(true);
-                          setTimeout(() => setTestAlertSent(false), 3000);
-                        }}
-                        className="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-all shadow-sm active:scale-95 flex items-center gap-2 cursor-pointer w-full sm:w-auto justify-center"
-                      >
-                        {testAlertSent ? (
-                          <>
-                            <Icon icon="ph:check-bold" className="w-3.5 h-3.5 text-white" />
-                            <span>Notification Dispatched to Inbox & Portal!</span>
-                          </>
-                        ) : (
-                          <>
-                            <Icon icon="ph:paper-plane-tilt-bold" className="w-3.5 h-3.5" />
-                            <span>Simulate Real-Time Email & Portal Notification</span>
-                          </>
-                        )}
-                      </button>
                     </div>
                   </motion.div>
                 )}
@@ -2018,39 +2007,39 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
         variants={sectionFadeIn}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
-        <div className="text-left space-y-3">
-          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 font-bold">
-            <span>{t.trust?.badge || "Kenapa Klien Percaya"}</span>
-          </div>
-          <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
-            {t.trust?.mainHeading || "Kenapa Klien Percaya"}{' '}
-            <span className="text-blue-600">
-              {t.trust?.mainHeadingHighlight || "Bekerja Sama Dengan Saya"}
-            </span>
-          </h2>
-        </div>
-
-        {/* 2-Column Bento Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-          {(t.trust?.items || []).map((item: any, idx: number) => (
-            <div
-              key={idx}
-              className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col sm:flex-row gap-4 items-start"
-            >
-              <div className="flex-shrink-0 w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 border border-blue-200 flex items-center justify-center">
-                <Icon icon={TRUST_ICONS[idx]} className="w-5 h-5" />
-              </div>
-              <div className="space-y-1.5">
-                <h3 className="text-sm sm:text-base font-sans font-bold text-slate-900">
-                  {item.title}
-                </h3>
-                <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                  {item.desc}
-                </p>
-              </div>
+          <div className="text-left space-y-3">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 font-bold">
+              <span>{t.trust?.badge || "Kenapa Klien Percaya"}</span>
             </div>
-          ))}
-        </div>
+            <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
+              {t.trust?.mainHeading || "Kenapa Klien Percaya"}{' '}
+              <span className="text-blue-600">
+                {t.trust?.mainHeadingHighlight || "Bekerja Sama Dengan Saya"}
+              </span>
+            </h2>
+          </div>
+
+          {/* 2-Column Bento Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+            {(t.trust?.items || []).map((item: any, idx: number) => (
+              <div
+                key={idx}
+                className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col sm:flex-row gap-4 items-start"
+              >
+                <div className="flex-shrink-0 w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 border border-blue-200 flex items-center justify-center">
+                  <Icon icon={TRUST_ICONS[idx]} className="w-5 h-5" />
+                </div>
+                <div className="space-y-1.5">
+                  <h3 className="text-sm sm:text-base font-sans font-bold text-slate-900">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </motion.section>
 
