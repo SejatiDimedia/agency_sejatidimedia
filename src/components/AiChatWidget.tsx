@@ -6,26 +6,6 @@ import { MessageSquare, X, Send, User, Loader2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import Pusher from 'pusher-js';
 
-// Custom Sedia AI Icon based on user's new SVG/image
-const SediaIcon = ({ className }: { className?: string }) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    className={className}
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    {/* Head, Antenna, and Cutout Eyes */}
-    <path
-      fillRule="evenodd"
-      clipRule="evenodd"
-      d="M11 3V1.5a1.5 1.5 0 0 1 3 0V3h1.5A3.5 3.5 0 0 1 19 6.5v4A3.5 3.5 0 0 1 15.5 14H8.5A3.5 3.5 0 0 1 5 10.5v-4A3.5 3.5 0 0 1 8.5 3H11zM9 10.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm6 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"
-    />
-
-    {/* Bottom Body */}
-    <path d="M4 17.5C4 16.12 5.12 15 6.5 15h11c1.38 0 2.5 1.12 2.5 2.5 0 3.5-3.5 5.5-8 5.5s-8-2-8-5.5z" />
-  </svg>
-);
-
 type Message = {
   role: 'user' | 'ai';
   text: string;
@@ -80,6 +60,33 @@ export default function AiChatWidget() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages]);
+
+  // Smart Auto-Open AI Chat (Default: 45 detik)
+  useEffect(() => {
+    // Check if chat has already been auto-opened or manually closed in this session
+    const hasAutoOpened = sessionStorage.getItem('sedia_auto_opened');
+    const isDismissed = sessionStorage.getItem('sedia_chat_dismissed');
+
+    if (!hasAutoOpened && !isDismissed) {
+      // 45 seconds golden window for high-intent visitors
+      const timer = setTimeout(() => {
+        setIsOpen(true);
+        sessionStorage.setItem('sedia_auto_opened', 'true');
+      }, 45000);
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
+  const handleOpen = () => {
+    setIsOpen(true);
+    sessionStorage.setItem('sedia_auto_opened', 'true');
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    sessionStorage.setItem('sedia_chat_dismissed', 'true');
+  };
 
   const handleSendMessage = async (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -155,7 +162,7 @@ export default function AiChatWidget() {
             exit={{ scale: 0, opacity: 0 }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => setIsOpen(true)}
+            onClick={handleOpen}
             className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-[100] w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-lg shadow-[#2C5098]/30 flex items-center justify-center cursor-pointer transition-all border border-white/20 group p-0 overflow-hidden"
             aria-label="Buka Chat AI"
           >
@@ -179,10 +186,10 @@ export default function AiChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 15, scale: 0.96 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-[100] w-[calc(100vw-24px)] sm:w-[340px] md:w-[350px] h-[420px] sm:h-[450px] max-h-[75vh] flex flex-col rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-2xl shadow-slate-900/10 overflow-hidden"
+            className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-[100] w-[calc(100vw-24px)] sm:w-[340px] md:w-[350px] h-[450px] max-h-[75dvh] flex flex-col rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-2xl shadow-slate-900/10 overflow-hidden touch-auto"
           >
             {/* Header */}
-            <div className="px-3.5 py-2.5 border-b border-slate-200/80 bg-gradient-to-r from-slate-50 via-white to-blue-50/30 flex items-center justify-between">
+            <div className="px-3.5 py-2.5 border-b border-slate-200/80 bg-gradient-to-r from-slate-50 via-white to-blue-50/30 flex items-center justify-between shrink-0">
               <div className="flex items-center gap-2.5">
                 <div className="w-7 h-7 rounded-full bg-[#2C5098]/10 border border-[#2C5098]/20 flex items-center justify-center overflow-hidden">
                   <img src="/ai-gif2.gif" alt="CS Avatar" className="w-full h-full object-cover scale-110" />
@@ -218,7 +225,7 @@ export default function AiChatWidget() {
                   {isHandoffMode ? "Akhiri Sesi" : "Hubungi Tim"}
                 </button>
                 <button
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleClose}
                   className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
@@ -226,8 +233,11 @@ export default function AiChatWidget() {
               </div>
             </div>
 
-            {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-3.5 space-y-3 custom-scrollbar">
+            {/* Messages Area (Smooth scrollable on mobile) */}
+            <div 
+              className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-3.5 space-y-3 custom-scrollbar touch-pan-y"
+              style={{ WebkitOverflowScrolling: 'touch' }}
+            >
               {messages.map((msg, idx) => (
                 <div key={idx} className={`flex items-end gap-1.5 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                   {/* Avatar */}
@@ -253,10 +263,10 @@ export default function AiChatWidget() {
 
               {isLoading && (
                 <div className="flex items-end gap-1.5 flex-row">
-                  <div className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center shadow-xs bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white">
-                    <SediaIcon className="w-3.5 h-3.5" />
+                  <div className="shrink-0 w-6 h-6 rounded-full overflow-hidden flex items-center justify-center shadow-xs bg-[#2C5098]/10 border border-[#2C5098]/20">
+                    <img src="/ai-gif2.gif" alt="Sedia AI" className="w-full h-full object-cover scale-110" />
                   </div>
-                  <div className="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 rounded-bl-xs flex items-center gap-1">
+                  <div className="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200/90 rounded-bl-xs flex items-center gap-1.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-bounce" style={{ animationDelay: '0ms' }} />
                     <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-bounce" style={{ animationDelay: '150ms' }} />
                     <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -267,7 +277,7 @@ export default function AiChatWidget() {
             </div>
 
             {/* Input Area */}
-            <div className="p-3 bg-slate-50/80 border-t border-slate-200/80">
+            <div className="p-3 bg-slate-50/80 border-t border-slate-200/80 shrink-0">
               <form onSubmit={handleSendMessage} className="relative flex items-center">
                 <input
                   type="text"

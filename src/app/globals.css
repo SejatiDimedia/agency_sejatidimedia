@@ -167,3 +167,23 @@ textarea,
   content-visibility: auto;
   contain-intrinsic-size: 0 500px;
 }
+
+/* Custom scrollbar utility */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(44, 80, 152, 0.25) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(44, 80, 152, 0.25);
+  border-radius: 9999px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(44, 80, 152, 0.45);
+}
