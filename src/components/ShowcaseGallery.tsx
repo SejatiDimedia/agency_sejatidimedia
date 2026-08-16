@@ -63,17 +63,17 @@ export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
   };
 
   return (
-    <div className="p-6 rounded-2xl bg-theme-elevated border border-theme-border/60 shadow-lg hover:shadow-xl transition-all duration-300 space-y-5 text-left">
-      <div className="flex items-center justify-between border-b border-theme-border/40 pb-3">
+    <div className="p-6 rounded-2xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border/60 shadow-lg hover:shadow-xl transition-all duration-300 space-y-5 text-left">
+      <div className="flex items-center justify-between border-b border-slate-100 dark:border-theme-border/40 pb-3">
         <div className="space-y-0.5">
-          <h3 className="text-xs font-sans font-bold text-theme-fore uppercase tracking-wider">
+          <h3 className="text-xs font-sans font-bold text-slate-900 dark:text-theme-fore uppercase tracking-wider">
             Project Showcase
           </h3>
-          <p className="text-[10px] text-theme-fore-subtle font-mono">
+          <p className="text-[10px] text-slate-400 dark:text-theme-fore-subtle font-mono">
             {images.length} {images.length === 1 ? "Screenshot" : "Screenshots"}
           </p>
         </div>
-        <Layers className="w-4 h-4 text-theme-accent/80" />
+        <Layers className="w-4 h-4 text-[#2C5098]" />
       </div>
 
       <div className="grid grid-cols-3 gap-2.5">
@@ -86,7 +86,7 @@ export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
               onClick={() => setActiveIdx(idx)}
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.98 }}
-              className="relative aspect-square w-full rounded-xl overflow-hidden border border-theme-border/60 bg-theme-surface/50 hover:border-theme-accent/60 cursor-pointer transition-all duration-300 group shadow-sm hover:shadow-md"
+              className="relative aspect-square w-full rounded-xl overflow-hidden border border-slate-200 dark:border-theme-border/60 bg-slate-50 dark:bg-theme-surface/50 hover:border-[#2C5098] cursor-pointer transition-all duration-300 group shadow-sm hover:shadow-md"
             >
               <Image
                 src={img.url}
@@ -102,7 +102,7 @@ export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
                   <motion.div
                     initial={{ scale: 0.8, opacity: 0 }}
                     whileHover={{ scale: 1.1 }}
-                    className="p-2 rounded-full bg-theme-elevated/80 backdrop-blur-sm border border-theme-border text-theme-base shadow-lg"
+                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm border border-slate-200 text-slate-900 shadow-lg"
                   >
                     <Maximize2 className="w-3.5 h-3.5" />
                   </motion.div>
@@ -111,10 +111,10 @@ export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
               
               {isLastVisibleWithMore && (
                 <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center z-10 transition-all group-hover:bg-black/80">
-                  <span className="text-base font-sans font-extrabold text-theme-accent tracking-tight drop-shadow">
+                  <span className="text-base font-sans font-extrabold text-white tracking-tight drop-shadow">
                     +{remainingCount}
                   </span>
-                  <span className="text-[8px] font-mono text-white/60 uppercase tracking-widest mt-0.5">
+                  <span className="text-[8px] font-mono text-white/70 uppercase tracking-widest mt-0.5">
                     Gallery
                   </span>
                 </div>
@@ -142,28 +142,28 @@ export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
                 exit={{ opacity: 0, scale: 0.95, y: 20 }}
                 transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                 onClick={(e) => e.stopPropagation()}
-                className="relative w-full max-w-[96vw] md:max-w-6xl h-[85vh] md:h-[90vh] bg-theme-elevated border border-theme-border/80 rounded-2xl overflow-hidden shadow-2xl flex flex-col z-10"
+                className="relative w-full max-w-[96vw] md:max-w-6xl h-[85vh] md:h-[90vh] bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border/80 rounded-2xl overflow-hidden shadow-2xl flex flex-col z-10"
               >
                 {/* Modal Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-theme-border/60 bg-theme-surface/30">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-theme-border/60 bg-slate-50 dark:bg-theme-surface/30">
                   <div className="space-y-0.5 text-left">
-                    <span className="text-[10px] font-mono text-theme-accent uppercase tracking-wider">
+                    <span className="text-[10px] font-mono text-[#2C5098] uppercase tracking-wider font-bold">
                       Project Screenshot
                     </span>
-                    <h3 className="text-sm sm:text-base font-sans font-bold text-theme-fore truncate max-w-[200px] sm:max-w-xl">
+                    <h3 className="text-sm sm:text-base font-sans font-bold text-slate-900 dark:text-theme-fore truncate max-w-[200px] sm:max-w-xl">
                       {images[activeIdx].name}
                     </h3>
                   </div>
                   
                   <div className="flex items-center gap-3">
-                    <span className="text-[10px] font-mono text-theme-fore-subtle bg-theme-surface/60 border border-theme-border/40 px-2 py-0.5 rounded">
+                    <span className="text-[10px] font-mono text-slate-500 dark:text-theme-fore-subtle bg-white dark:bg-theme-surface/60 border border-slate-200 dark:border-theme-border/40 px-2 py-0.5 rounded">
                       {activeIdx + 1} / {images.length}
                     </span>
                     <motion.button
                       whileHover={{ rotate: 90, scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => setActiveIdx(null)}
-                      className="p-1.5 rounded-lg bg-theme-surface hover:bg-theme-border border border-theme-border/60 text-theme-fore transition-all cursor-pointer"
+                      className="p-1.5 rounded-lg bg-white hover:bg-slate-100 dark:bg-theme-surface dark:hover:bg-theme-border border border-slate-200 dark:border-theme-border/60 text-slate-700 dark:text-theme-fore transition-all cursor-pointer"
                     >
                       <X className="w-4 h-4" />
                     </motion.button>
@@ -178,7 +178,7 @@ export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handlePrev}
-                      className="absolute left-4 z-20 p-2.5 rounded-full bg-theme-elevated/80 hover:bg-theme-accent border border-theme-border text-theme-base cursor-pointer shadow-lg transition-colors animate-in fade-in"
+                      className="absolute left-4 z-20 p-2.5 rounded-full bg-white/90 hover:bg-[#2C5098] hover:text-white border border-slate-200 text-slate-800 cursor-pointer shadow-lg transition-colors animate-in fade-in"
                     >
                       <ChevronLeft className="w-5 h-5" />
                     </motion.button>
@@ -201,7 +201,7 @@ export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
                     {/* Loader overlay */}
                     {imageLoading && (
                       <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
-                        <div className="w-8 h-8 rounded-full border-2 border-theme-accent/20 border-t-theme-accent animate-spin" />
+                        <div className="w-8 h-8 rounded-full border-2 border-[#2C5098]/20 border-t-[#2C5098] animate-spin" />
                       </div>
                     )}
                   </div>
@@ -212,7 +212,7 @@ export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={handleNext}
-                      className="absolute right-4 z-20 p-2.5 rounded-full bg-theme-elevated/80 hover:bg-theme-accent border border-theme-border text-theme-base cursor-pointer shadow-lg transition-colors animate-in fade-in"
+                      className="absolute right-4 z-20 p-2.5 rounded-full bg-white/90 hover:bg-[#2C5098] hover:text-white border border-slate-200 text-slate-800 cursor-pointer shadow-lg transition-colors animate-in fade-in"
                     >
                       <ChevronRight className="w-5 h-5" />
                     </motion.button>
@@ -221,7 +221,7 @@ export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
 
                 {/* Modal Footer / Thumbnails list */}
                 {images.length > 1 && (
-                  <div className="px-6 py-4 border-t border-theme-border/60 bg-theme-surface/10">
+                  <div className="px-6 py-4 border-t border-slate-200 dark:border-theme-border/60 bg-slate-50 dark:bg-theme-surface/10">
                     <div className="flex gap-2 overflow-x-auto py-1 px-0.5 justify-center no-scrollbar">
                       {images.map((img, idx) => (
                         <div
@@ -229,8 +229,8 @@ export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
                           onClick={() => setActiveIdx(idx)}
                           className={`relative w-10 h-10 rounded-lg overflow-hidden border cursor-pointer transition-all flex-shrink-0 ${
                             idx === activeIdx
-                              ? "border-theme-accent scale-105 shadow-sm"
-                              : "border-theme-border opacity-40 hover:opacity-85"
+                              ? "border-[#2C5098] scale-105 shadow-sm"
+                              : "border-slate-200 opacity-40 hover:opacity-85"
                           }`}
                         >
                           <Image

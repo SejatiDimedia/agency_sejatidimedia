@@ -47,7 +47,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
         <div className="space-y-4">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-xs font-mono text-slate-500 hover:text-blue-600 dark:text-theme-fore-muted dark:hover:text-theme-accent transition-colors"
+            className="inline-flex items-center gap-2 text-xs font-mono text-slate-500 hover:text-[#2C5098] dark:text-theme-fore-muted dark:hover:text-theme-accent transition-colors"
           >
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>{language === 'en' ? 'Back to Home' : 'Kembali ke Beranda'}</span>
@@ -55,20 +55,20 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
 
           <div className="space-y-3 text-left">
             {/* Section Eyebrow matching the landing page theme */}
-            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 dark:text-theme-accent font-bold">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] dark:text-theme-accent font-bold">
               <span>{language === 'en' ? 'PROJECT SHOWCASE' : 'PORTOFOLIO PROYEK'}</span>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-sora font-extrabold tracking-tight text-slate-900 dark:text-theme-fore leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-jakarta font-sans font-extrabold tracking-tight text-slate-900 dark:text-theme-fore leading-tight">
               {language === 'en' ? (
                 <>
                   Software & System{' '}
-                  <span className="text-blue-600 inline-block">Portfolio</span>
+                  <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent inline-block">Portfolio</span>
                 </>
               ) : (
                 <>
                   Portofolio Sistem &{' '}
-                  <span className="text-blue-600 inline-block">Aplikasi</span>
+                  <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent inline-block">Aplikasi</span>
                 </>
               )}
             </h1>
@@ -89,7 +89,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
               onClick={() => setActiveCategory(cat)}
               className={`px-4 py-2 rounded-full text-xs font-sans font-bold transition-all duration-200 cursor-pointer ${
                 activeCategory === cat
-                  ? "bg-blue-600 text-white shadow-sm shadow-blue-600/25"
+                  ? "bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-md shadow-[#2C5098]/25 border border-transparent"
                   : "bg-white dark:bg-theme-surface text-slate-600 dark:text-theme-fore-muted hover:bg-slate-50 dark:hover:bg-theme-elevated hover:text-slate-900 dark:hover:text-theme-fore border border-slate-200 dark:border-theme-border shadow-2xs"
               }`}
             >
@@ -119,7 +119,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
                   exit={{ opacity: 0, scale: 0.96 }}
                   transition={{ duration: 0.3 }}
                   key={project.slug}
-                  className="group flex flex-col justify-between p-5 rounded-3xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border hover:border-blue-300 dark:hover:border-theme-border-accent hover:shadow-xl transition-all duration-300 relative overflow-hidden"
+                  className="group flex flex-col justify-between p-5 rounded-3xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border hover:border-[#2C5098]/50 dark:hover:border-theme-border-accent hover:shadow-xl hover:shadow-[#2C5098]/10 transition-all duration-300 relative overflow-hidden"
                 >
                   <div className="space-y-4">
                     {/* Thumbnail */}
@@ -144,14 +144,14 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
                           {project.categories.map((cat) => (
                             <span
                               key={cat}
-                              className="inline-block text-[8px] font-mono uppercase tracking-widest font-bold text-blue-700 dark:text-theme-accent bg-blue-50 dark:bg-theme-accent/10 border border-blue-200/60 dark:border-theme-accent/20 px-2.5 py-0.5 rounded-full"
+                              className="inline-block text-[8px] font-mono uppercase tracking-widest font-bold text-[#2C5098] dark:text-theme-accent bg-[#2C5098]/10 dark:bg-theme-accent/10 border border-[#2C5098]/20 dark:border-theme-accent/20 px-2.5 py-0.5 rounded-full"
                             >
                               {getCategoryName(cat)}
                             </span>
                           ))}
                         </div>
                       )}
-                      <h3 className="text-base font-sora font-bold text-slate-900 dark:text-theme-fore group-hover:text-blue-600 transition-colors">
+                      <h3 className="text-base font-jakarta font-sans font-bold text-slate-900 dark:text-theme-fore group-hover:text-[#2C5098] transition-colors">
                         {project.name}
                       </h3>
                       <p className="text-xs text-slate-600 dark:text-theme-fore-muted leading-relaxed line-clamp-3 font-sans">
@@ -177,7 +177,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
 
                     <Link
                       href={`/projects/${project.slug}`}
-                      className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-full bg-slate-50 dark:bg-theme-surface hover:bg-blue-600 hover:text-white text-xs font-sans font-bold text-slate-700 dark:text-theme-fore transition-all duration-300 border border-slate-200 dark:border-theme-border/80 hover:border-blue-600 shadow-2xs cursor-pointer"
+                      className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-full bg-slate-50 dark:bg-theme-surface hover:bg-gradient-to-r hover:from-[#2C5098] hover:to-[#23385B] hover:text-white text-xs font-sans font-bold text-slate-700 dark:text-theme-fore transition-all duration-300 border border-slate-200 dark:border-theme-border/80 hover:border-transparent shadow-2xs hover:shadow-md hover:shadow-[#2C5098]/20 cursor-pointer"
                     >
                       <span>{language === 'en' ? 'View Details' : 'Lihat Detail'}</span>
                       <ChevronRight className="w-3.5 h-3.5" />
