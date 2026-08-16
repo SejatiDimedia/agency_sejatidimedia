@@ -156,7 +156,7 @@ export default function AiChatWidget() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-[100] w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-theme-accent hover:bg-theme-accent-bright text-white shadow-md shadow-theme-accent/25 flex items-center justify-center cursor-pointer transition-all border border-white/15 group p-0 overflow-hidden"
+            className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-[100] w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-lg shadow-[#2C5098]/30 flex items-center justify-center cursor-pointer transition-all border border-white/20 group p-0 overflow-hidden"
             aria-label="Buka Chat AI"
           >
             <img
@@ -166,7 +166,7 @@ export default function AiChatWidget() {
             />
 
             {/* Subtle ping animation behind button */}
-            <span className="absolute inset-0 rounded-full bg-theme-accent animate-ping opacity-20 pointer-events-none" />
+            <span className="absolute inset-0 rounded-full bg-[#2C5098] animate-ping opacity-25 pointer-events-none" />
           </motion.button>
         )}
       </AnimatePresence>
@@ -179,17 +179,17 @@ export default function AiChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 15, scale: 0.96 }}
             transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-[100] w-[calc(100vw-24px)] sm:w-[340px] md:w-[350px] h-[420px] sm:h-[450px] max-h-[75vh] flex flex-col rounded-2xl bg-theme-surface/90 backdrop-blur-xl border border-theme-border shadow-xl overflow-hidden"
+            className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-[100] w-[calc(100vw-24px)] sm:w-[340px] md:w-[350px] h-[420px] sm:h-[450px] max-h-[75vh] flex flex-col rounded-2xl bg-white/95 backdrop-blur-xl border border-slate-200/90 shadow-2xl shadow-slate-900/10 overflow-hidden"
           >
             {/* Header */}
-            <div className="px-3.5 py-2.5 border-b border-theme-border bg-theme-elevated/60 flex items-center justify-between">
+            <div className="px-3.5 py-2.5 border-b border-slate-200/80 bg-gradient-to-r from-slate-50 via-white to-blue-50/30 flex items-center justify-between">
               <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-full bg-theme-accent/10 border border-theme-accent/20 flex items-center justify-center overflow-hidden">
+                <div className="w-7 h-7 rounded-full bg-[#2C5098]/10 border border-[#2C5098]/20 flex items-center justify-center overflow-hidden">
                   <img src="/ai-gif2.gif" alt="CS Avatar" className="w-full h-full object-cover scale-110" />
                 </div>
                 <div>
-                  <h3 className="text-xs font-sans font-bold text-theme-fore leading-tight">Sedia AI</h3>
-                  <p className="text-[9px] font-mono text-emerald-500 flex items-center gap-1">
+                  <h3 className="text-xs font-sans font-bold text-slate-900 leading-tight">Sedia AI</h3>
+                  <p className="text-[9px] font-mono text-emerald-600 font-semibold flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     Online
                   </p>
@@ -208,8 +208,8 @@ export default function AiChatWidget() {
                   disabled={isLoading || isWaitingForName}
                   className={
                     isHandoffMode
-                      ? "px-2.5 py-1 rounded-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white transition-colors text-[9px] font-bold tracking-wide uppercase disabled:opacity-50 cursor-pointer border border-red-500/20 flex items-center gap-1"
-                      : "px-2.5 py-1 rounded-full bg-theme-accent/10 hover:bg-theme-accent text-theme-accent hover:text-white transition-colors text-[9px] font-bold tracking-wide uppercase disabled:opacity-50 cursor-pointer border border-theme-accent/20 flex items-center gap-1"
+                      ? "px-2.5 py-1 rounded-full bg-red-500/10 hover:bg-red-500 text-red-600 hover:text-white transition-colors text-[9px] font-bold tracking-wide uppercase disabled:opacity-50 cursor-pointer border border-red-500/20 flex items-center gap-1"
+                      : "px-2.5 py-1 rounded-full bg-[#2C5098]/10 hover:bg-[#2C5098] text-[#2C5098] hover:text-white transition-colors text-[9px] font-bold tracking-wide uppercase disabled:opacity-50 cursor-pointer border border-[#2C5098]/20 flex items-center gap-1"
                   }
                 >
                   {!isHandoffMode && (
@@ -219,7 +219,7 @@ export default function AiChatWidget() {
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="w-7 h-7 rounded-full bg-theme-elevated hover:bg-theme-border/50 flex items-center justify-center text-theme-fore-muted hover:text-theme-fore transition-colors cursor-pointer"
+                  className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -231,19 +231,19 @@ export default function AiChatWidget() {
               {messages.map((msg, idx) => (
                 <div key={idx} className={`flex items-end gap-1.5 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                   {/* Avatar */}
-                  <div className={`shrink-0 w-6 h-6 rounded-full overflow-hidden flex items-center justify-center shadow-xs ${msg.role === 'user' ? 'bg-theme-fore text-theme-base' : 'bg-theme-accent/10 border border-theme-accent/20'}`}>
+                  <div className={`shrink-0 w-6 h-6 rounded-full overflow-hidden flex items-center justify-center shadow-xs ${msg.role === 'user' ? 'bg-[#23385B] text-white' : 'bg-[#2C5098]/10 border border-[#2C5098]/20'}`}>
                     {msg.role === 'user' ? <User className="w-3 h-3" /> : <img src="/ai-gif2.gif" className="w-full h-full object-cover scale-110" />}
                   </div>
 
                   {/* Bubble */}
                   <div className={`max-w-[78%] px-3 py-2 rounded-xl text-[11.5px] leading-relaxed ${msg.role === 'user'
-                      ? 'bg-theme-fore text-theme-base rounded-br-xs'
-                      : 'bg-theme-elevated border border-theme-border text-theme-fore rounded-bl-xs'
+                      ? 'bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white rounded-br-xs shadow-xs'
+                      : 'bg-slate-50 border border-slate-200/90 text-slate-800 rounded-bl-xs'
                     }`}>
                     {msg.role === 'user' ? (
                       <p>{msg.text}</p>
                     ) : (
-                      <div className="prose prose-sm prose-invert max-w-none prose-p:my-0.5 prose-ul:my-0.5 prose-ul:pl-3.5 prose-li:my-0 text-[11.5px]">
+                      <div className="prose prose-sm max-w-none prose-p:my-0.5 prose-ul:my-0.5 prose-ul:pl-3.5 prose-li:my-0 text-[11.5px] text-slate-800">
                         <ReactMarkdown>{msg.text}</ReactMarkdown>
                       </div>
                     )}
@@ -253,13 +253,13 @@ export default function AiChatWidget() {
 
               {isLoading && (
                 <div className="flex items-end gap-1.5 flex-row">
-                  <div className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center shadow-xs bg-theme-accent text-white">
+                  <div className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center shadow-xs bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white">
                     <SediaIcon className="w-3.5 h-3.5" />
                   </div>
-                  <div className="px-3 py-2 rounded-xl bg-theme-elevated border border-theme-border rounded-bl-xs flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-theme-fore-muted animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 rounded-full bg-theme-fore-muted animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 rounded-full bg-theme-fore-muted animate-bounce" style={{ animationDelay: '300ms' }} />
+                  <div className="px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 rounded-bl-xs flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-bounce" style={{ animationDelay: '0ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-bounce" style={{ animationDelay: '150ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-bounce" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               )}
@@ -267,7 +267,7 @@ export default function AiChatWidget() {
             </div>
 
             {/* Input Area */}
-            <div className="p-3 bg-theme-elevated/40 border-t border-theme-border">
+            <div className="p-3 bg-slate-50/80 border-t border-slate-200/80">
               <form onSubmit={handleSendMessage} className="relative flex items-center">
                 <input
                   type="text"
@@ -275,12 +275,12 @@ export default function AiChatWidget() {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ketik pesan Anda..."
                   disabled={isLoading}
-                  className="w-full pl-3 pr-10 py-2 bg-theme-surface border border-theme-border rounded-lg text-xs text-theme-fore placeholder-theme-fore-muted focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent transition-all disabled:opacity-50"
+                  className="w-full pl-3 pr-10 py-2 bg-white border border-slate-200 rounded-xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2C5098] focus:ring-1 focus:ring-[#2C5098] transition-all disabled:opacity-50"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim() || isLoading}
-                  className="absolute right-1.5 w-7 h-7 flex items-center justify-center rounded-md bg-theme-accent hover:bg-theme-accent-bright text-white disabled:bg-theme-border disabled:text-theme-fore-muted transition-colors cursor-pointer"
+                  className="absolute right-1.5 w-7 h-7 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white disabled:bg-slate-200 disabled:text-slate-400 transition-all cursor-pointer shadow-xs"
                 >
                   {isLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5 ml-0.5" />}
                 </button>

@@ -47,6 +47,21 @@ export const TECH_ICONS: Record<string, string> = {
   "Supabase": "devicon:supabase",
   "Astro": "devicon:astro",
   "Fast API": "devicon:fastapi",
-  "RabbitMQ": "devicon:rabbitmq",
-  "Nuxt": "devicon:nuxt"
+  "Nuxt": "devicon:nuxt",
+  "N8N": "simple-icons:n8n",
+  "n8n": "simple-icons:n8n",
+  "LangChain": "simple-icons:langchain",
+  "LlamaIndex": "simple-icons:llamaindex",
+  "RAG Architecture": "ph:file-magnifying-glass-duotone",
+  "QLoRA / Fine-Tuning": "ph:sliders-horizontal-duotone",
+  "Autonomous Agents": "ph:robot-duotone",
+  "AI Agents": "ph:robot-duotone",
+  "Vector DB": "ph:database-duotone",
+  "Pinecone": "simple-icons:pinecone",
+  "Hugging Face": "logos:hugging-face-icon",
+  "OpenAI": "logos:openai-icon",
+  "Claude": "logos:claude-icon",
+  "Ollama": "simple-icons:ollama",
+  "DeepSeek": "simple-icons:deepseek",
+  "Prompt Engineering": "ph:terminal-window-duotone"
 };

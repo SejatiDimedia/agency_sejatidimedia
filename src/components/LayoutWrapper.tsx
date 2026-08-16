@@ -184,8 +184,8 @@ export default function LayoutWrapper({
             <div
               className={`absolute w-[400px] h-[400px] rounded-full blur-[100px] pointer-events-none ${
                 template === 'professional' || theme === 'light'
-                  ? 'bg-blue-600/5'
-                  : 'bg-blue-500/10'
+                  ? 'bg-[#2C5098]/8'
+                  : 'bg-[#2C5098]/12'
               }`}
             />
 
@@ -215,11 +215,7 @@ export default function LayoutWrapper({
                   }`}
                 >
                   <motion.div
-                    className={`absolute top-0 left-0 h-full ${
-                      template === 'professional' || theme === 'light'
-                        ? 'bg-blue-600 shadow-[0_0_8px_rgba(37,99,235,0.6)]'
-                        : 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]'
-                    }`}
+                    className="absolute top-0 left-0 h-full bg-[#2C5098] shadow-[0_0_8px_rgba(44,80,152,0.6)]"
                     initial={{ width: "0%" }}
                     animate={{ width: `${progress}%` }}
                     transition={{ ease: "easeOut", duration: 0.15 }}
@@ -564,7 +560,7 @@ export default function LayoutWrapper({
           >
             {/* Top Announcement Bar: Fullwidth at Top, Smoothly Collapses on Scroll */}
             <div
-              className={`w-full bg-[#1E315B] text-white transition-all duration-300 ease-out overflow-hidden ${scrolled ? 'max-h-0 opacity-0 py-0 shadow-none' : 'max-h-12 opacity-100 py-2 sm:py-2.5 px-4 shadow-2xs'
+              className={`w-full bg-gradient-to-r from-[#23385B] via-[#2C5098] to-[#23385B] text-white transition-all duration-300 ease-out overflow-hidden ${scrolled ? 'max-h-0 opacity-0 py-0 shadow-none' : 'max-h-12 opacity-100 py-2 sm:py-2.5 px-4 shadow-2xs'
                 }`}
             >
               <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 text-[9px] sm:text-[10px] font-sans font-bold tracking-widest uppercase">
@@ -573,7 +569,7 @@ export default function LayoutWrapper({
                 <span className="opacity-40 hidden sm:inline">•</span>
                 <button
                   onClick={() => handleNavClick('contact-section')}
-                  className="underline underline-offset-2 hover:text-blue-200 transition-colors cursor-pointer hidden sm:inline"
+                  className="underline underline-offset-2 hover:text-blue-100 transition-colors cursor-pointer hidden sm:inline"
                 >
                   {language === 'id' ? 'Pesan Sekarang' : 'Book Now'}
                 </button>
@@ -609,7 +605,7 @@ export default function LayoutWrapper({
                     />
                   </div>
                   <span className="font-bold text-slate-900 text-[11px] sm:text-sm tracking-tight uppercase whitespace-nowrap shrink-0">
-                    <span className="font-sora" style={{ color: '#2E54A2' }}>Sejati</span>{' '}
+                    <span className="font-sora" style={{ color: '#2C5098' }}>Sejati</span>{' '}
                     <span className="font-sora" style={{ color: '#23385B' }}>Dimedia</span>
                   </span>
                 </div>
@@ -619,7 +615,7 @@ export default function LayoutWrapper({
                   <button
                     onClick={() => handleNavClick("home")}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${pathname === "/"
-                      ? "text-blue-600 bg-blue-50/80 font-bold"
+                      ? "text-[#2C5098] bg-[#2C5098]/8 font-bold"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
                       }`}
                   >
@@ -640,7 +636,7 @@ export default function LayoutWrapper({
                   <button
                     onClick={() => router.push("/projects")}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${pathname.startsWith("/projects")
-                      ? "text-blue-600 bg-blue-50/80 font-bold"
+                      ? "text-[#2C5098] bg-[#2C5098]/8 font-bold"
                       : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
                       }`}
                   >
@@ -691,7 +687,7 @@ export default function LayoutWrapper({
                   {/* Navbar CTA Button */}
                   <button
                     onClick={() => handleNavClick("contact-section")}
-                    className="px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-xs shadow-blue-600/20 active:scale-95 transition-all duration-200 cursor-pointer flex items-center gap-1 sm:gap-1.5 shrink-0"
+                    className="px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-[10px] sm:text-xs font-bold bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white shadow-sm shadow-[#2C5098]/25 hover:shadow-md hover:shadow-[#2C5098]/35 active:scale-95 transition-all duration-300 cursor-pointer flex items-center gap-1 sm:gap-1.5 shrink-0 border border-white/10"
                   >
                     <span>{language === 'en' ? 'Consult' : 'Konsul'}</span>
                     <span className="hidden xs:inline">{language === 'en' ? 'ation' : 'tasi'}</span>
@@ -727,7 +723,7 @@ export default function LayoutWrapper({
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono text-slate-500">
                     <a
                       href="mailto:sejatidimedia@gmail.com"
-                      className="hover:text-blue-600 transition-colors duration-200 underline underline-offset-4"
+                      className="hover:text-[#2C5098] transition-colors duration-200 underline underline-offset-4"
                     >
                       sejatidimedia@gmail.com
                     </a>
@@ -745,7 +741,7 @@ export default function LayoutWrapper({
                       <li>
                         <button
                           onClick={() => handleNavClick("capabilities-section")}
-                          className="hover:text-blue-600 transition-colors duration-200 cursor-pointer block text-left"
+                          className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer block text-left"
                         >
                           {t.nav.services}
                         </button>
@@ -753,7 +749,7 @@ export default function LayoutWrapper({
                       <li>
                         <button
                           onClick={() => handleNavClick("technology-section")}
-                          className="hover:text-blue-600 transition-colors duration-200 cursor-pointer block text-left"
+                          className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer block text-left"
                         >
                           {t.nav.tech}
                         </button>
@@ -761,7 +757,7 @@ export default function LayoutWrapper({
                       <li>
                         <button
                           onClick={() => handleNavClick("projects-section")}
-                          className="hover:text-blue-600 transition-colors duration-200 cursor-pointer block text-left"
+                          className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer block text-left"
                         >
                           {t.nav.portfolio}
                         </button>
@@ -777,7 +773,7 @@ export default function LayoutWrapper({
                       <li>
                         <button
                           onClick={() => handleNavClick("methodology-section")}
-                          className="hover:text-blue-600 transition-colors duration-200 cursor-pointer block text-left"
+                          className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer block text-left"
                         >
                           {t.nav.workflow}
                         </button>
@@ -785,7 +781,7 @@ export default function LayoutWrapper({
                       <li>
                         <button
                           onClick={() => handleNavClick("features-section")}
-                          className="hover:text-blue-600 transition-colors duration-200 cursor-pointer block text-left"
+                          className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer block text-left"
                         >
                           {t.nav.advantages}
                         </button>
@@ -793,7 +789,7 @@ export default function LayoutWrapper({
                       <li>
                         <button
                           onClick={() => handleNavClick("contact-section")}
-                          className="hover:text-blue-600 transition-colors duration-200 cursor-pointer block text-left font-bold text-slate-900"
+                          className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer block text-left font-bold text-slate-900"
                         >
                           {t.nav.contact}
                         </button>
@@ -805,7 +801,7 @@ export default function LayoutWrapper({
 
               <div className="relative py-6 select-none border-t border-b border-slate-200/80 overflow-hidden flex items-center justify-center">
                 <h2 className="text-[9vw] sm:text-[10vw] md:text-[10.5vw] lg:text-[105px] xl:text-[115px] font-sans font-bold tracking-tighter uppercase leading-none text-center select-none w-full transition-all duration-300 py-3 px-6 whitespace-nowrap">
-                  <span className="bg-gradient-to-b from-[#2E54A2] via-[#2E54A2]/80 to-transparent bg-clip-text text-transparent">SEJATI</span>
+                  <span className="bg-gradient-to-b from-[#2C5098] via-[#2C5098]/80 to-transparent bg-clip-text text-transparent">SEJATI</span>
                   <span className="bg-gradient-to-b from-[#23385B] via-[#23385B]/80 to-transparent bg-clip-text text-transparent">DIMEDIA</span>
                 </h2>
               </div>
@@ -845,7 +841,7 @@ export default function LayoutWrapper({
             <div className="bg-white/90 backdrop-blur-xl border border-slate-200 shadow-xl rounded-2xl p-1.5 flex items-center justify-between">
               <button
                 onClick={() => handleNavClick("home")}
-                className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname === "/" ? "text-blue-700 bg-blue-50 font-bold" : "text-slate-600 hover:text-slate-900"}`}
+                className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname === "/" ? "text-[#2C5098] bg-[#2C5098]/10 font-bold" : "text-slate-600 hover:text-slate-900"}`}
               >
                 <Home className="w-5 h-5 mb-1" />
                 <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.home}</span>
@@ -866,7 +862,7 @@ export default function LayoutWrapper({
               </button>
               <button
                 onClick={() => router.push("/projects")}
-                className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/projects") ? "text-blue-700 bg-blue-50 font-bold" : "text-slate-600 hover:text-slate-900"}`}
+                className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/projects") ? "text-[#2C5098] bg-[#2C5098]/10 font-bold" : "text-slate-600 hover:text-slate-900"}`}
               >
                 <FolderOpen className="w-5 h-5 mb-1" />
                 <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.portfolio}</span>

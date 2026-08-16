@@ -76,7 +76,7 @@ function ClientPortalMockup3D({ t }: { t: any }) {
       >
         {/* Ambient 3D Dynamic Shadow Base */}
         <div
-          className="absolute inset-0 bg-blue-600/10 rounded-3xl blur-2xl transform translate-y-8 scale-95 pointer-events-none -z-10"
+          className="absolute inset-0 bg-[#2C5098]/10 rounded-3xl blur-2xl transform translate-y-8 scale-95 pointer-events-none -z-10"
         />
 
         {/* Floating Badge #1 (Top Right) - High Z-Depth Layer */}
@@ -87,14 +87,14 @@ function ClientPortalMockup3D({ t }: { t: any }) {
           <motion.div
             animate={{ y: [0, -6, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="px-4 py-2 rounded-2xl bg-white border border-blue-200 shadow-2xl flex items-center gap-2.5"
+            className="px-4 py-2 rounded-2xl bg-white border border-[#2C5098]/20 shadow-2xl flex items-center gap-2.5"
           >
-            <div className="w-6 h-6 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 shadow-xs">
+            <div className="w-6 h-6 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center shrink-0 shadow-xs">
               <Icon icon="ph:clock-clockwise-bold" className="w-3.5 h-3.5" />
             </div>
             <div>
               <p className="text-[10px] font-bold text-slate-900 leading-none">24/7 Live Tracking</p>
-              <p className="text-[8px] font-medium text-blue-600 mt-0.5 hidden sm:block">Real-Time Development Status</p>
+              <p className="text-[8px] font-medium text-[#2C5098] mt-0.5 hidden sm:block">Real-Time Development Status</p>
             </div>
           </motion.div>
         </div>
@@ -125,11 +125,11 @@ function ClientPortalMockup3D({ t }: { t: any }) {
             transform: "translateZ(20px)",
             transformStyle: "preserve-3d",
           }}
-          className="w-full p-4 sm:p-6 rounded-3xl bg-white border border-slate-200 shadow-2xl hover:border-blue-300 transition-colors duration-300 space-y-3.5 relative overflow-hidden text-left"
+          className="w-full p-4 sm:p-6 rounded-3xl bg-white border border-slate-200 shadow-2xl hover:border-[#2C5098]/40 transition-colors duration-300 space-y-3.5 relative overflow-hidden text-left"
         >
           {/* Moving Laser Shimmer Light Line along top border */}
           <motion.div
-            className="absolute top-0 left-0 h-[2px] w-48 bg-gradient-to-r from-transparent via-blue-500 to-transparent z-30 pointer-events-none"
+            className="absolute top-0 left-0 h-[2px] w-48 bg-gradient-to-r from-transparent via-[#2C5098] to-transparent z-30 pointer-events-none"
             animate={{ x: ['-100%', '350%'] }}
             transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
           />
@@ -146,7 +146,7 @@ function ClientPortalMockup3D({ t }: { t: any }) {
                 <div className="flex items-center gap-1.5 bg-slate-50 px-3 py-1 rounded-lg border border-slate-200 ml-2">
                   <img src="/logo.svg" alt="SejatiDimedia Logo" className="h-3.5 w-auto object-contain" />
                   <span className="text-[10px] sm:text-xs font-mono text-slate-700 flex items-center gap-1 truncate max-w-[200px] sm:max-w-none">
-                    <Icon icon="ph:lock-key-duotone" className="w-3 h-3 text-blue-600 shrink-0" />
+                    <Icon icon="ph:lock-key-duotone" className="w-3 h-3 text-[#2C5098] shrink-0" />
                     sejatidimedia.id/portal/projects
                   </span>
                 </div>
@@ -155,8 +155,8 @@ function ClientPortalMockup3D({ t }: { t: any }) {
 
             {/* Multi-Tab Pills */}
             <div className="flex items-center gap-2 pt-1">
-              <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1">
-                <Icon icon="ph:squares-four-duotone" className="w-3 h-3 text-blue-600" />
+              <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 flex items-center gap-1">
+                <Icon icon="ph:squares-four-duotone" className="w-3 h-3 text-[#2C5098]" />
                 Dashboard
               </span>
               <span className="px-2.5 py-0.5 rounded-md text-[10px] font-medium text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1">
@@ -177,7 +177,7 @@ function ClientPortalMockup3D({ t }: { t: any }) {
           >
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-xl bg-blue-100/70 border border-blue-200 flex items-center justify-center text-blue-700 shrink-0">
+                <div className="w-8 h-8 rounded-xl bg-[#2C5098]/10 border border-[#2C5098]/20 flex items-center justify-center text-[#2C5098] shrink-0">
                   <Icon icon="ph:kanban-duotone" className="w-4 h-4" />
                 </div>
                 <div>
@@ -193,7 +193,7 @@ function ClientPortalMockup3D({ t }: { t: any }) {
               <motion.span
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                className="px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-blue-100 text-blue-800 border border-blue-200 shrink-0 shadow-xs"
+                className="px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white border border-white/20 shrink-0 shadow-xs"
               >
                 88% Completed
               </motion.span>
@@ -205,8 +205,8 @@ function ClientPortalMockup3D({ t }: { t: any }) {
                 <Icon icon="ph:check-circle-fill" className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                 <span>Phase 1-3: UI/UX & DB Architecture</span>
               </div>
-              <div className="flex items-center gap-1.5 text-blue-700 bg-blue-50/80 p-2 rounded-xl border border-blue-200 shadow-2xs">
-                <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse shrink-0" />
+              <div className="flex items-center gap-1.5 text-[#23385B] bg-[#2C5098]/10 p-2 rounded-xl border border-[#2C5098]/20 shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-[#2C5098] animate-pulse shrink-0" />
                 <span>Phase 4: QA & Production Release</span>
               </div>
             </div>
@@ -214,7 +214,7 @@ function ClientPortalMockup3D({ t }: { t: any }) {
             {/* Animated Breathing Progress Bar */}
             <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden p-0.5">
               <motion.div
-                className="h-full bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-500 rounded-full"
+                className="h-full bg-gradient-to-r from-[#2C5098] via-[#284478] to-[#23385B] rounded-full"
                 animate={{ width: ['78%', '88%', '78%'] }}
                 transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               />
@@ -228,7 +228,7 @@ function ClientPortalMockup3D({ t }: { t: any }) {
           >
             <div className="flex items-center justify-between border-b border-slate-200/80 pb-2">
               <span className="text-[10px] sm:text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
-                <Icon icon="ph:receipt-duotone" className="w-3.5 h-3.5 text-blue-600" />
+                <Icon icon="ph:receipt-duotone" className="w-3.5 h-3.5 text-[#2C5098]" />
                 Project Billing & Invoices
               </span>
               <motion.span
@@ -245,14 +245,14 @@ function ClientPortalMockup3D({ t }: { t: any }) {
                 <p className="text-[8px] sm:text-[9px] font-bold text-slate-500 uppercase">Total Billed</p>
                 <p className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">Rp 37.2M</p>
               </div>
-              <div className="bg-blue-50/80 p-2 sm:p-2.5 rounded-xl border border-blue-200 shadow-xs relative overflow-hidden">
+              <div className="bg-[#2C5098]/8 p-2 sm:p-2.5 rounded-xl border border-[#2C5098]/20 shadow-xs relative overflow-hidden">
                 <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-500/15 to-transparent pointer-events-none"
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-[#2C5098]/15 to-transparent pointer-events-none"
                   animate={{ x: ['-100%', '150%'] }}
                   transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
                 />
-                <p className="text-[8px] sm:text-[9px] font-bold text-blue-700 uppercase">Amount Paid</p>
-                <p className="text-xs sm:text-sm font-bold text-blue-700 mt-0.5">Rp 37.2M</p>
+                <p className="text-[8px] sm:text-[9px] font-bold text-[#23385B] uppercase">Amount Paid</p>
+                <p className="text-xs sm:text-sm font-bold text-[#23385B] mt-0.5">Rp 37.2M</p>
               </div>
               <div className="bg-white p-2 sm:p-2.5 rounded-xl border border-slate-200 shadow-xs">
                 <p className="text-[8px] sm:text-[9px] font-bold text-slate-500 uppercase">Balance Due</p>
@@ -267,11 +267,11 @@ function ClientPortalMockup3D({ t }: { t: any }) {
             className="bg-slate-100 p-2 sm:p-2.5 rounded-xl border border-slate-200 flex items-center justify-between text-[10px] text-slate-700"
           >
             <div className="flex items-center gap-1.5">
-              <Icon icon="ph:seal-check-duotone" className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+              <Icon icon="ph:seal-check-duotone" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
               <span>INV-202607-001: <strong className="text-slate-900">Paid & Verified</strong></span>
             </div>
             <span className="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[9px] font-bold text-slate-700 flex items-center gap-1 shadow-xs">
-              <Icon icon="ph:download-simple-bold" className="w-3 h-3 text-blue-600" />
+              <Icon icon="ph:download-simple-bold" className="w-3 h-3 text-[#2C5098]" />
               PDF Invoice
             </span>
           </div>
@@ -541,6 +541,9 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
           <div className="absolute inset-y-0 right-0 w-24 sm:w-48 bg-gradient-to-l from-white/50 to-transparent" />
         </div>
 
+        {/* Ambient Brand Glow behind Headline */}
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[540px] h-[280px] bg-gradient-to-br from-[#2C5098]/8 to-[#23385B]/5 rounded-full blur-[100px] pointer-events-none -z-0" />
+
         <div className="relative z-10 min-h-[calc(100vh-14rem)] flex flex-col items-center justify-between text-center max-w-4xl mx-auto px-4 sm:px-6">
           {/* Main Center Content Container */}
           <div className="flex-1 flex flex-col items-center justify-center space-y-6 sm:space-y-8 w-full pt-16 sm:pt-24 lg:pt-28">
@@ -549,7 +552,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
             <div className="max-w-4xl">
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-sans font-bold tracking-tight leading-[1.12] text-slate-900 drop-shadow-2xs">
                 {t.hero.title}{' '}
-                <span className="text-blue-600 inline-block">
+                <span className="bg-gradient-to-br from-[#2C5098] via-[#284478] to-[#23385B] bg-clip-text text-transparent inline-block font-extrabold pb-0.5">
                   {t.hero.titleHighlight}
                 </span>.
               </h1>
@@ -566,7 +569,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2 w-full sm:w-auto">
               <button
                 onClick={() => scrollToId('contact-section')}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-lg shadow-blue-600/25 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white shadow-lg shadow-[#2C5098]/25 hover:shadow-xl hover:shadow-[#2C5098]/35 active:scale-[0.98] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 border border-white/10"
                 id="hero-btn-book-call"
               >
                 <span>{t.hero.btnPrimary}</span>
@@ -574,7 +577,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
               </button>
               <button
                 onClick={() => scrollToId('projects-section')}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-white/90 backdrop-blur-md hover:bg-white text-slate-700 hover:text-slate-900 border border-slate-200/90 hover:border-slate-300 shadow-sm active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-white/90 backdrop-blur-md hover:bg-white text-slate-700 hover:text-slate-900 border border-slate-200/90 hover:border-[#2C5098]/40 shadow-sm active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
                 id="hero-btn-view-projects"
               >
                 <span>{t.hero.btnSecondary}</span>
@@ -587,7 +590,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.55 }}
-            className="pt-6 flex flex-col items-center gap-1.5 cursor-pointer text-slate-400 hover:text-blue-600 transition-colors select-none"
+            className="pt-6 flex flex-col items-center gap-1.5 cursor-pointer text-slate-400 hover:text-[#2C5098] transition-colors select-none"
             onClick={() => scrollToId('client-portal-section')}
           >
             <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.25em] font-bold text-slate-400">
@@ -597,7 +600,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
               animate={{ y: [0, 4, 0] }}
               transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
             >
-              <Icon icon="ph:caret-down-bold" className="w-3.5 h-3.5 text-blue-600" />
+              <Icon icon="ph:caret-down-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
             </motion.div>
           </motion.div>
         </div>
@@ -617,13 +620,13 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
         <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-8 sm:space-y-12">
           {/* 1. Centered Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 font-bold">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
               <span>{t.clientPortal?.eyebrow || "FITUR UNGGULAN"}</span>
             </div>
 
             <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
               {t.clientPortal?.title || (language === 'en' ? 'Every Project Includes a' : 'Setiap Proyek Dilengkapi')}{' '}
-              <span className="text-blue-600">
+              <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent font-extrabold">
                 {language === 'en' ? 'Dedicated Client Portal' : 'Portal Klien Khusus'}
               </span>
             </h2>
@@ -664,15 +667,15 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                   key={tab.idx}
                   onClick={() => setPortalActiveTab(tab.idx)}
                   className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl font-sans text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-2 sm:gap-2.5 cursor-pointer relative ${isActive
-                    ? 'bg-blue-600 text-white shadow-md shadow-blue-500/25 scale-[1.02]'
-                    : 'bg-white text-slate-700 hover:text-slate-900 border border-slate-200/80 hover:border-blue-300 hover:bg-slate-50 shadow-2xs'
+                    ? 'bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-md shadow-[#2C5098]/30 scale-[1.02]'
+                    : 'bg-white text-slate-700 hover:text-slate-900 border border-slate-200/80 hover:border-[#2C5098]/40 hover:bg-slate-50 shadow-2xs'
                     }`}
                 >
                   <span className={`w-5 h-5 rounded-md text-[10px] font-mono font-bold flex items-center justify-center ${isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
                     }`}>
                     {tab.num}
                   </span>
-                  <Icon icon={tab.icon} className={`w-4 h-4 ${isActive ? 'text-white' : 'text-blue-600'}`} />
+                  <Icon icon={tab.icon} className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#2C5098]'}`} />
                   <span className="hidden sm:inline">{tab.label}</span>
                   <span className="sm:hidden">{tab.shortLabel}</span>
                 </button>
@@ -683,13 +686,13 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
           {/* 3. Main Interactive Live Showcase Window */}
           <div className="relative flex justify-center items-center py-2 max-w-4xl mx-auto w-full">
             {/* Ambient Background Soft Radial Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[340px] bg-gradient-to-tr from-blue-100/60 via-indigo-50/40 to-blue-200/40 rounded-full blur-[90px] pointer-events-none -z-10" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[340px] bg-gradient-to-tr from-[#2C5098]/12 via-indigo-50/40 to-[#23385B]/10 rounded-full blur-[90px] pointer-events-none -z-10" />
 
             {/* Clean macOS Client Portal Window */}
-            <div className="w-full rounded-3xl bg-white border border-slate-200/90 shadow-2xl shadow-slate-900/8 overflow-hidden relative group hover:border-blue-400 transition-all duration-300">
+            <div className="w-full rounded-3xl bg-white border border-slate-200/90 shadow-2xl shadow-slate-900/8 overflow-hidden relative group hover:border-[#2C5098]/50 transition-all duration-300">
               {/* Laser Moving Shimmer Accent */}
               <motion.div
-                className="absolute top-0 left-0 h-[2px] w-48 bg-gradient-to-r from-transparent via-blue-500 to-transparent z-30"
+                className="absolute top-0 left-0 h-[2px] w-48 bg-gradient-to-r from-transparent via-[#2C5098] to-transparent z-30"
                 animate={{ x: ['-100%', '350%'] }}
                 transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
               />
@@ -705,7 +708,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
 
                 {/* Full-width URL address bar */}
                 <div className="flex-1 flex items-center gap-2 bg-white px-3 sm:px-3.5 py-1.5 rounded-xl border border-slate-200 text-slate-700 text-[10px] sm:text-xs font-mono shadow-2xs min-w-0">
-                  <Icon icon="ph:lock-key-duotone" className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                  <Icon icon="ph:lock-key-duotone" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
                   <span className="truncate text-slate-700 font-medium">sejatidimedia.id/portal/projects/saas-dashboard</span>
                 </div>
 
@@ -735,7 +738,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                     {/* Progress Summary Header */}
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-200 flex items-center justify-center shrink-0 shadow-2xs">
+                        <div className="w-10 h-10 rounded-xl bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 flex items-center justify-center shrink-0 shadow-2xs">
                           <Icon icon="ph:kanban-duotone" className="w-5 h-5" />
                         </div>
                         <div>
@@ -748,7 +751,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                         </div>
                       </div>
                       <div className="flex items-center gap-2 self-start sm:self-auto">
-                        <span className="px-3.5 py-1 rounded-xl text-xs font-mono font-black tracking-wide bg-blue-600 text-white shadow-sm shadow-blue-500/25 border border-blue-400/40 flex items-center gap-1.5">
+                        <span className="px-3.5 py-1 rounded-xl text-xs font-mono font-black tracking-wide bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white shadow-sm shadow-[#2C5098]/25 border border-white/20 flex items-center gap-1.5">
                           88% Completed
                         </span>
                       </div>
@@ -757,7 +760,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                     {/* Progress Bar */}
                     <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden p-0.5 border border-slate-200">
                       <motion.div
-                        className="h-full bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-400 rounded-full"
+                        className="h-full bg-gradient-to-r from-[#2C5098] via-[#284478] to-[#23385B] rounded-full"
                         initial={{ width: '0%' }}
                         animate={{ width: '88%' }}
                         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -797,28 +800,28 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                       </div>
 
                       {/* Column 2: In Progress */}
-                      <div className="space-y-2 bg-blue-50/40 p-3 rounded-2xl border border-blue-200/70">
-                        <div className="flex items-center justify-between text-[10px] font-mono font-bold text-blue-700 uppercase px-1">
-                          <span className="px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/20 text-blue-700 flex items-center gap-1 font-mono font-bold">
+                      <div className="space-y-2 bg-[#2C5098]/5 p-3 rounded-2xl border border-[#2C5098]/20">
+                        <div className="flex items-center justify-between text-[10px] font-mono font-bold text-[#2C5098] uppercase px-1">
+                          <span className="px-2 py-0.5 rounded-md bg-[#2C5098]/10 border border-[#2C5098]/20 text-[#2C5098] flex items-center gap-1 font-mono font-bold">
                             IN PROGRESS (2)
                           </span>
                           <span className="relative flex h-2 w-2 items-center justify-center">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-blue-600" />
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2C5098] opacity-75" />
+                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#2C5098]" />
                           </span>
                         </div>
                         <div className="space-y-1.5 text-xs">
-                          <div className="p-2.5 rounded-xl bg-white border border-blue-200 shadow-2xs text-blue-900 font-semibold flex items-center gap-2">
+                          <div className="p-2.5 rounded-xl bg-white border border-[#2C5098]/20 shadow-2xs text-[#23385B] font-semibold flex items-center gap-2">
                             <span className="relative flex h-3 w-3 items-center justify-center shrink-0 ml-0.5 mr-0.5">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600" />
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2C5098] opacity-75" />
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2C5098]" />
                             </span>
                             <span>Payment Gateway & Webhook Setup</span>
                           </div>
-                          <div className="p-2.5 rounded-xl bg-white border border-blue-200 shadow-2xs text-blue-900 font-semibold flex items-center gap-2">
+                          <div className="p-2.5 rounded-xl bg-white border border-[#2C5098]/20 shadow-2xs text-[#23385B] font-semibold flex items-center gap-2">
                             <span className="relative flex h-3 w-3 items-center justify-center shrink-0 ml-0.5 mr-0.5">
-                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75" />
-                              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600" />
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2C5098] opacity-75" />
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2C5098]" />
                             </span>
                             <span>REST API & Multi-Tenant Endpoints</span>
                           </div>
@@ -849,7 +852,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                     {/* Live Commit Status Footer */}
                     <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-slate-500 font-mono">
                       <span className="flex items-center gap-1.5">
-                        <Icon icon="ph:git-commit-bold" className="w-3.5 h-3.5 text-blue-600" />
+                        <Icon icon="ph:git-commit-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
                         Latest: <strong className="text-slate-800">feat(auth): integrate multi-tenant JWT session</strong>
                       </span>
                       <span className="text-slate-400">12 mins ago</span>
@@ -894,7 +897,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                         OFFICIAL INVOICES & DIGITAL RECEIPTS
                       </div>
                       <div className="space-y-2">
-                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-blue-300 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
+                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-[#2C5098]/40 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
                           <div className="flex items-center gap-3">
                             <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center shrink-0">
                               <Icon icon="ph:receipt-duotone" className="w-4 h-4" />
@@ -910,13 +913,13 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                               <p className="text-xs text-slate-500">Milestone 1: Down Payment (50%) • Rp 18,600,000</p>
                             </div>
                           </div>
-                          <button className="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 text-blue-700 border border-slate-200 hover:border-blue-300 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer self-end sm:self-auto">
+                          <button className="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-[#2C5098]/10 text-[#2C5098] border border-slate-200 hover:border-[#2C5098]/30 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer self-end sm:self-auto">
                             <Icon icon="ph:download-simple-bold" className="w-3.5 h-3.5" />
                             Download PDF
                           </button>
                         </div>
 
-                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-blue-300 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
+                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-[#2C5098]/40 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
                           <div className="flex items-center gap-3">
                             <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center shrink-0">
                               <Icon icon="ph:receipt-duotone" className="w-4 h-4" />
@@ -932,7 +935,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                               <p className="text-xs text-slate-500">Milestone 2: Final Handover (50%) • Rp 18,600,000</p>
                             </div>
                           </div>
-                          <button className="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-blue-50 text-blue-700 border border-slate-200 hover:border-blue-300 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer self-end sm:self-auto">
+                          <button className="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-[#2C5098]/10 text-[#2C5098] border border-slate-200 hover:border-[#2C5098]/30 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer self-end sm:self-auto">
                             <Icon icon="ph:download-simple-bold" className="w-3.5 h-3.5" />
                             Download PDF
                           </button>
@@ -963,7 +966,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                     {/* Channel Header */}
                     <div className="flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-slate-200">
                       <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 border border-blue-200 flex items-center justify-center shrink-0">
+                        <div className="w-10 h-10 rounded-xl bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 flex items-center justify-center shrink-0">
                           <Icon icon="ph:bell-simple-ringing-duotone" className="w-5 h-5" />
                         </div>
                         <div>
@@ -990,7 +993,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                       <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
                         <div className="flex items-center justify-between pb-1.5 border-b border-slate-200">
                           <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
-                            <Icon icon="ph:broadcast-duotone" className="w-4 h-4 text-blue-600" />
+                            <Icon icon="ph:broadcast-duotone" className="w-4 h-4 text-[#2C5098]" />
                             In-Portal Live Activity
                           </span>
                           <span className="px-2 py-0.5 rounded-md text-[9px] font-mono font-bold bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">
@@ -1000,7 +1003,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                         <div className="space-y-2">
                           <div className="bg-white p-2.5 rounded-xl border border-slate-200/90 shadow-2xs space-y-1">
                             <div className="flex items-center justify-between">
-                              <span className="px-2 py-0.5 rounded text-[9px] font-mono font-black tracking-wider bg-blue-50 text-blue-700 border border-blue-200/80">
+                              <span className="px-2 py-0.5 rounded text-[9px] font-mono font-black tracking-wider bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20">
                                 MILESTONE COMPLETED
                               </span>
                               <span className="text-[9px] text-slate-400 font-mono">10m ago</span>
@@ -1022,13 +1025,13 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                       </div>
 
                       {/* Email Notification Card */}
-                      <div className="p-4 rounded-2xl bg-blue-50/40 border border-blue-200/80 space-y-2.5">
-                        <div className="flex items-center justify-between pb-1.5 border-b border-blue-200/60">
-                          <span className="text-xs font-bold text-blue-900 flex items-center gap-1.5">
-                            <Icon icon="ph:envelope-simple-duotone" className="w-4 h-4 text-blue-600" />
+                      <div className="p-4 rounded-2xl bg-[#2C5098]/5 border border-[#2C5098]/20 space-y-2.5">
+                        <div className="flex items-center justify-between pb-1.5 border-b border-[#2C5098]/20">
+                          <span className="text-xs font-bold text-[#23385B] flex items-center gap-1.5">
+                            <Icon icon="ph:envelope-simple-duotone" className="w-4 h-4 text-[#2C5098]" />
                             Email Notification Digest
                           </span>
-                          <span className="px-2 py-0.5 rounded-md text-[9px] font-mono font-bold bg-blue-100/70 text-blue-800 border border-blue-200">
+                          <span className="px-2 py-0.5 rounded-md text-[9px] font-mono font-bold bg-[#2C5098]/10 text-[#23385B] border border-[#2C5098]/20">
                             Auto-Dispatch
                           </span>
                         </div>
@@ -1040,7 +1043,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                           <p className="text-slate-600 leading-relaxed text-[11px]">
                             Hello Timur, all Sprint 2 deliverables have passed QA testing. You can review the live staging build at:
                           </p>
-                          <div className="p-2 rounded-lg bg-slate-50 border border-slate-200 font-mono text-[10px] text-blue-600 break-all">
+                          <div className="p-2 rounded-lg bg-slate-50 border border-slate-200 font-mono text-[10px] text-[#2C5098] font-bold break-all">
                             https://staging.sejatidimedia.id/demo
                           </div>
                         </div>
@@ -1096,7 +1099,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
         <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
           {/* Standard Centered Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 font-bold">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
               <span>{t.about?.eyebrow || "TENTANG SAYA"}</span>
             </div>
 
@@ -1144,7 +1147,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
             {/* Narrative Item 02: Core Philosophy */}
             <div className="py-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-baseline">
               <div className="md:col-span-4 space-y-1">
-                <span className="text-xs font-mono font-bold uppercase tracking-widest text-blue-600">
+                <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#2C5098]">
                   {t.about?.phase2Label || (language === 'en' ? '02 / CORE PRINCIPLE' : '02 / PRINSIP UTAMA')}
                 </span>
                 <h3 className="text-base sm:text-lg font-sans font-bold text-slate-900">
@@ -1211,12 +1214,12 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 font-bold">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
               <span>{t.nav.services}</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
               {t.nav.services}{' '}
-              <span className="text-blue-600">
+              <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent">
                 {t.services.mainHeadingHighlight}
               </span>
             </h2>
@@ -1237,8 +1240,8 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                   key={idx}
                   onClick={() => setOpenServiceIndex(isOpen ? null : idx)}
                   className={`rounded-3xl transition-all duration-300 overflow-hidden cursor-pointer ${isOpen
-                    ? 'bg-white border-2 border-blue-500/60 shadow-md p-6 sm:p-8 text-slate-900 relative'
-                    : 'bg-white border border-slate-200 hover:border-blue-300 p-5 sm:p-6 hover:bg-slate-50/80 shadow-xs'
+                    ? 'bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-xl shadow-[#2C5098]/25 border border-white/10 p-6 sm:p-8 relative'
+                    : 'bg-white border border-slate-200 hover:border-[#2C5098]/40 p-5 sm:p-6 hover:bg-slate-50/80 shadow-xs'
                     }`}
                 >
                   {isOpen ? (
@@ -1246,16 +1249,16 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
                         {/* Left: Number & Title (4 cols) */}
                         <div className="lg:col-span-4 space-y-2 text-left">
-                          <span className="font-mono text-xs sm:text-sm font-bold text-blue-600">
+                          <span className="font-mono text-xs sm:text-sm font-bold text-white/80">
                             {itemNum}
                           </span>
-                          <h3 className="text-xl sm:text-2xl font-sans font-bold text-slate-900 leading-snug">
+                          <h3 className="text-xl sm:text-2xl font-sans font-bold text-white leading-snug">
                             {item.title}
                           </h3>
                         </div>
 
                         {/* Center: Image Mockup (5 cols) */}
-                        <div className="lg:col-span-5 relative overflow-hidden rounded-2xl border border-slate-200 shadow-sm bg-slate-100">
+                        <div className="lg:col-span-5 relative overflow-hidden rounded-2xl border border-white/20 shadow-md bg-white/10">
                           <img
                             src={imageSrc}
                             alt={item.title}
@@ -1267,7 +1270,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
 
                         {/* Right: Description & CTA (3 cols) */}
                         <div className="lg:col-span-3 space-y-4 text-left flex flex-col justify-between h-full">
-                          <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                          <p className="text-xs text-white/90 leading-relaxed font-sans">
                             {item.desc}
                           </p>
                           <div>
@@ -1276,10 +1279,10 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                                 e.stopPropagation();
                                 scrollToId('contact-section');
                               }}
-                              className="px-5 py-2.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm transition-all shadow-sm active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
+                              className="px-5 py-2.5 rounded-full bg-white hover:bg-slate-100 text-[#23385B] font-bold text-xs sm:text-sm transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto hover:text-[#2C5098]"
                             >
                               <span>{language === 'en' ? 'Contact Us' : 'Hubungi Kami'}</span>
-                              <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
+                              <Icon icon="ph:arrow-right-bold" className="w-4 h-4 text-[#2C5098]" />
                             </button>
                           </div>
                         </div>
@@ -1291,7 +1294,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                           e.stopPropagation();
                           setOpenServiceIndex(null);
                         }}
-                        className="absolute top-5 right-5 w-8 h-8 rounded-full border border-slate-200 bg-slate-50 text-slate-600 flex items-center justify-center hover:bg-slate-100 hover:text-slate-900 transition-all cursor-pointer shadow-xs"
+                        className="absolute top-5 right-5 w-8 h-8 rounded-full border border-white/20 bg-white/10 text-white flex items-center justify-center hover:bg-white/25 transition-all cursor-pointer shadow-xs"
                         title="Collapse"
                       >
                         <Icon icon="ph:minus-bold" className="w-4 h-4" />
@@ -1307,7 +1310,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                           {item.title}
                         </h3>
                       </div>
-                      <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-blue-600 bg-blue-50 shrink-0 shadow-xs">
+                      <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-[#2C5098] bg-[#2C5098]/10 shrink-0 shadow-xs">
                         <Icon icon="ph:plus-bold" className="w-3.5 h-3.5" />
                       </div>
                     </div>
@@ -1333,12 +1336,12 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
         <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-8">
           {/* MOBILE & TABLET HEADER (Below MD) */}
           <div className="space-y-3 block md:hidden text-left">
-            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 font-bold">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
               <span>{t.tech.badge || "Teknologi"}</span>
             </div>
             <h2 className="text-2xl sm:text-3.5xl font-sans font-bold tracking-tight leading-[1.12] text-slate-900">
               {t.tech.mainHeading}{' '}
-              <span className="text-blue-600">
+              <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent">
                 {t.tech.mainHeadingHighlight}
               </span>
             </h2>
@@ -1359,20 +1362,20 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 {/* Card 1: Frontend */}
                 <motion.div
                   variants={cardSlideUp}
-                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-[0_10px_40px_-10px_rgba(44,80,152,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
                 >
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-[#2C5098] transition-colors">
                       Frontend
                     </h3>
-                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center font-bold shrink-0">
                       <Icon icon="ph:layout-duotone" className="w-4 h-4" />
                     </div>
                   </div>
                   <p className="text-xs text-slate-600 mb-4 font-sans leading-relaxed">{t.tech.frontendDesc}</p>
                   <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
                     {["React", "Vue", "Angular", "Next.js", "Vite", "TypeScript", "Tailwind CSS"].map((tech) => (
-                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-blue-500/50 hover:bg-blue-50 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
+                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-[#2C5098]/50 hover:bg-[#2C5098]/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
                         <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
                         <span>{tech}</span>
                       </div>
@@ -1383,20 +1386,20 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 {/* Card 3: Database */}
                 <motion.div
                   variants={cardSlideUp}
-                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-[0_10px_40px_-10px_rgba(44,80,152,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
                 >
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-[#2C5098] transition-colors">
                       {t.tech.database}
                     </h3>
-                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center font-bold shrink-0">
                       <Icon icon="ph:database-duotone" className="w-4 h-4" />
                     </div>
                   </div>
                   <p className="text-xs text-slate-600 mb-4 font-sans leading-relaxed">{t.tech.databaseDesc}</p>
                   <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
                     {["MySQL", "PostgreSQL", "MongoDB", "Firestore", "Redis"].map((tech) => (
-                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-blue-500/50 hover:bg-blue-50 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
+                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-[#2C5098]/50 hover:bg-[#2C5098]/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
                         <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
                         <span>{tech}</span>
                       </div>
@@ -1407,20 +1410,20 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 {/* Card 5: Infrastructure */}
                 <motion.div
                   variants={cardSlideUp}
-                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-[0_10px_40px_-10px_rgba(44,80,152,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
                 >
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-[#2C5098] transition-colors">
                       {t.tech.infra}
                     </h3>
-                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center font-bold shrink-0">
                       <Icon icon="ph:cloud-duotone" className="w-4 h-4" />
                     </div>
                   </div>
                   <p className="text-xs text-slate-600 mb-4 font-sans leading-relaxed">{t.tech.infraDesc}</p>
                   <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
                     {["Docker", "AWS", "Google Cloud", "Firebase"].map((tech) => (
-                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-blue-500/50 hover:bg-blue-50 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
+                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-[#2C5098]/50 hover:bg-[#2C5098]/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
                         <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
                         <span>{tech}</span>
                       </div>
@@ -1433,39 +1436,39 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
               <div className="col-span-4 flex flex-col items-center justify-center relative py-6 px-4">
                 {/* SVG Connecting Spoke Lines linking Cards to Central Hub */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible" viewBox="0 0 200 400" preserveAspectRatio="none">
-                  <line x1="0" y1="60" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
-                  <line x1="0" y1="200" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
-                  <line x1="0" y1="340" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
-                  <line x1="200" y1="60" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
-                  <line x1="200" y1="200" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
-                  <line x1="200" y1="340" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
+                  <line x1="0" y1="60" x2="100" y2="200" stroke="rgba(44, 80, 152, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
+                  <line x1="0" y1="200" x2="100" y2="200" stroke="rgba(44, 80, 152, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
+                  <line x1="0" y1="340" x2="100" y2="200" stroke="rgba(44, 80, 152, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
+                  <line x1="200" y1="60" x2="100" y2="200" stroke="rgba(44, 80, 152, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
+                  <line x1="200" y1="200" x2="100" y2="200" stroke="rgba(44, 80, 152, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
+                  <line x1="200" y1="340" x2="100" y2="200" stroke="rgba(44, 80, 152, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
                 </svg>
 
-                {/* Spaced Central Hub Window with Rotating Orbital Rings */}
-                <div className="w-44 h-44 lg:w-48 lg:h-48 rounded-full bg-white border-2 border-blue-500/40 shadow-xl flex flex-col items-center justify-center text-center p-5 relative z-20 group hover:border-blue-500 hover:scale-105 transition-all duration-500">
+                {/* Spaced Central Hub Window with Rotating Orbital Rings (Light & Airy Style) */}
+                <div className="w-44 h-44 lg:w-48 lg:h-48 rounded-full bg-gradient-to-b from-white via-white to-[#2C5098]/5 border border-[#2C5098]/30 shadow-xl shadow-[#2C5098]/8 flex flex-col items-center justify-center text-center p-5 relative z-20 group hover:border-[#2C5098]/60 hover:scale-105 transition-all duration-500">
 
                   {/* 1. OUTER ROTATING DASHED ORBITAL RING (CLOCKWISE SPIN 20s) */}
-                  <div className="absolute -inset-6 rounded-full border border-dashed border-blue-500/35 animate-[spin_20s_linear_infinite] pointer-events-none flex items-center justify-center">
+                  <div className="absolute -inset-5 rounded-full border border-dashed border-[#2C5098]/20 animate-[spin_20s_linear_infinite] pointer-events-none flex items-center justify-center">
                     {/* Orbiting Satellite Glowing Dot (Top) */}
-                    <div className="absolute -top-1.5 w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_12px_rgba(59,130,246,0.9)]" />
+                    <div className="absolute -top-1 w-2.5 h-2.5 rounded-full bg-[#2C5098] shadow-[0_0_8px_rgba(44,80,152,0.6)]" />
                     {/* Orbiting Satellite Glowing Dot (Bottom) */}
-                    <div className="absolute -bottom-1.5 w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.9)]" />
+                    <div className="absolute -bottom-1 w-2.5 h-2.5 rounded-full bg-[#2C5098]/60 shadow-[0_0_8px_rgba(44,80,152,0.4)]" />
                   </div>
 
                   {/* 2. INNER COUNTER-ROTATING RING (REVERSE SPIN 12s) */}
-                  <div className="absolute -inset-2.5 rounded-full border-2 border-blue-500/40 border-t-transparent border-b-transparent animate-[spin_12s_linear_infinite_reverse] pointer-events-none" />
+                  <div className="absolute -inset-2 rounded-full border border-[#2C5098]/25 border-t-transparent border-b-transparent animate-[spin_12s_linear_infinite_reverse] pointer-events-none" />
 
                   {/* 3. GLOWING PULSE RING */}
-                  <div className="absolute -inset-1 rounded-full border border-blue-500/20 animate-pulse pointer-events-none" />
+                  <div className="absolute -inset-0.5 rounded-full border border-[#2C5098]/15 animate-pulse pointer-events-none" />
 
                   {/* Center Content */}
-                  <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold mb-1.5 shadow-2xs group-hover:rotate-12 transition-transform duration-300">
+                  <div className="w-9 h-9 rounded-xl bg-[#2C5098]/8 text-[#2C5098] flex items-center justify-center font-bold mb-1.5 shadow-2xs group-hover:rotate-12 transition-transform duration-300">
                     <Icon icon="ph:cpu-duotone" className="w-5 h-5 animate-pulse" />
                   </div>
-                  <span className="text-[8px] font-mono font-extrabold uppercase tracking-widest text-blue-600 mb-0.5">
+                  <span className="text-[8px] font-mono font-bold uppercase tracking-widest text-[#2C5098] mb-0.5">
                     Tech Stack
                   </span>
-                  <h3 className="text-sm lg:text-base font-sans font-extrabold text-slate-900 leading-tight">
+                  <h3 className="text-sm lg:text-base font-sans font-bold text-slate-800 leading-tight">
                     Stack Of<br />Technology
                   </h3>
                 </div>
@@ -1476,20 +1479,20 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 {/* Card 2: Backend & API */}
                 <motion.div
                   variants={cardSlideUp}
-                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-[0_10px_40px_-10px_rgba(44,80,152,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
                 >
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-[#2C5098] transition-colors">
                       {t.tech.backend}
                     </h3>
-                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center font-bold shrink-0">
                       <Icon icon="ph:hard-drives-duotone" className="w-4 h-4" />
                     </div>
                   </div>
                   <p className="text-xs text-slate-600 mb-4 font-sans leading-relaxed">{t.tech.backendDesc}</p>
                   <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
                     {["Laravel", "Node.js", "Golang", "Python", "Express", "GraphQL"].map((tech) => (
-                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-blue-500/50 hover:bg-blue-50 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
+                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-[#2C5098]/50 hover:bg-[#2C5098]/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
                         <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
                         <span>{tech}</span>
                       </div>
@@ -1500,20 +1503,20 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 {/* Card 4: Mobile */}
                 <motion.div
                   variants={cardSlideUp}
-                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-[0_10px_40px_-10px_rgba(44,80,152,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
                 >
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-[#2C5098] transition-colors">
                       {t.tech.mobile}
                     </h3>
-                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold shrink-0">
+                    <div className="w-8 h-8 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center font-bold shrink-0">
                       <Icon icon="ph:device-mobile-speaker-duotone" className="w-4 h-4" />
                     </div>
                   </div>
                   <p className="text-xs text-slate-600 mb-4 font-sans leading-relaxed">{t.tech.mobileDesc}</p>
                   <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
                     {["React Native", "Flutter"].map((tech) => (
-                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-blue-500/50 hover:bg-blue-50 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
+                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-[#2C5098]/50 hover:bg-[#2C5098]/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
                         <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
                         <span>{tech}</span>
                       </div>
@@ -1521,23 +1524,36 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                   </div>
                 </motion.div>
 
-                {/* Card 6: Third-Party Integration */}
+                {/* Card 6: AI & LLM Engineering */}
                 <motion.div
                   variants={cardSlideUp}
-                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-[0_10px_40px_-10px_rgba(44,80,152,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
                 >
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-[#2C5098] transition-colors">
                       {t.tech.integrationTitle}
                     </h3>
-                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center font-bold shrink-0">
-                      <Icon icon="ph:share-network-duotone" className="w-4 h-4" />
+                    <div className="w-8 h-8 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center font-bold shrink-0">
+                      <Icon icon="ph:sparkle-duotone" className="w-4 h-4" />
                     </div>
                   </div>
                   <p className="text-xs text-slate-600 mb-4 font-sans leading-relaxed">{t.tech.integrationDesc}</p>
                   <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
-                    {["Rest API", "Payment Integration", "Cloud Storage", "OAuth Providers"].map((tech) => (
-                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-blue-500/50 hover:bg-blue-50 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
+                    {[
+                      "Python",
+                      "N8N",
+                      "LangChain",
+                      "LlamaIndex",
+                      "RAG Architecture",
+                      "QLoRA / Fine-Tuning",
+                      "Autonomous Agents",
+                      "Vector DB",
+                      "OpenAI",
+                      "Claude",
+                      "Hugging Face",
+                      "Ollama"
+                    ].map((tech) => (
+                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-[#2C5098]/50 hover:bg-[#2C5098]/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
                         <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
                         <span>{tech}</span>
                       </div>
@@ -1565,7 +1581,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 <h3 className="text-sm font-sans font-extrabold text-slate-900">
                   Frontend
                 </h3>
-                <Icon icon="ph:layout-duotone" className="w-4 h-4 text-blue-600" />
+                <Icon icon="ph:layout-duotone" className="w-4 h-4 text-[#2C5098]" />
               </div>
               <p className="text-xs text-slate-600 font-sans leading-relaxed">{t.tech.frontendDesc}</p>
               <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
@@ -1587,7 +1603,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 <h3 className="text-sm font-sans font-extrabold text-slate-900">
                   {t.tech.backend}
                 </h3>
-                <Icon icon="ph:hard-drives-duotone" className="w-4 h-4 text-blue-600" />
+                <Icon icon="ph:hard-drives-duotone" className="w-4 h-4 text-[#2C5098]" />
               </div>
               <p className="text-xs text-slate-600 font-sans leading-relaxed">{t.tech.backendDesc}</p>
               <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
@@ -1609,7 +1625,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 <h3 className="text-sm font-sans font-extrabold text-slate-900">
                   {t.tech.database}
                 </h3>
-                <Icon icon="ph:database-duotone" className="w-4 h-4 text-blue-600" />
+                <Icon icon="ph:database-duotone" className="w-4 h-4 text-[#2C5098]" />
               </div>
               <p className="text-xs text-slate-600 font-sans leading-relaxed">{t.tech.databaseDesc}</p>
               <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
@@ -1631,7 +1647,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 <h3 className="text-sm font-sans font-extrabold text-slate-900">
                   {t.tech.mobile}
                 </h3>
-                <Icon icon="ph:device-mobile-speaker-duotone" className="w-4 h-4 text-blue-600" />
+                <Icon icon="ph:device-mobile-speaker-duotone" className="w-4 h-4 text-[#2C5098]" />
               </div>
               <p className="text-xs text-slate-600 font-sans leading-relaxed">{t.tech.mobileDesc}</p>
               <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
@@ -1653,7 +1669,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 <h3 className="text-sm font-sans font-extrabold text-slate-900">
                   {t.tech.infra}
                 </h3>
-                <Icon icon="ph:cloud-duotone" className="w-4 h-4 text-blue-600" />
+                <Icon icon="ph:cloud-duotone" className="w-4 h-4 text-[#2C5098]" />
               </div>
               <p className="text-xs text-slate-600 font-sans leading-relaxed">{t.tech.infraDesc}</p>
               <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
@@ -1666,7 +1682,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
               </div>
             </motion.div>
 
-            {/* Card 6: Third-Party Integration */}
+            {/* Card 6: AI & LLM Engineering */}
             <motion.div
               variants={cardSlideUp}
               className="p-5 rounded-3xl bg-white border border-slate-200 space-y-3 sm:col-span-2 shadow-xs"
@@ -1675,11 +1691,24 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 <h3 className="text-sm font-sans font-extrabold text-slate-900">
                   {t.tech.integrationTitle}
                 </h3>
-                <Icon icon="ph:share-network-duotone" className="w-4 h-4 text-blue-600" />
+                <Icon icon="ph:sparkle-duotone" className="w-4 h-4 text-[#2C5098]" />
               </div>
               <p className="text-xs text-slate-600 font-sans leading-relaxed">{t.tech.integrationDesc}</p>
               <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
-                {["Rest API", "Payment Integration", "Cloud Storage", "OAuth Providers"].map((tech) => (
+                {[
+                  "Python",
+                  "N8N",
+                  "LangChain",
+                  "LlamaIndex",
+                  "RAG Architecture",
+                  "QLoRA / Fine-Tuning",
+                  "Autonomous Agents",
+                  "Vector DB",
+                  "OpenAI",
+                  "Claude",
+                  "Hugging Face",
+                  "Ollama"
+                ].map((tech) => (
                   <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-slate-50 border border-slate-200 text-slate-700 flex items-center gap-1">
                     <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
                     <span>{tech}</span>
@@ -1705,12 +1734,12 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
         <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 text-left">
             <div className="space-y-3">
-              <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 font-bold">
+              <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
                 <span>{t.nav.portfolio}</span>
               </div>
               <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
                 {t.portfolio.mainHeading}{' '}
-                <span className="text-blue-600">
+                <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent">
                   {t.portfolio.mainHeadingHighlight}
                 </span>
               </h2>
@@ -1739,7 +1768,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 return (
                   <div
                     key={project.slug}
-                    className="group flex flex-col justify-between p-5 rounded-3xl bg-white border border-slate-200 hover:border-blue-300 hover:shadow-md transition-all duration-300 relative overflow-hidden"
+                    className="group flex flex-col justify-between p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/40 hover:shadow-md transition-all duration-300 relative overflow-hidden"
                   >
                     <div className="space-y-4">
                       {/* Thumbnail Container */}
@@ -1760,7 +1789,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
 
                       {/* Info Block */}
                       <div className="space-y-1.5">
-                        <h3 className="text-base font-sans font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                        <h3 className="text-base font-sans font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors">
                           {project.name}
                         </h3>
                         <p className="text-xs text-slate-600 leading-relaxed line-clamp-3 font-sans">
@@ -1785,7 +1814,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                       {/* View details button */}
                       <Link
                         href={`/projects/${project.slug}`}
-                        className="flex items-center justify-center gap-1.5 w-full py-2 rounded-xl bg-slate-50 hover:bg-blue-600 hover:text-white text-xs font-bold text-slate-800 transition-all border border-slate-200 hover:border-blue-600"
+                        className="flex items-center justify-center gap-1.5 w-full py-2 rounded-xl bg-slate-50 hover:bg-gradient-to-r hover:from-[#2C5098] hover:to-[#23385B] hover:text-white text-xs font-bold text-slate-800 transition-all border border-slate-200 hover:border-transparent"
                       >
                         <span>{t.portfolio.viewProject}</span>
                         <Icon icon="ph:caret-right-bold" className="w-3.5 h-3.5" />
@@ -1817,7 +1846,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
         <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
           {/* Centered Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 font-bold text-center">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold text-center">
               <span>{t.pricing.label}</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
@@ -1860,7 +1889,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
 
                   <button
                     onClick={() => selectPlan('Full-Stack Web App', 'SaaS MVP (Fast Turnaround)')}
-                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 hover:bg-blue-600 hover:text-white hover:border-blue-600 text-slate-800 transition-all cursor-pointer text-center"
+                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 hover:bg-[#2C5098] hover:text-white hover:border-[#2C5098] text-slate-800 transition-all cursor-pointer text-center"
                   >
                     {t.pricing.starterBtn || "Mulai dari Sini"}
                   </button>
@@ -1871,7 +1900,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                   <ul className="space-y-2.5 text-xs text-slate-600">
                     {t.pricingCards.starterIncludes.map((item, idx) => (
                       <li key={idx} className="flex items-start gap-2.5">
-                        <div className="mt-0.5 w-4 h-4 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <div className="mt-0.5 w-4 h-4 rounded-full bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center shrink-0">
                           <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
                         </div>
                         <span>{item}</span>
@@ -1882,15 +1911,15 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
               </div>
 
               {/* Card 2: Growth (Featured) */}
-              <div className="p-7 sm:p-8 rounded-3xl bg-white border-2 border-blue-600 shadow-lg flex flex-col justify-between space-y-6 relative">
-                <div className="absolute -top-3 right-6 bg-blue-600 text-white text-[9px] font-mono font-bold px-3.5 py-1 rounded-full uppercase tracking-wider shadow-xs flex items-center gap-1">
+              <div className="p-7 sm:p-8 rounded-3xl bg-white border-2 border-[#2C5098] shadow-lg shadow-[#2C5098]/10 flex flex-col justify-between space-y-6 relative">
+                <div className="absolute -top-3 right-6 bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white text-[9px] font-mono font-bold px-3.5 py-1 rounded-full uppercase tracking-wider shadow-xs flex items-center gap-1">
                   <Icon icon="ph:crown-duotone" className="w-3 h-3" />
                   {language === 'en' ? 'Most Popular' : 'Paling Populer'}
                 </div>
 
                 <div className="space-y-5">
                   <div className="space-y-1 pt-1">
-                    <span className="text-[10px] font-mono uppercase tracking-widest text-blue-600 font-bold">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#2C5098] font-bold">
                       {t.pricingCards.growthTag}
                     </span>
                     <h3 className="text-lg font-sans font-bold text-slate-900">
@@ -1909,7 +1938,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
 
                   <button
                     onClick={() => selectPlan('Full-Stack Web App', 'Medium Scale Production')}
-                    className="w-full py-3 px-4 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white transition-all shadow-md shadow-blue-600/20 cursor-pointer text-center"
+                    className="w-full py-3 px-4 rounded-xl text-xs font-bold bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white transition-all shadow-md shadow-[#2C5098]/25 cursor-pointer text-center"
                   >
                     {t.pricing.growthBtn || "Diskusikan Proyek Anda"}
                   </button>
@@ -1920,7 +1949,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                   <ul className="space-y-2.5 text-xs text-slate-600">
                     {t.pricingCards.growthIncludes.map((item, idx) => (
                       <li key={idx} className="flex items-start gap-2.5">
-                        <div className="mt-0.5 w-4 h-4 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0">
+                        <div className="mt-0.5 w-4 h-4 rounded-full bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white flex items-center justify-center shrink-0">
                           <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
                         </div>
                         <span>{item}</span>
@@ -1958,7 +1987,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
 
                   <button
                     onClick={() => selectPlan('Comprehensive Hybrid Pipeline', 'High-Scale Custom Architecture')}
-                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 hover:bg-blue-600 hover:text-white hover:border-blue-600 text-slate-800 transition-all cursor-pointer text-center"
+                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 hover:bg-[#2C5098] hover:text-white hover:border-[#2C5098] text-slate-800 transition-all cursor-pointer text-center"
                   >
                     {t.pricing.customBtn || "Ceritakan Kebutuhan Anda"}
                   </button>
@@ -1969,7 +1998,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                   <ul className="space-y-2.5 text-xs text-slate-600">
                     {t.pricingCards.customIncludes.map((item, idx) => (
                       <li key={idx} className="flex items-start gap-2.5">
-                        <div className="mt-0.5 w-4 h-4 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <div className="mt-0.5 w-4 h-4 rounded-full bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center shrink-0">
                           <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
                         </div>
                         <span>{item}</span>
@@ -1996,12 +2025,12 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
           <div className="text-left space-y-3">
-            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 font-bold">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
               <span>{t.trust?.badge || "Kenapa Klien Percaya"}</span>
             </div>
             <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
               {t.trust?.mainHeading || "Kenapa Klien Percaya"}{' '}
-              <span className="text-blue-600">
+              <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent">
                 {t.trust?.mainHeadingHighlight || "Bekerja Sama Dengan Saya"}
               </span>
             </h2>
@@ -2012,9 +2041,9 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
             {(t.trust?.items || []).map((item: any, idx: number) => (
               <div
                 key={idx}
-                className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md hover:border-blue-300 transition-all flex flex-col sm:flex-row gap-4 items-start"
+                className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md hover:border-[#2C5098]/40 transition-all flex flex-col sm:flex-row gap-4 items-start"
               >
-                <div className="flex-shrink-0 w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 border border-blue-200 flex items-center justify-center">
+                <div className="flex-shrink-0 w-11 h-11 rounded-2xl bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 flex items-center justify-center">
                   <Icon icon={TRUST_ICONS[idx]} className="w-5 h-5" />
                 </div>
                 <div className="space-y-1.5">
@@ -2044,7 +2073,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
           <div className="space-y-4 text-left">
-            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 font-bold">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
               <span>{t.process.badge}</span>
             </div>
             <h2 className="text-3xl sm:text-4.5xl font-sans font-bold tracking-tight leading-[1.15] text-slate-900 max-w-2xl">
@@ -2062,20 +2091,20 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                   <button
                     key={milestone.step}
                     onClick={() => setActiveMilestone(idx)}
-                    className={`w-full py-4 text-left cursor-pointer border-b transition-all duration-300 flex items-center justify-between group ${isActive ? 'border-blue-600' : 'border-slate-200 hover:border-slate-300'
+                    className={`w-full py-4 text-left cursor-pointer border-b transition-all duration-300 flex items-center justify-between group ${isActive ? 'border-[#2C5098]' : 'border-slate-200 hover:border-slate-300'
                       }`}
                     id={`processes-step-${milestone.step}`}
                   >
                     <span
                       className={`text-base font-sans font-bold transition-all duration-300 ${isActive
-                        ? 'text-blue-600 translate-x-1.5'
+                        ? 'text-[#2C5098] translate-x-1.5'
                         : 'text-slate-600 group-hover:text-slate-900 group-hover:translate-x-1'
                         }`}
                     >
                       {t.milestones[idx].title}
                     </span>
                     <span
-                      className={`text-xs font-mono font-bold transition-colors flex items-center gap-2 ${isActive ? 'text-blue-600' : 'text-slate-400 group-hover:text-slate-600'
+                      className={`text-xs font-mono font-bold transition-colors flex items-center gap-2 ${isActive ? 'text-[#2C5098]' : 'text-slate-400 group-hover:text-slate-600'
                         }`}
                     >
                       <Icon icon={MILESTONE_ICONS[idx]} className="w-4 h-4" />
@@ -2098,7 +2127,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 >
                   <div className="space-y-6">
                     {/* Giant floating number digits in primary color */}
-                    <div className="text-8xl sm:text-9xl font-sans font-bold tracking-tighter leading-none bg-gradient-to-b from-blue-600 to-transparent bg-clip-text text-transparent select-none opacity-85">
+                    <div className="text-8xl sm:text-9xl font-sans font-bold tracking-tighter leading-none bg-gradient-to-b from-[#2C5098] to-transparent bg-clip-text text-transparent select-none opacity-85">
                       {MILESTONES[activeMilestone].step}
                     </div>
 
@@ -2116,7 +2145,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                   <div>
                     <button
                       onClick={() => scrollToId('contact-section')}
-                      className="px-6 py-3 bg-blue-600 text-white hover:bg-blue-700 rounded-lg text-xs font-sans font-bold tracking-widest uppercase transition-all duration-300 shadow-md cursor-pointer flex items-center gap-2 group/btn"
+                      className="px-6 py-3 bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white rounded-lg text-xs font-sans font-bold tracking-widest uppercase transition-all duration-300 shadow-md shadow-[#2C5098]/25 cursor-pointer flex items-center gap-2 group/btn"
                       id={`processes-get-started-${MILESTONES[activeMilestone].step}`}
                     >
                       <span>Get Started</span>
@@ -2146,7 +2175,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
             {/* Left Column: Ask Box */}
             <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
               <div className="space-y-3">
-                <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 font-bold">
+                <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
                   <span>FAQ</span>
                 </div>
                 <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
@@ -2183,11 +2212,11 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                         value={customQuestion}
                         onChange={(e) => setCustomQuestion(e.target.value)}
                         placeholder={t.faq.askPlaceholder}
-                        className="w-full pr-10 pl-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all"
+                        className="w-full pr-10 pl-3.5 py-2.5 text-xs rounded-xl bg-slate-50 border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2C5098] focus:ring-1 focus:ring-[#2C5098] transition-all"
                       />
                       <button
                         type="submit"
-                        className="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-colors cursor-pointer"
+                        className="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white transition-colors cursor-pointer shadow-xs"
                         aria-label="Submit question"
                       >
                         <Icon icon="ph:paper-plane-tilt-fill" className="w-3 h-3" />
@@ -2200,7 +2229,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                     <div className="space-y-1">
                       <h5 className="text-xs font-bold text-slate-900">Pertanyaan Terkirim!</h5>
                       <p className="text-[11px] text-slate-600 leading-relaxed">
-                        Terima kasih. Pertanyaan Anda akan direspons dalam waktu <span className="font-semibold text-blue-600">12 jam</span>.
+                        Terima kasih. Pertanyaan Anda akan direspons dalam waktu <span className="font-semibold text-[#2C5098]">12 jam</span>.
                       </p>
                     </div>
                     <button
@@ -2208,7 +2237,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                         setQuestionSubmitted(false);
                         setCustomQuestion('');
                       }}
-                      className="text-[10px] font-mono uppercase tracking-wider text-blue-600 hover:underline cursor-pointer"
+                      className="text-[10px] font-mono uppercase tracking-wider text-[#2C5098] hover:underline cursor-pointer"
                     >
                       Kirim pertanyaan lain
                     </button>
@@ -2225,7 +2254,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                   <div
                     key={idx}
                     className={`rounded-2xl border transition-all duration-200 overflow-hidden ${isExpanded
-                      ? 'bg-white border-blue-500/60 shadow-sm'
+                      ? 'bg-white border-[#2C5098]/60 shadow-sm'
                       : 'bg-white border-slate-200 hover:border-slate-300'
                       }`}
                   >
@@ -2235,7 +2264,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                       aria-expanded={isExpanded}
                     >
                       <span>{faq.q}</span>
-                      <div className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 ${isExpanded ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-600'
+                      <div className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 ${isExpanded ? 'bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white' : 'bg-slate-100 text-slate-600'
                         }`}>
                         {isExpanded ? <Icon icon="ph:minus-bold" className="w-3 h-3" /> : <Icon icon="ph:plus-bold" className="w-3 h-3" />}
                       </div>
@@ -2279,13 +2308,13 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
         <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
           {/* Standard Centered Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
-            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-blue-600 font-bold">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
               <span>{t.contact.badge || "KONTAK & KONSULTASI"}</span>
             </div>
 
             <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
               {t.contact.mainHeading}{' '}
-              <span className="text-blue-600">
+              <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent">
                 {t.contact.mainHeadingHighlight}
               </span>
             </h2>
@@ -2332,9 +2361,9 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                   </a>
 
                   {/* Email Direct with 1-Click Copy */}
-                  <div className="group flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-200 hover:border-blue-500/80 hover:bg-blue-50/20 hover:shadow-sm transition-all">
+                  <div className="group flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-200 hover:border-[#2C5098]/80 hover:bg-[#2C5098]/10 hover:shadow-sm transition-all">
                     <div className="flex items-center gap-3.5 min-w-0">
-                      <div className="w-11 h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold shrink-0">
+                      <div className="w-11 h-11 rounded-xl bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center font-bold shrink-0">
                         <Icon icon="ph:envelope-simple-fill" className="w-6 h-6" />
                       </div>
                       <div className="text-left min-w-0">
@@ -2347,7 +2376,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                     <button
                       type="button"
                       onClick={handleCopyEmail}
-                      className="shrink-0 px-2.5 py-1.5 rounded-lg bg-slate-50 hover:bg-blue-50 hover:text-blue-600 text-slate-600 text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1 border border-slate-200"
+                      className="shrink-0 px-2.5 py-1.5 rounded-lg bg-slate-50 hover:bg-[#2C5098]/10 hover:text-[#2C5098] text-slate-600 text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1 border border-slate-200"
                       title="Copy email to clipboard"
                     >
                       {copiedEmail ? (
@@ -2395,17 +2424,17 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                       href="https://fastwork.id/en/user/timurradhadian?source=web_marketplace_profile-menu_profile"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group flex items-center justify-between p-2.5 px-3 rounded-xl bg-white hover:bg-blue-50/40 border border-slate-200/80 hover:border-blue-500/70 hover:shadow-2xs transition-all cursor-pointer"
+                      className="group flex items-center justify-between p-2.5 px-3 rounded-xl bg-white hover:bg-[#2C5098]/10 border border-slate-200/80 hover:border-[#2C5098]/70 hover:shadow-2xs transition-all cursor-pointer"
                     >
                       <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-6 h-6 rounded-md bg-blue-100/70 text-blue-600 flex items-center justify-center shrink-0 group-hover:bg-blue-600 group-hover:text-white transition-all">
+                        <div className="w-6 h-6 rounded-md bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center shrink-0 group-hover:bg-[#2C5098] group-hover:text-white transition-all">
                           <Icon icon="ph:lightning-fill" className="w-3.5 h-3.5" />
                         </div>
-                        <span className="text-xs font-sans font-bold text-slate-800 group-hover:text-blue-700 transition-colors truncate">
+                        <span className="text-xs font-sans font-bold text-slate-800 group-hover:text-[#2C5098] transition-colors truncate">
                           Fastwork
                         </span>
                       </div>
-                      <Icon icon="ph:arrow-up-right-bold" className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
+                      <Icon icon="ph:arrow-up-right-bold" className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#2C5098] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
                     </a>
                   </div>
                 </div>
@@ -2446,9 +2475,9 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                         </span>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           {/* Name Field */}
-                          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 hover:border-slate-300 focus-within:bg-white focus-within:border-blue-600 focus-within:ring-4 focus-within:ring-blue-50 transition-all shadow-2xs space-y-1">
+                          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 hover:border-slate-300 focus-within:bg-white focus-within:border-[#2C5098] focus-within:ring-4 focus-within:ring-[#2C5098]/15 transition-all shadow-2xs space-y-1">
                             <label className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider block" htmlFor="form-name">
-                              {t.contact.formNameLabel} <span className="text-blue-600">*</span>
+                              {t.contact.formNameLabel} <span className="text-[#2C5098]">*</span>
                             </label>
                             <div className="flex items-center gap-2.5">
                               <Icon icon="ph:user-bold" className="w-4 h-4 text-slate-400 shrink-0" />
@@ -2465,9 +2494,9 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                           </div>
 
                           {/* Email Field */}
-                          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 hover:border-slate-300 focus-within:bg-white focus-within:border-blue-600 focus-within:ring-4 focus-within:ring-blue-50 transition-all shadow-2xs space-y-1">
+                          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 hover:border-slate-300 focus-within:bg-white focus-within:border-[#2C5098] focus-within:ring-4 focus-within:ring-[#2C5098]/15 transition-all shadow-2xs space-y-1">
                             <label className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider block" htmlFor="form-email">
-                              {t.contact.formEmailLabel} <span className="text-blue-600">*</span>
+                              {t.contact.formEmailLabel} <span className="text-[#2C5098]">*</span>
                             </label>
                             <div className="flex items-center gap-2.5">
                               <Icon icon="ph:envelope-simple-bold" className="w-4 h-4 text-slate-400 shrink-0" />
@@ -2524,12 +2553,12 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                                 key={svc.id}
                                 onClick={() => setFormData({ ...formData, service: svc.id })}
                                 className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-3 ${isSelected
-                                  ? 'bg-blue-50/90 border-2 border-blue-600 text-blue-950 shadow-2xs'
+                                  ? 'bg-[#2C5098]/10 border-2 border-[#2C5098] text-slate-900 shadow-2xs'
                                   : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800'
                                   }`}
                               >
                                 <div className="flex items-center gap-3 min-w-0">
-                                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${isSelected ? 'bg-blue-600 text-white' : 'bg-slate-50 border border-slate-200 text-slate-600'
+                                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${isSelected ? 'bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white' : 'bg-slate-50 border border-slate-200 text-slate-600'
                                     }`}>
                                     <Icon icon={svc.icon} className="w-5 h-5" />
                                   </div>
@@ -2539,7 +2568,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                                   </div>
                                 </div>
                                 {isSelected && (
-                                  <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center shrink-0">
+                                  <div className="w-5 h-5 rounded-full bg-[#2C5098] text-white flex items-center justify-center shrink-0">
                                     <Icon icon="ph:check-bold" className="w-3 h-3" />
                                   </div>
                                 )}
@@ -2588,7 +2617,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                               >
                                 <div className="flex items-center justify-between gap-2">
                                   <span className={`text-xs font-sans font-bold ${isSelected ? 'text-white' : 'text-slate-900'}`}>{sc.label}</span>
-                                  <Icon icon={sc.icon} className={`w-4 h-4 shrink-0 ${isSelected ? 'text-blue-300' : 'text-slate-400'}`} />
+                                  <Icon icon={sc.icon} className={`w-4 h-4 shrink-0 ${isSelected ? 'text-[#93B4ED]' : 'text-slate-400'}`} />
                                 </div>
                                 <span className={`text-[10px] truncate ${isSelected ? 'text-slate-300' : 'text-slate-500'}`}>{sc.desc}</span>
                               </button>
@@ -2602,7 +2631,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                         <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
                           04 // DETAIL & KEBUTUHAN KHUSUS
                         </span>
-                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 hover:border-slate-300 focus-within:bg-white focus-within:border-blue-600 focus-within:ring-4 focus-within:ring-blue-50 transition-all shadow-2xs space-y-1">
+                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 hover:border-slate-300 focus-within:bg-white focus-within:border-[#2C5098] focus-within:ring-4 focus-within:ring-[#2C5098]/15 transition-all shadow-2xs space-y-1">
                           <label className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider block" htmlFor="form-details">
                             {t.contact.formDetailsLabel}
                           </label>
@@ -2622,7 +2651,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                         <button
                           type="submit"
                           disabled={formSubmitting}
-                          className="w-full py-4 rounded-full bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-sans font-bold tracking-wider shadow-lg shadow-blue-600/20 active:scale-[0.99] transition-all cursor-pointer flex items-center justify-center gap-3 disabled:opacity-50"
+                          className="w-full py-4 rounded-full bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white text-xs sm:text-sm font-sans font-bold tracking-wider shadow-lg shadow-[#2C5098]/25 active:scale-[0.99] transition-all cursor-pointer flex items-center justify-center gap-3 disabled:opacity-50"
                           id="btn-submit-contact"
                         >
                           {formSubmitting ? (
@@ -2665,7 +2694,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                         <button
                           type="button"
                           onClick={() => setFormSubmitted(false)}
-                          className="text-[10px] font-mono text-slate-500 hover:text-blue-600 underline cursor-pointer"
+                          className="text-[10px] font-mono text-slate-500 hover:text-[#2C5098] underline cursor-pointer"
                         >
                           Kirim Pesan Lain / Reset Form
                         </button>

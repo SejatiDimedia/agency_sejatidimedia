@@ -103,9 +103,9 @@ export const id = {
     mobileDesc: "Aplikasi iOS & Android native/hybrid.",
     infra: "Infrastructure",
     infraDesc: "Virtualisasi & integrasi cloud.",
-    integration: "Integrasi Pihak Ketiga",
-    integrationTitle: "Integrasi Pihak Ketiga",
-    integrationDesc: "Penghubungan dengan layanan eksternal untuk modul pembayaran aman, autentikasi terpusat, dan layanan berbasis API lainnya."
+    integration: "Integrasi AI & LLM",
+    integrationTitle: "AI & LLM Engineering",
+    integrationDesc: "Pengembangan kecerdasan buatan enterprise: RAG Pipeline, Fine-Tuning QLoRA, Autonomous AI Agents, n8n automasi, dan orkestrasi LLM."
   },
   credibility: {
     badge: "Kredibilitas",

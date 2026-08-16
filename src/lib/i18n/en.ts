@@ -103,9 +103,9 @@ export const en = {
     mobileDesc: "Native/hybrid iOS & Android applications.",
     infra: "Infrastructure",
     infraDesc: "Virtualization & cloud integration.",
-    integration: "Third-Party Integration",
-    integrationTitle: "Third-Party Integration",
-    integrationDesc: "Connecting with external services for secure payment modules, centralized authentication, and other API-based services."
+    integration: "AI & LLM Integration",
+    integrationTitle: "AI & LLM Engineering",
+    integrationDesc: "Enterprise AI development: RAG Pipelines, QLoRA Fine-Tuning, Autonomous AI Agents, n8n automation, and multi-model LLM orchestration."
   },
   credibility: {
     badge: "Credibility",
