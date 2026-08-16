@@ -14,7 +14,10 @@ type Message = {
 export default function AiChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'ai', text: 'Halo! Saya Sedia AI, asisten virtual dari SejatiDimedia. Ada yang bisa saya bantu terkait layanan, harga, atau portofolio kami?' }
+    {
+      role: 'ai',
+      text: 'Hai! Selamat datang di SejatiDimedia. Saya Sedia AI.\n\nSedang merencanakan pembuatan aplikasi web/mobile atau integrasi AI untuk bisnis Anda? Ceritakan ide Anda, atau tanyakan apa saja seputar layanan dan portofolio kami!'
+    }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);

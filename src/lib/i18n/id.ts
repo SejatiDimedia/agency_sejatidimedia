@@ -323,7 +323,8 @@ export const id = {
     starterDesc: "Cocok untuk validasi ide atau produk tahap awal sebelum meluncurkannya ke pasar secara luas.",
     starterPrice: "Mulai dari",
     starterIncludes: [
-      '1 Platform (Web / Mobile)',
+      'Gratis Domain .com (1 Tahun)',
+      'Pilihan: Web App / Mobile App MVP',
       'Fitur Inti & Core Logic',
       'Estimasi 2–4 Minggu Pengerjaan',
       '1x Revisi Besar',
@@ -333,18 +334,22 @@ export const id = {
     growthTitle: "Growth — Production Ready",
     growthDesc: "Cocok untuk bisnis yang siap merilis produk secara resmi ke pengguna umum dengan fitur lengkap dan integrasi backend.",
     growthIncludes: [
-      'Web Application + API Backend',
+      'Gratis Domain .com (1 Tahun)',
+      'Web App ATAU Mobile App (Android/iOS)',
+      'API Backend & Database Terstruktur',
       'Integrasi Pembayaran & Autentikasi',
       'Dashboard Admin & Manajemen',
       'Pendampingan 30 Hari Pasca-Launch',
       '100% Hak Cipta & Source Code'
     ],
-    customTag: "Skala Enterprise",
-    customTitle: "Custom — Sistem Kompleks",
+    customTag: "Skala Enterprise & AI",
+    customTitle: "Custom — Sistem Kompleks & AI",
     customDesc: "Cocok untuk kebutuhan sistem skala besar, arsitektur rumit, dan terintegrasi dengan banyak proses bisnis operasional.",
     customIncludes: [
-      'Arsitektur Multi-Platform',
-      'Timeline & Scope Kustom',
+      'Domain .com + Cloud Infrastructure',
+      'Multi-Platform (Web + Android + iOS)',
+      'Integrasi AI & Otomasi (RAG / Agents / n8n)',
+      'Timeline & Scope Kustom Fleksibel',
       'Dukungan Lanjutan Sesuai Kesepakatan',
       'Dokumentasi API & Arsitektur Lengkap',
       'Pemeliharaan Server Berkala'

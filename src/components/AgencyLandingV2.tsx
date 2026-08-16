@@ -147,7 +147,7 @@ function ClientPortalMockup3D({ t }: { t: any }) {
                   <img src="/logo.svg" alt="SejatiDimedia Logo" className="h-3.5 w-auto object-contain" />
                   <span className="text-[10px] sm:text-xs font-mono text-slate-700 flex items-center gap-1 truncate max-w-[200px] sm:max-w-none">
                     <Icon icon="ph:lock-key-duotone" className="w-3 h-3 text-[#2C5098] shrink-0" />
-                    sejatidimedia.id/portal/projects
+                    sejatidimedia.web.id/portal/projects
                   </span>
                 </div>
               </div>
@@ -709,7 +709,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 {/* Full-width URL address bar */}
                 <div className="flex-1 flex items-center gap-2 bg-white px-3 sm:px-3.5 py-1.5 rounded-xl border border-slate-200 text-slate-700 text-[10px] sm:text-xs font-mono shadow-2xs min-w-0">
                   <Icon icon="ph:lock-key-duotone" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
-                  <span className="truncate text-slate-700 font-medium">sejatidimedia.id/portal/projects/saas-dashboard</span>
+                  <span className="truncate text-slate-700 font-medium">sejatidimedia.web.id/portal/projects/saas-dashboard</span>
                 </div>
 
                 {/* Live 24/7 status badge */}
@@ -1044,7 +1044,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                             Hello Timur, all Sprint 2 deliverables have passed QA testing. You can review the live staging build at:
                           </p>
                           <div className="p-2 rounded-lg bg-slate-50 border border-slate-200 font-mono text-[10px] text-[#2C5098] font-bold break-all">
-                            https://staging.sejatidimedia.id/demo
+                            https://staging.sejatidimedia.web.id/demo
                           </div>
                         </div>
                       </div>

@@ -323,7 +323,8 @@ export const en = {
     starterDesc: "Perfect for validating ideas or early-stage products before launching them widely to the market.",
     starterPrice: "Starting from",
     starterIncludes: [
-      '1 Platform (Web / Mobile)',
+      'Free .com Domain (1 Year)',
+      'Choice: Web App / Mobile App MVP',
       'Core Features & Logic',
       'Estimated 2–4 Weeks Turnaround',
       '1x Major Revision',
@@ -333,18 +334,22 @@ export const en = {
     growthTitle: "Growth — Production Ready",
     growthDesc: "Suitable for businesses ready to officially release products to the public with complete features and backend integration.",
     growthIncludes: [
-      'Web Application + API Backend',
+      'Free .com Domain (1 Year)',
+      'Web App OR Mobile App (Android/iOS)',
+      'Structured Backend API & Database',
       'Payment & Authentication Integration',
       'Admin & Management Dashboard',
       '30-Day Post-Launch Support',
       '100% Copyright & Source Code'
     ],
-    customTag: "Enterprise Scale",
-    customTitle: "Custom — Complex Systems",
+    customTag: "Enterprise Scale & AI",
+    customTitle: "Custom — Complex Systems & AI",
     customDesc: "Suitable for large-scale systems, complex architectures, and integrations with numerous operational business processes.",
     customIncludes: [
-      'Multi-Platform Architecture',
-      'Custom Timeline & Scope',
+      'Custom .com Domain + Cloud Setup',
+      'Multi-Platform (Web + Android + iOS)',
+      'Custom AI & Automation Pipeline (RAG / Agents / n8n)',
+      'Flexible Custom Timeline & Scope',
       'Advanced Support as Agreed',
       'Complete API & Architecture Docs',
       'Periodic Server Maintenance'
