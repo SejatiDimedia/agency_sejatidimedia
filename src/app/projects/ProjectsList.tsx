@@ -150,24 +150,18 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
 
                     {/* Title & Description */}
                     <div className="space-y-2 text-left">
-                      <div className="flex flex-wrap items-center gap-1.5 pb-1">
-                        {isProfessionalExp && (
-                          <span className="inline-flex items-center gap-1 text-[8px] font-mono uppercase tracking-widest font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-0.5 rounded-full">
-                            <Icon icon="ph:briefcase-fill" className="w-2.5 h-2.5 text-[#2C5098]" />
-                            {language === 'en' ? 'Career Experience' : 'Pengalaman Profesional'}
-                          </span>
-                        )}
-                        {project.categories && project.categories.length > 0 && (
-                          project.categories.map((cat) => (
+                      {project.categories && project.categories.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 pb-1">
+                          {project.categories.map((cat) => (
                             <span
                               key={cat}
                               className="inline-block text-[8px] font-mono uppercase tracking-widest font-bold text-[#2C5098] dark:text-theme-accent bg-[#2C5098]/10 dark:bg-theme-accent/10 border border-[#2C5098]/20 dark:border-theme-accent/20 px-2.5 py-0.5 rounded-full"
                             >
                               {getCategoryName(cat)}
                             </span>
-                          ))
-                        )}
-                      </div>
+                          ))}
+                        </div>
+                      )}
                       <h3 className="text-base font-jakarta font-sans font-bold text-slate-900 dark:text-theme-fore group-hover:text-[#2C5098] transition-colors">
                         {project.name}
                       </h3>
