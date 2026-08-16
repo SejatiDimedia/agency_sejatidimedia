@@ -36,6 +36,8 @@ export default function ProjectDetailClient({ project, relatedProjects }: { proj
     ? (project.descriptionEn || project.summaryEn || project.description || project.summary || "")
     : (project.descriptionId || project.summaryId || project.description || project.summary || "");
 
+  const isProfessionalExp = project.name.toLowerCase().includes('manufaktur') || project.name.toLowerCase().includes('manufactur');
+
   return (
     <div className="space-y-10 py-8">
       {/* Back button */}
@@ -61,7 +63,13 @@ export default function ProjectDetailClient({ project, relatedProjects }: { proj
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
         <div className="absolute bottom-6 left-6 right-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4 z-10">
-          <div className="space-y-2">
+          <div className="space-y-2 text-left">
+            {isProfessionalExp && (
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-white/95 text-slate-800 border border-white/40 shadow-sm backdrop-blur-md">
+                <Icon icon="ph:briefcase-duotone" className="w-3.5 h-3.5 text-[#2C5098]" />
+                <span>{language === 'en' ? 'Professional Career Experience' : 'Pengalaman Profesional Perusahaan'}</span>
+              </div>
+            )}
             <h1 className="text-2xl sm:text-4xl md:text-5xl font-sans font-black tracking-tight text-white">
               {project.name}
             </h1>
@@ -104,8 +112,25 @@ export default function ProjectDetailClient({ project, relatedProjects }: { proj
               {t.projectDetail?.spec || (language === 'en' ? 'Project Specifications' : 'Spesifikasi Proyek')}
             </h2>
 
-            {/* Status & Date */}
+            {/* Status & Date & Classification */}
             <div className="space-y-4 text-xs">
+              <div className="flex items-center justify-between">
+                <span className="font-mono text-slate-400 dark:text-theme-fore-subtle">{language === 'en' ? 'Portfolio Type' : 'Tipe Portofolio'}</span>
+                <span className="flex items-center gap-1.5 font-sans font-bold text-slate-900 dark:text-theme-fore">
+                  {isProfessionalExp ? (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-mono text-[#2C5098] bg-[#2C5098]/10 border border-[#2C5098]/20 px-2 py-0.5 rounded">
+                      <Icon icon="ph:briefcase-fill" className="w-3 h-3" />
+                      {language === 'en' ? 'Professional Experience' : 'Pengalaman Profesional'}
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 px-2 py-0.5 rounded">
+                      <Icon icon="ph:sparkle-fill" className="w-3 h-3" />
+                      {language === 'en' ? 'SejatiDimedia Work' : 'Karya SejatiDimedia'}
+                    </span>
+                  )}
+                </span>
+              </div>
+
               <div className="flex items-center justify-between">
                 <span className="font-mono text-slate-400 dark:text-theme-fore-subtle">{t.projectDetail?.status || 'Status'}</span>
                 <span className="flex items-center gap-1.5 font-sans font-bold text-slate-900 dark:text-theme-fore">
@@ -201,6 +226,7 @@ export default function ProjectDetailClient({ project, relatedProjects }: { proj
                 relProject.thumbnail === "/thumbnail.png" ||
                 relProject.thumbnail === "/placeholder.png";
               const relDisplayThumbnail = (relIsDummy ? "/logo.svg" : relProject.thumbnail) as string;
+              const relIsProfessional = relProject.name.toLowerCase().includes('manufaktur') || relProject.name.toLowerCase().includes('manufactur');
 
               const relDisplaySummary = language === 'en'
                 ? (relProject.summaryEn || relProject.descriptionEn || relProject.summary || relProject.description)
@@ -221,6 +247,14 @@ export default function ProjectDetailClient({ project, relatedProjects }: { proj
                         className={relIsDummy ? "object-contain p-6 bg-slate-50 dark:bg-theme-surface/40" : "object-cover group-hover:scale-[1.02] transition-transform duration-500"}
                         sizes="(max-w-768px) 100vw, 33vw"
                       />
+                      {relIsProfessional && (
+                        <div className="absolute top-2 left-2 z-10">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-mono font-bold uppercase tracking-wider bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-xs">
+                            <Icon icon="ph:briefcase-duotone" className="w-3 h-3 text-[#2C5098]" />
+                            <span>{language === 'en' ? 'Professional' : 'Pengalaman'}</span>
+                          </span>
+                        </div>
+                      )}
                     </div>
                     {/* Info */}
                     <div className="space-y-1.5 text-left">

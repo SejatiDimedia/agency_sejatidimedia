@@ -1764,6 +1764,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                   project.thumbnail === "/placeholder.png";
 
                 const displayThumbnail = (isDummy ? "/logo.svg" : project.thumbnail) as string;
+                const isProfessionalExp = project.name.toLowerCase().includes('manufaktur') || project.name.toLowerCase().includes('manufactur');
 
                 return (
                   <div
@@ -1780,6 +1781,14 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                           className={isDummy ? "object-contain p-8" : "object-cover group-hover:scale-105 transition-transform duration-500"}
                           sizes="(max-width: 768px) 100vw, 33vw"
                         />
+                        {isProfessionalExp && (
+                          <div className="absolute top-2.5 left-2.5 z-10">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[8.5px] font-mono font-bold uppercase tracking-wider bg-white/95 text-slate-800 border border-slate-200 shadow-xs">
+                              <Icon icon="ph:briefcase-duotone" className="w-3 h-3 text-[#2C5098]" />
+                              <span>{language === 'en' ? 'Professional Exp' : 'Pengalaman Profesional'}</span>
+                            </span>
+                          </div>
+                        )}
                         <div className="absolute top-2.5 right-2.5">
                           <span className="px-2 py-0.5 rounded-md text-[9px] font-mono font-bold bg-white/95 text-slate-800 border border-slate-200 shadow-xs">
                             {project.status === 'COMPLETE' ? 'Completed' : 'Ongoing'}

@@ -110,6 +110,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
                 project.thumbnail === "/thumbnail.png" ||
                 project.thumbnail === "/placeholder.png";
               const displayThumbnail = (isDummy ? "/logo.svg" : project.thumbnail) as string;
+              const isProfessionalExp = project.name.toLowerCase().includes('manufaktur') || project.name.toLowerCase().includes('manufactur');
 
               return (
                 <motion.div
@@ -135,22 +136,38 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
                         }
                         sizes="(max-w-768px) 100vw, 33vw"
                       />
+
+                      {/* Floating Professional Experience Badge */}
+                      {isProfessionalExp && (
+                        <div className="absolute top-2.5 left-2.5 z-10">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-sm">
+                            <Icon icon="ph:briefcase-duotone" className="w-3.5 h-3.5 text-[#2C5098]" />
+                            <span>{language === 'en' ? 'Professional Experience' : 'Pengalaman Profesional'}</span>
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     {/* Title & Description */}
                     <div className="space-y-2 text-left">
-                      {project.categories && project.categories.length > 0 && (
-                        <div className="flex flex-wrap gap-1.5 pb-1">
-                          {project.categories.map((cat) => (
+                      <div className="flex flex-wrap items-center gap-1.5 pb-1">
+                        {isProfessionalExp && (
+                          <span className="inline-flex items-center gap-1 text-[8px] font-mono uppercase tracking-widest font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2.5 py-0.5 rounded-full">
+                            <Icon icon="ph:briefcase-fill" className="w-2.5 h-2.5 text-[#2C5098]" />
+                            {language === 'en' ? 'Career Experience' : 'Pengalaman Profesional'}
+                          </span>
+                        )}
+                        {project.categories && project.categories.length > 0 && (
+                          project.categories.map((cat) => (
                             <span
                               key={cat}
                               className="inline-block text-[8px] font-mono uppercase tracking-widest font-bold text-[#2C5098] dark:text-theme-accent bg-[#2C5098]/10 dark:bg-theme-accent/10 border border-[#2C5098]/20 dark:border-theme-accent/20 px-2.5 py-0.5 rounded-full"
                             >
                               {getCategoryName(cat)}
                             </span>
-                          ))}
-                        </div>
-                      )}
+                          ))
+                        )}
+                      </div>
                       <h3 className="text-base font-jakarta font-sans font-bold text-slate-900 dark:text-theme-fore group-hover:text-[#2C5098] transition-colors">
                         {project.name}
                       </h3>
