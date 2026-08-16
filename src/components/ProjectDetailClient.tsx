@@ -114,22 +114,6 @@ export default function ProjectDetailClient({ project, relatedProjects }: { proj
 
             {/* Status & Date & Classification */}
             <div className="space-y-4 text-xs">
-              <div className="flex items-center justify-between">
-                <span className="font-mono text-slate-400 dark:text-theme-fore-subtle">{language === 'en' ? 'Portfolio Type' : 'Tipe Portofolio'}</span>
-                <span className="flex items-center gap-1.5 font-sans font-bold text-slate-900 dark:text-theme-fore">
-                  {isProfessionalExp ? (
-                    <span className="inline-flex items-center gap-1 text-[10px] font-mono text-[#2C5098] bg-[#2C5098]/10 border border-[#2C5098]/20 px-2 py-0.5 rounded">
-                      <Icon icon="ph:briefcase-fill" className="w-3 h-3" />
-                      {language === 'en' ? 'Professional Experience' : 'Pengalaman Profesional'}
-                    </span>
-                  ) : (
-                    <span className="inline-flex items-center gap-1 text-[10px] font-mono text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 px-2 py-0.5 rounded">
-                      <Icon icon="ph:sparkle-fill" className="w-3 h-3" />
-                      {language === 'en' ? 'SejatiDimedia Work' : 'Karya SejatiDimedia'}
-                    </span>
-                  )}
-                </span>
-              </div>
 
               <div className="flex items-center justify-between">
                 <span className="font-mono text-slate-400 dark:text-theme-fore-subtle">{t.projectDetail?.status || 'Status'}</span>
