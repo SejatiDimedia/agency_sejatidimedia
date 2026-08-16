@@ -748,8 +748,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                         </div>
                       </div>
                       <div className="flex items-center gap-2 self-start sm:self-auto">
-                        <span className="px-3.5 py-1 rounded-xl text-xs font-mono font-black tracking-wide bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-sm shadow-blue-500/25 border border-blue-400/40 flex items-center gap-1.5">
-                          <Icon icon="ph:sparkle-fill" className="w-3 h-3 text-blue-200" />
+                        <span className="px-3.5 py-1 rounded-xl text-xs font-mono font-black tracking-wide bg-blue-600 text-white shadow-sm shadow-blue-500/25 border border-blue-400/40 flex items-center gap-1.5">
                           88% Completed
                         </span>
                       </div>

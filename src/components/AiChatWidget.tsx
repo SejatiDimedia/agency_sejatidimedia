@@ -156,7 +156,8 @@ export default function AiChatWidget() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsOpen(true)}
-            className="fixed bottom-24 right-4 md:bottom-8 md:right-8 z-[100] w-14 h-14 rounded-full bg-theme-accent hover:bg-theme-accent-bright text-white shadow-lg shadow-theme-accent/20 flex items-center justify-center cursor-pointer transition-colors border border-white/10 group p-0 overflow-hidden"
+            className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-[100] w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-theme-accent hover:bg-theme-accent-bright text-white shadow-md shadow-theme-accent/25 flex items-center justify-center cursor-pointer transition-all border border-white/15 group p-0 overflow-hidden"
+            aria-label="Buka Chat AI"
           >
             <img
               src="/ai-gif2.gif"
@@ -164,7 +165,7 @@ export default function AiChatWidget() {
               className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
             />
 
-            {/* Ping animation behind button */}
+            {/* Subtle ping animation behind button */}
             <span className="absolute inset-0 rounded-full bg-theme-accent animate-ping opacity-20 pointer-events-none" />
           </motion.button>
         )}
@@ -174,27 +175,27 @@ export default function AiChatWidget() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            initial={{ opacity: 0, y: 15, scale: 0.96 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-24 right-4 md:bottom-8 md:right-8 z-[100] w-[calc(100vw-32px)] md:w-[380px] h-[500px] max-h-[80vh] flex flex-col rounded-3xl bg-theme-surface/80 backdrop-blur-xl border border-theme-border shadow-2xl overflow-hidden"
+            exit={{ opacity: 0, y: 15, scale: 0.96 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-[100] w-[calc(100vw-24px)] sm:w-[340px] md:w-[350px] h-[420px] sm:h-[450px] max-h-[75vh] flex flex-col rounded-2xl bg-theme-surface/90 backdrop-blur-xl border border-theme-border shadow-xl overflow-hidden"
           >
             {/* Header */}
-            <div className="px-5 py-4 border-b border-theme-border bg-theme-elevated/50 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-theme-accent/10 border border-theme-accent/20 flex items-center justify-center overflow-hidden">
+            <div className="px-3.5 py-2.5 border-b border-theme-border bg-theme-elevated/60 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-full bg-theme-accent/10 border border-theme-accent/20 flex items-center justify-center overflow-hidden">
                   <img src="/ai-gif2.gif" alt="CS Avatar" className="w-full h-full object-cover scale-110" />
                 </div>
                 <div>
-                  <h3 className="text-sm font-sans font-bold text-theme-fore leading-tight">Sedia AI</h3>
-                  <p className="text-[10px] font-mono text-emerald-500 flex items-center gap-1">
+                  <h3 className="text-xs font-sans font-bold text-theme-fore leading-tight">Sedia AI</h3>
+                  <p className="text-[9px] font-mono text-emerald-500 flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
                     Online
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
                 <button
                   onClick={() => {
                     if (isHandoffMode) {
@@ -207,42 +208,42 @@ export default function AiChatWidget() {
                   disabled={isLoading || isWaitingForName}
                   className={
                     isHandoffMode
-                      ? "px-3 py-1.5 rounded-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white transition-colors text-[10px] font-bold tracking-wide uppercase disabled:opacity-50 cursor-pointer border border-red-500/20 flex items-center gap-1.5"
-                      : "px-3 py-1.5 rounded-full bg-theme-accent/10 hover:bg-theme-accent text-theme-accent hover:text-white transition-colors text-[10px] font-bold tracking-wide uppercase disabled:opacity-50 cursor-pointer border border-theme-accent/20 flex items-center gap-1.5"
+                      ? "px-2.5 py-1 rounded-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white transition-colors text-[9px] font-bold tracking-wide uppercase disabled:opacity-50 cursor-pointer border border-red-500/20 flex items-center gap-1"
+                      : "px-2.5 py-1 rounded-full bg-theme-accent/10 hover:bg-theme-accent text-theme-accent hover:text-white transition-colors text-[9px] font-bold tracking-wide uppercase disabled:opacity-50 cursor-pointer border border-theme-accent/20 flex items-center gap-1"
                   }
                 >
                   {!isHandoffMode && (
-                    <img src="/telegram-icon.svg" alt="Telegram" className="w-3.5 h-3.5" />
+                    <img src="/telegram-icon.svg" alt="Telegram" className="w-3 h-3" />
                   )}
                   {isHandoffMode ? "Akhiri Sesi" : "Hubungi Tim"}
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="w-8 h-8 rounded-full bg-theme-elevated hover:bg-theme-border/50 flex items-center justify-center text-theme-fore-muted hover:text-theme-fore transition-colors cursor-pointer"
+                  className="w-7 h-7 rounded-full bg-theme-elevated hover:bg-theme-border/50 flex items-center justify-center text-theme-fore-muted hover:text-theme-fore transition-colors cursor-pointer"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-5 space-y-4 custom-scrollbar">
+            <div className="flex-1 overflow-y-auto p-3.5 space-y-3 custom-scrollbar">
               {messages.map((msg, idx) => (
-                <div key={idx} className={`flex items-end gap-2 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                <div key={idx} className={`flex items-end gap-1.5 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                   {/* Avatar */}
-                  <div className={`shrink-0 w-7 h-7 rounded-full overflow-hidden flex items-center justify-center shadow-sm ${msg.role === 'user' ? 'bg-theme-fore text-theme-base' : 'bg-theme-accent/10 border border-theme-accent/20'}`}>
-                    {msg.role === 'user' ? <User className="w-3.5 h-3.5" /> : <img src="/ai-gif2.gif" className="w-full h-full object-cover scale-110" />}
+                  <div className={`shrink-0 w-6 h-6 rounded-full overflow-hidden flex items-center justify-center shadow-xs ${msg.role === 'user' ? 'bg-theme-fore text-theme-base' : 'bg-theme-accent/10 border border-theme-accent/20'}`}>
+                    {msg.role === 'user' ? <User className="w-3 h-3" /> : <img src="/ai-gif2.gif" className="w-full h-full object-cover scale-110" />}
                   </div>
 
                   {/* Bubble */}
-                  <div className={`max-w-[75%] px-4 py-3 rounded-2xl text-xs leading-relaxed ${msg.role === 'user'
-                      ? 'bg-theme-fore text-theme-base rounded-br-sm'
-                      : 'bg-theme-elevated border border-theme-border text-theme-fore rounded-bl-sm'
+                  <div className={`max-w-[78%] px-3 py-2 rounded-xl text-[11.5px] leading-relaxed ${msg.role === 'user'
+                      ? 'bg-theme-fore text-theme-base rounded-br-xs'
+                      : 'bg-theme-elevated border border-theme-border text-theme-fore rounded-bl-xs'
                     }`}>
                     {msg.role === 'user' ? (
                       <p>{msg.text}</p>
                     ) : (
-                      <div className="prose prose-sm prose-invert max-w-none prose-p:my-1 prose-ul:my-1 prose-ul:pl-4 prose-li:my-0 text-xs">
+                      <div className="prose prose-sm prose-invert max-w-none prose-p:my-0.5 prose-ul:my-0.5 prose-ul:pl-3.5 prose-li:my-0 text-[11.5px]">
                         <ReactMarkdown>{msg.text}</ReactMarkdown>
                       </div>
                     )}
@@ -251,11 +252,11 @@ export default function AiChatWidget() {
               ))}
 
               {isLoading && (
-                <div className="flex items-end gap-2 flex-row">
-                  <div className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center shadow-sm bg-theme-accent text-white">
-                    <SediaIcon className="w-4 h-4" />
+                <div className="flex items-end gap-1.5 flex-row">
+                  <div className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center shadow-xs bg-theme-accent text-white">
+                    <SediaIcon className="w-3.5 h-3.5" />
                   </div>
-                  <div className="px-4 py-3 rounded-2xl bg-theme-elevated border border-theme-border rounded-bl-sm flex items-center gap-1.5">
+                  <div className="px-3 py-2 rounded-xl bg-theme-elevated border border-theme-border rounded-bl-xs flex items-center gap-1">
                     <span className="w-1.5 h-1.5 rounded-full bg-theme-fore-muted animate-bounce" style={{ animationDelay: '0ms' }} />
                     <span className="w-1.5 h-1.5 rounded-full bg-theme-fore-muted animate-bounce" style={{ animationDelay: '150ms' }} />
                     <span className="w-1.5 h-1.5 rounded-full bg-theme-fore-muted animate-bounce" style={{ animationDelay: '300ms' }} />
@@ -266,7 +267,7 @@ export default function AiChatWidget() {
             </div>
 
             {/* Input Area */}
-            <div className="p-4 bg-theme-elevated/50 border-t border-theme-border">
+            <div className="p-3 bg-theme-elevated/40 border-t border-theme-border">
               <form onSubmit={handleSendMessage} className="relative flex items-center">
                 <input
                   type="text"
@@ -274,14 +275,14 @@ export default function AiChatWidget() {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder="Ketik pesan Anda..."
                   disabled={isLoading}
-                  className="w-full pl-4 pr-12 py-3 bg-theme-surface border border-theme-border rounded-xl text-xs text-theme-fore placeholder-theme-fore-muted focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent transition-all disabled:opacity-50"
+                  className="w-full pl-3 pr-10 py-2 bg-theme-surface border border-theme-border rounded-lg text-xs text-theme-fore placeholder-theme-fore-muted focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent transition-all disabled:opacity-50"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim() || isLoading}
-                  className="absolute right-2 w-8 h-8 flex items-center justify-center rounded-lg bg-theme-accent hover:bg-theme-accent-bright text-white disabled:bg-theme-border disabled:text-theme-fore-muted transition-colors cursor-pointer"
+                  className="absolute right-1.5 w-7 h-7 flex items-center justify-center rounded-md bg-theme-accent hover:bg-theme-accent-bright text-white disabled:bg-theme-border disabled:text-theme-fore-muted transition-colors cursor-pointer"
                 >
-                  {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4 ml-0.5" />}
+                  {isLoading ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5 ml-0.5" />}
                 </button>
               </form>
             </div>
