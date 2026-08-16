@@ -8,19 +8,32 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://sejatidimedia.web.id"),
   title: {
     template: "%s | SejatiDimedia",
-    default: "SejatiDimedia - Software Agency & Development",
+    default: "Jasa Pembuatan Aplikasi & Website Balikpapan | SejatiDimedia",
   },
-  description: "SejatiDimedia adalah software agency di Balikpapan. Kami membangun sistem produksi, aplikasi SaaS, dan produk mobile kustom berkinerja tinggi.",
+  description: "Jasa pembuatan aplikasi mobile (iOS & Android), pembuatan website profesional, dan sistem SaaS kustom di Balikpapan. Bangun sistem digital bisnis terintegrasi dan berkinerja tinggi bersama SejatiDimedia.",
   keywords: [
+    "software balikpapan",
+    "pembuatan web",
+    "balikpapan software agency",
+    "pembuatan aplikasi balikpapan",
+    "jasa pembuatan aplikasi balikpapan",
+    "jasa pembuatan website balikpapan",
+    "pembuatan website balikpapan",
+    "jasa pembuatan web",
+    "pembuatan web balikpapan",
+    "software agency balikpapan",
+    "software house balikpapan",
+    "developer aplikasi balikpapan",
+    "jasa buat aplikasi balikpapan",
+    "jasa buat website balikpapan",
+    "web development balikpapan",
+    "mobile app development balikpapan",
+    "aplikasi kasir balikpapan",
+    "aplikasi erp balikpapan",
     "sejatidimedia",
     "sejati dimedia",
-    "software agency balikpapan",
-    "software agency indonesia",
-    "web development",
-    "mobile app development",
-    "jasa pembuatan website balikpapan",
-    "jasa pembuatan aplikasi",
     "Timur Dian Radha Sejati",
+    "software agency indonesia",
     "SaaS builder",
   ],
   authors: [{ name: "Timur Dian Radha Sejati" }],
@@ -29,14 +42,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "id_ID",
     url: "https://sejatidimedia.web.id",
-    title: "SejatiDimedia - Software Agency Balikpapan",
-    description: "Software agency di Balikpapan yang berfokus pada aplikasi SaaS, web, dan produk mobile berkualitas tinggi.",
+    title: "Jasa Pembuatan Aplikasi & Website Balikpapan | SejatiDimedia",
+    description: "Jasa pembuatan aplikasi mobile (iOS & Android), pembuatan website profesional, dan sistem SaaS kustom berkinerja tinggi di Balikpapan.",
     siteName: "SejatiDimedia",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SejatiDimedia - Software Agency",
-    description: "Membangun sistem produksi, aplikasi SaaS, dan produk mobile kustom.",
+    title: "Jasa Pembuatan Aplikasi & Website Balikpapan | SejatiDimedia",
+    description: "Jasa pembuatan aplikasi mobile, website, dan sistem SaaS kustom di Balikpapan.",
   },
   verification: {
     google: "Wm-o9TjYVWYqL5cxsP8hRnHGlRbdCPbpsNv0pEQN_QY",
@@ -151,28 +164,79 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "ProfessionalService",
-              "name": "SejatiDimedia",
+              "@type": ["ProfessionalService", "LocalBusiness"],
+              "name": "SejatiDimedia - Jasa Pembuatan Aplikasi & Website Balikpapan",
+              "alternateName": "SejatiDimedia",
               "url": "https://sejatidimedia.web.id",
               "logo": "https://sejatidimedia.web.id/logo.svg",
               "image": "https://sejatidimedia.web.id/logo.svg",
-              "description": "SejatiDimedia adalah software agency & media command center premium. Kami membangun sistem produksi, aplikasi SaaS, dan produk mobile kustom.",
+              "description": "Jasa pembuatan aplikasi mobile (iOS & Android), pembuatan website profesional, sistem SaaS, dan solusi software kustom di Balikpapan, Kalimantan Timur.",
               "founder": {
                 "@type": "Person",
                 "name": "Timur Dian Radha Sejati",
+                "jobTitle": "Lead Software Engineer & Founder",
                 "url": "https://sejatidimedia.web.id"
               },
               "address": {
                 "@type": "PostalAddress",
                 "addressLocality": "Balikpapan",
-                "addressRegion": "East Kalimantan",
+                "addressRegion": "Kalimantan Timur",
                 "addressCountry": "ID"
               },
-              "areaServed": ["Balikpapan", "Indonesia"],
+              "geo": {
+                "@type": "GeoCoordinates",
+                "latitude": -1.2379,
+                "longitude": 116.8529
+              },
+              "areaServed": [
+                {
+                  "@type": "City",
+                  "name": "Balikpapan"
+                },
+                {
+                  "@type": "Country",
+                  "name": "Indonesia"
+                }
+              ],
+              "hasOfferCatalog": {
+                "@type": "OfferCatalog",
+                "name": "Layanan Pengembangan Perangkat Lunak",
+                "itemListElement": [
+                  {
+                    "@type": "Offer",
+                    "itemOffered": {
+                      "@type": "Service",
+                      "name": "Jasa Pembuatan Aplikasi Mobile Balikpapan (iOS & Android)"
+                    }
+                  },
+                  {
+                    "@type": "Offer",
+                    "itemOffered": {
+                      "@type": "Service",
+                      "name": "Jasa Pembuatan Website & Web App Balikpapan"
+                    }
+                  },
+                  {
+                    "@type": "Offer",
+                    "itemOffered": {
+                      "@type": "Service",
+                      "name": "Pengembangan Sistem SaaS & ERP Custom"
+                    }
+                  },
+                  {
+                    "@type": "Offer",
+                    "itemOffered": {
+                      "@type": "Service",
+                      "name": "Integrasi Sistem & AI / LLM"
+                    }
+                  }
+                ]
+              },
               "priceRange": "$$",
               "sameAs": [
                 "https://fastwork.id/en/user/timurradhadian",
-                "https://www.upwork.com/freelancers/~017698b392e21b4b6c"
+                "https://www.upwork.com/freelancers/~017698b392e21b4b6c",
+                "https://github.com/timursejati"
               ]
             })
           }}

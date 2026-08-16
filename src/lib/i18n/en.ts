@@ -15,11 +15,11 @@ export const en = {
   },
   hero: {
     badge: "AVAILABLE FOR NEW CLIENTS",
-    badgeText: "Independent Software Developer · Focus on Manufacturing & Operational Business Systems",
+    badgeText: "Balikpapan Software Agency · Custom Web & Mobile App Development",
     socialProof: "5 Years Experience · 32 Projects Completed",
     title: "Build the System Your Business Truly Needs, Not Just a",
     titleHighlight: "Website",
-    subtitle: "With 5 years of direct experience in the manufacturing industry, I help businesses transform manual operational processes into integrated digital systems.",
+    subtitle: "Balikpapan software agency specializing in custom mobile apps, modern web development, and operational business systems.",
     card1Title: "Real Manufacturing Systems",
     card1Desc: "Accustomed to building enterprise-scale systems in the manufacturing industry that handle transactions, inventory, and daily workflows accurately.",
     card2Title: "Testable Products",

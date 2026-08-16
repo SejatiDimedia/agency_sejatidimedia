@@ -15,11 +15,11 @@ export const id = {
   },
   hero: {
     badge: "TERSEDIA UNTUK KLIEN BARU",
-    badgeText: "Software Developer Independen · Fokus Sistem Bisnis Manufaktur & Operasional",
+    badgeText: "Software Agency Balikpapan · Jasa Pembuatan Aplikasi & Sistem Bisnis",
     socialProof: "5 Tahun Pengalaman · 32 Proyek Diselesaikan",
     title: "Bangun Sistem yang Benar-Benar Dibutuhkan Bisnis Anda, Bukan Sekadar",
     titleHighlight: "Website",
-    subtitle: "Dengan 5 tahun pengalaman langsung di industri manufaktur, saya membantu bisnis mengubah proses operasional manual menjadi sistem digital terintegrasi.",
+    subtitle: "Jasa pembuatan aplikasi mobile, website modern, dan sistem operasional bisnis di Balikpapan. Mengubah proses manual menjadi sistem digital terintegrasi dan berkinerja tinggi.",
     card1Title: "Sistem Manufaktur Nyata",
     card1Desc: "Terbiasa membangun sistem berskala enterprise di industri manufaktur yang menangani transaksi, inventori, dan proses kerja harian secara akurat.",
     card2Title: "Bisa Diuji Langsung",
