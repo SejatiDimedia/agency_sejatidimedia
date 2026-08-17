@@ -24,7 +24,7 @@ Struktur Paket Layanan & Harga Resmi:
 
 3. Custom — Sistem Kompleks & AI (Harga: Disesuaikan dengan cakupan/scope proyek):
    - Tujuan: Kebutuhan sistem skala enterprise, arsitektur multi-platform terpadu, dan otomasi berbasis AI.
-   - Termasuk: Domain .com + Cloud Infrastructure (AWS/GCP/Vercel), Multi-Platform Terintegrasi (Web + Android + iOS sekaligus), Custom AI Pipeline & Automation (RAG Architecture, Autonomous Agents, n8n Workflows, LangChain, LLM Fine-Tuning), Timeline & Scope Kustom Fleksibel, Dukungan & Pemeliharaan Server Berkala, Dokumentasi Lengkap API & Arsitektur.
+   - Termasuk: Gratis Domain .com (1 Tahun), Multi-Platform Terintegrasi (Web + Android + iOS sekaligus), Custom AI Pipeline & Automation (RAG Architecture, Autonomous Agents, n8n Workflows, LangChain, LLM Fine-Tuning), Timeline & Scope Kustom Fleksibel, Dukungan & Pemeliharaan Server Berkala, Dokumentasi Lengkap API & Arsitektur.
 
 Keahlian Teknologi (Tech Stack):
 - Web: Next.js, React, TypeScript, Tailwind CSS, Node.js, Express, PostgreSQL, Supabase, Redis.
@@ -54,14 +54,14 @@ export async function POST(req: Request) {
       if (session_id) {
         const { disableHandoffMode } = await import('../../../lib/redis');
         await disableHandoffMode(session_id);
-        
+
         // Notify owner on Telegram that the client ended the chat
         const telegramText = `🔴 *Klien Mengakhiri Sesi Chat*\n\nSession ID: \`${session_id}\`\nSedia AI telah mengambil alih percakapan kembali.`;
         try {
           await notifyOwnerViaTelegram(telegramText);
-        } catch(e) {}
+        } catch (e) { }
       }
-      return NextResponse.json({ 
+      return NextResponse.json({
         response: "Sesi percakapan langsung dengan Tim SejatiDimedia telah diakhiri. Saya (Sedia AI) kembali siap membantu Anda! 🤖",
         isHandoff: false
       });
@@ -77,10 +77,10 @@ export async function POST(req: Request) {
         const clientName = message.substring(10).trim() || 'Klien Baru';
 
         // Format summary of chat for the owner
-        const chatSummary = Array.isArray(history) 
+        const chatSummary = Array.isArray(history)
           ? history.map((msg: any) => `${msg.role === 'user' ? '👤 User' : '🤖 AI'}: ${msg.text}`).join('\n')
           : '';
-        
+
         const telegramText = `🔔 *Request Chat dari ${clientName}*\n\n*Session ID:* \`${session_id}\`\n\n*Riwayat Chat Singkat:*\n${chatSummary.substring(chatSummary.length - 1000)}\n\n_Balas pesan ini untuk merespons user secara langsung._`;
 
         try {
@@ -89,8 +89,8 @@ export async function POST(req: Request) {
           await saveSessionMapping(tgResponse.message_id, session_id);
           // Lock user into human handoff mode for 2 hours
           await enableHandoffMode(session_id);
-          
-          return NextResponse.json({ 
+
+          return NextResponse.json({
             response: "Baik, saya akan sampaikan pesan Anda ke tim kami. Mohon tunggu sebentar ya, mereka akan segera membalas langsung di sini.",
             isHandoff: true
           });
@@ -98,16 +98,16 @@ export async function POST(req: Request) {
           console.error("Handoff failed:", err);
           return NextResponse.json({ response: "Mohon maaf, sistem notifikasi ke tim kami sedang bermasalah. Silakan isi form kontak di bawah layar.", isHandoff: false });
         }
-      } 
-      
+      }
+
       // If user is ALREADY in handoff mode, just forward their message directly
       else {
-        const telegramText = `💬 *Balasan dari User (${session_id.substring(0,6)}...)*\n\n"${message}"`;
-        
+        const telegramText = `💬 *Balasan dari User (${session_id.substring(0, 6)}...)*\n\n"${message}"`;
+
         try {
           const tgResponse = await notifyOwnerViaTelegram(telegramText);
           await saveSessionMapping(tgResponse.message_id, session_id);
-          
+
           // Don't return an AI text response, just acknowledge receipt
           return NextResponse.json({ response: "_Pesan terkirim ke Tim SejatiDimedia..._", isHandoff: true });
         } catch (err) {
@@ -118,7 +118,7 @@ export async function POST(req: Request) {
     }
 
     const apiKey = process.env.OPENROUTER_API_KEY || process.env.GEMINI_API_KEY;
-    
+
     if (!apiKey) {
       return NextResponse.json(
         { error: "API Key belum dikonfigurasi. Silakan tambahkan OPENROUTER_API_KEY di .env.local" },
@@ -169,8 +169,8 @@ export async function POST(req: Request) {
           method: "POST",
           headers: {
             "Authorization": `Bearer ${apiKey}`,
-            "HTTP-Referer": "https://sejatidimedia.web.id", 
-            "X-Title": "SejatiDimedia", 
+            "HTTP-Referer": "https://sejatidimedia.web.id",
+            "X-Title": "SejatiDimedia",
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
@@ -180,7 +180,7 @@ export async function POST(req: Request) {
         });
 
         const data = await response.json();
-        
+
         if (response.ok && data.choices?.[0]?.message?.content) {
           aiMessage = data.choices[0].message.content;
           success = true;

@@ -2017,6 +2017,21 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 </div>
               </div>
             </div>
+
+            {/* Note text below pricing grid */}
+            <div className="pt-6 sm:pt-8 text-center">
+              <a
+                href="https://wa.me/6289508436275?text=Halo%20SejatiDimedia,%20saya%20ingin%20berdiskusi%20mengenai%20opsi%20proyek%20dengan%20budget%20yang%20tersedia."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 text-xs sm:text-sm text-slate-500 hover:text-[#2C5098] transition-colors group cursor-pointer max-w-xl mx-auto px-4 leading-relaxed"
+              >
+                <Icon icon="ph:chat-circle-dots-bold" className="w-4 h-4 text-[#2C5098] group-hover:scale-110 transition-transform shrink-0" />
+                <span className="underline underline-offset-4 decoration-slate-300 group-hover:decoration-[#2C5098]">
+                  {t.pricingCards.budgetNote || "Budget terbatas tapi butuh solusi cepat? Chat saya, kita diskusikan opsi yang realistis untuk kebutuhan Anda."}
+                </span>
+              </a>
+            </div>
           </div>
         </div>
       </motion.section>

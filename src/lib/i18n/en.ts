@@ -344,7 +344,7 @@ export const en = {
     ],
     customTag: "Enterprise Scale & AI",
     customTitle: "Custom — Complex Systems & AI",
-    customDesc: "Suitable for large-scale systems, complex architectures, and integrations with numerous operational business processes.",
+    customDesc: "For specific needs beyond standard packages. Tell us your needs and budget, we'll find the right fit.",
     customIncludes: [
       'Custom .com Domain + Cloud Setup',
       'Multi-Platform (Web + Android + iOS)',
@@ -353,7 +353,8 @@ export const en = {
       'Advanced Support as Agreed',
       'Complete API & Architecture Docs',
       'Periodic Server Maintenance'
-    ]
+    ],
+    budgetNote: "Limited budget but need a fast solution? Chat with me, let's discuss realistic options for your needs."
   },
 
   features: {

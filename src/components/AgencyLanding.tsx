@@ -1456,6 +1456,21 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           </motion.div>
 
         </motion.div>
+
+        {/* Note text below pricing grid */}
+        <div className="pt-2 sm:pt-4 text-center">
+          <a
+            href="https://wa.me/6289508436275?text=Halo%20SejatiDimedia,%20saya%20ingin%20berdiskusi%20mengenai%20opsi%20proyek%20dengan%20budget%20yang%20tersedia."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center gap-2 text-xs sm:text-sm text-theme-fore-muted hover:text-theme-accent transition-colors group cursor-pointer max-w-xl mx-auto px-4 leading-relaxed"
+          >
+            <Icon icon="ph:chat-circle-dots-bold" className="w-4 h-4 text-theme-accent group-hover:scale-110 transition-transform shrink-0" />
+            <span className="underline underline-offset-4 decoration-theme-border group-hover:decoration-theme-accent">
+              {t.pricingCards.budgetNote || "Budget terbatas tapi butuh solusi cepat? Chat saya, kita diskusikan opsi yang realistis untuk kebutuhan Anda."}
+            </span>
+          </a>
+        </div>
       </motion.section>
 
       {/* SECTION 4.5: KENAPA KLIEN PERCAYA BEKERJA SAMA DENGAN SAYA */}

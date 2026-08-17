@@ -344,16 +344,17 @@ export const id = {
     ],
     customTag: "Skala Enterprise & AI",
     customTitle: "Custom — Sistem Kompleks & AI",
-    customDesc: "Cocok untuk kebutuhan sistem skala besar, arsitektur rumit, dan terintegrasi dengan banyak proses bisnis operasional.",
+    customDesc: "Untuk kebutuhan spesifik di luar paket standar. Ceritakan kebutuhan dan budget Anda, kita cari skema yang paling pas.",
     customIncludes: [
-      'Domain .com + Cloud Infrastructure',
+      'Gratis Domain .com(1 Tahun)',
       'Multi-Platform (Web + Android + iOS)',
       'Integrasi AI & Otomasi (RAG / Agents / n8n)',
       'Timeline & Scope Kustom Fleksibel',
       'Dukungan Lanjutan Sesuai Kesepakatan',
       'Dokumentasi API & Arsitektur Lengkap',
       'Pemeliharaan Server Berkala'
-    ]
+    ],
+    budgetNote: "Budget terbatas tapi butuh solusi cepat? Chat saya, kita diskusikan opsi yang realistis untuk kebutuhan Anda."
   },
 
   features: {
