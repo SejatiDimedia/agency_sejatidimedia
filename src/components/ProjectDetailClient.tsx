@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ArrowLeft, ExternalLink, Calendar, CheckCircle2, Clock, ShieldAlert, Briefcase, Lock, ShieldCheck } from "lucide-react";
 import { Icon } from "@iconify/react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import ShowcaseGallery from "./ShowcaseGallery";
 import { Project, isProfessionalProject } from "../lib/api/glio-projects";
 import { useLanguage } from "../lib/i18n/LanguageContext";
@@ -84,14 +85,71 @@ export default function ProjectDetailClient({
 
   const markdownComponents = {
     h1: ({ children }: any) => <h1 className="text-2xl font-sans font-bold text-slate-900 dark:text-theme-fore mt-6 mb-3 border-b border-slate-100 dark:border-theme-border/20 pb-2">{children}</h1>,
-    h2: ({ children }: any) => <h2 className="text-xl font-sans font-bold text-slate-900 dark:text-theme-fore mt-5 mb-2.5 border-b border-slate-100 dark:border-theme-border/20 pb-1.5">{children}</h2>,
-    h3: ({ children }: any) => <h3 className="text-lg font-sans font-bold text-slate-900 dark:text-theme-fore mt-4 mb-2">{children}</h3>,
+    h2: ({ children }: any) => <h2 className="text-xl font-sans font-bold text-slate-900 dark:text-theme-fore mt-6 mb-3 border-b border-slate-100 dark:border-theme-border/20 pb-1.5">{children}</h2>,
+    h3: ({ children }: any) => <h3 className="text-lg font-sans font-bold text-slate-900 dark:text-theme-fore mt-5 mb-2">{children}</h3>,
+    h4: ({ children }: any) => <h4 className="text-base font-sans font-bold text-slate-900 dark:text-theme-fore mt-4 mb-2">{children}</h4>,
     p: ({ children }: any) => <p className="mb-4 text-slate-600 dark:text-theme-fore-muted leading-relaxed">{children}</p>,
     ul: ({ children }: any) => <ul className="list-disc list-outside mb-6 ml-5 space-y-2">{children}</ul>,
     ol: ({ children }: any) => <ol className="list-decimal list-outside mb-6 ml-5 space-y-2">{children}</ol>,
     li: ({ children }: any) => <li className="text-slate-600 dark:text-theme-fore-muted marker:font-bold marker:text-slate-800 [&>p]:m-0">{children}</li>,
     strong: ({ children }: any) => <strong className="font-bold text-slate-900 dark:text-theme-fore">{children}</strong>,
-    code: ({ children }: any) => <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-theme-surface border border-slate-200 dark:border-theme-border font-mono text-xs text-[#2C5098]">{children}</code>,
+    em: ({ children }: any) => <em className="italic text-slate-700 dark:text-theme-fore">{children}</em>,
+    code: ({ inline, className, children, ...props }: any) => (
+      <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-theme-surface border border-slate-200/80 dark:border-theme-border font-mono text-xs text-[#2C5098] font-medium" {...props}>
+        {children}
+      </code>
+    ),
+    pre: ({ children }: any) => (
+      <pre className="p-4 my-4 rounded-2xl bg-slate-900 text-slate-100 font-mono text-xs overflow-x-auto border border-slate-800 shadow-sm leading-relaxed">
+        {children}
+      </pre>
+    ),
+    table: ({ children }: any) => (
+      <div className="w-full my-6 overflow-x-auto rounded-2xl border border-slate-200/90 dark:border-theme-border/80 shadow-xs bg-white dark:bg-theme-surface/40">
+        <table className="w-full text-left border-collapse text-xs sm:text-sm">{children}</table>
+      </div>
+    ),
+    thead: ({ children }: any) => (
+      <thead className="bg-slate-50 dark:bg-theme-surface text-slate-900 dark:text-theme-fore font-bold border-b border-slate-200/90 dark:border-theme-border/80">
+        {children}
+      </thead>
+    ),
+    tbody: ({ children }: any) => (
+      <tbody className="divide-y divide-slate-100 dark:divide-theme-border/40 font-sans text-slate-700 dark:text-theme-fore-muted">
+        {children}
+      </tbody>
+    ),
+    tr: ({ children }: any) => (
+      <tr className="hover:bg-slate-50/70 dark:hover:bg-theme-surface/50 transition-colors">
+        {children}
+      </tr>
+    ),
+    th: ({ children }: any) => (
+      <th className="px-4 py-3 text-xs font-mono font-bold uppercase tracking-wider text-slate-800 dark:text-theme-fore whitespace-nowrap bg-slate-100/60 dark:bg-theme-surface/70">
+        {children}
+      </th>
+    ),
+    td: ({ children }: any) => (
+      <td className="px-4 py-3 leading-relaxed align-top">
+        {children}
+      </td>
+    ),
+    hr: () => <hr className="my-8 border-t border-slate-200/80 dark:border-theme-border/40" />,
+    blockquote: ({ children }: any) => (
+      <blockquote className="my-4 pl-4 border-l-4 border-[#2C5098] bg-slate-50/80 dark:bg-theme-surface/30 py-2 rounded-r-xl italic text-slate-600 dark:text-theme-fore-muted">
+        {children}
+      </blockquote>
+    ),
+    a: ({ href, children }: any) => (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-[#2C5098] font-semibold underline underline-offset-2 hover:text-[#1E315B] transition-colors"
+      >
+        {children}
+      </a>
+    ),
   };
 
   return (
@@ -154,7 +212,7 @@ export default function ProjectDetailClient({
               {isNdaActive ? (
                 <>
                   {/* Readable Intro Portion */}
-                  <ReactMarkdown components={markdownComponents}>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                     {intro}
                   </ReactMarkdown>
 
@@ -163,7 +221,7 @@ export default function ProjectDetailClient({
                     <div className="relative mt-6 pt-2 overflow-hidden rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30">
                       {/* Blurred Text Body */}
                       <div className="filter blur-md opacity-25 select-none pointer-events-none p-4 max-h-[340px] overflow-hidden">
-                        <ReactMarkdown components={markdownComponents}>
+                        <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                           {confidential}
                         </ReactMarkdown>
                       </div>
@@ -194,7 +252,7 @@ export default function ProjectDetailClient({
                   )}
                 </>
               ) : (
-                <ReactMarkdown components={markdownComponents}>
+                <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
                   {displayDescription}
                 </ReactMarkdown>
               )}

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MessageSquare, X, Send, User, Loader2, Maximize2, Minimize2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import Pusher from 'pusher-js';
 
 type Message = {
@@ -322,7 +323,7 @@ export default function AiChatWidget() {
                       <div className={`prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ul:pl-4 prose-li:my-0.5 text-slate-800 ${
                         isExpanded ? 'text-[13px] leading-relaxed' : 'text-xs'
                       }`}>
-                        <ReactMarkdown>{msg.text}</ReactMarkdown>
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.text}</ReactMarkdown>
                       </div>
                     )}
                   </div>
