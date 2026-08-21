@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import Image from "next/image";
 import { X, ChevronLeft, ChevronRight, Maximize2, Layers, ShieldAlert } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { GlioProjectDocument } from "../lib/api/glio-projects";
+import { GlioProjectDocument, NDA_PLACEHOLDER_IMAGE } from "../lib/api/glio-projects";
 import { useLanguage } from "../lib/i18n/LanguageContext";
 
 interface ShowcaseGalleryProps {
@@ -111,8 +111,8 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
                 }`}
               >
                 <Image
-                  src={img.url}
-                  alt={img.name}
+                  src={isNdaBlurred ? NDA_PLACEHOLDER_IMAGE : img.url}
+                  alt={isNdaBlurred ? "Redacted NDA Screenshot" : img.name}
                   fill
                   className={`object-cover transition-all duration-500 ${
                     isNdaBlurred

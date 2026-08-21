@@ -100,6 +100,79 @@ export function isProfessionalProject(
   return false;
 }
 
+// Safe abstract placeholder SVG for blurred NDA screenshot thumbnails (100% leak-proof in DOM & Network tab)
+export const NDA_PLACEHOLDER_IMAGE = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%230f172a'/%3E%3Cstop offset='50%25' stop-color='%231e293b'/%3E%3Cstop offset='100%25' stop-color='%230f172a'/%3E%3C/linearGradient%3E%3Cfilter id='b'%3E%3CfeGaussianBlur stdDeviation='16'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23g)'/%3E%3Ccircle cx='180' cy='140' r='110' fill='%233b82f6' opacity='0.25' filter='url(%23b)'/%3E%3Ccircle cx='420' cy='260' r='130' fill='%23f59e0b' opacity='0.2' filter='url(%23b)'/%3E%3Ccircle cx='300' cy='200' r='90' fill='%2310b981' opacity='0.15' filter='url(%23b)'/%3E%3Crect x='60' y='50' width='480' height='300' rx='20' fill='%23ffffff' fill-opacity='0.03' stroke='%23ffffff' stroke-opacity='0.08' stroke-width='1'/%3E%3C/svg%3E";
+
+export const NDA_REDACTED_TEXT_ID = `### Arsitektur Sistem Internal [DATA DISENSOR DI BAWAH NDA]
+
+Implementasi modul proprietary meliputi integrasi pipeline sensor data real-time, sinkronisasi gateway industri dengan protokol standar, pengolahan metrik telemetri, serta orkestrasi microservices backend terdistribusi.
+
+- Pipeline data internal terenkripsi end-to-end
+- Optimasi alur antrian pesan asynchronous dan caching
+- Algoritma pemrosesan telemetri internal sistem
+- Integrasi database relasional dan in-memory data store
+
+Seluruh rincian konfigurasi server riil, skema database proprietary, dan diagram topologi internal disamarkan untuk mematuhi regulasi kerahasiaan perusahaan (Non-Disclosure Agreement).`;
+
+export const NDA_REDACTED_TEXT_EN = `### Internal System Architecture [REDACTED UNDER NDA]
+
+Proprietary implementation encompasses real-time telemetry processing pipelines, industrial gateway protocol synchronization, internal messaging queues, and distributed backend service orchestration.
+
+- End-to-end encrypted internal data transport
+- High-throughput asynchronous message queue optimization
+- Internal business logic and telemetry calculation algorithms
+- Resilient database clustering and in-memory cache architecture
+
+All sensitive server connection strings, internal database schemas, and proprietary network topology diagrams are fully redacted to ensure compliance with corporate Non-Disclosure Agreements (NDA).`;
+
+/**
+ * Military-grade server & client sanitizer:
+ * Strips raw confidential text and replaces real screenshot URLs with safe abstract SVG graphics.
+ */
+export function sanitizeProjectForNda(project: Project, isNdaActive: boolean): Project {
+  if (!isNdaActive) return project;
+
+  const getIntroOnly = (content?: string | null) => {
+    if (!content) return "";
+    const blocks = content.split(/\n\n+/);
+    if (blocks.length <= 2) {
+      return blocks[0] || "";
+    }
+    return blocks.slice(0, 2).join("\n\n");
+  };
+
+  const rawId = project.descriptionId || project.description || "";
+  const rawEn = project.descriptionEn || project.description || "";
+
+  const introId = getIntroOnly(rawId);
+  const introEn = getIntroOnly(rawEn);
+
+  // Redacted description: safe intro + generic dummy redacted text
+  const sanitizedDescId = `${introId}\n\n${NDA_REDACTED_TEXT_ID}`;
+  const sanitizedDescEn = `${introEn}\n\n${NDA_REDACTED_TEXT_EN}`;
+
+  // Redact screenshot image documents: Replace real image URLs with safe abstract SVG data
+  const sanitizedDocuments = (project.documents || []).map((doc, idx) => {
+    if (doc.type && doc.type.startsWith("image/")) {
+      return {
+        ...doc,
+        id: `nda-doc-${idx}`,
+        name: `Redacted Screenshot ${idx + 1}`,
+        url: NDA_PLACEHOLDER_IMAGE,
+      };
+    }
+    return doc;
+  });
+
+  return {
+    ...project,
+    description: sanitizedDescId,
+    descriptionId: sanitizedDescId,
+    descriptionEn: sanitizedDescEn,
+    documents: sanitizedDocuments,
+  };
+}
+
 const GLIO_API_URL = process.env.GLIO_API_URL || "";
 const GLIO_API_KEY = process.env.GLIO_API_KEY || "";
 

@@ -39,14 +39,16 @@ export default function ProjectDetailClient({
   project,
   relatedProjects,
   initialNdaBlurEnabled = true,
+  initialNdaProjectSlugs = [],
 }: {
   project: Project;
   relatedProjects: Project[];
   initialNdaBlurEnabled?: boolean;
+  initialNdaProjectSlugs?: string[];
 }) {
   const { t, language } = useLanguage();
   const [ndaBlur, setNdaBlur] = useState<boolean>(initialNdaBlurEnabled);
-  const [ndaProjectSlugs, setNdaProjectSlugs] = useState<string[]>([]);
+  const [ndaProjectSlugs, setNdaProjectSlugs] = useState<string[]>(initialNdaProjectSlugs);
 
   useEffect(() => {
     fetch('/api/settings/nda')
