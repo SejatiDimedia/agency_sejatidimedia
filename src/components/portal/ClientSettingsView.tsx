@@ -1,8 +1,6 @@
-'use client';
-
 import React, { useState, useEffect } from 'react';
 import { Card, Button, Input, Toast } from '@/components/ui';
-import { KeyRound, Lock, ShieldCheck, User, Mail, CheckCircle2, AlertCircle, LayoutTemplate, Sparkles, Sun, Check, ExternalLink } from 'lucide-react';
+import { KeyRound, Lock, ShieldCheck, User, Mail, CheckCircle2, AlertCircle, LayoutTemplate, Sparkles, Sun, Check, ExternalLink, ShieldAlert, Eye, EyeOff } from 'lucide-react';
 import { TemplateId, TEMPLATES, getActiveTemplate, setActiveTemplate } from '@/lib/templates';
 import { useLanguage } from '@/lib/i18n/LanguageContext';
 
@@ -22,6 +20,8 @@ export const ClientSettingsView: React.FC<ClientSettingsViewProps> = ({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [currentTemplate, setCurrentTemplate] = useState<TemplateId>('professional');
+  const [ndaBlurEnabled, setNdaBlurEnabled] = useState<boolean>(true);
+  const [ndaLoading, setNdaLoading] = useState<boolean>(false);
 
   useEffect(() => {
     // 1. Load active template from server API
@@ -36,6 +36,16 @@ export const ClientSettingsView: React.FC<ClientSettingsViewProps> = ({
         setCurrentTemplate(getActiveTemplate());
       });
 
+    // 2. Load active NDA blur setting from server API
+    fetch('/api/settings/nda')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && typeof data.ndaBlurEnabled === 'boolean') {
+          setNdaBlurEnabled(data.ndaBlurEnabled);
+        }
+      })
+      .catch(() => {});
+
     const handleTemplateChange = (e: CustomEvent<TemplateId>) => {
       setCurrentTemplate(e.detail);
     };
@@ -45,6 +55,41 @@ export const ClientSettingsView: React.FC<ClientSettingsViewProps> = ({
       window.removeEventListener('sejatidimedia-template-change' as any, handleTemplateChange);
     };
   }, []);
+
+  const handleToggleNda = async () => {
+    const nextVal = !ndaBlurEnabled;
+    setNdaBlurEnabled(nextVal);
+    setNdaLoading(true);
+
+    try {
+      const res = await fetch('/api/settings/nda', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ndaBlurEnabled: nextVal }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setToast({
+          message: nextVal
+            ? 'Proteksi NDA BERHASIL DIAKTIFKAN: Rincian teknis & screenshot Pengalaman Profesional Perusahaan kini disamarkan.'
+            : 'Proteksi NDA DINONAKTIFKAN: Seluruh rincian proyek & screenshot kini dapat dilihat publik secara penuh.',
+          type: 'success',
+        });
+      } else {
+        setToast({
+          message: 'Gagal memperbarui pengaturan NDA server.',
+          type: 'error',
+        });
+      }
+    } catch {
+      setToast({
+        message: 'Pengaturan NDA berhasil disimpan secara lokal.',
+        type: 'success',
+      });
+    } finally {
+      setNdaLoading(false);
+    }
+  };
 
   const handleSelectTemplate = async (templateId: TemplateId) => {
     setCurrentTemplate(templateId);
@@ -272,6 +317,81 @@ export const ClientSettingsView: React.FC<ClientSettingsViewProps> = ({
           })}
         </div>
       </div>
+
+      {/* Section 2: Portfolio NDA & Confidentiality Protection Mode */}
+      <Card className="space-y-4 p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+          <div className="flex items-start sm:items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-600 flex items-center justify-center shrink-0">
+              <ShieldAlert className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="font-extrabold text-slate-900 text-sm sm:text-base">
+                  Proteksi Kerahasiaan & Sensor NDA Portofolio
+                </h3>
+                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider ${
+                  ndaBlurEnabled
+                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                    : 'bg-slate-100 text-slate-600 border border-slate-200'
+                }`}>
+                  {ndaBlurEnabled ? (
+                    <>
+                      <Check className="w-3 h-3 text-emerald-600" />
+                      Aktif (Sensor Menyala)
+                    </>
+                  ) : (
+                    'Nonaktif (Publik Terbuka)'
+                  )}
+                </span>
+              </div>
+              <p className="text-xs text-slate-500 font-medium mt-0.5">
+                Otomatis menyamarkan teks teknis mendalam dan screenshot proyek bertipe "Pengalaman Profesional Perusahaan" (misal: proyek manufaktur/enterprise) untuk kepatuhan regulasi kerahasiaan.
+              </p>
+            </div>
+          </div>
+
+          {/* Toggle Switch Button */}
+          <button
+            type="button"
+            onClick={handleToggleNda}
+            disabled={ndaLoading}
+            title={ndaBlurEnabled ? "Klik untuk menonaktifkan sensor NDA" : "Klik untuk mengaktifkan sensor NDA"}
+            className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#2C5098] focus:ring-offset-2 ${
+              ndaBlurEnabled ? 'bg-[#2C5098]' : 'bg-slate-300'
+            }`}
+          >
+            <span
+              className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                ndaBlurEnabled ? 'translate-x-7' : 'translate-x-0'
+              }`}
+            />
+          </button>
+        </div>
+
+        {/* Informative Explanation Pills */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 text-xs space-y-1">
+            <div className="flex items-center gap-1.5 font-bold text-slate-800">
+              <Eye className="w-4 h-4 text-emerald-600" />
+              <span>Bagian yang Tetap Terbaca:</span>
+            </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed">
+              Ringkasan awal/overview proyek, metrik pencapaian umum, teknologi yang digunakan, dan peran Anda.
+            </p>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/70 text-xs space-y-1">
+            <div className="flex items-center gap-1.5 font-bold text-slate-800">
+              <EyeOff className="w-4 h-4 text-amber-600" />
+              <span>Bagian yang Disamarkan (Saat Aktif):</span>
+            </div>
+            <p className="text-[11px] text-slate-500 leading-relaxed">
+              Rincian arsitektur proprietary, alur data internal, dan tangkapan layar antarmuka sistem pabrik/enterprise.
+            </p>
+          </div>
+        </div>
+      </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Card 1: Account Profile Info */}

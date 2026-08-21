@@ -167,7 +167,14 @@ export const en = {
     related: "Other Projects",
     relatedDesc: "Explore other software engineering works.",
     viewAll: "View All Projects",
-    detailLink: "View Detail"
+    detailLink: "View Detail",
+    ndaBadge: "Professional Career Experience",
+    ndaCardBadge: "Protected under Non-Disclosure Agreement (NDA)",
+    ndaCardTitle: "Technical Details Confidential (NDA Restricted)",
+    ndaCardDesc: "Deep architectural specifics, internal data pipelines, and proprietary algorithms are obscured to comply with enterprise Non-Disclosure Agreements (NDA). The introductory overview above is presented as a professional experience showcase.",
+    ndaGalleryBadge: "Protected by NDA",
+    ndaGalleryTitle: "Screenshots Protected by NDA",
+    ndaGalleryDesc: "Internal system screenshots are blurred to maintain non-disclosure compliance."
   },
   process: {
     badge: "Workflow",

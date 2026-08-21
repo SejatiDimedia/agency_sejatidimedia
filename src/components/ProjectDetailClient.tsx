@@ -1,8 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, ExternalLink, Calendar, CheckCircle2, Clock } from "lucide-react";
+import { ArrowLeft, ExternalLink, Calendar, CheckCircle2, Clock, ShieldAlert, Briefcase, Lock, ShieldCheck } from "lucide-react";
 import { Icon } from "@iconify/react";
 import ReactMarkdown from "react-markdown";
 import ShowcaseGallery from "./ShowcaseGallery";
@@ -21,8 +22,41 @@ const formatDate = (dateStr?: string, lang: string = 'id') => {
   });
 };
 
-export default function ProjectDetailClient({ project, relatedProjects }: { project: Project, relatedProjects: Project[] }) {
+const splitDescriptionForNda = (content: string) => {
+  const blocks = content.split(/\n\n+/);
+  if (blocks.length <= 2) {
+    const firstBlock = blocks[0] || '';
+    const rest = blocks.slice(1).join('\n\n');
+    return { intro: firstBlock, confidential: rest };
+  }
+  // Take first 2 blocks as intro, rest as confidential
+  const intro = blocks.slice(0, 2).join('\n\n');
+  const confidential = blocks.slice(2).join('\n\n');
+  return { intro, confidential };
+};
+
+export default function ProjectDetailClient({
+  project,
+  relatedProjects,
+  initialNdaBlurEnabled = true,
+}: {
+  project: Project;
+  relatedProjects: Project[];
+  initialNdaBlurEnabled?: boolean;
+}) {
   const { t, language } = useLanguage();
+  const [ndaBlur, setNdaBlur] = useState<boolean>(initialNdaBlurEnabled);
+
+  useEffect(() => {
+    fetch('/api/settings/nda')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && typeof data.ndaBlurEnabled === 'boolean') {
+          setNdaBlur(data.ndaBlurEnabled);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const isDummy = !project.thumbnail ||
     project.thumbnail.trim() === "" ||
@@ -37,6 +71,20 @@ export default function ProjectDetailClient({ project, relatedProjects }: { proj
     : (project.descriptionId || project.summaryId || project.description || project.summary || "");
 
   const isProfessionalExp = project.name.toLowerCase().includes('manufaktur') || project.name.toLowerCase().includes('manufactur');
+  const isNdaActive = isProfessionalExp && ndaBlur;
+  const { intro, confidential } = splitDescriptionForNda(displayDescription);
+
+  const markdownComponents = {
+    h1: ({ children }: any) => <h1 className="text-2xl font-sans font-bold text-slate-900 dark:text-theme-fore mt-6 mb-3 border-b border-slate-100 dark:border-theme-border/20 pb-2">{children}</h1>,
+    h2: ({ children }: any) => <h2 className="text-xl font-sans font-bold text-slate-900 dark:text-theme-fore mt-5 mb-2.5 border-b border-slate-100 dark:border-theme-border/20 pb-1.5">{children}</h2>,
+    h3: ({ children }: any) => <h3 className="text-lg font-sans font-bold text-slate-900 dark:text-theme-fore mt-4 mb-2">{children}</h3>,
+    p: ({ children }: any) => <p className="mb-4 text-slate-600 dark:text-theme-fore-muted leading-relaxed">{children}</p>,
+    ul: ({ children }: any) => <ul className="list-disc list-outside mb-6 ml-5 space-y-2">{children}</ul>,
+    ol: ({ children }: any) => <ol className="list-decimal list-outside mb-6 ml-5 space-y-2">{children}</ol>,
+    li: ({ children }: any) => <li className="text-slate-600 dark:text-theme-fore-muted marker:font-bold marker:text-slate-800 [&>p]:m-0">{children}</li>,
+    strong: ({ children }: any) => <strong className="font-bold text-slate-900 dark:text-theme-fore">{children}</strong>,
+    code: ({ children }: any) => <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-theme-surface border border-slate-200 dark:border-theme-border font-mono text-xs text-[#2C5098]">{children}</code>,
+  };
 
   return (
     <div className="space-y-10 py-8">
@@ -66,7 +114,7 @@ export default function ProjectDetailClient({ project, relatedProjects }: { proj
           <div className="space-y-2 text-left">
             {isProfessionalExp && (
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-white/95 text-slate-800 border border-white/40 shadow-sm backdrop-blur-md">
-                <Icon icon="ph:briefcase-duotone" className="w-3.5 h-3.5 text-[#2C5098]" />
+                <Briefcase className="w-3.5 h-3.5 text-[#2C5098]" />
                 <span>{language === 'en' ? 'Professional Career Experience' : 'Pengalaman Profesional Perusahaan'}</span>
               </div>
             )}
@@ -82,25 +130,66 @@ export default function ProjectDetailClient({ project, relatedProjects }: { proj
         {/* Left Column: Project Description */}
         <div className="lg:col-span-8 space-y-6">
           <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border shadow-md text-left space-y-4">
-            <h2 className="text-xl font-sans font-bold text-slate-900 dark:text-theme-fore border-b border-slate-100 dark:border-theme-border/40 pb-2">
-              {t.projectDetail?.detail || (language === 'en' ? 'Project Details' : 'Detail Proyek')}
-            </h2>
+            <div className="flex items-center justify-between border-b border-slate-100 dark:border-theme-border/40 pb-2">
+              <h2 className="text-xl font-sans font-bold text-slate-900 dark:text-theme-fore">
+                {t.projectDetail?.detail || (language === 'en' ? 'Project Details' : 'Detail Proyek')}
+              </h2>
+              {isNdaActive && (
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                  <ShieldAlert className="w-3 h-3 text-amber-600" />
+                  <span>NDA Mode Active</span>
+                </span>
+              )}
+            </div>
+
             <div className="text-sm sm:text-base text-slate-600 dark:text-theme-fore-muted leading-relaxed text-left">
-              <ReactMarkdown
-                components={{
-                  h1: ({ children }) => <h1 className="text-2xl font-sans font-bold text-slate-900 dark:text-theme-fore mt-6 mb-3 border-b border-slate-100 dark:border-theme-border/20 pb-2">{children}</h1>,
-                  h2: ({ children }) => <h2 className="text-xl font-sans font-bold text-slate-900 dark:text-theme-fore mt-5 mb-2.5 border-b border-slate-100 dark:border-theme-border/20 pb-1.5">{children}</h2>,
-                  h3: ({ children }) => <h3 className="text-lg font-sans font-bold text-slate-900 dark:text-theme-fore mt-4 mb-2">{children}</h3>,
-                  p: ({ children }) => <p className="mb-4 text-slate-600 dark:text-theme-fore-muted leading-relaxed">{children}</p>,
-                  ul: ({ children }) => <ul className="list-disc list-outside mb-6 ml-5 space-y-2">{children}</ul>,
-                  ol: ({ children }) => <ol className="list-decimal list-outside mb-6 ml-5 space-y-2">{children}</ol>,
-                  li: ({ children }) => <li className="text-slate-600 dark:text-theme-fore-muted marker:font-bold marker:text-slate-800 [&>p]:m-0">{children}</li>,
-                  strong: ({ children }) => <strong className="font-bold text-slate-900 dark:text-theme-fore">{children}</strong>,
-                  code: ({ children }) => <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-theme-surface border border-slate-200 dark:border-theme-border font-mono text-xs text-[#2C5098]">{children}</code>,
-                }}
-              >
-                {displayDescription}
-              </ReactMarkdown>
+              {isNdaActive ? (
+                <>
+                  {/* Readable Intro Portion */}
+                  <ReactMarkdown components={markdownComponents}>
+                    {intro}
+                  </ReactMarkdown>
+
+                  {/* Blurred Confidential Portion with Overlay */}
+                  {confidential && (
+                    <div className="relative mt-6 pt-2 overflow-hidden rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/30">
+                      {/* Blurred Text Body */}
+                      <div className="filter blur-md opacity-25 select-none pointer-events-none p-4 max-h-[340px] overflow-hidden">
+                        <ReactMarkdown components={markdownComponents}>
+                          {confidential}
+                        </ReactMarkdown>
+                      </div>
+
+                      {/* Gradient Mask */}
+                      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/80 to-white dark:via-theme-elevated/85 dark:to-theme-elevated flex items-center justify-center p-4" />
+
+                      {/* NDA Protection Card */}
+                      <div className="absolute inset-0 flex items-center justify-center p-4 z-10">
+                        <div className="w-full max-w-lg p-6 sm:p-7 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-slate-200/90 dark:border-slate-800 shadow-2xl backdrop-blur-xl text-center space-y-3">
+                          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto shadow-xs">
+                            <ShieldAlert className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                          </div>
+                          <div className="space-y-1">
+                            <span className="inline-block px-2.5 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                              {t.projectDetail?.ndaCardBadge || "Protected under NDA"}
+                            </span>
+                            <h4 className="text-base sm:text-lg font-sans font-bold text-slate-900 dark:text-white">
+                              {t.projectDetail?.ndaCardTitle || "Rincian Teknis Disamarkan (NDA Restricted)"}
+                            </h4>
+                          </div>
+                          <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed max-w-md mx-auto">
+                            {t.projectDetail?.ndaCardDesc || "Rincian arsitektur sistem mendalam, diagram alur data internal, dan proprietary logic disamarkan untuk mematuhi regulasi kerahasiaan perusahaan (NDA). Informasi pengantar di atas disajikan sebagai portofolio pengalaman profesional."}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <ReactMarkdown components={markdownComponents}>
+                  {displayDescription}
+                </ReactMarkdown>
+              )}
             </div>
           </div>
         </div>
@@ -182,7 +271,7 @@ export default function ProjectDetailClient({ project, relatedProjects }: { proj
           </div>
 
           {/* Showcase Gallery */}
-          <ShowcaseGallery images={showcaseImages} />
+          <ShowcaseGallery images={showcaseImages} isNdaBlurred={isNdaActive} />
         </div>
       </div>
 

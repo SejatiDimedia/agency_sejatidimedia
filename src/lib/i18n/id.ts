@@ -167,7 +167,14 @@ export const id = {
     related: "Proyek Lainnya",
     relatedDesc: "Jelajahi karya rekayasa perangkat lunak lainnya.",
     viewAll: "Lihat Semua Proyek",
-    detailLink: "Detail"
+    detailLink: "Detail",
+    ndaBadge: "Pengalaman Profesional Perusahaan",
+    ndaCardBadge: "Protected under Non-Disclosure Agreement (NDA)",
+    ndaCardTitle: "Rincian Teknis Disamarkan (NDA Restricted)",
+    ndaCardDesc: "Rincian arsitektur mendalam, diagram alur data internal, dan proprietary logic disamarkan untuk mematuhi regulasi kerahasiaan perusahaan (NDA). Informasi pengantar di atas disajikan sebagai portofolio pengalaman profesional.",
+    ndaGalleryBadge: "Protected by NDA",
+    ndaGalleryTitle: "Tangkapan Layar Terproteksi NDA",
+    ndaGalleryDesc: "Tangkapan layar sistem internal disamarkan untuk kepatuhan regulasi kerahasiaan."
   },
   process: {
     badge: "Alur Kerja",

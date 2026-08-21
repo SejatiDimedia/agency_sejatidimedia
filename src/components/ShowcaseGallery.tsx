@@ -3,15 +3,18 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
-import { X, ChevronLeft, ChevronRight, Maximize2, Layers } from "lucide-react";
+import { X, ChevronLeft, ChevronRight, Maximize2, Layers, ShieldAlert } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { GlioProjectDocument } from "../lib/api/glio-projects";
+import { useLanguage } from "../lib/i18n/LanguageContext";
 
 interface ShowcaseGalleryProps {
   images: GlioProjectDocument[];
+  isNdaBlurred?: boolean;
 }
 
-export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
+export default function ShowcaseGallery({ images, isNdaBlurred = false }: ShowcaseGalleryProps) {
+  const { t, language } = useLanguage();
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
@@ -63,65 +66,104 @@ export default function ShowcaseGallery({ images }: ShowcaseGalleryProps) {
   };
 
   return (
-    <div className="p-6 rounded-2xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border/60 shadow-lg hover:shadow-xl transition-all duration-300 space-y-5 text-left">
+    <div className="p-6 rounded-2xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border/60 shadow-lg hover:shadow-xl transition-all duration-300 space-y-5 text-left relative overflow-hidden">
       <div className="flex items-center justify-between border-b border-slate-100 dark:border-theme-border/40 pb-3">
         <div className="space-y-0.5">
-          <h3 className="text-xs font-sans font-bold text-slate-900 dark:text-theme-fore uppercase tracking-wider">
-            Project Showcase
-          </h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-xs font-sans font-bold text-slate-900 dark:text-theme-fore uppercase tracking-wider">
+              Project Showcase
+            </h3>
+            {isNdaBlurred && (
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8.5px] font-mono font-bold uppercase tracking-wider bg-amber-500/10 text-amber-600 border border-amber-500/20">
+                <ShieldAlert className="w-2.5 h-2.5" />
+                <span>{t.projectDetail?.ndaGalleryBadge || (language === 'en' ? 'Protected by NDA' : 'Proteksi NDA')}</span>
+              </span>
+            )}
+          </div>
           <p className="text-[10px] text-slate-400 dark:text-theme-fore-subtle font-mono">
-            {images.length} {images.length === 1 ? "Screenshot" : "Screenshots"}
+            {images.length} {images.length === 1 ? (language === 'en' ? 'Screenshot' : 'Tangkapan Layar') : (language === 'en' ? 'Screenshots' : 'Tangkapan Layar')}
           </p>
         </div>
-        <Layers className="w-4 h-4 text-[#2C5098]" />
+        {isNdaBlurred ? (
+          <ShieldAlert className="w-4 h-4 text-amber-500" />
+        ) : (
+          <Layers className="w-4 h-4 text-[#2C5098]" />
+        )}
       </div>
 
-      <div className="grid grid-cols-3 gap-2.5">
-        {visibleImages.map((img, idx) => {
-          const isLastVisibleWithMore = images.length > displayLimit && idx === displayLimit - 1;
-          
-          return (
-            <motion.div
-              key={img.id}
-              onClick={() => setActiveIdx(idx)}
-              whileHover={{ scale: 1.03, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              className="relative aspect-square w-full rounded-xl overflow-hidden border border-slate-200 dark:border-theme-border/60 bg-slate-50 dark:bg-theme-surface/50 hover:border-[#2C5098] cursor-pointer transition-all duration-300 group shadow-sm hover:shadow-md"
-            >
-              <Image
-                src={img.url}
-                alt={img.name}
-                fill
-                className="object-cover transition-all duration-500 filter brightness-[0.9] group-hover:brightness-100 group-hover:scale-105"
-                sizes="(max-w-768px) 33vw, 10vw"
-              />
-              
-              {/* Expand Hover Icon */}
-              {!isLastVisibleWithMore && (
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
-                  <motion.div
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    whileHover={{ scale: 1.1 }}
-                    className="p-2 rounded-full bg-white/90 backdrop-blur-sm border border-slate-200 text-slate-900 shadow-lg"
-                  >
-                    <Maximize2 className="w-3.5 h-3.5" />
-                  </motion.div>
-                </div>
-              )}
-              
-              {isLastVisibleWithMore && (
-                <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center z-10 transition-all group-hover:bg-black/80">
-                  <span className="text-base font-sans font-extrabold text-white tracking-tight drop-shadow">
-                    +{remainingCount}
-                  </span>
-                  <span className="text-[8px] font-mono text-white/70 uppercase tracking-widest mt-0.5">
-                    Gallery
-                  </span>
-                </div>
-              )}
-            </motion.div>
-          );
-        })}
+      <div className="relative">
+        <div className="grid grid-cols-3 gap-2.5">
+          {visibleImages.map((img, idx) => {
+            const isLastVisibleWithMore = images.length > displayLimit && idx === displayLimit - 1;
+            
+            return (
+              <motion.div
+                key={img.id}
+                onClick={() => {
+                  if (!isNdaBlurred) {
+                    setActiveIdx(idx);
+                  }
+                }}
+                whileHover={isNdaBlurred ? {} : { scale: 1.03, y: -2 }}
+                whileTap={isNdaBlurred ? {} : { scale: 0.98 }}
+                className={`relative aspect-square w-full rounded-xl overflow-hidden border border-slate-200 dark:border-theme-border/60 bg-slate-50 dark:bg-theme-surface/50 transition-all duration-300 group shadow-sm ${
+                  isNdaBlurred ? 'cursor-not-allowed' : 'hover:border-[#2C5098] cursor-pointer hover:shadow-md'
+                }`}
+              >
+                <Image
+                  src={img.url}
+                  alt={img.name}
+                  fill
+                  className={`object-cover transition-all duration-500 ${
+                    isNdaBlurred
+                      ? 'filter blur-md scale-110 brightness-75 select-none pointer-events-none'
+                      : 'filter brightness-[0.9] group-hover:brightness-100 group-hover:scale-105'
+                  }`}
+                  sizes="(max-w-768px) 33vw, 10vw"
+                />
+                
+                {/* Expand Hover Icon (Only when NOT blurred) */}
+                {!isNdaBlurred && !isLastVisibleWithMore && (
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      whileHover={{ scale: 1.1 }}
+                      className="p-2 rounded-full bg-white/90 backdrop-blur-sm border border-slate-200 text-slate-900 shadow-lg"
+                    >
+                      <Maximize2 className="w-3.5 h-3.5" />
+                    </motion.div>
+                  </div>
+                )}
+                
+                {isLastVisibleWithMore && !isNdaBlurred && (
+                  <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center z-10 transition-all group-hover:bg-black/80">
+                    <span className="text-base font-sans font-extrabold text-white tracking-tight drop-shadow">
+                      +{remainingCount}
+                    </span>
+                    <span className="text-[8px] font-mono text-white/70 uppercase tracking-widest mt-0.5">
+                      Gallery
+                    </span>
+                  </div>
+                )}
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* NDA Overlay Badge on top of gallery */}
+        {isNdaBlurred && (
+          <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px] rounded-xl flex flex-col items-center justify-center p-3 text-center z-20 pointer-events-none select-none border border-white/10 shadow-inner">
+            <div className="w-9 h-9 rounded-full bg-amber-500/20 text-amber-300 flex items-center justify-center mb-1.5 border border-amber-500/30 shadow-xs">
+              <ShieldAlert className="w-4.5 h-4.5" />
+            </div>
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-300 drop-shadow-xs">
+              {t.projectDetail?.ndaGalleryTitle || (language === 'en' ? 'Screenshots Protected by NDA' : 'Tangkapan Layar Terproteksi NDA')}
+            </span>
+            <span className="text-[9.5px] font-sans text-slate-200 mt-0.5 max-w-[210px] leading-tight drop-shadow-xs">
+              {t.projectDetail?.ndaGalleryDesc || (language === 'en' ? 'Internal system screenshots are blurred to maintain non-disclosure compliance.' : 'Tangkapan layar sistem internal disamarkan untuk kepatuhan regulasi kerahasiaan.')}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* PORTAL AT THE DOCUMENT BODY FOR HIGH-PRIORITY SCREEN OVERLAY */}
