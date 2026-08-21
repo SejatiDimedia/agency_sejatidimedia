@@ -7,7 +7,7 @@ import { ArrowLeft, ExternalLink, Calendar, CheckCircle2, Clock, ShieldAlert, Br
 import { Icon } from "@iconify/react";
 import ReactMarkdown from "react-markdown";
 import ShowcaseGallery from "./ShowcaseGallery";
-import { Project } from "../lib/api/glio-projects";
+import { Project, isProfessionalProject } from "../lib/api/glio-projects";
 import { useLanguage } from "../lib/i18n/LanguageContext";
 import { TECH_ICONS } from "../lib/constants";
 
@@ -46,13 +46,19 @@ export default function ProjectDetailClient({
 }) {
   const { t, language } = useLanguage();
   const [ndaBlur, setNdaBlur] = useState<boolean>(initialNdaBlurEnabled);
+  const [ndaProjectSlugs, setNdaProjectSlugs] = useState<string[]>([]);
 
   useEffect(() => {
     fetch('/api/settings/nda')
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && typeof data.ndaBlurEnabled === 'boolean') {
-          setNdaBlur(data.ndaBlurEnabled);
+        if (data.success) {
+          if (typeof data.ndaBlurEnabled === 'boolean') {
+            setNdaBlur(data.ndaBlurEnabled);
+          }
+          if (Array.isArray(data.ndaProjectSlugs)) {
+            setNdaProjectSlugs(data.ndaProjectSlugs);
+          }
         }
       })
       .catch(() => {});
@@ -70,7 +76,7 @@ export default function ProjectDetailClient({
     ? (project.descriptionEn || project.summaryEn || project.description || project.summary || "")
     : (project.descriptionId || project.summaryId || project.description || project.summary || "");
 
-  const isProfessionalExp = project.name.toLowerCase().includes('manufaktur') || project.name.toLowerCase().includes('manufactur');
+  const isProfessionalExp = isProfessionalProject(project, ndaProjectSlugs);
   const isNdaActive = isProfessionalExp && ndaBlur;
   const { intro, confidential } = splitDescriptionForNda(displayDescription);
 
@@ -299,7 +305,7 @@ export default function ProjectDetailClient({
                 relProject.thumbnail === "/thumbnail.png" ||
                 relProject.thumbnail === "/placeholder.png";
               const relDisplayThumbnail = (relIsDummy ? "/logo.svg" : relProject.thumbnail) as string;
-              const relIsProfessional = relProject.name.toLowerCase().includes('manufaktur') || relProject.name.toLowerCase().includes('manufactur');
+              const relIsProfessional = isProfessionalProject(relProject, ndaProjectSlugs);
 
               const relDisplaySummary = language === 'en'
                 ? (relProject.summaryEn || relProject.descriptionEn || relProject.summary || relProject.description)
@@ -323,7 +329,7 @@ export default function ProjectDetailClient({
                       {relIsProfessional && (
                         <div className="absolute top-2 left-2 z-10">
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-mono font-bold uppercase tracking-wider bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-xs">
-                            <Icon icon="ph:briefcase-duotone" className="w-3 h-3 text-[#2C5098]" />
+                            <Briefcase className="w-3 h-3 text-[#2C5098]" />
                             <span>{language === 'en' ? 'Professional' : 'Pengalaman'}</span>
                           </span>
                         </div>

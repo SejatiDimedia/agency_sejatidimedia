@@ -14,6 +14,7 @@ import {
   Globe,
   Sparkles,
   FolderKanban,
+  Briefcase,
   X
 } from 'lucide-react';
 import { ActiveNavSection } from '@/types/portal';
@@ -128,6 +129,7 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
 
   const isDashboardActive = pathname === '/admin/dashboard';
   const isPortalActive = pathname === '/portal' || pathname.startsWith('/portal/projects');
+  const isPortfolioActive = pathname === '/portal/portfolio';
   const isDesignSystemActive = pathname === '/design-system' || pathname === '/admin/components';
   const isAdmin = userRole === 'ADMIN';
 
@@ -232,6 +234,15 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
                 label="File Deliverables"
                 isActive={activeSection === 'file-management' || pathname === '/portal/files'}
                 onClick={() => handleNavigate('/portal/files', 'file-management')}
+                collapsed={isCollapsed}
+              />
+
+              {/* CLIENT & ADMIN: Portfolio Showcase & NDA Settings */}
+              <SidebarItem
+                icon={<Briefcase className="w-5 h-5" />}
+                label={isAdmin ? "Portfolio Showcase (NDA)" : "Portfolio Showcase"}
+                isActive={isPortfolioActive}
+                onClick={() => handleNavigate('/portal/portfolio', 'portfolio')}
                 collapsed={isCollapsed}
               />
 

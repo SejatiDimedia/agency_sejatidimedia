@@ -8,7 +8,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Project, MOCK_PROJECTS } from '../lib/api/glio-projects';
+import { Project, MOCK_PROJECTS, isProfessionalProject } from '../lib/api/glio-projects';
 import { useLanguage } from '../lib/i18n/LanguageContext';
 import { TECH_ICONS } from '../lib/constants';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'motion/react';
@@ -343,6 +343,18 @@ const MILESTONE_ICONS = [
 
 export default function AgencyLandingV2({ copy, projects }: { copy?: any; projects?: Project[] }) {
   const { t, language } = useLanguage();
+  const [ndaProjectSlugs, setNdaProjectSlugs] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch('/api/settings/nda')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.ndaProjectSlugs)) {
+          setNdaProjectSlugs(data.ndaProjectSlugs);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const scrollToId = (id: string) => {
     const el = document.getElementById(id);
@@ -1764,7 +1776,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                   project.thumbnail === "/placeholder.png";
 
                 const displayThumbnail = (isDummy ? "/logo.svg" : project.thumbnail) as string;
-                const isProfessionalExp = project.name.toLowerCase().includes('manufaktur') || project.name.toLowerCase().includes('manufactur');
+                const isProfessionalExp = isProfessionalProject(project, ndaProjectSlugs);
 
                 return (
                   <div

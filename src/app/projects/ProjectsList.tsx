@@ -3,9 +3,9 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight, ArrowLeft } from "lucide-react";
+import { ChevronRight, ArrowLeft, Briefcase } from "lucide-react";
 import { Icon } from "@iconify/react";
-import { Project } from "../../lib/api/glio-projects";
+import { Project, isProfessionalProject } from "../../lib/api/glio-projects";
 import { motion, AnimatePresence } from "motion/react";
 import { useLanguage } from "../../lib/i18n/LanguageContext";
 import { TECH_ICONS } from "../../lib/constants";
@@ -13,6 +13,18 @@ import { TECH_ICONS } from "../../lib/constants";
 export default function ProjectsList({ projects }: { projects: Project[] }) {
   const { language } = useLanguage();
   const [activeCategory, setActiveCategory] = useState(language === 'en' ? "All" : "Semua");
+  const [ndaProjectSlugs, setNdaProjectSlugs] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch('/api/settings/nda')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.ndaProjectSlugs)) {
+          setNdaProjectSlugs(data.ndaProjectSlugs);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   useEffect(() => {
     if (activeCategory === "Semua" || activeCategory === "All") {
@@ -110,7 +122,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
                 project.thumbnail === "/thumbnail.png" ||
                 project.thumbnail === "/placeholder.png";
               const displayThumbnail = (isDummy ? "/logo.svg" : project.thumbnail) as string;
-              const isProfessionalExp = project.name.toLowerCase().includes('manufaktur') || project.name.toLowerCase().includes('manufactur');
+              const isProfessionalExp = isProfessionalProject(project, ndaProjectSlugs);
 
               return (
                 <motion.div
@@ -141,7 +153,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
                       {isProfessionalExp && (
                         <div className="absolute top-2.5 left-2.5 z-10">
                           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-sm">
-                            <Icon icon="ph:briefcase-duotone" className="w-3.5 h-3.5 text-[#2C5098]" />
+                            <Briefcase className="w-3.5 h-3.5 text-[#2C5098]" />
                             <span>{language === 'en' ? 'Professional Experience' : 'Pengalaman Profesional'}</span>
                           </span>
                         </div>

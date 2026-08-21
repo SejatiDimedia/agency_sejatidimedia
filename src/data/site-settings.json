@@ -1,5 +1,14 @@
 {
   "activeTemplate": "professional",
   "ndaBlurEnabled": true,
-  "updatedAt": "2026-08-21T00:54:03.648Z"
+  "ndaProjectSlugs": [
+    "report--dashboard-industry-manufaktur",
+    "erp-digitalisasi-produksi-industry-manufaktur",
+    "digitalisasi-sistem-surat-jalan-industry-manufaktur",
+    "digitalisasi-import-monitoring-system-industry-manufaktur",
+    "digitalisasi-sistem-bongkar-muat-material-logistik-kayu-industry-manufaktur",
+    "warehouse-management-system-industry-manufaktur",
+    "wood-tracebility-system-industry-manufaktur"
+  ],
+  "updatedAt": "2026-08-21T01:17:28.916Z"
 }

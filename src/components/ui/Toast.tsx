@@ -32,46 +32,60 @@ export const Toast: React.FC<ToastProps> = ({
 
   const typeStyles = {
     success: {
-      bg: 'bg-slate-900/95 border-emerald-500/50 text-white',
-      icon: <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />,
+      border: 'border-emerald-200/80',
+      iconBox: 'bg-emerald-50 border-emerald-100 text-emerald-600',
+      icon: <CheckCircle2 className="w-4 h-4" />,
       accent: 'bg-emerald-500',
+      title: 'Berhasil',
     },
     warning: {
-      bg: 'bg-slate-900/95 border-amber-500/50 text-white',
-      icon: <AlertTriangle className="w-5 h-5 text-amber-400 shrink-0" />,
+      border: 'border-amber-200/80',
+      iconBox: 'bg-amber-50 border-amber-100 text-amber-600',
+      icon: <AlertTriangle className="w-4 h-4" />,
       accent: 'bg-amber-500',
+      title: 'Perhatian',
     },
     error: {
-      bg: 'bg-slate-900/95 border-rose-500/50 text-white',
-      icon: <AlertCircle className="w-5 h-5 text-rose-400 shrink-0" />,
+      border: 'border-rose-200/80',
+      iconBox: 'bg-rose-50 border-rose-100 text-rose-600',
+      icon: <AlertCircle className="w-4 h-4" />,
       accent: 'bg-rose-500',
+      title: 'Terjadi Kesalahan',
     },
     info: {
-      bg: 'bg-slate-900/95 border-blue-500/50 text-white',
-      icon: <Info className="w-5 h-5 text-blue-400 shrink-0" />,
-      accent: 'bg-blue-500',
+      border: 'border-blue-200/80',
+      iconBox: 'bg-blue-50 border-blue-100 text-blue-600',
+      icon: <Info className="w-4 h-4" />,
+      accent: 'bg-blue-600',
+      title: 'Informasi',
     },
   };
 
   const style = typeStyles[type];
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 max-w-md w-full sm:w-auto font-sans">
+    <div className="fixed bottom-6 right-6 z-50 max-w-md w-full sm:w-auto font-sans animate-in fade-in slide-in-from-bottom-5 duration-300">
       <div
-        className={`${style.bg} border backdrop-blur-md rounded-2xl p-4 shadow-[0_20px_50px_rgba(0,0,0,0.3)] flex items-start gap-3 relative overflow-hidden transition-all duration-300 animate-in fade-in slide-in-from-bottom-5`}
+        className={`bg-white/98 backdrop-blur-md border ${style.border} rounded-2xl p-4 shadow-[0_15px_35px_-5px_rgba(15,23,42,0.12),0_5px_15px_rgba(15,23,42,0.06)] flex items-start gap-3.5 relative overflow-hidden text-left`}
       >
         {/* Left Color Indicator Stripe */}
         <div className={`absolute left-0 top-0 bottom-0 w-1.5 ${style.accent}`} />
 
-        <div className="pl-1 pt-0.5">{style.icon}</div>
+        {/* Icon Container */}
+        <div className={`w-8 h-8 rounded-xl border flex items-center justify-center shrink-0 ${style.iconBox} shadow-2xs`}>
+          {style.icon}
+        </div>
 
-        <div className="flex-1 pr-6 text-xs font-medium leading-relaxed">
+        {/* Message Content */}
+        <div className="flex-1 pr-3 text-xs font-semibold text-slate-800 leading-relaxed pt-0.5">
           {message}
         </div>
 
+        {/* Close Button */}
         <button
           onClick={onClose}
-          className="text-slate-400 hover:text-white transition-colors cursor-pointer p-1 rounded-lg hover:bg-white/10"
+          aria-label="Tutup notifikasi"
+          className="text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors cursor-pointer p-1 rounded-lg shrink-0"
         >
           <X className="w-4 h-4" />
         </button>
@@ -79,3 +93,4 @@ export const Toast: React.FC<ToastProps> = ({
     </div>
   );
 };
+

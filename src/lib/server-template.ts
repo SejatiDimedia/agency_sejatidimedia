@@ -13,6 +13,8 @@ declare global {
   var __globalActiveTemplate: TemplateId | undefined;
   // eslint-disable-next-line no-var
   var __globalNdaBlur: boolean | undefined;
+  // eslint-disable-next-line no-var
+  var __globalNdaProjects: string[] | undefined;
 }
 
 export async function getGlobalActiveTemplate(): Promise<TemplateId> {
@@ -153,6 +155,90 @@ export async function setGlobalNdaBlur(enabled: boolean): Promise<boolean> {
     const data = {
       ...existingData,
       ndaBlurEnabled: enabled,
+      updatedAt: new Date().toISOString(),
+    };
+    fs.writeFileSync(SETTINGS_FILE_PATH, JSON.stringify(data, null, 2), 'utf-8');
+  } catch {
+    // Safe to ignore on serverless
+  }
+
+  return true;
+}
+
+const REDIS_NDA_PROJECTS_KEY = 'site_nda_project_slugs';
+
+export async function getGlobalNdaProjectSlugs(): Promise<string[]> {
+  // 1. Check Upstash Redis first
+  if (redis) {
+    try {
+      const redisVal = await redis.get(REDIS_NDA_PROJECTS_KEY);
+      if (Array.isArray(redisVal)) {
+        globalThis.__globalNdaProjects = redisVal;
+        return redisVal;
+      }
+      if (typeof redisVal === 'string') {
+        try {
+          const parsed = JSON.parse(redisVal);
+          if (Array.isArray(parsed)) {
+            globalThis.__globalNdaProjects = parsed;
+            return parsed;
+          }
+        } catch {}
+      }
+    } catch (e) {
+      console.warn('Redis get NDA project slugs warning:', e);
+    }
+  }
+
+  // 2. Check Global In-Memory Cache
+  if (globalThis.__globalNdaProjects !== undefined) {
+    return globalThis.__globalNdaProjects;
+  }
+
+  // 3. Check local filesystem
+  try {
+    if (fs.existsSync(SETTINGS_FILE_PATH)) {
+      const content = fs.readFileSync(SETTINGS_FILE_PATH, 'utf-8');
+      const data = JSON.parse(content);
+      if (Array.isArray(data.ndaProjectSlugs)) {
+        globalThis.__globalNdaProjects = data.ndaProjectSlugs;
+        return data.ndaProjectSlugs;
+      }
+    }
+  } catch {
+    // Fallback
+  }
+
+  return [];
+}
+
+export async function setGlobalNdaProjectSlugs(slugs: string[]): Promise<boolean> {
+  globalThis.__globalNdaProjects = slugs;
+
+  // 1. Save to Upstash Redis
+  if (redis) {
+    try {
+      await redis.set(REDIS_NDA_PROJECTS_KEY, slugs);
+    } catch (e) {
+      console.warn('Redis set NDA project slugs warning:', e);
+    }
+  }
+
+  // 2. Save to local filesystem if writable
+  try {
+    const dir = path.dirname(SETTINGS_FILE_PATH);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    let existingData: any = {};
+    if (fs.existsSync(SETTINGS_FILE_PATH)) {
+      try {
+        existingData = JSON.parse(fs.readFileSync(SETTINGS_FILE_PATH, 'utf-8'));
+      } catch {}
+    }
+    const data = {
+      ...existingData,
+      ndaProjectSlugs: slugs,
       updatedAt: new Date().toISOString(),
     };
     fs.writeFileSync(SETTINGS_FILE_PATH, JSON.stringify(data, null, 2), 'utf-8');

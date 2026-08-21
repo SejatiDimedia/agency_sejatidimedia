@@ -142,4 +142,5 @@ export type ActiveNavSection =
   | 'file-management' 
   | 'calendar' 
   | 'team' 
+  | 'portfolio'
   | 'settings';

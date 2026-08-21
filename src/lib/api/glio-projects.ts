@@ -31,6 +31,73 @@ export interface Project {
   descriptionEn?: string | null;
   links?: GlioProjectLink[];
   documents?: GlioProjectDocument[];
+  isProfessional?: boolean;
+  isNda?: boolean;
+}
+
+/**
+ * Central utility function to determine if a project should be treated as
+ * "Pengalaman Profesional Perusahaan" (Professional Career Experience / NDA-protected).
+ */
+export function isProfessionalProject(
+  project: {
+    slug?: string;
+    name?: string;
+    categories?: string[];
+    isProfessional?: boolean;
+    isNda?: boolean;
+  },
+  ndaProjectSlugs?: string[]
+): boolean {
+  if (!project) return false;
+
+  // 1. Explicit boolean flag on project object (e.g. from database)
+  if (project.isProfessional === true || project.isNda === true) {
+    return true;
+  }
+
+  // 2. If ndaProjectSlugs is provided by Admin / Server API, it is the DEFINITIVE SOURCE OF TRUTH!
+  if (Array.isArray(ndaProjectSlugs)) {
+    if (project.slug && ndaProjectSlugs.includes(project.slug)) {
+      return true;
+    }
+    // If not in the admin's active NDA list, it is NOT an NDA project!
+    return false;
+  }
+
+  // 3. Fallback when ndaProjectSlugs has not been loaded yet:
+  // Check categories / tags
+  if (project.categories && Array.isArray(project.categories)) {
+    const isCategoryMatched = project.categories.some((cat) => {
+      const c = cat.toLowerCase().trim();
+      return (
+        c === 'pengalaman profesional' ||
+        c === 'pengalaman perusahaan' ||
+        c === 'professional experience' ||
+        c === 'corporate' ||
+        c === 'enterprise' ||
+        c === 'nda' ||
+        c === 'confidential' ||
+        c === 'manufaktur' ||
+        c === 'manufacturing'
+      );
+    });
+    if (isCategoryMatched) return true;
+  }
+
+  // Check fallback keywords in project name
+  if (project.name) {
+    const nameLower = project.name.toLowerCase();
+    if (
+      nameLower.includes('manufaktur') ||
+      nameLower.includes('manufactur') ||
+      nameLower.includes('nda restricted')
+    ) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 const GLIO_API_URL = process.env.GLIO_API_URL || "";
