@@ -65,7 +65,7 @@ export const viewport: Viewport = {
   themeColor: "#050506",
 };
 
-import { Plus_Jakarta_Sans, Sora, JetBrains_Mono, Inter } from "next/font/google";
+import { Plus_Jakarta_Sans, Sora, JetBrains_Mono, Inter, Zen_Dots } from "next/font/google";
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -96,6 +96,13 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
 });
 
+const zenDots = Zen_Dots({
+  subsets: ["latin"],
+  variable: "--font-zen-dots",
+  display: "swap",
+  weight: "400",
+});
+
 export default function RootLayout({
   children,
 }: {
@@ -105,11 +112,14 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${plusJakarta.variable} ${sora.variable} ${jetbrainsMono.variable} ${inter.variable}`}
+      className={`${plusJakarta.variable} ${sora.variable} ${jetbrainsMono.variable} ${inter.variable} ${zenDots.variable}`}
     >
       <head>
         <meta name="google-site-verification" content="Wm-o9TjYVWYqL5cxsP8hRnHGlRbdCPbpsNv0pEQN_QY" />
-        <link rel="preload" href="/hero_minimal_horizon.webp" as="image" type="image/webp" fetchPriority="high" />
+        <link rel="preload" href="/hero_bg.webp" as="image" type="image/webp" fetchPriority="high" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap" rel="stylesheet" />
         <script
           dangerouslySetInnerHTML={{
             __html: `

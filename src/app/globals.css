@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap');
 
 /* View Transitions for Theme Toggle */
 ::view-transition-old(root),
@@ -16,6 +17,7 @@
   --font-sora: "Sora", sans-serif;
   --font-serif: "Playfair Display", Georgia, serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-zen-dots: "Zen Dots", var(--font-zen-dots), sans-serif;
 
   --color-theme-deep: var(--background-deep);
   --color-theme-base: var(--background-base);
@@ -34,18 +36,6 @@
 }
 
 body,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-span,
-li,
-button,
-input,
-textarea,
 .font-sans,
 .font-jakarta {
   font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
@@ -54,6 +44,12 @@ textarea,
 .font-sora,
 .font-display {
   font-family: 'Sora', sans-serif;
+}
+
+.font-zen-dots,
+.font-zen-dots span,
+.font-zen-dots * {
+  font-family: 'Zen Dots', var(--font-zen-dots), cursive, sans-serif !important;
 }
 
 :root {

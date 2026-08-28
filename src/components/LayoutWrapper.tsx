@@ -197,12 +197,12 @@ export default function LayoutWrapper({
               className="z-10 flex flex-col items-center gap-8"
             >
               <Image
-                src="/logo.svg"
+                src="/SejatiDimedia_Logo.svg"
                 alt="SEJATIDIMEDIA Logo"
-                width={140}
-                height={70}
+                width={173}
+                height={34}
                 priority
-                className="h-12 w-auto object-contain drop-shadow-xl"
+                className="h-10 sm:h-12 w-auto object-contain drop-shadow-xl"
               />
 
               <div className="relative flex flex-col items-center">
@@ -280,24 +280,20 @@ export default function LayoutWrapper({
             <div className={`max-w-7xl mx-auto px-6 w-full flex items-center justify-between gap-4 transition-all duration-300 ${scrolled ? 'py-3' : 'py-5'}`}>
               {/* Logo / Brand Name */}
               <div
-                className="flex items-center gap-2 cursor-pointer select-none shrink-0"
+                className="flex items-center cursor-pointer select-none shrink-0"
                 onClick={() => handleNavClick("home")}
                 id="logo-header-trigger"
               >
-                <div className="h-5 sm:h-5.5 w-auto hover:scale-105 transition-transform duration-200 flex items-center justify-center shrink-0">
+                <div className="h-6 sm:h-7.5 w-auto hover:opacity-90 transition-opacity duration-200 flex items-center shrink-0">
                   <Image
-                    src="/logo.svg"
+                    src="/SejatiDimedia_Logo.svg"
                     alt="SejatiDimedia Logo"
-                    width={40}
-                    height={14}
+                    width={173}
+                    height={34}
+                    priority
                     className="h-full w-auto object-contain"
                   />
                 </div>
-                <span
-                  className="font-bold text-slate-900 text-xs sm:text-sm tracking-tight uppercase whitespace-nowrap shrink-0"
-                >
-                  <span className="font-sora" style={{ color: '#2E54A2' }}>Sejati</span> <span className="font-sora" style={{ color: '#23385B' }}>Dimedia</span>
-                </span>
               </div>
 
               {/* Capsule Center Navigation */}
@@ -379,12 +375,12 @@ export default function LayoutWrapper({
             <div className="max-w-7xl mx-auto px-6 space-y-16">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
                 <div className="md:col-span-7 space-y-6 text-left">
-                  <div className="h-7 w-auto flex items-center justify-start">
+                  <div className="h-6 sm:h-7.5 w-auto flex items-center justify-start">
                     <Image
-                      src="/logo.svg"
+                      src="/SejatiDimedia_Logo.svg"
                       alt="SejatiDimedia Logo"
-                      width={56}
-                      height={28}
+                      width={173}
+                      height={34}
                       className="h-full w-auto object-contain"
                     />
                   </div>
@@ -471,9 +467,12 @@ export default function LayoutWrapper({
               </div>
 
               <div className="relative py-6 select-none border-t border-b border-theme-border/20 overflow-hidden flex items-center justify-center">
-                <h2 className="text-[9vw] sm:text-[10vw] md:text-[10.5vw] lg:text-[105px] xl:text-[115px] font-sora font-bold tracking-tighter uppercase leading-none text-center select-none w-full transition-all duration-300 opacity-90 dark:opacity-85 py-3 px-6 whitespace-nowrap">
-                  <span className="bg-gradient-to-b from-[#2E54A2] via-[#2E54A2]/80 to-transparent bg-clip-text text-transparent">SEJATI</span>
-                  <span className="bg-gradient-to-b from-[#23385B] via-[#23385B]/80 to-transparent bg-clip-text text-transparent">DIMEDIA</span>
+                <h2
+                  style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }}
+                  className="text-[7.5vw] sm:text-[8vw] md:text-[8.5vw] lg:text-[88px] xl:text-[96px] font-zen-dots tracking-wider uppercase leading-none text-center select-none w-full transition-all duration-300 opacity-90 dark:opacity-85 py-3 px-6 whitespace-nowrap"
+                >
+                  <span style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }} className="bg-gradient-to-b from-[#2E54A2] via-[#2E54A2]/80 to-transparent bg-clip-text text-transparent">SEJATI</span>{' '}
+                  <span style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }} className="bg-gradient-to-b from-[#23385B] via-[#23385B]/80 to-transparent bg-clip-text text-transparent">DIMEDIA</span>
                 </h2>
               </div>
 
@@ -591,23 +590,20 @@ export default function LayoutWrapper({
               >
                 {/* Brand Logo */}
                 <div
-                  className="flex items-center gap-1.5 sm:gap-2 cursor-pointer select-none shrink-0 min-w-0"
+                  className="flex items-center cursor-pointer select-none shrink-0 min-w-0"
                   onClick={() => handleNavClick("home")}
                   id="logo-header-trigger"
                 >
-                  <div className="h-4.5 sm:h-5.5 w-auto hover:scale-105 transition-transform duration-200 flex items-center justify-center shrink-0">
+                  <div className="h-6 sm:h-7.5 w-auto hover:opacity-90 transition-opacity duration-200 flex items-center shrink-0">
                     <Image
-                      src="/logo.svg"
+                      src="/SejatiDimedia_Logo.svg"
                       alt="SejatiDimedia Logo"
-                      width={38}
-                      height={14}
+                      width={173}
+                      height={34}
+                      priority
                       className="h-full w-auto object-contain"
                     />
                   </div>
-                  <span className="font-bold text-slate-900 text-[11px] sm:text-sm tracking-tight uppercase whitespace-nowrap shrink-0">
-                    <span className="font-sora" style={{ color: '#2C5098' }}>Sejati</span>{' '}
-                    <span className="font-sora" style={{ color: '#23385B' }}>Dimedia</span>
-                  </span>
                 </div>
 
                 {/* Center Navigation Links */}
@@ -708,12 +704,12 @@ export default function LayoutWrapper({
             <div className="max-w-7xl mx-auto px-6 space-y-16">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
                 <div className="md:col-span-7 space-y-6 text-left">
-                  <div className="h-7 w-auto flex items-center justify-start">
+                  <div className="h-6 sm:h-7.5 w-auto flex items-center justify-start">
                     <Image
-                      src="/logo.svg"
+                      src="/SejatiDimedia_Logo.svg"
                       alt="SejatiDimedia Logo"
-                      width={56}
-                      height={28}
+                      width={173}
+                      height={34}
                       className="h-full w-auto object-contain"
                     />
                   </div>
@@ -800,9 +796,12 @@ export default function LayoutWrapper({
               </div>
 
               <div className="relative py-6 select-none border-t border-b border-slate-200/80 overflow-hidden flex items-center justify-center">
-                <h2 className="text-[9vw] sm:text-[10vw] md:text-[10.5vw] lg:text-[105px] xl:text-[115px] font-sans font-bold tracking-tighter uppercase leading-none text-center select-none w-full transition-all duration-300 py-3 px-6 whitespace-nowrap">
-                  <span className="bg-gradient-to-b from-[#2C5098] via-[#2C5098]/80 to-transparent bg-clip-text text-transparent">SEJATI</span>
-                  <span className="bg-gradient-to-b from-[#23385B] via-[#23385B]/80 to-transparent bg-clip-text text-transparent">DIMEDIA</span>
+                <h2
+                  style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }}
+                  className="text-[7.5vw] sm:text-[8vw] md:text-[8.5vw] lg:text-[88px] xl:text-[96px] font-zen-dots tracking-wider uppercase leading-none text-center select-none w-full transition-all duration-300 py-3 px-6 whitespace-nowrap"
+                >
+                  <span style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }} className="bg-gradient-to-b from-[#2C5098] via-[#2C5098]/80 to-transparent bg-clip-text text-transparent">SEJATI</span>{' '}
+                  <span style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }} className="bg-gradient-to-b from-[#23385B] via-[#23385B]/80 to-transparent bg-clip-text text-transparent">DIMEDIA</span>
                 </h2>
               </div>
 

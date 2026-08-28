@@ -353,7 +353,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
           setNdaProjectSlugs(data.ndaProjectSlugs);
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
 
   const scrollToId = (id: string) => {
@@ -535,11 +535,11 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
         id="hero-section"
         className="w-full relative overflow-hidden bg-white pt-10 sm:pt-14 pb-16 sm:pb-24 lg:pb-28"
       >
-        {/* Minimalist Serene Horizon Background */}
+        {/* Hero Serene Horizon / Ambience Background */}
         <div className="absolute inset-x-0 top-0 h-[480px] sm:h-[600px] lg:h-[680px] overflow-hidden pointer-events-none -z-0">
           <img
-            src="/hero_minimal_horizon.webp"
-            alt="SejatiDimedia Serene Horizon"
+            src="/hero_bg.webp"
+            alt="SejatiDimedia Hero Background"
             className="w-full h-full object-cover object-top opacity-80"
             fetchPriority="high"
             decoding="async"
@@ -2431,49 +2431,7 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
                 </div>
 
                 {/* Freelance Platform Direct Badges */}
-                <div className="pt-4 border-t border-slate-200/80 space-y-2.5">
-                  <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
-                    <span>{language === 'en' ? 'FREELANCE PLATFORMS' : 'SALURAN PLATFORM LAIN'}</span>
-                  </div>
 
-                  <div className="grid grid-cols-2 gap-2.5">
-                    {/* Upwork Capsule */}
-                    <a
-                      href="https://www.upwork.com/freelancers/~017698b392e21b4b6c"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center justify-between p-2.5 px-3 rounded-xl bg-white hover:bg-emerald-50/40 border border-slate-200/80 hover:border-emerald-500/70 hover:shadow-2xs transition-all cursor-pointer"
-                    >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-6 h-6 rounded-md bg-emerald-100/70 text-[#14A800] flex items-center justify-center shrink-0 group-hover:bg-[#14A800] group-hover:text-white transition-all">
-                          <Icon icon="simple-icons:upwork" className="w-3.5 h-3.5" />
-                        </div>
-                        <span className="text-xs font-sans font-bold text-slate-800 group-hover:text-emerald-700 transition-colors truncate">
-                          Upwork
-                        </span>
-                      </div>
-                      <Icon icon="ph:arrow-up-right-bold" className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
-                    </a>
-
-                    {/* Fastwork Capsule */}
-                    <a
-                      href="https://fastwork.id/en/user/timurradhadian?source=web_marketplace_profile-menu_profile"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center justify-between p-2.5 px-3 rounded-xl bg-white hover:bg-[#2C5098]/10 border border-slate-200/80 hover:border-[#2C5098]/70 hover:shadow-2xs transition-all cursor-pointer"
-                    >
-                      <div className="flex items-center gap-2 min-w-0">
-                        <div className="w-6 h-6 rounded-md bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center shrink-0 group-hover:bg-[#2C5098] group-hover:text-white transition-all">
-                          <Icon icon="ph:lightning-fill" className="w-3.5 h-3.5" />
-                        </div>
-                        <span className="text-xs font-sans font-bold text-slate-800 group-hover:text-[#2C5098] transition-colors truncate">
-                          Fastwork
-                        </span>
-                      </div>
-                      <Icon icon="ph:arrow-up-right-bold" className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#2C5098] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0" />
-                    </a>
-                  </div>
-                </div>
               </div>
 
               {/* Right Column: Premium Form (7.5 cols) */}
