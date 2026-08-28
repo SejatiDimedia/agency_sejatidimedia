@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: "%s | SejatiDimedia",
     default: "Jasa Pembuatan Aplikasi & Website Balikpapan | SejatiDimedia",
   },
-  description: "Jasa pembuatan aplikasi mobile (iOS & Android), pembuatan website profesional, dan sistem SaaS kustom di Balikpapan. Bangun sistem digital bisnis terintegrasi dan berkinerja tinggi bersama SejatiDimedia.",
+  description: "Jasa pembuatan aplikasi mobile (iOS & Android), pembuatan website profesional, hingga integrasi AI di Balikpapan. Bangun sistem digital yang membantu bisnis Anda bekerja lebih efisien bersama SejatiDimedia.",
   keywords: [
     "software balikpapan",
     "pembuatan web",
