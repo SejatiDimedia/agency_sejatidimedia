@@ -469,13 +469,20 @@ export default function AgencyLanding({
                     <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block shadow-sm" />
                     <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-sm" />
                   </div>
-                  <div className="flex items-center gap-1 sm:gap-1.5 bg-slate-100 dark:bg-slate-800/90 px-2.5 sm:px-3 py-1 rounded-lg border border-slate-200 dark:border-slate-700/60 ml-1 sm:ml-2">
+                  <Link
+                    href="/portal/demo"
+                    className="flex items-center gap-1 sm:gap-1.5 bg-slate-100 hover:bg-blue-50 dark:bg-slate-800/90 dark:hover:bg-slate-800 px-2.5 sm:px-3 py-1 rounded-lg border border-slate-200 hover:border-blue-400/50 dark:border-slate-700/60 ml-1 sm:ml-2 transition-all cursor-pointer group/bar"
+                    title="Klik untuk mencoba Demo Portal langsung"
+                  >
                     <img src="/logo.svg" alt="SejatiDimedia Logo" className="h-3.5 sm:h-4 w-auto object-contain" />
                     <span className="text-[9px] sm:text-[11px] font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1 truncate max-w-[180px] sm:max-w-none">
                       <Icon icon="ph:lock-key-duotone" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
-                      sejatidimedia.id/portal/projects
+                      sejatidimedia.id/portal/demo
                     </span>
-                  </div>
+                    <span className="px-1.5 py-0.2 rounded text-[8px] bg-blue-500/20 text-blue-600 dark:text-blue-300 font-bold uppercase ml-1">
+                      Demo
+                    </span>
+                  </Link>
                 </div>
               </div>
 
@@ -651,7 +658,18 @@ export default function AgencyLanding({
                 {t.clientPortal?.point3Desc || "Setiap milestone selesai, Anda mendapat notifikasi — bukan Anda yang harus mengejar update."}
               </p>
             </div>
+          </div>
 
+          {/* Dedicated CTA Button to Live Demo Portal */}
+          <div className="pt-4 flex justify-center">
+            <Link
+              href="/portal/demo"
+              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-sans font-bold text-xs sm:text-sm shadow-xl shadow-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer group"
+            >
+              <Icon icon="ph:play-circle-duotone" className="w-5 h-5 text-blue-200 group-hover:scale-110 transition-transform" />
+              <span>{language === 'en' ? 'Try Interactive Client Portal Demo (Guest Mode)' : 'Coba Demo Client Portal Interaktif (Mode Tamu)'}</span>
+              <Icon icon="ph:arrow-right-bold" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
         </div>
       </motion.section>

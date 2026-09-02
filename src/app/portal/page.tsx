@@ -44,11 +44,11 @@ export default function ClientPortalDashboard() {
           });
           setCurrentRole(data.user.role === 'ADMIN' ? 'Admin' : 'Client');
         } else {
-          router.replace('/auth/login');
+          router.replace('/portal/demo');
         }
       })
       .catch(() => {
-        router.replace('/auth/login');
+        router.replace('/portal/demo');
       });
   }, [router]);
 

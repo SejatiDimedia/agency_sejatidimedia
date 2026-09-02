@@ -90,19 +90,18 @@ export default function LoginPage() {
     <div className="min-h-screen bg-[#f0f4f8] flex items-center justify-center p-4 font-sans antialiased">
       <div className="w-full max-w-md bg-white rounded-[2.5rem] shadow-xl border border-slate-200/80 p-6 sm:p-8 relative overflow-hidden space-y-6">
         {/* Top Header Logo */}
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center gap-2 cursor-pointer" onClick={() => router.push('/')}>
-            <div className="w-10 h-10 flex items-center justify-center shrink-0">
-              <img src="/logo.svg" alt="SejatiDimedia Logo" className="w-full h-full object-contain" />
-            </div>
-            <span className="font-extrabold text-slate-900 text-xl tracking-tight uppercase">
-              <span className='font-sora' style={{ color: '#2E54A2' }}>Sejati</span> <span className='font-sora' style={{ color: '#23385B' }}>Dimedia</span>
-            </span>
+        <div className="text-center pt-2 pb-1">
+          <div
+            className="inline-flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity"
+            onClick={() => router.push('/')}
+            title="Kembali ke Beranda"
+          >
+            <img
+              src="/SejatiDimedia_Logo.svg"
+              alt="SejatiDimedia Logo"
+              className="h-10 w-auto object-contain"
+            />
           </div>
-
-          {/* <h1 className="text-2xl font-black text-slate-900 tracking-tight">
-            Client Portal Login
-          </h1> */}
         </div>
 
         {/* Dual Tab Switcher */}
@@ -226,6 +225,20 @@ export default function LoginPage() {
             </Button>
           </form>
         )}
+
+        {/* Guest Demo Access Callout */}
+        <div className="p-3.5 rounded-2xl bg-blue-50/80 border border-blue-200/70 text-center space-y-1">
+          <p className="text-xs text-slate-600 font-medium">
+            Belum menjadi klien atau ingin melihat simulasi portal?
+          </p>
+          <button
+            onClick={() => router.push('/portal/demo')}
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#2C5098] hover:text-[#23385B] hover:underline cursor-pointer transition-colors"
+          >
+            <span>Coba Demo Client Portal sebagai Tamu</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
 
         {/* Security Footer Note */}
         <div className="pt-4 border-t border-slate-100 flex items-center justify-center gap-2 text-[11px] text-slate-400 font-medium">

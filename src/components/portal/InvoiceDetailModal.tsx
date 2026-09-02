@@ -192,18 +192,35 @@ export function InvoiceDetailModal({
             print-color-adjust: exact !important;
             margin: 0 !important;
             padding: 0 !important;
+            height: auto !important;
+            min-height: 100% !important;
+            overflow: visible !important;
           }
 
-          /* Hide no-print controls */
+          /* Hide all elements on the page by default */
+          body * {
+            visibility: hidden !important;
+          }
+
+          /* Completely remove sidebars, headers, app layouts, navigation, and no-print controls from document flow */
+          aside,
+          header,
+          nav,
+          footer,
+          main,
+          button,
           .no-print,
           .no-print * {
             display: none !important;
+            visibility: hidden !important;
             height: 0 !important;
             width: 0 !important;
             overflow: hidden !important;
+            margin: 0 !important;
+            padding: 0 !important;
           }
 
-          /* Reset Modal Backdrop & Wrapper for Printing */
+          /* Reset Modal Backdrop & Card so they don't constrain the printable area */
           .print-modal-overlay {
             position: static !important;
             background: transparent !important;
@@ -214,6 +231,7 @@ export function InvoiceDetailModal({
             display: block !important;
             height: auto !important;
             width: 100% !important;
+            visibility: visible !important;
           }
 
           .print-modal-card {
@@ -228,6 +246,14 @@ export function InvoiceDetailModal({
             margin: 0 !important;
             padding: 0 !important;
             background: #ffffff !important;
+            display: block !important;
+            visibility: visible !important;
+          }
+
+          /* Make ONLY the invoice document and its children visible */
+          #printable-invoice,
+          #printable-invoice * {
+            visibility: visible !important;
           }
 
           #printable-invoice {
@@ -239,6 +265,7 @@ export function InvoiceDetailModal({
             box-shadow: none !important;
             border-radius: 0 !important;
             background: #ffffff !important;
+            display: block !important;
           }
 
           /* Preserve Side-by-Side Flex & Grid Layouts on Print */
@@ -315,15 +342,7 @@ export function InvoiceDetailModal({
             <div className="print-flex-row flex flex-col sm:flex-row justify-between items-start gap-6 border-b border-slate-200 pb-6">
               <div>
                 <div className="flex items-center gap-2.5 mb-2">
-                  <div className="w-9 h-9 flex items-center justify-center shrink-0">
-                    <img src="/logo.svg" alt="SejatiDimedia Logo" className="w-full h-full object-contain" />
-                  </div>
-                  <span
-                    className="text-xl font-extrabold text-slate-900 tracking-tight uppercase font-sora"
-                  >
-                    <span className='font-sora' style={{ color: '#2E54A2' }}>Sejati</span>{' '}
-                    <span className='font-sora' style={{ color: '#23385B' }}>Dimedia</span>
-                  </span>
+                  <img src="/SejatiDimedia_Logo.svg" alt="SejatiDimedia Logo" className="h-8 w-auto object-contain" />
                 </div>
                 <div className="space-y-0.5 text-xs text-slate-500 font-medium">
                   <p className="font-semibold text-slate-700">SejatiDimedia Agency</p>

@@ -15,7 +15,11 @@ import {
   Sparkles,
   FolderKanban,
   Briefcase,
-  X
+  X,
+  CreditCard,
+  MessageSquare,
+  Lock,
+  ShieldCheck
 } from 'lucide-react';
 import { ActiveNavSection } from '@/types/portal';
 import { SidebarItem } from '@/components/ui';
@@ -32,6 +36,9 @@ interface PortalSidebarProps {
   userRole?: 'ADMIN' | 'CLIENT';
   mobileOpen?: boolean;
   onMobileClose?: () => void;
+  isDemoMode?: boolean;
+  onSelectDemoTab?: (tab: 'milestones' | 'invoices' | 'deliverables' | 'comments') => void;
+  demoActiveTab?: 'milestones' | 'invoices' | 'deliverables' | 'comments';
 }
 
 export const PortalSidebar: React.FC<PortalSidebarProps> = ({
@@ -45,6 +52,9 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
   userRole: propUserRole = 'CLIENT',
   mobileOpen = false,
   onMobileClose = () => { },
+  isDemoMode = false,
+  onSelectDemoTab,
+  demoActiveTab = 'milestones',
 }) => {
   const pathname = usePathname();
   const router = useRouter();
@@ -150,207 +160,247 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
       <aside
         className={
           mobileOpen
-            ? "fixed top-0 left-0 bottom-0 z-[55] h-screen w-72 bg-white p-5 border-r border-slate-200 shadow-2xl flex flex-col transition-all duration-300"
-            : `hidden lg:flex ${isCollapsed ? 'w-20' : 'w-72'
+            ? "no-print fixed top-0 left-0 bottom-0 z-[55] h-screen w-72 bg-white p-5 border-r border-slate-200 shadow-2xl flex flex-col transition-all duration-300"
+            : `no-print hidden lg:flex ${isCollapsed ? 'w-20' : 'w-72'
             } bg-white rounded-[2rem] p-5 shadow-[0_10px_30px_-5px_rgba(0,0,0,0.04)] border border-slate-200/70 flex flex-col shrink-0 transition-all duration-300 relative z-20 h-[calc(100vh-2.5rem)] sticky top-5`
         }
       >
         {/* Top Header & Logo - Fixed */}
-        <div className="shrink-0">
-          <div className="flex items-center justify-between mb-7 px-1">
-            <div className="flex items-center gap-2 overflow-hidden cursor-pointer" onClick={() => router.push('/')}>
-              <div className="w-8 h-8 flex items-center justify-center shrink-0">
-                <img src="/logo.svg" alt="SejatiDimedia Logo" className="w-full h-full object-contain" />
+        <div className="shrink-0 mb-7">
+          {isCollapsed ? (
+            <div className="flex flex-col items-center justify-center gap-3 w-full">
+              <div
+                className="w-10 h-10 flex items-center justify-center cursor-pointer hover:opacity-85 transition-opacity"
+                onClick={() => router.push('/')}
+                title="Ke Beranda"
+              >
+                <img src="/logo.svg" alt="SejatiDimedia Logo" className="w-8 h-8 object-contain" />
               </div>
-              {(!isCollapsed || mobileOpen) && (
-                <div className="flex flex-col truncate">
-                  <span
-                    className="font-bold text-slate-900 text-base leading-snug tracking-tight uppercase"
-                  >
-                    <span className="font-sora" style={{ color: '#2E54A2' }}>Sejati</span> <span className="font-sora" style={{ color: '#23385B' }}>Dimedia</span>
-                  </span>
-                </div>
+              <button
+                onClick={toggleCollapse}
+                className="hidden lg:flex w-8 h-8 rounded-xl bg-slate-100/80 hover:bg-slate-200/70 text-slate-500 items-center justify-center transition-colors shrink-0 cursor-pointer"
+                title="Buka sidebar"
+              >
+                <ChevronsLeft className="w-4 h-4 rotate-180" />
+              </button>
+            </div>
+          ) : (
+            <div className="relative flex items-center justify-center w-full py-1">
+              <div
+                className="flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity"
+                onClick={() => router.push('/')}
+                title="Ke Beranda"
+              >
+                <img
+                  src="/SejatiDimedia_Logo.svg"
+                  alt="SejatiDimedia Logo"
+                  className="h-8 w-auto object-contain"
+                />
+              </div>
+
+              {/* Desktop Collapse Toggle */}
+              <button
+                onClick={toggleCollapse}
+                className="hidden lg:flex absolute right-0 w-7 h-7 rounded-xl bg-slate-100/80 hover:bg-slate-200/70 text-slate-500 items-center justify-center transition-colors shrink-0 cursor-pointer"
+                title="Tutup sidebar"
+              >
+                <ChevronsLeft className="w-3.5 h-3.5 transition-transform duration-300" />
+              </button>
+
+              {/* Mobile Close Button */}
+              {mobileOpen && (
+                <button
+                  onClick={onMobileClose}
+                  className="lg:hidden absolute right-0 w-7 h-7 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors shrink-0 cursor-pointer"
+                  title="Tutup Menu"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
               )}
             </div>
-
-            {/* Desktop Collapse Toggle */}
-            <button
-              onClick={toggleCollapse}
-              className="hidden lg:flex w-8 h-8 rounded-xl bg-slate-100/80 hover:bg-slate-200/70 text-slate-500 items-center justify-center transition-colors shrink-0 cursor-pointer"
-              title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            >
-              <ChevronsLeft className={`w-4 h-4 transition-transform duration-300 ${isCollapsed ? 'rotate-180' : ''}`} />
-            </button>
-
-            {/* Mobile Close Button */}
-            {mobileOpen && (
-              <button
-                onClick={onMobileClose}
-                className="lg:hidden w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors shrink-0 cursor-pointer"
-                title="Tutup Menu"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
-          </div>
+          )}
         </div>
 
         {/* Scrollable Navigation Area */}
         <div className="flex-1 overflow-y-auto min-h-0 pr-1 -mr-1">
-          {/* Navigation Group 1: GENERAL / CLIENT MENU */}
-          <div className="mb-6">
-            {!isCollapsed && (
-              <p className="text-[11px] font-bold text-slate-400 tracking-wider uppercase px-3 mb-2">
-                {isAdmin ? 'ADMIN MENU' : 'CLIENT WORKSPACE'}
-              </p>
-            )}
-
-            <nav className="space-y-1.5">
-              {/* ADMIN ONLY: Dashboard Leads */}
-              {isAdmin && (
+          {isDemoMode ? (
+            /* ===============================================================
+               DEMO MODE: Isolated Guest Navigation (No Admin/Portfolio/Settings)
+               =============================================================== */
+            <div className="space-y-4">
+              <nav className="space-y-1.5">
+                {/* 1. Sprints & Milestones */}
                 <SidebarItem
-                  icon={<LayoutDashboard className="w-5 h-5" />}
-                  label="Dashboard Leads"
-                  isActive={isDashboardActive}
-                  onClick={() => handleNavigate('/admin/dashboard', 'dashboard-leads')}
-                  count={finalLeadsCount}
+                  icon={<FolderKanban className="w-5 h-5" />}
+                  label="Proyek Simulasi"
+                  isActive={demoActiveTab === 'milestones'}
+                  onClick={() => onSelectDemoTab?.('milestones')}
+                  count={1}
                   collapsed={isCollapsed}
                 />
-              )}
 
-              {/* CLIENT & ADMIN: Client Portal / Projects */}
-              <SidebarItem
-                icon={<FolderKanban className="w-5 h-5" />}
-                label={isAdmin ? "Client Portal View" : "My Projects & Milestones"}
-                isActive={isPortalActive && activeSection !== 'settings'}
-                onClick={() => handleNavigate('/portal', 'clients-portal')}
-                count={finalProjectsCount}
-                collapsed={isCollapsed}
-              />
+                {/* 2. Invoices & Billing */}
+                <SidebarItem
+                  icon={<CreditCard className="w-5 h-5" />}
+                  label="Invoices & Billing"
+                  isActive={demoActiveTab === 'invoices'}
+                  onClick={() => onSelectDemoTab?.('invoices')}
+                  count={3}
+                  collapsed={isCollapsed}
+                />
 
-              {/* CLIENT & ADMIN: Deliverables & Files */}
-              <SidebarItem
-                icon={<FolderOpen className="w-5 h-5" />}
-                label="File Deliverables"
-                isActive={activeSection === 'file-management' || pathname === '/portal/files'}
-                onClick={() => handleNavigate('/portal/files', 'file-management')}
-                collapsed={isCollapsed}
-              />
+                {/* 3. Deliverables */}
+                <SidebarItem
+                  icon={<FolderOpen className="w-5 h-5" />}
+                  label="File Deliverables"
+                  isActive={demoActiveTab === 'deliverables'}
+                  onClick={() => onSelectDemoTab?.('deliverables')}
+                  count={4}
+                  collapsed={isCollapsed}
+                />
 
-              {/* CLIENT & ADMIN: Portfolio Showcase & NDA Settings */}
-              <SidebarItem
-                icon={<Briefcase className="w-5 h-5" />}
-                label={isAdmin ? "Portfolio Showcase (NDA)" : "Portfolio Showcase"}
-                isActive={isPortfolioActive}
-                onClick={() => handleNavigate('/portal/portfolio', 'portfolio')}
-                collapsed={isCollapsed}
-              />
-
-              {/* ADMIN ONLY MENU ITEMS */}
-              {isAdmin && (
-                <>
-                  {/* <SidebarItem
-                    icon={<Sparkles className="w-5 h-5" />}
-                    label="UI Design Showcase"
-                    isActive={isDesignSystemActive}
-                    onClick={() => handleNavigate('/admin/components')}
-                    collapsed={isCollapsed}
-                  /> */}
-
-                  <SidebarItem
-                    icon={<Calendar className="w-5 h-5" />}
-                    label="Calendar"
-                    isActive={false}
-                    onClick={() => handleNavigate('/admin/dashboard', 'calendar')}
-                    collapsed={isCollapsed}
-                  />
-
-                  <SidebarItem
-                    icon={<Contact className="w-5 h-5" />}
-                    label="Team & Clients"
-                    isActive={false}
-                    onClick={() => handleNavigate('/admin/dashboard', 'team')}
-                    collapsed={isCollapsed}
-                  />
-                </>
-              )}
-            </nav>
-          </div>
-
-          {/* Navigation Group 2: MY WORKSPACE (ADMIN ONLY) */}
-          {/* {isAdmin && (
-            <div>
-              {!isCollapsed && (
-                <div className="flex items-center justify-between px-3 mb-2">
-                  <p className="text-[11px] font-bold text-slate-400 tracking-wider uppercase">
-                    LEAD WORKSPACE
-                  </p>
-                  <button
-                    onClick={openAddLeadModal}
-                    className="w-5 h-5 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
-                    title="Tambah Item Baru"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              )}
-
-              <nav className="space-y-1">
-                <div
-                  onClick={() => handleNavigate('/admin/dashboard')}
-                  className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-start'} px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100/80 rounded-2xl cursor-pointer transition-colors`}
-                >
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0"></span>
-                  {!isCollapsed && <span className="ml-3 truncate">Leads Pipeline</span>}
-                </div>
-                <div
-                  onClick={() => handleNavigate('/portal')}
-                  className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-start'} px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100/80 rounded-2xl cursor-pointer transition-colors`}
-                >
-                  <span className="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></span>
-                  {!isCollapsed && <span className="ml-3 truncate">Active Client Projects</span>}
-                </div>
-                <div
-                  onClick={() => handleNavigate('/design-system')}
-                  className={`flex items-center ${isCollapsed ? 'justify-center' : 'justify-start'} px-3.5 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100/80 rounded-2xl cursor-pointer transition-colors`}
-                >
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0"></span>
-                  {!isCollapsed && <span className="ml-3 truncate">Design System & UI</span>}
-                </div>
+                {/* 4. Comments */}
+                <SidebarItem
+                  icon={<MessageSquare className="w-5 h-5" />}
+                  label="Log Diskusi & Revisi"
+                  isActive={demoActiveTab === 'comments'}
+                  onClick={() => onSelectDemoTab?.('comments')}
+                  collapsed={isCollapsed}
+                />
               </nav>
             </div>
-          )} */}
+          ) : (
+            /* ===============================================================
+               REGULAR MODE: Client & Admin Navigation
+               =============================================================== */
+            <div className="mb-6">
+              {!isCollapsed && (
+                <p className="text-[11px] font-bold text-slate-400 tracking-wider uppercase px-3 mb-2">
+                  {isAdmin ? 'ADMIN MENU' : 'CLIENT WORKSPACE'}
+                </p>
+              )}
+
+              <nav className="space-y-1.5">
+                {/* ADMIN ONLY: Dashboard Leads */}
+                {isAdmin && (
+                  <SidebarItem
+                    icon={<LayoutDashboard className="w-5 h-5" />}
+                    label="Dashboard Leads"
+                    isActive={isDashboardActive}
+                    onClick={() => handleNavigate('/admin/dashboard', 'dashboard-leads')}
+                    count={finalLeadsCount}
+                    collapsed={isCollapsed}
+                  />
+                )}
+
+                {/* CLIENT & ADMIN: Client Portal / Projects */}
+                <SidebarItem
+                  icon={<FolderKanban className="w-5 h-5" />}
+                  label={isAdmin ? "Client Portal View" : "My Projects & Milestones"}
+                  isActive={isPortalActive && activeSection !== 'settings'}
+                  onClick={() => handleNavigate('/portal', 'clients-portal')}
+                  count={finalProjectsCount}
+                  collapsed={isCollapsed}
+                />
+
+                {/* CLIENT & ADMIN: Deliverables & Files */}
+                <SidebarItem
+                  icon={<FolderOpen className="w-5 h-5" />}
+                  label="File Deliverables"
+                  isActive={activeSection === 'file-management' || pathname === '/portal/files'}
+                  onClick={() => handleNavigate('/portal/files', 'file-management')}
+                  collapsed={isCollapsed}
+                />
+
+                {/* CLIENT & ADMIN: Portfolio Showcase & NDA Settings */}
+                <SidebarItem
+                  icon={<Briefcase className="w-5 h-5" />}
+                  label={isAdmin ? "Portfolio Showcase (NDA)" : "Portfolio Showcase"}
+                  isActive={isPortfolioActive}
+                  onClick={() => handleNavigate('/portal/portfolio', 'portfolio')}
+                  collapsed={isCollapsed}
+                />
+
+                {/* ADMIN ONLY MENU ITEMS */}
+                {isAdmin && (
+                  <>
+                    <SidebarItem
+                      icon={<Calendar className="w-5 h-5" />}
+                      label="Calendar"
+                      isActive={false}
+                      onClick={() => handleNavigate('/admin/dashboard', 'calendar')}
+                      collapsed={isCollapsed}
+                    />
+
+                    <SidebarItem
+                      icon={<Contact className="w-5 h-5" />}
+                      label="Team & Clients"
+                      isActive={false}
+                      onClick={() => handleNavigate('/admin/dashboard', 'team')}
+                      collapsed={isCollapsed}
+                    />
+                  </>
+                )}
+              </nav>
+            </div>
+          )}
         </div>
 
         {/* Bottom Area: Settings & Logout - Fixed */}
-        <div className="shrink-0 pt-4 border-t border-slate-100 space-y-1">
-          <button
-            onClick={() => handleNavigate('/portal/settings', 'settings')}
-            className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-start px-3.5'
-              } py-2 rounded-2xl text-xs font-semibold ${activeSection === 'settings' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80'
-              } transition-colors cursor-pointer`}
-          >
-            <Settings className="w-4 h-4 shrink-0" />
-            {!isCollapsed && <span className="ml-3 truncate">Settings & Password</span>}
-          </button>
+        <div className="shrink-0 pt-4 border-t border-slate-100 space-y-1.5">
+          {isDemoMode ? (
+            <>
+              <button
+                onClick={() => router.push('/')}
+                className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-start px-3.5'
+                  } py-2 rounded-2xl text-xs font-semibold text-slate-600 hover:bg-slate-100/80 transition-colors cursor-pointer`}
+              >
+                <Globe className="w-4 h-4 shrink-0 text-slate-500" />
+                {!isCollapsed && <span className="ml-3 truncate">Ke Beranda Web</span>}
+              </button>
 
-          <button
-            onClick={() => router.push('/')}
-            className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-start px-3.5'
-              } py-2 rounded-2xl text-xs font-semibold text-slate-600 hover:bg-slate-100/80 transition-colors cursor-pointer`}
-          >
-            <Globe className="w-4 h-4 shrink-0 text-slate-500" />
-            {!isCollapsed && <span className="ml-3 truncate">Ke Landing Page</span>}
-          </button>
+              <a
+                href="https://wa.me/6289508436275?text=Halo%20SejatiDimedia,%20saya%20tertarik%20memulai%20proyek%20setelah%20melihat%20Demo%20Client%20Portal."
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-start px-3.5'
+                  } py-2.5 rounded-2xl text-xs font-bold text-white bg-[#25D366] hover:bg-[#20ba59] shadow-xs transition-all cursor-pointer`}
+              >
+                <ShieldCheck className="w-4 h-4 shrink-0" />
+                {!isCollapsed && <span className="ml-3 truncate">Mulai Proyek</span>}
+              </a>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => handleNavigate('/portal/settings', 'settings')}
+                className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-start px-3.5'
+                  } py-2 rounded-2xl text-xs font-semibold ${activeSection === 'settings' ? 'bg-slate-900 text-white shadow-md' : 'text-slate-600 hover:bg-slate-100/80'
+                  } transition-colors cursor-pointer`}
+              >
+                <Settings className="w-4 h-4 shrink-0" />
+                {!isCollapsed && <span className="ml-3 truncate">Settings & Password</span>}
+              </button>
 
-          <button
-            onClick={handleLogout}
-            className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-start px-3.5'
-              } py-2 rounded-2xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer`}
-          >
-            <LogOut className="w-4 h-4 shrink-0 text-rose-500" />
-            {!isCollapsed && <span className="ml-3 truncate">Log out</span>}
-          </button>
+              <button
+                onClick={() => router.push('/')}
+                className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-start px-3.5'
+                  } py-2 rounded-2xl text-xs font-semibold text-slate-600 hover:bg-slate-100/80 transition-colors cursor-pointer`}
+              >
+                <Globe className="w-4 h-4 shrink-0 text-slate-500" />
+                {!isCollapsed && <span className="ml-3 truncate">Ke Landing Page</span>}
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className={`w-full flex items-center ${isCollapsed ? 'justify-center px-0' : 'justify-start px-3.5'
+                  } py-2 rounded-2xl text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer`}
+              >
+                <LogOut className="w-4 h-4 shrink-0 text-rose-500" />
+                {!isCollapsed && <span className="ml-3 truncate">Log out</span>}
+              </button>
+            </>
+          )}
         </div>
       </aside>
     </>

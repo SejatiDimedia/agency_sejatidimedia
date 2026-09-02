@@ -757,10 +757,20 @@ export default function AgencyLandingV2({
                 </div>
 
                 {/* Full-width URL address bar */}
-                <div className="flex-1 flex items-center gap-2 bg-white px-3 sm:px-3.5 py-1.5 rounded-xl border border-slate-200 text-slate-700 text-[10px] sm:text-xs font-mono shadow-2xs min-w-0">
-                  <Icon icon="ph:lock-key-duotone" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
-                  <span className="truncate text-slate-700 font-medium">sejatidimedia.web.id/portal/projects/saas-dashboard</span>
-                </div>
+                <Link
+                  href="/portal/demo"
+                  className="flex-1 flex items-center justify-between gap-2 bg-white hover:bg-slate-100/80 px-3 sm:px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-[#2C5098]/40 text-slate-700 text-[10px] sm:text-xs font-mono shadow-2xs min-w-0 transition-all cursor-pointer group/bar"
+                  title="Klik untuk mencoba Demo Portal langsung"
+                >
+                  <div className="flex items-center gap-2 truncate">
+                    <Icon icon="ph:lock-key-duotone" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
+                    <span className="truncate text-slate-700 font-medium">sejatidimedia.web.id/portal/demo</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-md bg-[#2C5098]/10 text-[#2C5098] font-bold text-[9px] sm:text-[10px] uppercase tracking-wider shrink-0 group-hover/bar:bg-[#2C5098] group-hover/bar:text-white transition-all flex items-center gap-1">
+                    <span>Buka Demo</span>
+                    <Icon icon="ph:arrow-right-bold" className="w-2.5 h-2.5" />
+                  </span>
+                </Link>
 
                 {/* Live 24/7 status badge */}
                 <div className="flex items-center shrink-0">
@@ -1103,6 +1113,18 @@ export default function AgencyLandingV2({
                 )}
               </div>
             </div>
+          </div>
+
+          {/* Dedicated CTA Button to Live Demo Portal */}
+          <div className="pt-2 flex justify-center">
+            <Link
+              href="/portal/demo"
+              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#2C5098] to-[#1E315B] text-white font-sans font-bold text-xs sm:text-sm shadow-xl shadow-[#2C5098]/20 hover:shadow-2xl hover:shadow-[#2C5098]/30 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer group"
+            >
+              <Icon icon="ph:play-circle-duotone" className="w-5 h-5 text-blue-200 group-hover:scale-110 transition-transform" />
+              <span>{language === 'en' ? 'Try Interactive Client Portal Demo (Guest Mode)' : 'Coba Demo Client Portal Interaktif (Mode Tamu)'}</span>
+              <Icon icon="ph:arrow-right-bold" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
 
           {/* 4. Minimalist Inline Key Value Footnote (Bilingual Support) */}

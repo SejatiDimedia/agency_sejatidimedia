@@ -48,7 +48,7 @@ export const PortalHeader: React.FC<PortalHeaderProps> = ({
   };
 
   return (
-    <header className="w-full flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6">
+    <header className="no-print w-full flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-6">
       {/* Search & Hamburger Menu Row */}
       <div className="flex items-center gap-3 w-full md:w-auto">
         {onMenuClick && (

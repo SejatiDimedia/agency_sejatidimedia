@@ -85,11 +85,16 @@ function MagicLinkActivator() {
 
   return (
     <div className="w-full max-w-md bg-white rounded-[2.5rem] shadow-xl border border-slate-200/80 p-6 sm:p-8 text-center space-y-6">
-      <div className="inline-flex items-center justify-center gap-2">
-        <div className="w-10 h-10 flex items-center justify-center shrink-0">
-          <img src="/logo.svg" alt="SejatiDimedia Logo" className="w-full h-full object-contain" />
-        </div>
-        <span className="font-extrabold text-slate-900 text-xl tracking-tight font-sora" style={{ fontFamily: "'Sora', sans-serif" }}>SejatiDimedia</span>
+      <div
+        className="inline-flex items-center justify-center cursor-pointer hover:opacity-90 transition-opacity"
+        onClick={() => router.push('/')}
+        title="Kembali ke Beranda"
+      >
+        <img
+          src="/SejatiDimedia_Logo.svg"
+          alt="SejatiDimedia Logo"
+          className="h-10 w-auto object-contain"
+        />
       </div>
 
       {loading && (
