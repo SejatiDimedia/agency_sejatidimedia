@@ -4,40 +4,43 @@ import { notifyOwnerViaTelegram } from '../../../lib/telegram';
 import { saveSessionMapping, enableHandoffMode, isHandoffMode } from '../../../lib/redis';
 
 const BASE_SYSTEM_PROMPT = `Namamu adalah Sedia AI, asisten virtual resmi untuk SejatiDimedia (sejatidimedia.web.id). 
-SejatiDimedia adalah software engineering agency & media command center premium berbasis di Balikpapan, Indonesia. Dikelola oleh Founder & Lead Software Engineer: Timur Dian Radha Sejati.
+SejatiDimedia adalah software engineering agency & digital solutions command center premium berbasis di Balikpapan, Indonesia. Dikelola oleh Founder & Lead Software Engineer: Timur Dian Radha Sejati.
 
 Identitas & Keunggulan Utama SejatiDimedia:
-- Kami membangun sistem perangkat lunak siap produksi (Production-Ready), aplikasi SaaS modern, mobile apps, dan integrasi kecerdasan buatan (AI & Automation).
-- Nilai Utama: Kode Bersih & Terstruktur (Clean Code), 100% Hak Cipta & Akses Penuh Source Code Klien, Tanpa Biaya Tersembunyi, serta Pendampingan & Garansi 30 Hari Pasca-Launch.
+- Kami membangun sistem perangkat lunak siap produksi (Production-Ready), aplikasi SaaS modern, mobile apps, otomasi pabrik/industri, dan integrasi kecerdasan buatan (AI & Automation).
+- Nilai Utama: Kode Bersih & Terstruktur (Clean Code), 100% Hak Cipta & Akses Penuh Source Code Klien, Tanpa Biaya Tersembunyi, serta Pendampingan & Garansi Bug Fixing Resmi Pasca-Launch.
 - Client Portal Eksklusif: Klien mendapatkan dashboard portal khusus untuk memantau progress sprint, dokumen, invoice, dan timeline secara transparan.
 
-Struktur Paket Layanan & Harga Resmi:
-1. Starter — MVP Prototype (Harga: Rp 3.000.000 – Rp 7.000.000+ per proyek):
-   - Tujuan: Cocok untuk validasi ide bisnis atau produk tahap awal (Fast Turnaround).
-   - Termasuk: Gratis Domain .com (1 Tahun) + Setup DNS, Pilihan: 1 Platform (Web App MVP atau Mobile App Prototype), Fitur Inti & Core Logic, 1x Revisi Besar, Kode Bersih & Siap Skala.
-   - Estimasi pengerjaan: 2 – 4 minggu.
+Struktur Skema Pengembangan & Solusi:
+1. Starter — MVP Prototype (Skema: Fixed Scope & Timeline, Estimasi: 2–4 Minggu):
+   - Tujuan: Validasi ide bisnis atau produk baru ke pasar secara cepat dan fungsional sebelum komitmen anggaran besar.
+   - Pilihan: Web App MVP ATAU Mobile App MVP.
+   - Termasuk: Fitur Inti & Core Business Logic, UI/UX Responsif & Siap Rilis, Waktu Pengerjaan Cepat 2–4 Minggu.
 
-2. Growth — Production Ready (Harga: Rp 10.000.000+ per proyek) [Paling Populer]:
-   - Tujuan: Untuk bisnis yang siap merilis produk resmi ke publik dengan sistem lengkap dan performa tinggi.
-   - Termasuk: Gratis Domain .com (1 Tahun), Pilihan Platform: Web Application Full-Stack ATAU Mobile App Siap Rilis (Android/iOS via Flutter/React Native), API Backend & Database Terstruktur, Integrasi Pembayaran (Payment Gateway) & Autentikasi, Dashboard Admin & Manajemen, Pendampingan 30 Hari Pasca-Launch, 100% Hak Cipta & Source Code.
-   - Estimasi pengerjaan: 4 – 8 minggu.
+2. Growth — Production Ready (Skema: Berdasarkan Fitur & Scope, Estimasi: 1–2 Bulan) [Paling Populer]:
+   - Tujuan: Aplikasi skala penuh dengan multi-user, backend tangguh, dan integrasi lengkap untuk operasional bisnis harian.
+   - Termasuk: Web App ATAU Mobile App (Android & iOS), Backend API & Database Multi-User, Autentikasi Multi-Role & Payment Gateway, Dashboard Admin & Analitik Bisnis.
 
-3. Custom — Sistem Kompleks & AI (Harga: Disesuaikan dengan cakupan/scope proyek):
-   - Tujuan: Kebutuhan sistem skala enterprise, arsitektur multi-platform terpadu, dan otomasi berbasis AI.
-   - Termasuk: Gratis Domain .com (1 Tahun), Multi-Platform Terintegrasi (Web + Android + iOS sekaligus), Custom AI Pipeline & Automation (RAG Architecture, Autonomous Agents, n8n Workflows, LangChain, LLM Fine-Tuning), Timeline & Scope Kustom Fleksibel, Dukungan & Pemeliharaan Server Berkala, Dokumentasi Lengkap API & Arsitektur.
+3. Custom — Enterprise, Pabrik & AI (Skema: Custom Architecture & Retainer, Estimasi: Roadmap Fleksibel):
+   - Tujuan: Kebutuhan sistem enterprise skala tinggi, software pabrik/industri, arsitektur multi-platform terpadu, dan otomasi berbasis AI.
+   - Termasuk: Custom Architecture & Retainer, Integrasi AI/LLM & Otomasi Alur Kerja Pabrik, Infrastruktur Cloud High-Availability, Dedicated Support & SLA Khusus.
+
+Standar di Setiap Proyek:
+Semua proyek mendapatkan 100% Hak Cipta & Akses Penuh Source Code, Garansi Bug Fixing Resmi, Deployment ke Server Cloud, dan komunikasi langsung dengan developer (Direct Developer tanpa perantara).
 
 Keahlian Teknologi (Tech Stack):
-- Web: Next.js, React, TypeScript, Tailwind CSS, Node.js, Express, PostgreSQL, Supabase, Redis.
+- Web & Backend: Next.js, React, TypeScript, Tailwind CSS, Node.js, Express, PostgreSQL, Supabase, Redis, Prisma.
 - Mobile: React Native, Flutter, Expo (Android & iOS).
-- AI & LLM Engineering: LangChain, LlamaIndex, n8n Workflow Automation, RAG (Retrieval-Augmented Generation), Autonomous Agents, Vector Databases (Pinecone/Qdrant/Chroma), Model Fine-Tuning (QLoRA), OpenAI, Claude, Gemini, Ollama, Hugging Face.
+- AI & LLM Engineering: LangChain, LlamaIndex, n8n Workflow Automation, RAG (Retrieval-Augmented Generation), Autonomous Agents, Vector Databases (Pinecone/Qdrant/Chroma), Model Fine-Tuning, OpenAI, Claude, Groq, Gemini, Ollama.
 
-Filosofi Desain: Premium, High-Performance, Minimalist, Airy Light Design, dan Modern.`;
+Filosofi Desain: Premium, High-Performance, Minimalist, Airy Light Design, dan Modern.
+WhatsApp Konsultasi Cepat: https://wa.me/6289508436275`;
 
 const ANTI_HALLUCINATION_RULES = `
 Aturan Menjawab & Panduan Komunikasi (SANGAT PENTING!):
 1. Jawab dengan ramah, profesional, percaya diri, elegan, namun tetap padat dan to-the-point (hindari bertele-tele). Gunakan Bahasa Indonesia yang baik dan natural.
 2. JANGAN PERNAH mengarang atau membuat-buat portofolio palsu! Jika user bertanya apakah pernah membuat aplikasi tertentu, hubungkan dengan portofolio yang ada di daftar di bawah. Jika belum pernah ada portofolio publik untuk jenis tersebut (misal game 3D), sampaikan dengan jujur bahwa SejatiDimedia memiliki kapasitas teknis untuk mendiskusikannya lebih lanjut.
-3. JANGAN PERNAH menjanjikan estimasi waktu/harga yang di luar paket tanpa dasar. Jika ditanya estimasi detail di luar paket, berikan perkiraan umum sesuai 3 paket di atas dan sarankan untuk mengisi Formulir Konsultasi Gratis di bawah halaman atau hubungi langsung via tombol 'Hubungi Tim'.
+3. JANGAN PERNAH menjanjikan estimasi waktu/harga kaku tanpa dasar. Jelaskan bahwa penentuan biaya mengacu pada 3 skema di atas (Starter MVP: Fixed Scope, Growth: Berdasarkan Scope Fitur, Custom: Retainer & Arsitektur Khusus), dan sarankan untuk berkonsultasi via WhatsApp (https://wa.me/6289508436275) atau formulir di bawah halaman.
 4. Jika user ingin berbicara dengan tim manusia, arahkan mereka untuk klik tombol 'Hubungi Tim' di bagian atas jendela chat ini agar terhubung langsung ke Telegram Founder.
 5. Gunakan format Markdown (bold, bullet points) agar jawaban enak dibaca.
 `;
@@ -96,7 +99,7 @@ export async function POST(req: Request) {
           });
         } catch (err) {
           console.error("Handoff failed:", err);
-          return NextResponse.json({ response: "Mohon maaf, sistem notifikasi ke tim kami sedang bermasalah. Silakan isi form kontak di bawah layar.", isHandoff: false });
+          return NextResponse.json({ response: "Mohon maaf, sistem notifikasi ke tim kami sedang bermasalah. Silakan hubungi kami via WhatsApp atau isi form konsultasi.", isHandoff: false });
         }
       }
 
@@ -117,11 +120,13 @@ export async function POST(req: Request) {
       }
     }
 
-    const apiKey = process.env.OPENROUTER_API_KEY || process.env.GEMINI_API_KEY;
+    const groqApiKey = process.env.GROQ_API_KEY;
+    const openRouterApiKey = process.env.OPENROUTER_API_KEY;
+    const geminiApiKey = process.env.GEMINI_API_KEY;
 
-    if (!apiKey) {
+    if (!groqApiKey && !openRouterApiKey && !geminiApiKey) {
       return NextResponse.json(
-        { error: "API Key belum dikonfigurasi. Silakan tambahkan OPENROUTER_API_KEY di .env.local" },
+        { error: "API Key AI belum dikonfigurasi. Silakan tambahkan GROQ_API_KEY di .env.local untuk respon AI yang cepat dan stabil." },
         { status: 500 }
       );
     }
@@ -131,11 +136,11 @@ export async function POST(req: Request) {
     const projectsListStr = liveProjects.map((p, index) => {
       const summary = p.summaryId || p.summary || p.descriptionId || p.description || "";
       return `${index + 1}. ${p.name}: ${summary} (Kategori: ${p.categories.join(', ')})`;
-    }).join('\\n');
+    }).join('\n');
 
-    const dynamicSystemPrompt = `${BASE_SYSTEM_PROMPT}\\n\\nDaftar Portofolio/Proyek yang pernah dikerjakan SejatiDimedia:\\n${projectsListStr}\\n${ANTI_HALLUCINATION_RULES}`;
+    const dynamicSystemPrompt = `${BASE_SYSTEM_PROMPT}\n\nDaftar Portofolio/Proyek yang pernah dikerjakan SejatiDimedia:\n${projectsListStr}\n${ANTI_HALLUCINATION_RULES}`;
 
-    // Format history for OpenRouter (OpenAI format)
+    // Format history for OpenAI/Groq compatible chat completions
     const messages = [
       { role: 'system', content: dynamicSystemPrompt },
       { role: 'assistant', content: 'Paham. Saya siap menjadi Sedia AI, asisten profesional SejatiDimedia.' }
@@ -152,48 +157,109 @@ export async function POST(req: Request) {
 
     messages.push({ role: 'user', content: message });
 
-    const modelsToTry = [
-      "google/gemma-4-31b-it:free",
-      "google/gemma-4-26b-a4b-it:free",
-      "google/gemini-2.0-flash-exp:free"
-    ];
-
     let aiMessage = "Maaf, saya tidak bisa membalas saat ini.";
     let success = false;
 
-    for (const modelName of modelsToTry) {
-      if (success) break;
+    // =========================================================================
+    // 1. PRIMARY: GROQ CLOUD (Ultra-fast ~800 tokens/sec & generous free tier)
+    // =========================================================================
+    if (groqApiKey) {
+      const groqModels = [
+        "qwen/qwen3.8-27b",
+        "qwen/qwen3.6-27b",
+        "openai/gpt-oss-120b",
+        "openai/gpt-oss-20b",
+        "llama-3.3-70b-versatile",
+        "llama-3.1-8b-instant"
+      ];
 
-      try {
-        const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${apiKey}`,
-            "HTTP-Referer": "https://sejatidimedia.web.id",
-            "X-Title": "SejatiDimedia",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model: modelName,
-            messages: messages,
-          })
-        });
+      for (const modelName of groqModels) {
+        if (success) break;
 
-        const data = await response.json();
+        try {
+          const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${groqApiKey}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model: modelName,
+              messages: messages,
+              temperature: 0.6,
+              max_tokens: 1024,
+            })
+          });
 
-        if (response.ok && data.choices?.[0]?.message?.content) {
-          aiMessage = data.choices[0].message.content;
-          success = true;
-        } else {
-          console.warn(`Model ${modelName} failed:`, data.error?.message);
+          const data = await response.json();
+
+          if (response.ok && data.choices?.[0]?.message?.content) {
+            let content = data.choices[0].message.content;
+            // Clean up any internal reasoning / <think> tags if model produces them
+            if (content.includes('</think>')) {
+              content = content.split('</think>').pop()?.trim() || content;
+            }
+            if (content.trim()) {
+              aiMessage = content.trim();
+              success = true;
+            }
+          } else {
+            console.warn(`Groq model ${modelName} error:`, data.error?.message || data);
+          }
+        } catch (err) {
+          console.warn(`Fetch error for Groq ${modelName}:`, err);
         }
-      } catch (err) {
-        console.warn(`Fetch error for ${modelName}:`, err);
+      }
+    }
+
+    // =========================================================================
+    // 2. FALLBACK: OPENROUTER (If Groq is not configured or failed)
+    // =========================================================================
+    if (!success && openRouterApiKey) {
+      const openRouterModels = [
+        "meta-llama/llama-3.3-70b-instruct:free",
+        "google/gemini-2.0-flash-exp:free",
+        "google/gemma-4-31b-it:free",
+        "google/gemma-4-26b-a4b-it:free"
+      ];
+
+      for (const modelName of openRouterModels) {
+        if (success) break;
+
+        try {
+          const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${openRouterApiKey}`,
+              "HTTP-Referer": "https://sejatidimedia.web.id",
+              "X-Title": "SejatiDimedia",
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              model: modelName,
+              messages: messages,
+            })
+          });
+
+          const data = await response.json();
+
+          if (response.ok && data.choices?.[0]?.message?.content) {
+            aiMessage = data.choices[0].message.content;
+            success = true;
+          } else {
+            console.warn(`OpenRouter model ${modelName} failed:`, data.error?.message);
+          }
+        } catch (err) {
+          console.warn(`Fetch error for OpenRouter ${modelName}:`, err);
+        }
       }
     }
 
     if (!success) {
-      throw new Error("Semua server AI gratis sedang sibuk (Provider returned error). Coba lagi beberapa saat.");
+      if (!groqApiKey) {
+        throw new Error("Server AI gratis OpenRouter sedang sibuk. Masukkan GROQ_API_KEY di file .env.local untuk respon instan dan stabil.");
+      }
+      throw new Error("Server AI sedang mengalami kendala sementara. Silakan coba beberapa saat lagi atau hubungi kami via WhatsApp.");
     }
 
     return NextResponse.json({ response: aiMessage, isHandoff: false });
