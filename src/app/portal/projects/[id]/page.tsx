@@ -26,13 +26,16 @@ import {
   X,
   AlertTriangle,
   CreditCard,
-  Clock
+  Clock,
+  Kanban,
+  List
 } from 'lucide-react';
 
 import { InvoiceDetailModal } from '@/components/portal/InvoiceDetailModal';
 import { InvoiceModal } from '@/components/portal/InvoiceModal';
+import { MilestoneKanbanBoard } from '@/components/portal/MilestoneKanbanBoard';
 import { Invoice } from '@/types/portal';
-import { ActiveNavSection } from '@/types/portal';
+import { ActiveNavSection, MilestoneStatus } from '@/types/portal';
 
 export default function ProjectDetailsPage() {
   const router = useRouter();
@@ -73,6 +76,7 @@ export default function ProjectDetailsPage() {
 
   // Tab filter status state
   const [statusFilter, setStatusFilter] = useState<'All' | 'To Do' | 'In Progress' | 'Done'>('All');
+  const [milestoneViewMode, setMilestoneViewMode] = useState<'kanban' | 'list'>('kanban');
 
   // File Deliverables & Comments states
   const [openComments, setOpenComments] = useState<Record<string, boolean>>({});
@@ -828,359 +832,406 @@ export default function ProjectDetailsPage() {
               </div>
             </div>
 
-            {/* Filter Tabs */}
-            <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 rounded-2xl w-fit mb-4 border border-slate-200/50">
-              {(['All', 'To Do', 'In Progress', 'Done'] as const).map((status) => {
-                const count = status === 'All'
-                  ? project.milestones.length
-                  : project.milestones.filter((m: any) => m.status === status).length;
-                return (
-                  <button
-                    key={status}
-                    type="button"
-                    onClick={() => setStatusFilter(status)}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${statusFilter === status
-                      ? 'bg-white text-slate-900 shadow-sm'
+            {/* View Switcher: Kanban Board vs List View */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+              <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-2xl w-fit border border-slate-200/60">
+                <button
+                  type="button"
+                  onClick={() => setMilestoneViewMode('kanban')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${milestoneViewMode === 'kanban'
+                      ? 'bg-white text-[#2C5098] shadow-xs'
                       : 'text-slate-500 hover:text-slate-800'
-                      }`}
-                  >
-                    <span>{status === 'All' ? 'Semua' : status}</span>
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded-md ${statusFilter === status ? 'bg-slate-100 text-slate-700' : 'bg-slate-200/60 text-slate-500'
-                      }`}>
-                      {count}
-                    </span>
-                  </button>
-                );
-              })}
+                    }`}
+                >
+                  <Kanban className="w-3.5 h-3.5" />
+                  <span>Kanban Board</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setMilestoneViewMode('list')}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${milestoneViewMode === 'list'
+                      ? 'bg-white text-slate-900 shadow-xs'
+                      : 'text-slate-500 hover:text-slate-800'
+                    }`}
+                >
+                  <List className="w-3.5 h-3.5" />
+                  <span>List View</span>
+                </button>
+              </div>
+
+              {milestoneViewMode === 'list' && (
+                /* Filter Tabs */
+                <div className="flex flex-wrap items-center gap-1.5 p-1 bg-slate-100 rounded-2xl w-fit border border-slate-200/50">
+                  {(['All', 'To Do', 'In Progress', 'Done'] as const).map((status) => {
+                    const count = status === 'All'
+                      ? project.milestones.length
+                      : project.milestones.filter((m: any) => m.status === status).length;
+                    return (
+                      <button
+                        key={status}
+                        type="button"
+                        onClick={() => setStatusFilter(status)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${statusFilter === status
+                          ? 'bg-white text-slate-900 shadow-sm'
+                          : 'text-slate-500 hover:text-slate-800'
+                          }`}
+                      >
+                        <span>{status === 'All' ? 'Semua' : status}</span>
+                        <span className={`text-[10px] px-1.5 py-0.5 rounded-md ${statusFilter === status ? 'bg-slate-100 text-slate-700' : 'bg-slate-200/60 text-slate-500'
+                          }`}>
+                          {count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
-            {/* Milestones List */}
-            <div className="space-y-4">
-              {project.milestones.length === 0 && (
-                <div className="p-10 bg-white border border-dashed border-slate-300 rounded-[1.8rem] text-center text-slate-500 text-xs font-medium">
-                  Belum ada milestone yang terdaftar untuk proyek ini.
-                </div>
-              )}
+            {/* Conditional Milestone View */}
+            {milestoneViewMode === 'kanban' ? (
+              <MilestoneKanbanBoard
+                milestones={project.milestones}
+                onToggleTask={handleToggleTask}
+                onUpdateMilestoneStatus={(mId, newStatus) => handleMilestoneStatusChange(mId, newStatus)}
+                onOpenAddMilestone={() => {
+                  setCurrentMilestoneEdit(null);
+                  setMilestoneForm({ title: '', description: '', dueDate: '', status: 'To Do' });
+                  setIsMilestoneModalOpen(true);
+                }}
+                isAdmin={userSession?.role === 'ADMIN'}
+                isDemo={false}
+              />
+            ) : (
+              /* Milestones List */
+              <div className="space-y-4">
+                {project.milestones.length === 0 && (
+                  <div className="p-10 bg-white border border-dashed border-slate-300 rounded-[1.8rem] text-center text-slate-500 text-xs font-medium">
+                    Belum ada milestone yang terdaftar untuk proyek ini.
+                  </div>
+                )}
 
-              {project.milestones.length > 0 && project.milestones.filter((m: any) => statusFilter === 'All' ? true : m.status === statusFilter).length === 0 && (
-                <div className="p-10 bg-white border border-dashed border-slate-300 rounded-[1.8rem] text-center text-slate-500 text-xs font-medium">
-                  Tidak ada milestone dengan status "{statusFilter === 'All' ? 'Semua' : statusFilter}".
-                </div>
-              )}
+                {project.milestones.length > 0 && project.milestones.filter((m: any) => statusFilter === 'All' ? true : m.status === statusFilter).length === 0 && (
+                  <div className="p-10 bg-white border border-dashed border-slate-300 rounded-[1.8rem] text-center text-slate-500 text-xs font-medium">
+                    Tidak ada milestone dengan status "{statusFilter === 'All' ? 'Semua' : statusFilter}".
+                  </div>
+                )}
 
-              {project.milestones
-                .filter((m: any) => statusFilter === 'All' ? true : m.status === statusFilter)
-                .map((ms: any) => {
-                  const msProgress = calculateMilestoneProgress(ms);
-                  return (
-                    <Card key={ms.id} variant="default" className="space-y-4 p-5 bg-white border border-slate-200/80 rounded-[1.8rem] shadow-sm relative overflow-hidden">
-                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
-                        <div>
-                          <div className="flex items-center flex-wrap gap-2">
-                            <h4 className="font-bold text-slate-900 text-base">{ms.title}</h4>
+                {project.milestones
+                  .filter((m: any) => statusFilter === 'All' ? true : m.status === statusFilter)
+                  .map((ms: any) => {
+                    const msProgress = calculateMilestoneProgress(ms);
+                    return (
+                      <Card key={ms.id} variant="default" className="space-y-4 p-5 bg-white border border-slate-200/80 rounded-[1.8rem] shadow-sm relative overflow-hidden">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
+                          <div>
+                            <div className="flex items-center flex-wrap gap-2">
+                              <h4 className="font-bold text-slate-900 text-base">{ms.title}</h4>
 
-                            {editMode ? (
-                              <select
-                                value={ms.status}
-                                onChange={(e) => handleMilestoneStatusChange(ms.id, e.target.value)}
-                                className="text-xs font-bold border border-slate-300 rounded-lg px-2 py-0.5 bg-slate-50 focus:outline-none focus:border-blue-500"
-                              >
-                                <option value="To Do">To Do</option>
-                                <option value="In Progress">In Progress</option>
-                                <option value="Done">Done</option>
-                              </select>
-                            ) : (
-                              <Badge
-                                status={ms.status === 'Done' ? 'Won' : ms.status === 'In Progress' ? 'Reviewing' : 'New'}
-                                label={ms.status}
-                              />
-                            )}
-
-                            <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/60 shadow-sm">
-                              {msProgress}% Selesai
-                            </span>
-                          </div>
-                          {ms.description && (
-                            <p className="text-xs text-slate-500 mt-1">{ms.description}</p>
-                          )}
-                        </div>
-
-                        <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto">
-                          <div className="flex items-center gap-1 text-xs font-semibold text-slate-400">
-                            <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                            <span>Deadline: {formatDate(ms.dueDate)}</span>
-                          </div>
-
-                          {editMode && (
-                            <div className="flex items-center gap-1.5 border-l border-slate-200 pl-3">
-                              <button
-                                onClick={() => handleOpenMilestoneEdit(ms)}
-                                className="p-1 rounded bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-800 transition-colors"
-                                title="Edit Milestone"
-                              >
-                                <Edit2 className="w-3.5 h-3.5" />
-                              </button>
-                              <button
-                                onClick={() => handleDeleteMilestone(ms.id)}
-                                className="p-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
-                                title="Hapus Milestone"
-                              >
-                                <Trash2 className="w-3.5 h-3.5" />
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* Tasks Checklist */}
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-1 text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider">
-                          <span>Tasks Checklist</span>
-                          {userSession?.role !== 'ADMIN' && (
-                            <span className="normal-case font-normal text-slate-400/80 flex items-center gap-0.5 ml-1">
-                              <Info className="w-3 h-3 text-slate-300" />
-                              read-only
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                          {ms.tasks.map((task: any) => (
-                            <div
-                              key={task.id}
-                              className="flex items-center justify-between gap-2 text-xs p-2 rounded-xl bg-slate-50 border border-slate-100 group"
-                            >
-                              <button
-                                type="button"
-                                onClick={() => handleToggleTask(task)}
-                                disabled={userSession?.role !== 'ADMIN'}
-                                className={`flex items-center gap-2 cursor-pointer text-left focus:outline-none ${userSession?.role !== 'ADMIN' ? 'cursor-default' : ''
-                                  }`}
-                              >
-                                <CheckCircle2
-                                  className={`w-4 h-4 shrink-0 transition-colors ${task.isDone
-                                    ? 'text-emerald-500'
-                                    : 'text-slate-300 group-hover:text-slate-400'
-                                    }`}
-                                />
-                                <span className={task.isDone ? 'line-through text-slate-400' : 'font-medium text-slate-700'}>
-                                  {task.title}
-                                </span>
-                              </button>
-
-                              {editMode && (
-                                <button
-                                  onClick={() => handleDeleteTask(task.id)}
-                                  className="p-1 text-slate-400 hover:text-rose-600 transition-colors rounded opacity-0 group-hover:opacity-100 focus:opacity-100"
-                                  title="Hapus Task"
+                              {editMode ? (
+                                <select
+                                  value={ms.status}
+                                  onChange={(e) => handleMilestoneStatusChange(ms.id, e.target.value)}
+                                  className="text-xs font-bold border border-slate-300 rounded-lg px-2 py-0.5 bg-slate-50 focus:outline-none focus:border-blue-500"
                                 >
-                                  <Trash2 className="w-3 h-3" />
-                                </button>
-                              )}
-                            </div>
-                          ))}
-
-                          {/* Admin Add Task Input */}
-                          {editMode && (
-                            <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-50 border border-dashed border-slate-300">
-                              <input
-                                type="text"
-                                placeholder="Tambah task baru..."
-                                value={newTaskTitles[ms.id] || ''}
-                                onChange={(e) => setNewTaskTitles({ ...newTaskTitles, [ms.id]: e.target.value })}
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter') handleAddTask(ms.id);
-                                }}
-                                className="w-full bg-transparent px-2 py-1 text-xs focus:outline-none placeholder-slate-400 text-slate-700"
-                              />
-                              <button
-                                onClick={() => handleAddTask(ms.id)}
-                                className="p-1 rounded bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors"
-                              >
-                                <Plus className="w-3.5 h-3.5" />
-                              </button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-
-                      {/* File Deliverables Section */}
-                      <div className="pt-3 border-t border-slate-100/70 space-y-2">
-                        <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider">
-                            File Deliverables
-                          </span>
-
-                          {/* Admin Upload file action button */}
-                          {editMode && (
-                            <label className="text-[10px] font-bold text-blue-600 hover:text-blue-500 cursor-pointer flex items-center gap-1">
-                              {isUploading[ms.id] ? (
-                                <>
-                                  <Loader2 className="w-3 h-3 animate-spin" />
-                                  Mengunggah...
-                                </>
+                                  <option value="To Do">To Do</option>
+                                  <option value="In Progress">In Progress</option>
+                                  <option value="Done">Done</option>
+                                </select>
                               ) : (
-                                <>
-                                  <Upload className="w-3 h-3" />
-                                  Upload File
-                                </>
+                                <Badge
+                                  status={ms.status === 'Done' ? 'Won' : ms.status === 'In Progress' ? 'Reviewing' : 'New'}
+                                  label={ms.status}
+                                />
                               )}
-                              <input
-                                type="file"
-                                multiple
-                                disabled={isUploading[ms.id]}
-                                className="hidden"
-                                onChange={(e) => {
-                                  if (e.target.files && e.target.files.length > 0) {
-                                    handleUploadFiles(ms.id, Array.from(e.target.files));
-                                  }
-                                }}
-                              />
-                            </label>
-                          )}
+
+                              <span className="inline-flex items-center text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200/60 shadow-sm">
+                                {msProgress}% Selesai
+                              </span>
+                            </div>
+                            {ms.description && (
+                              <p className="text-xs text-slate-500 mt-1">{ms.description}</p>
+                            )}
+                          </div>
+
+                          <div className="flex items-center gap-3 shrink-0 self-end sm:self-auto">
+                            <div className="flex items-center gap-1 text-xs font-semibold text-slate-400">
+                              <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                              <span>Deadline: {formatDate(ms.dueDate)}</span>
+                            </div>
+
+                            {editMode && (
+                              <div className="flex items-center gap-1.5 border-l border-slate-200 pl-3">
+                                <button
+                                  onClick={() => handleOpenMilestoneEdit(ms)}
+                                  className="p-1 rounded bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-800 transition-colors"
+                                  title="Edit Milestone"
+                                >
+                                  <Edit2 className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteMilestone(ms.id)}
+                                  className="p-1 rounded bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 transition-colors"
+                                  title="Hapus Milestone"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            )}
+                          </div>
                         </div>
 
-                        {(!ms.deliverables || ms.deliverables.length === 0) ? (
-                          <p className="text-[11px] text-slate-400 italic">Belum ada file deliverable yang diunggah.</p>
-                        ) : (
-                          <div className="space-y-1.5">
-                            {ms.deliverables.map((file: any) => (
-                              <div key={file.id} className="flex items-center justify-between text-xs p-2 rounded-xl bg-slate-50 border border-slate-100 group">
-                                <div className="flex items-center gap-2 truncate">
-                                  <FileText className="w-4 h-4 text-blue-500 shrink-0" />
-                                  <div className="flex flex-col truncate">
-                                    <span className="font-bold text-slate-700 truncate">{file.name}</span>
-                                    <span className="text-[10px] text-slate-400">
-                                      {(file.size / 1024).toFixed(1)} KB &bull; {new Date(file.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
-                                    </span>
-                                  </div>
-                                </div>
+                        {/* Tasks Checklist */}
+                        <div className="space-y-2">
+                          <div className="flex items-center gap-1 text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider">
+                            <span>Tasks Checklist</span>
+                            {userSession?.role !== 'ADMIN' && (
+                              <span className="normal-case font-normal text-slate-400/80 flex items-center gap-0.5 ml-1">
+                                <Info className="w-3 h-3 text-slate-300" />
+                                read-only
+                              </span>
+                            )}
+                          </div>
 
-                                <div className="flex items-center gap-1.5 pl-2 shrink-0">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {ms.tasks.map((task: any) => (
+                              <div
+                                key={task.id}
+                                className="flex items-center justify-between gap-2 text-xs p-2 rounded-xl bg-slate-50 border border-slate-100 group"
+                              >
+                                <button
+                                  type="button"
+                                  onClick={() => handleToggleTask(task)}
+                                  disabled={userSession?.role !== 'ADMIN'}
+                                  className={`flex items-center gap-2 cursor-pointer text-left focus:outline-none ${userSession?.role !== 'ADMIN' ? 'cursor-default' : ''
+                                    }`}
+                                >
+                                  <CheckCircle2
+                                    className={`w-4 h-4 shrink-0 transition-colors ${task.isDone
+                                      ? 'text-emerald-500'
+                                      : 'text-slate-300 group-hover:text-slate-400'
+                                      }`}
+                                  />
+                                  <span className={task.isDone ? 'line-through text-slate-400' : 'font-medium text-slate-700'}>
+                                    {task.title}
+                                  </span>
+                                </button>
+
+                                {editMode && (
                                   <button
-                                    onClick={() => setPreviewFile({ id: file.id, name: file.name, mimeType: file.mimeType })}
-                                    className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all cursor-pointer"
-                                    title="Preview File"
+                                    onClick={() => handleDeleteTask(task.id)}
+                                    className="p-1 text-slate-400 hover:text-rose-600 transition-colors rounded opacity-0 group-hover:opacity-100 focus:opacity-100"
+                                    title="Hapus Task"
                                   >
-                                    <Eye className="w-3.5 h-3.5" />
+                                    <Trash2 className="w-3 h-3" />
                                   </button>
-
-                                  <a
-                                    href={`/api/projects/deliverables/${file.id}/download`}
-                                    className="p-1 rounded bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white transition-all cursor-pointer"
-                                    title="Download File"
-                                    download
-                                  >
-                                    <Download className="w-3.5 h-3.5" />
-                                  </a>
-
-                                  {editMode && (
-                                    <button
-                                      onClick={() => handleDeleteFile(file.id)}
-                                      className="p-1 rounded bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white transition-all cursor-pointer"
-                                      title="Hapus File"
-                                    >
-                                      <Trash2 className="w-3.5 h-3.5" />
-                                    </button>
-                                  )}
-                                </div>
+                                )}
                               </div>
                             ))}
-                          </div>
-                        )}
-                      </div>
 
-                      {/* Diskusi & Feedback Section */}
-                      <div className="pt-3 border-t border-slate-100/70 space-y-2">
-                        <button
-                          onClick={() => toggleCommentsCollapse(ms.id)}
-                          className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400 hover:text-slate-600 uppercase font-bold tracking-wider cursor-pointer focus:outline-none"
-                        >
-                          <MessageSquare className="w-3.5 h-3.5" />
-                          <span>Diskusi & Feedback ({ms.comments?.length || 0})</span>
-                          <span className="text-[9px] lowercase font-normal">
-                            {openComments[ms.id] ? '(klik untuk menutup)' : '(klik untuk membuka)'}
-                          </span>
-                        </button>
-
-                        {openComments[ms.id] && (
-                          <div className="space-y-3 mt-2">
-                            {(!ms.comments || ms.comments.length === 0) ? (
-                              <p className="text-[11px] text-slate-400 italic">Belum ada diskusi untuk milestone ini.</p>
-                            ) : (
-                              <div className="space-y-2.5 max-h-48 overflow-y-auto pr-1">
-                                {ms.comments.map((comment: any) => {
-                                  const isMe = comment.userId === userSession?.id;
-                                  const isAdminRole = comment.user?.role === 'ADMIN';
-                                  return (
-                                    <div key={comment.id} className="flex gap-2.5 text-xs">
-                                      <div className="w-7 h-7 rounded-full bg-slate-100 border border-slate-200/60 flex items-center justify-center font-bold text-slate-600 shrink-0 uppercase text-[9px] shadow-sm">
-                                        {comment.user?.name?.substring(0, 2) || 'KL'}
-                                      </div>
-                                      <div className="flex-1 space-y-0.5">
-                                        <div className="flex items-center justify-between">
-                                          <div className="flex items-center gap-1">
-                                            <span className="font-extrabold text-slate-800 text-[11px]">{comment.user?.name}</span>
-                                            <span className={`text-[8px] font-bold px-1.5 py-0.2 rounded-full uppercase tracking-wider ${isAdminRole ? 'bg-amber-50 text-amber-600 border border-amber-100' : 'bg-blue-50 text-blue-600 border border-blue-100'
-                                              }`}>
-                                              {isAdminRole ? 'Admin' : 'Klien'}
-                                            </span>
-                                          </div>
-                                          <div className="flex items-center gap-2">
-                                            <span className="text-[9px] text-slate-400">
-                                              {new Date(comment.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} &bull; {new Date(comment.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
-                                            </span>
-                                            {(editMode || isMe) && (
-                                              <button
-                                                onClick={() => handleDeleteComment(ms.id, comment.id)}
-                                                className="text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
-                                                title="Hapus komentar"
-                                              >
-                                                <Trash2 className="w-3 h-3" />
-                                              </button>
-                                            )}
-                                          </div>
-                                        </div>
-                                        <p className="text-slate-600 leading-relaxed bg-slate-50 border border-slate-100 p-2 rounded-xl text-[11px] whitespace-pre-wrap">
-                                          {comment.content}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  );
-                                })}
+                            {/* Admin Add Task Input */}
+                            {editMode && (
+                              <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-50 border border-dashed border-slate-300">
+                                <input
+                                  type="text"
+                                  placeholder="Tambah task baru..."
+                                  value={newTaskTitles[ms.id] || ''}
+                                  onChange={(e) => setNewTaskTitles({ ...newTaskTitles, [ms.id]: e.target.value })}
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter') handleAddTask(ms.id);
+                                  }}
+                                  className="w-full bg-transparent px-2 py-1 text-xs focus:outline-none placeholder-slate-400 text-slate-700"
+                                />
+                                <button
+                                  onClick={() => handleAddTask(ms.id)}
+                                  className="p-1 rounded bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors"
+                                >
+                                  <Plus className="w-3.5 h-3.5" />
+                                </button>
                               </div>
                             )}
-
-                            {/* Add Comment Input */}
-                            <div className="flex gap-2 pt-2 border-t border-slate-100">
-                              <textarea
-                                rows={1}
-                                placeholder="Tulis komentar/feedback..."
-                                value={commentInputs[ms.id] || ''}
-                                onChange={(e) => setCommentInputs(prev => ({ ...prev, [ms.id]: e.target.value }))}
-                                onKeyDown={(e) => {
-                                  if (e.key === 'Enter' && !e.shiftKey) {
-                                    e.preventDefault();
-                                    handleAddComment(ms.id);
-                                  }
-                                }}
-                                className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-blue-500 placeholder-slate-400 text-slate-700 resize-none"
-                              />
-                              <button
-                                onClick={() => handleAddComment(ms.id)}
-                                disabled={!commentInputs[ms.id] || !commentInputs[ms.id].trim()}
-                                className="px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] shadow-md shadow-blue-500/10 transition-all flex items-center justify-center shrink-0 disabled:opacity-50 cursor-pointer"
-                              >
-                                Kirim
-                              </button>
-                            </div>
                           </div>
-                        )}
-                      </div>
-                    </Card>
-                  );
-                })}
-            </div>
+                        </div>
+
+                        {/* File Deliverables Section */}
+                        <div className="pt-3 border-t border-slate-100/70 space-y-2">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider">
+                              File Deliverables
+                            </span>
+
+                            {/* Admin Upload file action button */}
+                            {editMode && (
+                              <label className="text-[10px] font-bold text-blue-600 hover:text-blue-500 cursor-pointer flex items-center gap-1">
+                                {isUploading[ms.id] ? (
+                                  <>
+                                    <Loader2 className="w-3 h-3 animate-spin" />
+                                    Mengunggah...
+                                  </>
+                                ) : (
+                                  <>
+                                    <Upload className="w-3 h-3" />
+                                    Upload File
+                                  </>
+                                )}
+                                <input
+                                  type="file"
+                                  multiple
+                                  disabled={isUploading[ms.id]}
+                                  className="hidden"
+                                  onChange={(e) => {
+                                    if (e.target.files && e.target.files.length > 0) {
+                                      handleUploadFiles(ms.id, Array.from(e.target.files));
+                                    }
+                                  }}
+                                />
+                              </label>
+                            )}
+                          </div>
+
+                          {(!ms.deliverables || ms.deliverables.length === 0) ? (
+                            <p className="text-[11px] text-slate-400 italic">Belum ada file deliverable yang diunggah.</p>
+                          ) : (
+                            <div className="space-y-1.5">
+                              {ms.deliverables.map((file: any) => (
+                                <div key={file.id} className="flex items-center justify-between text-xs p-2 rounded-xl bg-slate-50 border border-slate-100 group">
+                                  <div className="flex items-center gap-2 truncate">
+                                    <FileText className="w-4 h-4 text-blue-500 shrink-0" />
+                                    <div className="flex flex-col truncate">
+                                      <span className="font-bold text-slate-700 truncate">{file.name}</span>
+                                      <span className="text-[10px] text-slate-400">
+                                        {(file.size / 1024).toFixed(1)} KB &bull; {new Date(file.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                                      </span>
+                                    </div>
+                                  </div>
+
+                                  <div className="flex items-center gap-1.5 pl-2 shrink-0">
+                                    <button
+                                      onClick={() => setPreviewFile({ id: file.id, name: file.name, mimeType: file.mimeType })}
+                                      className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 transition-all cursor-pointer"
+                                      title="Preview File"
+                                    >
+                                      <Eye className="w-3.5 h-3.5" />
+                                    </button>
+
+                                    <a
+                                      href={`/api/projects/deliverables/${file.id}/download`}
+                                      className="p-1 rounded bg-blue-50 hover:bg-blue-600 text-blue-600 hover:text-white transition-all cursor-pointer"
+                                      title="Download File"
+                                      download
+                                    >
+                                      <Download className="w-3.5 h-3.5" />
+                                    </a>
+
+                                    {editMode && (
+                                      <button
+                                        onClick={() => handleDeleteFile(file.id)}
+                                        className="p-1 rounded bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white transition-all cursor-pointer"
+                                        title="Hapus File"
+                                      >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+
+                        {/* Diskusi & Feedback Section */}
+                        <div className="pt-3 border-t border-slate-100/70 space-y-2">
+                          <button
+                            onClick={() => toggleCommentsCollapse(ms.id)}
+                            className="flex items-center gap-1.5 text-[10px] font-mono text-slate-400 hover:text-slate-600 uppercase font-bold tracking-wider cursor-pointer focus:outline-none"
+                          >
+                            <MessageSquare className="w-3.5 h-3.5" />
+                            <span>Diskusi & Feedback ({ms.comments?.length || 0})</span>
+                            <span className="text-[9px] lowercase font-normal">
+                              {openComments[ms.id] ? '(klik untuk menutup)' : '(klik untuk membuka)'}
+                            </span>
+                          </button>
+
+                          {openComments[ms.id] && (
+                            <div className="space-y-3 mt-2">
+                              {(!ms.comments || ms.comments.length === 0) ? (
+                                <p className="text-[11px] text-slate-400 italic">Belum ada diskusi untuk milestone ini.</p>
+                              ) : (
+                                <div className="space-y-2.5 max-h-48 overflow-y-auto pr-1">
+                                  {ms.comments.map((comment: any) => {
+                                    const isMe = comment.userId === userSession?.id;
+                                    const isAdminRole = comment.user?.role === 'ADMIN';
+                                    return (
+                                      <div key={comment.id} className="flex gap-2.5 text-xs">
+                                        <div className="w-7 h-7 rounded-full bg-slate-100 border border-slate-200/60 flex items-center justify-center font-bold text-slate-600 shrink-0 uppercase text-[9px] shadow-sm">
+                                          {comment.user?.name?.substring(0, 2) || 'KL'}
+                                        </div>
+                                        <div className="flex-1 space-y-0.5">
+                                          <div className="flex items-center justify-between">
+                                            <div className="flex items-center gap-1">
+                                              <span className="font-extrabold text-slate-800 text-[11px]">{comment.user?.name}</span>
+                                              <span className={`text-[8px] font-bold px-1.5 py-0.2 rounded-full uppercase tracking-wider ${isAdminRole ? 'bg-amber-50 text-amber-600 border border-amber-100' : 'bg-blue-50 text-blue-600 border border-blue-100'
+                                                }`}>
+                                                {isAdminRole ? 'Admin' : 'Klien'}
+                                              </span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                              <span className="text-[9px] text-slate-400">
+                                                {new Date(comment.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })} &bull; {new Date(comment.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' })}
+                                              </span>
+                                              {(editMode || isMe) && (
+                                                <button
+                                                  onClick={() => handleDeleteComment(ms.id, comment.id)}
+                                                  className="text-slate-400 hover:text-rose-600 transition-colors cursor-pointer"
+                                                  title="Hapus komentar"
+                                                >
+                                                  <Trash2 className="w-3 h-3" />
+                                                </button>
+                                              )}
+                                            </div>
+                                          </div>
+                                          <p className="text-slate-600 leading-relaxed bg-slate-50 border border-slate-100 p-2 rounded-xl text-[11px] whitespace-pre-wrap">
+                                            {comment.content}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              )}
+
+                              {/* Add Comment Input */}
+                              <div className="flex gap-2 pt-2 border-t border-slate-100">
+                                <textarea
+                                  rows={1}
+                                  placeholder="Tulis komentar/feedback..."
+                                  value={commentInputs[ms.id] || ''}
+                                  onChange={(e) => setCommentInputs(prev => ({ ...prev, [ms.id]: e.target.value }))}
+                                  onKeyDown={(e) => {
+                                    if (e.key === 'Enter' && !e.shiftKey) {
+                                      e.preventDefault();
+                                      handleAddComment(ms.id);
+                                    }
+                                  }}
+                                  className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-blue-500 placeholder-slate-400 text-slate-700 resize-none"
+                                />
+                                <button
+                                  onClick={() => handleAddComment(ms.id)}
+                                  disabled={!commentInputs[ms.id] || !commentInputs[ms.id].trim()}
+                                  className="px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-[11px] shadow-md shadow-blue-500/10 transition-all flex items-center justify-center shrink-0 disabled:opacity-50 cursor-pointer"
+                                >
+                                  Kirim
+                                </button>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </Card>
+                    );
+                  })}
+              </div>
+            )}
           </div>
         )}
       </main>

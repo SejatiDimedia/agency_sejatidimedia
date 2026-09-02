@@ -7,6 +7,7 @@ import { PortalSidebar } from '@/components/portal/PortalSidebar';
 import { PortalHeader } from '@/components/portal/PortalHeader';
 import { StyleGuideModal } from '@/components/portal/StyleGuideModal';
 import { InvoiceDetailModal } from '@/components/portal/InvoiceDetailModal';
+import { MilestoneKanbanBoard } from '@/components/portal/MilestoneKanbanBoard';
 import { Card, Badge, Button } from '@/components/ui';
 import { Icon } from '@iconify/react';
 import {
@@ -27,9 +28,11 @@ import {
   ShieldCheck,
   Building2,
   User,
-  AlertCircle
+  AlertCircle,
+  Kanban,
+  List
 } from 'lucide-react';
-import { Project, Milestone, Invoice, ActiveNavSection, MilestoneComment } from '@/types/portal';
+import { Project, Milestone, Invoice, ActiveNavSection, MilestoneComment, MilestoneStatus } from '@/types/portal';
 
 // ============================================================================
 // REALISTIC MOCK DATA FOR GUEST DEMO
@@ -288,6 +291,9 @@ export default function GuestDemoClientPortal() {
   // Active Project Tab
   const [activeTab, setActiveTab] = useState<'milestones' | 'invoices' | 'deliverables' | 'comments'>('milestones');
 
+  // Milestone View Mode: Kanban vs List
+  const [milestoneViewMode, setMilestoneViewMode] = useState<'kanban' | 'list'>('kanban');
+
   // Reactive Project State (allows interactive task toggling!)
   const [project, setProject] = useState<Project>(INITIAL_DEMO_PROJECT);
   const [invoices, setInvoices] = useState<Invoice[]>(INITIAL_DEMO_INVOICES);
@@ -297,6 +303,24 @@ export default function GuestDemoClientPortal() {
   // Comments state (dedicated immutable array)
   const [demoComments, setDemoComments] = useState<MilestoneComment[]>(INITIAL_DEMO_COMMENTS);
   const [newCommentText, setNewCommentText] = useState('');
+
+  // Update milestone status (Kanban move)
+  const handleUpdateMilestoneStatus = (milestoneId: string, newStatus: MilestoneStatus) => {
+    setProject(prev => {
+      const updatedMilestones = prev.milestones.map(m => {
+        if (m.id !== milestoneId) return m;
+        return {
+          ...m,
+          status: newStatus
+        };
+      });
+
+      return {
+        ...prev,
+        milestones: updatedMilestones
+      };
+    });
+  };
 
   // Interactive Task Toggle Handler
   const handleToggleTask = (milestoneId: string, taskId: string) => {
@@ -579,90 +603,133 @@ export default function GuestDemoClientPortal() {
                 =============================================================== */}
             {activeTab === 'milestones' && (
               <div className="space-y-4">
-                <div className="p-3.5 rounded-2xl bg-blue-50 border border-blue-200/80 text-xs text-[#23385B] flex items-center justify-between gap-3">
+                <div className="p-3.5 rounded-2xl bg-blue-50 border border-blue-200/80 text-xs text-[#23385B] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-[#2C5098] shrink-0" />
                     <span>
-                      <strong>Coba Interaksi:</strong> Anda dapat mengklik centang pada kotak tugas (checklist) di bawah untuk melihat bar progres bergerak secara langsung!
+                      <strong>Coba Interaksi:</strong> Anda dapat mencentang tugas atau memindahkan status sprint langsung dari kartu! Bar progres proyek di atas akan otomatis bergerak real-time.
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono text-slate-500 hidden sm:inline">Live State Simulation</span>
+                  <span className="text-[10px] font-mono text-slate-500 hidden sm:inline shrink-0">Live State Simulation</span>
                 </div>
 
-                <div className="space-y-4">
-                  {project.milestones.map((milestone, mIdx) => {
-                    const completedTasksCount = milestone.tasks.filter(t => t.completed).length;
-                    const mProgress = milestone.tasks.length > 0
-                      ? Math.round((completedTasksCount / milestone.tasks.length) * 100)
-                      : (milestone.status === 'Done' ? 100 : 0);
+                {/* View Switcher: Kanban Board vs List View */}
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+                  <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-2xl w-fit border border-slate-200/60">
+                    <button
+                      type="button"
+                      onClick={() => setMilestoneViewMode('kanban')}
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${milestoneViewMode === 'kanban'
+                          ? 'bg-white text-[#2C5098] shadow-xs'
+                          : 'text-slate-500 hover:text-slate-800'
+                        }`}
+                    >
+                      <Kanban className="w-3.5 h-3.5" />
+                      <span>Kanban Board</span>
+                    </button>
 
-                    return (
-                      <div
-                        key={milestone.id}
-                        className={`p-6 rounded-3xl bg-white border transition-all ${milestone.status === 'In Progress'
-                          ? 'border-[#2C5098] shadow-md shadow-[#2C5098]/5'
-                          : 'border-slate-200 shadow-xs'
-                          }`}
-                      >
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
-                          <div className="space-y-1">
-                            <div className="flex items-center gap-2">
-                              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
-                                SPRINT {mIdx + 1}
-                              </span>
-                              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold ${milestone.status === 'Done'
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                : milestone.status === 'In Progress'
-                                  ? 'bg-blue-50 text-[#2C5098] border border-blue-200'
-                                  : 'bg-slate-100 text-slate-600 border border-slate-200'
-                                }`}>
-                                {milestone.status === 'Done' ? 'Completed' : milestone.status === 'In Progress' ? 'In Progress' : 'Pending'}
-                              </span>
-                            </div>
-                            <h3 className="text-base font-bold text-slate-900">{milestone.title}</h3>
-                            <p className="text-xs text-slate-500 leading-relaxed max-w-3xl">{milestone.description}</p>
-                          </div>
+                    <button
+                      type="button"
+                      onClick={() => setMilestoneViewMode('list')}
+                      className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${milestoneViewMode === 'list'
+                          ? 'bg-white text-slate-900 shadow-xs'
+                          : 'text-slate-500 hover:text-slate-800'
+                        }`}
+                    >
+                      <List className="w-3.5 h-3.5" />
+                      <span>List View</span>
+                    </button>
+                  </div>
 
-                          <div className="text-right sm:shrink-0 space-y-1">
-                            <span className="text-[11px] font-mono text-slate-400 block">Due Date</span>
-                            <span className="text-xs font-bold text-slate-900 font-mono">{milestone.dueDate}</span>
-                            <div className="text-[11px] font-mono font-bold text-[#2C5098]">{mProgress}% Done</div>
-                          </div>
-                        </div>
+                  <span className="text-xs text-slate-400 font-mono hidden sm:inline">
+                    {milestoneViewMode === 'kanban' ? 'Visual Agile Sprint Tracking' : 'Detailed Step-by-Step Breakdown'}
+                  </span>
+                </div>
 
-                        {/* Task Checklist Items */}
-                        <div className="pt-4 space-y-2">
-                          <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
-                            Sprint Tasks & Deliverables ({completedTasksCount}/{milestone.tasks.length}):
-                          </span>
+                {/* Conditional View Rendering */}
+                {milestoneViewMode === 'kanban' ? (
+                  <MilestoneKanbanBoard
+                    milestones={project.milestones}
+                    onToggleTask={(mId, task) => handleToggleTask(mId, typeof task === 'string' ? task : task.id)}
+                    onUpdateMilestoneStatus={handleUpdateMilestoneStatus}
+                    isDemo={true}
+                  />
+                ) : (
+                  <div className="space-y-4">
+                    {project.milestones.map((milestone, mIdx) => {
+                      const completedTasksCount = milestone.tasks.filter(t => t.completed).length;
+                      const mProgress = milestone.tasks.length > 0
+                        ? Math.round((completedTasksCount / milestone.tasks.length) * 100)
+                        : (milestone.status === 'Done' ? 100 : 0);
 
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                            {milestone.tasks.map(task => (
-                              <button
-                                key={task.id}
-                                onClick={() => handleToggleTask(milestone.id, task.id)}
-                                className={`p-3 rounded-2xl border text-left flex items-start gap-3 transition-all cursor-pointer ${task.completed
-                                  ? 'bg-emerald-50/50 border-emerald-200/80 text-slate-700'
-                                  : 'bg-slate-50 hover:bg-white border-slate-200 text-slate-800'
-                                  }`}
-                              >
-                                <div className={`mt-0.5 w-4 h-4 rounded-md border flex items-center justify-center shrink-0 transition-colors ${task.completed
-                                  ? 'bg-emerald-500 border-emerald-500 text-white'
-                                  : 'border-slate-300 bg-white'
-                                  }`}>
-                                  {task.completed && <CheckCircle2 className="w-3.5 h-3.5" />}
-                                </div>
-                                <span className={`text-xs ${task.completed ? 'line-through text-slate-500' : 'font-medium'}`}>
-                                  {task.title}
+                      return (
+                        <div
+                          key={milestone.id}
+                          className={`p-6 rounded-3xl bg-white border transition-all ${milestone.status === 'In Progress'
+                            ? 'border-[#2C5098] shadow-md shadow-[#2C5098]/5'
+                            : 'border-slate-200 shadow-xs'
+                            }`}
+                        >
+                          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-2">
+                                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                                  SPRINT {mIdx + 1}
                                 </span>
-                              </button>
-                            ))}
+                                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold ${milestone.status === 'Done'
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                  : milestone.status === 'In Progress'
+                                    ? 'bg-blue-50 text-[#2C5098] border border-blue-200'
+                                    : 'bg-slate-100 text-slate-600 border border-slate-200'
+                                  }`}>
+                                  {milestone.status === 'Done' ? 'Completed' : milestone.status === 'In Progress' ? 'In Progress' : 'Pending'}
+                                </span>
+                              </div>
+                              <h3 className="text-base font-bold text-slate-900">{milestone.title}</h3>
+                              <p className="text-xs text-slate-500 leading-relaxed max-w-3xl">{milestone.description}</p>
+                            </div>
+
+                            <div className="text-right sm:shrink-0 space-y-1">
+                              <span className="text-[11px] font-mono text-slate-400 block">Due Date</span>
+                              <span className="text-xs font-bold text-slate-900 font-mono">{milestone.dueDate}</span>
+                              <div className="text-[11px] font-mono font-bold text-[#2C5098]">{mProgress}% Done</div>
+                            </div>
+                          </div>
+
+                          {/* Task Checklist Items */}
+                          <div className="pt-4 space-y-2">
+                            <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
+                              Sprint Tasks & Deliverables ({completedTasksCount}/{milestone.tasks.length}):
+                            </span>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                              {milestone.tasks.map(task => (
+                                <button
+                                  key={task.id}
+                                  onClick={() => handleToggleTask(milestone.id, task.id)}
+                                  className={`p-3 rounded-2xl border text-left flex items-start gap-3 transition-all cursor-pointer ${task.completed
+                                    ? 'bg-emerald-50/50 border-emerald-200/80 text-slate-700'
+                                    : 'bg-slate-50 hover:bg-white border-slate-200 text-slate-800'
+                                    }`}
+                                >
+                                  <div className={`mt-0.5 w-4 h-4 rounded-md border flex items-center justify-center shrink-0 transition-colors ${task.completed
+                                    ? 'bg-emerald-500 border-emerald-500 text-white'
+                                    : 'border-slate-300 bg-white'
+                                    }`}>
+                                    {task.completed && <CheckCircle2 className="w-3.5 h-3.5" />}
+                                  </div>
+                                  <span className={`text-xs ${task.completed ? 'line-through text-slate-500' : 'font-medium'}`}>
+                                    {task.title}
+                                  </span>
+                                </button>
+                              ))}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             )}
 
