@@ -148,16 +148,6 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
                         }
                         sizes="(max-w-768px) 100vw, 33vw"
                       />
-
-                      {/* Floating Professional Experience Badge */}
-                      {isProfessionalExp && (
-                        <div className="absolute top-2.5 left-2.5 z-10">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-sm">
-                            <Briefcase className="w-3.5 h-3.5 text-[#2C5098]" />
-                            <span>{language === 'en' ? 'Professional Experience' : 'Pengalaman Profesional'}</span>
-                          </span>
-                        </div>
-                      )}
                     </div>
 
                     {/* Title & Description */}
@@ -186,24 +176,24 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
                   </div>
 
                   <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-theme-border/30 mt-4">
-                    <div className="flex flex-wrap gap-1.5">
-                      {project.technologies.map((tech) => (
-                        <span
-                          key={tech}
-                          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono bg-slate-50 dark:bg-theme-surface text-slate-600 dark:text-theme-fore-muted border border-slate-200/60 dark:border-theme-border/40"
-                        >
-                          {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5 opacity-80" />}
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.technologies.map((tech) => (
+                          <span
+                            key={tech}
+                            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono bg-slate-50 dark:bg-theme-surface text-slate-600 dark:text-theme-fore-muted border border-slate-200/60 dark:border-theme-border/40"
+                          >
+                            {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5 opacity-80" />}
+                            <span>{tech}</span>
+                          </span>
+                        ))}
+                      </div>
 
                     <Link
                       href={`/projects/${project.slug}`}
-                      className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-full bg-slate-50 dark:bg-theme-surface hover:bg-gradient-to-r hover:from-[#2C5098] hover:to-[#23385B] hover:text-white text-xs font-sans font-bold text-slate-700 dark:text-theme-fore transition-all duration-300 border border-slate-200 dark:border-theme-border/80 hover:border-transparent shadow-2xs hover:shadow-md hover:shadow-[#2C5098]/20 cursor-pointer"
+                      className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl bg-slate-50 dark:bg-theme-surface hover:bg-gradient-to-r hover:from-[#2C5098] hover:to-[#23385B] hover:text-white text-xs font-sans font-bold text-slate-700 dark:text-theme-fore transition-all duration-300 border border-slate-200 dark:border-theme-border/80 hover:border-transparent shadow-2xs hover:shadow-md hover:shadow-[#2C5098]/20 cursor-pointer"
                     >
                       <span>{language === 'en' ? 'View Details' : 'Lihat Detail'}</span>
-                      <ChevronRight className="w-3.5 h-3.5" />
+                      <Icon icon="ph:caret-right-bold" className="w-3.5 h-3.5" />
                     </Link>
                   </div>
                 </motion.div>

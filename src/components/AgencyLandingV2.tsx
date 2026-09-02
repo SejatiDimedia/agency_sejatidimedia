@@ -21,6 +21,14 @@ const SERVICE_IMAGES = [
   '/service_ai_llm.webp',
 ];
 
+const CATEGORY_MAP: Record<string, string> = {
+  "68fd86b3efc68bfc3fd16532": "AI",
+  "68fd8688efc68bfc3fd16531": "Web",
+  "68fd85f1f86ba8de6fc21c1f": "Mobile"
+};
+
+const getCategoryName = (id: string) => CATEGORY_MAP[id] || id;
+
 function ClientPortalMockup3D({ t }: { t: any }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -1806,41 +1814,43 @@ export default function AgencyLandingV2({
                   project.thumbnail === "/placeholder.png";
 
                 const displayThumbnail = (isDummy ? "/logo.svg" : project.thumbnail) as string;
-                const isProfessionalExp = isProfessionalProject(project, ndaProjectSlugs);
 
                 return (
                   <div
                     key={project.slug}
-                    className="group flex flex-col justify-between p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/40 hover:shadow-md transition-all duration-300 relative overflow-hidden"
+                    className="group flex flex-col justify-between p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-xl hover:shadow-[#2C5098]/10 transition-all duration-300 relative overflow-hidden"
                   >
                     <div className="space-y-4">
-                      {/* Thumbnail Container */}
-                      <div className="relative w-full h-44 rounded-2xl overflow-hidden bg-slate-50 border border-slate-100">
+                      {/* Thumbnail */}
+                      <div className="relative w-full h-48 rounded-2xl overflow-hidden bg-slate-50 border border-slate-200/80">
                         <Image
                           src={displayThumbnail}
                           alt={project.name}
                           fill
-                          className={isDummy ? "object-contain p-8" : "object-cover group-hover:scale-105 transition-transform duration-500"}
+                          className={
+                            isDummy
+                              ? "object-contain p-8 bg-slate-50"
+                              : "object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                          }
                           sizes="(max-width: 768px) 100vw, 33vw"
                         />
-                        {isProfessionalExp && (
-                          <div className="absolute top-2.5 left-2.5 z-10">
-                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[8.5px] font-mono font-bold uppercase tracking-wider bg-white/95 text-slate-800 border border-slate-200 shadow-xs">
-                              <Icon icon="ph:briefcase-duotone" className="w-3 h-3 text-[#2C5098]" />
-                              <span>{language === 'en' ? 'Professional Exp' : 'Pengalaman Profesional'}</span>
-                            </span>
-                          </div>
-                        )}
-                        <div className="absolute top-2.5 right-2.5">
-                          <span className="px-2 py-0.5 rounded-md text-[9px] font-mono font-bold bg-white/95 text-slate-800 border border-slate-200 shadow-xs">
-                            {project.status === 'COMPLETE' ? 'Completed' : 'Ongoing'}
-                          </span>
-                        </div>
                       </div>
 
-                      {/* Info Block */}
-                      <div className="space-y-1.5">
-                        <h3 className="text-base font-sans font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors">
+                      {/* Title & Description */}
+                      <div className="space-y-2 text-left">
+                        {project.categories && project.categories.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 pb-1">
+                            {project.categories.map((cat) => (
+                              <span
+                                key={cat}
+                                className="inline-block text-[8px] font-mono uppercase tracking-widest font-bold text-[#2C5098] bg-[#2C5098]/10 border border-[#2C5098]/20 px-2.5 py-0.5 rounded-full"
+                              >
+                                {getCategoryName(cat)}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        <h3 className="text-base font-jakarta font-sans font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors">
                           {project.name}
                         </h3>
                         <p className="text-xs text-slate-600 leading-relaxed line-clamp-3 font-sans">
@@ -1851,23 +1861,24 @@ export default function AgencyLandingV2({
                       </div>
                     </div>
 
-                    <div className="space-y-3.5 pt-4 border-t border-slate-100 mt-4">
-                      {/* Tech stack tags */}
-                      <div className="flex flex-wrap gap-1">
-                        {project.technologies.slice(0, 4).map((tech) => (
-                          <div key={tech} className="px-1.5 py-0.5 rounded-md text-[9px] font-mono bg-slate-50 text-slate-700 border border-slate-200 flex items-center gap-1 shadow-2xs">
-                            <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
+                    <div className="space-y-4 pt-4 border-t border-slate-100 mt-4">
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.technologies.map((tech) => (
+                          <span
+                            key={tech}
+                            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono bg-slate-50 text-slate-600 border border-slate-200/60"
+                          >
+                            {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5 opacity-80" />}
                             <span>{tech}</span>
-                          </div>
+                          </span>
                         ))}
                       </div>
 
-                      {/* View details button */}
                       <Link
                         href={`/projects/${project.slug}`}
-                        className="flex items-center justify-center gap-1.5 w-full py-2 rounded-xl bg-slate-50 hover:bg-gradient-to-r hover:from-[#2C5098] hover:to-[#23385B] hover:text-white text-xs font-bold text-slate-800 transition-all border border-slate-200 hover:border-transparent"
+                        className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl bg-slate-50 hover:bg-gradient-to-r hover:from-[#2C5098] hover:to-[#23385B] hover:text-white text-xs font-sans font-bold text-slate-700 transition-all duration-300 border border-slate-200 hover:border-transparent shadow-2xs hover:shadow-md hover:shadow-[#2C5098]/20 cursor-pointer"
                       >
-                        <span>{t.portfolio.viewProject}</span>
+                        <span>{language === 'en' ? 'View Details' : 'Lihat Detail'}</span>
                         <Icon icon="ph:caret-right-bold" className="w-3.5 h-3.5" />
                       </Link>
                     </div>

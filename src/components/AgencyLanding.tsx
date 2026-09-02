@@ -1295,7 +1295,7 @@ export default function AgencyLanding({
                   <div className="space-y-4 pt-4 border-t border-theme-border/30 mt-4">
                     {/* Tech stack tags */}
                     <div className="flex flex-wrap gap-1 text-left">
-                      {project.technologies.slice(0, 4).map((tech) => (
+                      {project.technologies.map((tech) => (
                         <div key={tech} className="px-1.5 py-0.5 rounded-md text-[9px] font-mono bg-theme-surface text-black dark:text-theme-fore-muted border border-theme-border/40 flex items-center gap-1 group/tech shadow-sm">
                           <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
                           <span>{tech}</span>

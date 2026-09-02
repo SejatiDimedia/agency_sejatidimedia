@@ -83,6 +83,12 @@ export default function ProjectDetailClient({
   const isNdaActive = isProfessionalExp && ndaBlur;
   const { intro, confidential } = splitDescriptionForNda(displayDescription);
 
+  const waMessage = language === 'en'
+    ? `Hello SejatiDimedia, I am interested in building a project similar to "${project.name}". Can we discuss the details?`
+    : `Halo SejatiDimedia, saya tertarik untuk membuat proyek sistem serupa dengan "${project.name}". Apakah bisa berdiskusi?`;
+
+  const waUrl = `https://wa.me/6289508436275?text=${encodeURIComponent(waMessage)}`;
+
   const markdownComponents = {
     h1: ({ children }: any) => <h1 className="text-2xl font-sans font-bold text-slate-900 dark:text-theme-fore mt-6 mb-3 border-b border-slate-100 dark:border-theme-border/20 pb-2">{children}</h1>,
     h2: ({ children }: any) => <h2 className="text-xl font-sans font-bold text-slate-900 dark:text-theme-fore mt-6 mb-3 border-b border-slate-100 dark:border-theme-border/20 pb-1.5">{children}</h2>,
@@ -307,11 +313,34 @@ export default function ProjectDetailClient({
                     key={tech}
                     className="flex items-center gap-1.5 px-2 py-1 rounded-md text-[10px] font-mono bg-slate-50 dark:bg-theme-surface text-slate-700 dark:text-theme-fore border border-slate-200/80 dark:border-theme-border/60"
                   >
-                    {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3 h-3 opacity-90" />}
+                    {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5 opacity-90" />}
                     {tech}
                   </span>
                 ))}
               </div>
+            </div>
+
+            {/* CTA: Ingin Proyek Serupa? */}
+            <div className="pt-5 border-t border-slate-100 dark:border-theme-border/40 space-y-3">
+              <div className="space-y-1.5">
+                <h3 className="text-sm font-sans font-bold text-slate-900 dark:text-theme-fore">
+                  {language === 'en' ? 'Want a Similar Project?' : 'Ingin Proyek Serupa?'}
+                </h3>
+                <p className="text-xs text-slate-600 dark:text-theme-fore-muted leading-relaxed">
+                  {language === 'en'
+                    ? 'Our expert team is ready to help you realize the best software system innovations.'
+                    : 'Tim ahli kami siap membantu Anda merealisasikan inovasi sistem software terbaik.'}
+                </p>
+              </div>
+              <a
+                href={waUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 w-full py-2.5 px-4 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] text-white text-xs font-sans font-bold shadow-sm hover:shadow-md transition-all group cursor-pointer"
+              >
+                <Icon icon="ic:baseline-whatsapp" className="w-4 h-4" />
+                <span>{language === 'en' ? 'Consult via WhatsApp' : 'Konsultasi Sekarang'}</span>
+              </a>
             </div>
 
             {/* External Links */}
