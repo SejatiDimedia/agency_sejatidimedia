@@ -18,12 +18,14 @@ interface LandingPageSelectorProps {
   initialTemplate?: TemplateId;
   copy?: any;
   projects?: Project[];
+  featuredProjectSlugs?: string[];
 }
 
 export default function LandingPageSelector({
   initialTemplate = 'professional',
   copy,
-  projects
+  projects,
+  featuredProjectSlugs,
 }: LandingPageSelectorProps) {
   const [template, setTemplate] = useState<TemplateId>(initialTemplate);
 
@@ -49,9 +51,9 @@ export default function LandingPageSelector({
   }, []);
 
   if (template === 'classic') {
-    return <AgencyLandingV1 copy={copy} projects={projects} />;
+    return <AgencyLandingV1 copy={copy} projects={projects} featuredProjectSlugs={featuredProjectSlugs} />;
   }
 
-  return <AgencyLandingV2 copy={copy} projects={projects} />;
+  return <AgencyLandingV2 copy={copy} projects={projects} featuredProjectSlugs={featuredProjectSlugs} />;
 }
 

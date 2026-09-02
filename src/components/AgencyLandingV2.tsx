@@ -5,7 +5,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Project, MOCK_PROJECTS, isProfessionalProject } from '../lib/api/glio-projects';
@@ -341,16 +341,30 @@ const MILESTONE_ICONS = [
   "icons8:support"
 ];
 
-export default function AgencyLandingV2({ copy, projects }: { copy?: any; projects?: Project[] }) {
+export default function AgencyLandingV2({
+  copy,
+  projects,
+  featuredProjectSlugs: initialFeaturedSlugs,
+}: {
+  copy?: any;
+  projects?: Project[];
+  featuredProjectSlugs?: string[];
+}) {
   const { t, language } = useLanguage();
   const [ndaProjectSlugs, setNdaProjectSlugs] = useState<string[]>([]);
+  const [featuredProjectSlugs, setFeaturedProjectSlugs] = useState<string[]>(initialFeaturedSlugs || []);
 
   useEffect(() => {
     fetch('/api/settings/nda')
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.ndaProjectSlugs)) {
-          setNdaProjectSlugs(data.ndaProjectSlugs);
+        if (data.success) {
+          if (Array.isArray(data.ndaProjectSlugs)) {
+            setNdaProjectSlugs(data.ndaProjectSlugs);
+          }
+          if (Array.isArray(data.featuredProjectSlugs)) {
+            setFeaturedProjectSlugs(data.featuredProjectSlugs);
+          }
         }
       })
       .catch(() => { });
@@ -524,6 +538,22 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
   };
 
   const projectList = (projects && projects.length > 0) ? projects : MOCK_PROJECTS;
+
+  const displayedProjects = useMemo(() => {
+    if (!projectList || projectList.length === 0) return [];
+    // 1. Projects marked as featured
+    const featured = projectList
+      .filter((p) => featuredProjectSlugs.includes(p.slug))
+      .sort((a, b) => featuredProjectSlugs.indexOf(a.slug) - featuredProjectSlugs.indexOf(b.slug));
+
+    // 2. If fewer than 3, backfill with other projects so exactly 3 projects are displayed
+    if (featured.length < 3) {
+      const remaining = projectList.filter((p) => !featuredProjectSlugs.includes(p.slug));
+      return [...featured, ...remaining].slice(0, 3);
+    }
+
+    return featured.slice(0, 3);
+  }, [projectList, featuredProjectSlugs]);
 
   return (
     <div className="w-full text-slate-900 font-sans [&_h1]:font-sans [&_h2]:font-sans [&_h3]:font-sans [&_h4]:font-sans [&_h5]:font-sans [&_h6]:font-sans">
@@ -1761,15 +1791,15 @@ export default function AgencyLandingV2({ copy, projects }: { copy?: any; projec
               href="/projects"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-200 hover:border-slate-300 text-xs font-sans font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition-all"
             >
-              <span>{t.portfolio.viewAll}</span>
+              <span>{t.portfolio.viewAll} ({projectList.length})</span>
               <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5" />
             </Link>
           </div>
 
-          {/* Projects Grid */}
+          {/* Projects Grid - 3 Featured Projects */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-            {projects && projects.length > 0 ? (
-              projects.slice(0, 6).map((project) => {
+            {displayedProjects && displayedProjects.length > 0 ? (
+              displayedProjects.map((project) => {
                 const isDummy = !project.thumbnail ||
                   project.thumbnail.trim() === "" ||
                   project.thumbnail === "/thumbnail.png" ||

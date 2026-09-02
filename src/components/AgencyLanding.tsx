@@ -5,10 +5,10 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Project } from '../lib/api/glio-projects';
+import { Project, MOCK_PROJECTS } from '../lib/api/glio-projects';
 import { useLanguage } from '../lib/i18n/LanguageContext';
 import { TECH_ICONS } from '../lib/constants';
 import { motion, AnimatePresence } from 'motion/react';
@@ -109,8 +109,42 @@ const MILESTONE_ICONS = [
   "icons8:support"
 ];
 
-export default function AgencyLanding({ copy, projects }: { copy?: any; projects?: Project[] }) {
+export default function AgencyLanding({
+  copy,
+  projects,
+  featuredProjectSlugs: initialFeaturedSlugs,
+}: {
+  copy?: any;
+  projects?: Project[];
+  featuredProjectSlugs?: string[];
+}) {
   const { t, language } = useLanguage();
+  const [featuredProjectSlugs, setFeaturedProjectSlugs] = useState<string[]>(initialFeaturedSlugs || []);
+
+  useEffect(() => {
+    fetch('/api/settings/nda')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.featuredProjectSlugs)) {
+          setFeaturedProjectSlugs(data.featuredProjectSlugs);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const displayedProjects = useMemo(() => {
+    const list = (projects && projects.length > 0) ? projects : MOCK_PROJECTS;
+    const featured = list
+      .filter((p) => featuredProjectSlugs.includes(p.slug))
+      .sort((a, b) => featuredProjectSlugs.indexOf(a.slug) - featuredProjectSlugs.indexOf(b.slug));
+
+    if (featured.length < 3) {
+      const remaining = list.filter((p) => !featuredProjectSlugs.includes(p.slug));
+      return [...featured, ...remaining].slice(0, 3);
+    }
+
+    return featured.slice(0, 3);
+  }, [projects, featuredProjectSlugs]);
 
   {/* FEATURE_ITEMS removed to eliminate redundancy */ }
 
@@ -1205,7 +1239,7 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
             href="/projects"
             className="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-theme-surface border border-theme-border/80 hover:border-theme-accent text-xs font-sans font-bold text-theme-fore cursor-pointer transition-all duration-300"
           >
-            <span>{t.portfolio.viewAll}</span>
+            <span>{t.portfolio.viewAll} ({projects && projects.length > 0 ? projects.length : MOCK_PROJECTS.length})</span>
             <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
@@ -1218,13 +1252,14 @@ export default function AgencyLanding({ copy, projects }: { copy?: any; projects
           whileInView="visible"
           viewport={{ once: false, amount: 0.15 }}
         >
-          {projects && projects.length > 0 ? (
-            projects.slice(0, 6).map((project) => {
+          {displayedProjects && displayedProjects.length > 0 ? (
+            displayedProjects.map((project) => {
               const isDummy = !project.thumbnail ||
                 project.thumbnail.trim() === "" ||
                 project.thumbnail === "/thumbnail.png" ||
                 project.thumbnail === "/placeholder.png";
               const displayThumbnail = (isDummy ? "/logo.svg" : project.thumbnail) as string;
+              const isFeatured = featuredProjectSlugs.includes(project.slug);
 
               return (
                 <motion.div

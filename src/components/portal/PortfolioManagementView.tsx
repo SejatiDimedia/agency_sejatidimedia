@@ -17,7 +17,8 @@ import {
   Filter,
   RefreshCw,
   SlidersHorizontal,
-  CheckCircle2
+  CheckCircle2,
+  Star
 } from 'lucide-react';
 import Image from 'next/image';
 import { Project, isProfessionalProject } from '@/lib/api/glio-projects';
@@ -27,12 +28,14 @@ export const PortfolioManagementView: React.FC = () => {
   const { language } = useLanguage();
   const [projects, setProjects] = useState<Project[]>([]);
   const [ndaProjectSlugs, setNdaProjectSlugs] = useState<string[]>([]);
+  const [featuredProjectSlugs, setFeaturedProjectSlugs] = useState<string[]>([]);
   const [ndaBlurEnabled, setNdaBlurEnabled] = useState<boolean>(true);
   const [loading, setLoading] = useState(true);
   const [savingSlug, setSavingSlug] = useState<string | null>(null);
+  const [savingFeaturedSlug, setSavingFeaturedSlug] = useState<string | null>(null);
   const [masterLoading, setMasterLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterTab, setFilterTab] = useState<'all' | 'nda' | 'public'>('all');
+  const [filterTab, setFilterTab] = useState<'all' | 'featured' | 'nda' | 'public'>('all');
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   // Load NDA settings and portfolio projects from API
@@ -43,8 +46,24 @@ export const PortfolioManagementView: React.FC = () => {
       const data = await res.json();
       if (data.success) {
         setNdaBlurEnabled(data.ndaBlurEnabled);
+        const projectsList = data.projects || [];
+        setProjects(projectsList);
         setNdaProjectSlugs(data.ndaProjectSlugs || []);
-        setProjects(data.projects || []);
+
+        // Sanitize: only retain featured slugs that actually exist in projectsList!
+        const validSlugs = (data.featuredProjectSlugs || []).filter((slug: string) =>
+          projectsList.some((p: Project) => p.slug === slug)
+        );
+        setFeaturedProjectSlugs(validSlugs);
+
+        // If data.featuredProjectSlugs contained phantom slugs, auto-sync back to server
+        if (data.featuredProjectSlugs && data.featuredProjectSlugs.length !== validSlugs.length) {
+          fetch('/api/settings/nda', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ featuredProjectSlugs: validSlugs }),
+          }).catch(() => {});
+        }
       }
     } catch (err) {
       console.error('Failed to load portfolio NDA settings:', err);
@@ -139,10 +158,74 @@ export const PortfolioManagementView: React.FC = () => {
     }
   };
 
+  // Toggle Proyek Unggulan status (Max 3 projects for Landing Page)
+  const handleToggleFeaturedProject = async (project: Project) => {
+    setSavingFeaturedSlug(project.slug);
+
+    // Sanitize current featured list against actual projects loaded
+    const currentValidSlugs = featuredProjectSlugs.filter((s) =>
+      projects.some((p) => p.slug === s)
+    );
+    const isCurrentlyFeatured = currentValidSlugs.includes(project.slug);
+    let nextFeatured: string[];
+
+    if (isCurrentlyFeatured) {
+      // Remove from featured
+      nextFeatured = currentValidSlugs.filter((s) => s !== project.slug);
+    } else {
+      // Check limit of 3 based ONLY on valid existing projects!
+      if (currentValidSlugs.length >= 3) {
+        const activeNames = projects
+          .filter((p) => currentValidSlugs.includes(p.slug))
+          .map((p) => p.name)
+          .slice(0, 3);
+        setToast({
+          message: `Maksimal 3 Proyek Unggulan! Proyek aktif saat ini: ${activeNames.join(', ')}. Nonaktifkan salah satu terlebih dahulu jika ingin menggantinya.`,
+          type: 'error',
+        });
+        setSavingFeaturedSlug(null);
+        return;
+      }
+      nextFeatured = [...currentValidSlugs, project.slug];
+    }
+
+    setFeaturedProjectSlugs(nextFeatured);
+
+    try {
+      const res = await fetch('/api/settings/nda', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ featuredProjectSlugs: nextFeatured }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setToast({
+          message: isCurrentlyFeatured
+            ? `${project.name} dihapus dari Proyek Unggulan Landing Page (${nextFeatured.length}/3 dipilih).`
+            : `⭐ ${project.name} ditandai sebagai Proyek Unggulan Landing Page (${nextFeatured.length}/3 dipilih)!`,
+          type: 'success',
+        });
+      } else {
+        setToast({
+          message: 'Gagal memperbarui status proyek unggulan ke server.',
+          type: 'error',
+        });
+      }
+    } catch {
+      setToast({
+        message: 'Status proyek unggulan disimpan secara lokal.',
+        type: 'success',
+      });
+    } finally {
+      setSavingFeaturedSlug(null);
+    }
+  };
+
   // Filtered projects
   const filteredProjects = useMemo(() => {
     return projects.filter((p) => {
       const isNda = ndaProjectSlugs.includes(p.slug);
+      const isFeatured = featuredProjectSlugs.includes(p.slug);
       const matchesSearch =
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.technologies.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -150,11 +233,16 @@ export const PortfolioManagementView: React.FC = () => {
 
       if (!matchesSearch) return false;
 
+      if (filterTab === 'featured') return isFeatured;
       if (filterTab === 'nda') return isNda;
       if (filterTab === 'public') return !isNda;
       return true;
     });
-  }, [projects, ndaProjectSlugs, searchQuery, filterTab]);
+  }, [projects, ndaProjectSlugs, featuredProjectSlugs, searchQuery, filterTab]);
+
+  const featuredCount = useMemo(() => {
+    return projects.filter((p) => featuredProjectSlugs.includes(p.slug)).length;
+  }, [projects, featuredProjectSlugs]);
 
   const ndaCount = useMemo(() => {
     return projects.filter((p) => ndaProjectSlugs.includes(p.slug)).length;
@@ -163,7 +251,7 @@ export const PortfolioManagementView: React.FC = () => {
   const publicCount = projects.length - ndaCount;
 
   return (
-    <div className="space-y-8 max-w-6xl pb-12">
+    <div className="space-y-8 w-full pb-12">
       {toast && (
         <Toast
           isOpen={!!toast}
@@ -182,10 +270,10 @@ export const PortfolioManagementView: React.FC = () => {
             </div>
             <div>
               <h2 className="text-2xl font-black text-slate-900 tracking-tight">
-                Manajemen Portofolio & Proteksi NDA
+                Manajemen Portofolio & Proyek Unggulan
               </h2>
               <p className="text-xs text-slate-500 font-medium">
-                Pilih proyek mana saja yang berstatus Pengalaman Profesional Perusahaan (terikat NDA) dan kelola sensor kerahasiaan.
+                Pilih 3 Proyek Unggulan untuk ditampilkan di Landing Page serta kelola proteksi kerahasiaan NDA.
               </p>
             </div>
           </div>
@@ -201,12 +289,21 @@ export const PortfolioManagementView: React.FC = () => {
             Muat Ulang
           </Button>
           <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-sm"
+          >
+            <span>Preview Landing Page</span>
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
+          <a
             href="/projects"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-sm"
           >
-            <span>Lihat Galeri Publik</span>
+            <span>Semua Galeri</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
         </div>
@@ -215,17 +312,33 @@ export const PortfolioManagementView: React.FC = () => {
       {/* Summary KPI Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <div className="p-5 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Proyek</span>
+          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Portofolio</span>
           <div className="flex items-baseline justify-between mt-2">
             <span className="text-2xl font-black text-slate-900">{projects.length}</span>
             <Layers className="w-5 h-5 text-slate-400" />
           </div>
         </div>
 
-        <div className="p-5 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
-          <span className="text-[11px] font-bold text-amber-500 uppercase tracking-wider">Terikat NDA</span>
+        <div className="p-5 rounded-3xl bg-amber-50/50 border border-amber-200/90 shadow-xs flex flex-col justify-between">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wider">Proyek Unggulan</span>
+            <span className="text-[10px] font-mono font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-300">
+              Landing Page
+            </span>
+          </div>
           <div className="flex items-baseline justify-between mt-2">
-            <span className="text-2xl font-black text-amber-600">{ndaCount}</span>
+            <div className="flex items-baseline gap-1">
+              <span className="text-2xl font-black text-amber-600">{featuredCount}</span>
+              <span className="text-xs font-bold text-amber-500">/ 3 Dipilih</span>
+            </div>
+            <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
+          </div>
+        </div>
+
+        <div className="p-5 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Terikat NDA</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-2xl font-black text-slate-800">{ndaCount}</span>
             <ShieldAlert className="w-5 h-5 text-amber-500" />
           </div>
         </div>
@@ -235,16 +348,6 @@ export const PortfolioManagementView: React.FC = () => {
           <div className="flex items-baseline justify-between mt-2">
             <span className="text-2xl font-black text-blue-600">{publicCount}</span>
             <Sparkles className="w-5 h-5 text-blue-500" />
-          </div>
-        </div>
-
-        <div className="p-5 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Status Master Sensor</span>
-          <div className="flex items-baseline justify-between mt-2">
-            <span className={`text-sm font-black ${ndaBlurEnabled ? 'text-emerald-600' : 'text-slate-500'}`}>
-              {ndaBlurEnabled ? 'Sensor Aktif' : 'Nonaktif'}
-            </span>
-            <span className={`w-3 h-3 rounded-full ${ndaBlurEnabled ? 'bg-emerald-500 shadow-sm' : 'bg-slate-300'}`} />
           </div>
         </div>
       </div>
@@ -326,15 +429,15 @@ export const PortfolioManagementView: React.FC = () => {
         </div>
       </Card>
 
-      {/* Projects NDA Selection Workspace */}
+      {/* Projects Selection Workspace */}
       <div className="space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h3 className="text-base sm:text-lg font-extrabold text-slate-900 tracking-tight">
-              Daftar Proyek & Status Proteksi NDA
+              Daftar Portofolio & Pengaturan Tampilan
             </h3>
             <p className="text-xs text-slate-500">
-              Tentukan status setiap proyek. Klik sakelar untuk menandai atau membatalkan status Pengalaman Profesional (NDA).
+              Tandai hingga <strong>3 Proyek Unggulan</strong> untuk ditampilkan di Landing Page, dan tentukan status proteksi NDA masing-masing proyek.
             </p>
           </div>
 
@@ -355,15 +458,24 @@ export const PortfolioManagementView: React.FC = () => {
             <div className="flex rounded-xl bg-slate-200/70 p-1 text-[11px] font-bold text-slate-600">
               <button
                 onClick={() => setFilterTab('all')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                   filterTab === 'all' ? 'bg-white text-slate-900 shadow-xs' : 'hover:text-slate-900'
                 }`}
               >
                 Semua ({projects.length})
               </button>
               <button
+                onClick={() => setFilterTab('featured')}
+                className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer ${
+                  filterTab === 'featured' ? 'bg-amber-500 text-white shadow-xs' : 'hover:text-slate-900'
+                }`}
+              >
+                <Star className={`w-3 h-3 ${filterTab === 'featured' ? 'fill-white text-white' : 'text-amber-500'}`} />
+                Unggulan ({featuredCount}/3)
+              </button>
+              <button
                 onClick={() => setFilterTab('nda')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                   filterTab === 'nda' ? 'bg-white text-amber-700 shadow-xs' : 'hover:text-slate-900'
                 }`}
               >
@@ -371,7 +483,7 @@ export const PortfolioManagementView: React.FC = () => {
               </button>
               <button
                 onClick={() => setFilterTab('public')}
-                className={`px-2.5 py-1 rounded-lg transition-all ${
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                   filterTab === 'public' ? 'bg-white text-blue-700 shadow-xs' : 'hover:text-slate-900'
                 }`}
               >
@@ -396,16 +508,18 @@ export const PortfolioManagementView: React.FC = () => {
                 setSearchQuery('');
                 setFilterTab('all');
               }}
-              className="text-[11px] font-bold text-blue-600 hover:underline"
+              className="text-[11px] font-bold text-blue-600 hover:underline cursor-pointer"
             >
               Reset Filter
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 w-full">
             {filteredProjects.map((project) => {
               const isNda = ndaProjectSlugs.includes(project.slug);
-              const isSaving = savingSlug === project.slug;
+              const isFeatured = featuredProjectSlugs.includes(project.slug);
+              const isSavingNda = savingSlug === project.slug;
+              const isSavingFeatured = savingFeaturedSlug === project.slug;
 
               const isDummy =
                 !project.thumbnail ||
@@ -418,8 +532,10 @@ export const PortfolioManagementView: React.FC = () => {
                 <div
                   key={project.slug}
                   className={`relative rounded-3xl p-5 bg-white border-2 transition-all duration-300 flex flex-col justify-between shadow-xs hover:shadow-md overflow-hidden ${
-                    isNda
-                      ? 'border-amber-400/80 bg-gradient-to-br from-white via-amber-50/20 to-white'
+                    isFeatured
+                      ? 'border-amber-400 bg-gradient-to-br from-amber-50/20 via-white to-white ring-2 ring-amber-400/20'
+                      : isNda
+                      ? 'border-amber-200 bg-gradient-to-br from-white via-amber-50/10 to-white'
                       : 'border-slate-200/80 hover:border-slate-300'
                   }`}
                 >
@@ -437,22 +553,46 @@ export const PortfolioManagementView: React.FC = () => {
 
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
-                          <h4 className="font-bold text-slate-900 text-sm leading-snug truncate">
+                          <h4 className="font-bold text-slate-900 text-sm leading-snug truncate flex items-center gap-1.5">
                             {project.name}
                           </h4>
-                          <a
-                            href={`/projects/${project.slug}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            title="Buka Halaman Detail Proyek"
-                            className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors shrink-0"
-                          >
-                            <ExternalLink className="w-3.5 h-3.5" />
-                          </a>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            {/* Star Quick Toggle Button */}
+                            <button
+                              type="button"
+                              onClick={() => handleToggleFeaturedProject(project)}
+                              disabled={isSavingFeatured}
+                              title={isFeatured ? "Klik untuk membatalkan status Unggulan" : "Klik untuk jadikan Proyek Unggulan"}
+                              className={`p-1.5 rounded-lg transition-all cursor-pointer ${
+                                isFeatured
+                                  ? 'bg-amber-100 text-amber-600 hover:bg-amber-200 shadow-2xs'
+                                  : 'bg-slate-100 text-slate-400 hover:text-amber-500 hover:bg-amber-50'
+                              }`}
+                            >
+                              <Star className={`w-3.5 h-3.5 ${isFeatured ? 'fill-amber-500 text-amber-500' : ''}`} />
+                            </button>
+
+                            <a
+                              href={`/projects/${project.slug}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title="Buka Halaman Detail Proyek"
+                              className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+                            >
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </a>
+                          </div>
                         </div>
 
-                        {/* Status Badge */}
+                        {/* Status Badges */}
                         <div className="pt-1 flex items-center gap-1.5 flex-wrap">
+                          {isFeatured && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs">
+                              <Star className="w-3 h-3 text-amber-600 fill-amber-500" />
+                              Unggulan Landing Page
+                            </span>
+                          )}
+
                           {isNda ? (
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/10 text-amber-700 border border-amber-500/25">
                               <ShieldAlert className="w-3 h-3 text-amber-600" />
@@ -491,32 +631,44 @@ export const PortfolioManagementView: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Bottom Toggle Bar */}
-                  <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between gap-3">
-                    <div className="text-left">
-                      <span className="text-[11px] font-bold text-slate-700 block">
-                        {isNda ? 'Proteksi NDA Aktif' : 'Mode Publik Terbuka'}
-                      </span>
-                      <span className="text-[10px] text-slate-400">
-                        {isNda ? 'Teks mendalam & screenshot disensor' : 'Semua data dapat dilihat publik'}
-                      </span>
-                    </div>
-
-                    {/* Toggle Switch */}
+                  {/* Bottom Action Controls Bar */}
+                  <div className="pt-3.5 mt-3.5 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2.5">
+                    {/* Featured Toggle Button */}
                     <button
                       type="button"
-                      onClick={() => handleToggleProjectNda(project)}
-                      disabled={isSaving}
-                      className={`relative inline-flex h-6 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 ${
-                        isNda ? 'bg-amber-500' : 'bg-slate-300'
+                      onClick={() => handleToggleFeaturedProject(project)}
+                      disabled={isSavingFeatured}
+                      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                        isFeatured
+                          ? 'bg-amber-500 hover:bg-amber-600 text-white shadow-xs'
+                          : 'bg-slate-100 hover:bg-amber-50 hover:text-amber-700 hover:border-amber-200 text-slate-700 border border-slate-200/70'
                       }`}
                     >
-                      <span
-                        className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
-                          isNda ? 'translate-x-6' : 'translate-x-0'
-                        }`}
-                      />
+                      <Star className={`w-3.5 h-3.5 ${isFeatured ? 'fill-white text-white' : 'text-slate-400'}`} />
+                      <span>{isFeatured ? 'Proyek Unggulan' : 'Jadikan Unggulan'}</span>
                     </button>
+
+                    {/* NDA Toggle Switch */}
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-medium text-slate-600">
+                        {isNda ? 'NDA Disensor' : 'Publik'}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleToggleProjectNda(project)}
+                        disabled={isSavingNda}
+                        title={isNda ? "Proteksi NDA aktif (klik untuk buka)" : "Publik terbuka (klik untuk sensor NDA)"}
+                        className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                          isNda ? 'bg-amber-500' : 'bg-slate-300'
+                        }`}
+                      >
+                        <span
+                          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                            isNda ? 'translate-x-5' : 'translate-x-0'
+                          }`}
+                        />
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
