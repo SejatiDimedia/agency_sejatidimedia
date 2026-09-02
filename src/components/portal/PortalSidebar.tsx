@@ -137,7 +137,7 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
     }
   };
 
-  const isDashboardActive = pathname === '/admin/dashboard';
+  const isDashboardActive = pathname === '/admin/dashboard' && activeSection !== 'team';
   const isPortalActive = pathname === '/portal' || pathname.startsWith('/portal/projects');
   const isPortfolioActive = pathname === '/portal/portfolio';
   const isDesignSystemActive = pathname === '/design-system' || pathname === '/admin/components';
@@ -312,18 +312,18 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
                   collapsed={isCollapsed}
                 />
 
-                {/* CLIENT & ADMIN: Portfolio Showcase & NDA Settings */}
-                <SidebarItem
-                  icon={<Briefcase className="w-5 h-5" />}
-                  label={isAdmin ? "Portfolio Showcase (NDA)" : "Portfolio Showcase"}
-                  isActive={isPortfolioActive}
-                  onClick={() => handleNavigate('/portal/portfolio', 'portfolio')}
-                  collapsed={isCollapsed}
-                />
-
                 {/* ADMIN ONLY MENU ITEMS */}
                 {isAdmin && (
                   <>
+                    {/* Portfolio Showcase & NDA Settings (ADMIN ONLY) */}
+                    <SidebarItem
+                      icon={<Briefcase className="w-5 h-5" />}
+                      label="Portfolio Showcase"
+                      isActive={isPortfolioActive}
+                      onClick={() => handleNavigate('/portal/portfolio', 'portfolio')}
+                      collapsed={isCollapsed}
+                    />
+
                     <SidebarItem
                       icon={<Calendar className="w-5 h-5" />}
                       label="Calendar"
@@ -335,8 +335,8 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
                     <SidebarItem
                       icon={<Contact className="w-5 h-5" />}
                       label="Team & Clients"
-                      isActive={false}
-                      onClick={() => handleNavigate('/admin/dashboard', 'team')}
+                      isActive={activeSection === 'team'}
+                      onClick={() => handleNavigate('/admin/dashboard?tab=team', 'team')}
                       collapsed={isCollapsed}
                     />
                   </>

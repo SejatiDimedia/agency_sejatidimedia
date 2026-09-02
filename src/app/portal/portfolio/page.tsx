@@ -28,13 +28,19 @@ export default function PortfolioPage() {
       .then((res) => res.json())
       .then((data) => {
         if (data.authenticated && data.user) {
+          // STRICT ACCESS CONTROL: Only ADMIN can access Portfolio Management
+          if (data.user.role !== 'ADMIN') {
+            router.replace('/portal');
+            return;
+          }
+
           setUserSession({
             id: data.user.id,
             name: data.user.name || 'Admin User',
             email: data.user.email,
             role: data.user.role || 'ADMIN',
           });
-          setCurrentRole(data.user.role === 'ADMIN' ? 'Admin' : 'Client');
+          setCurrentRole('Admin');
         } else {
           router.replace('/auth/login');
         }
@@ -64,6 +70,15 @@ export default function PortfolioPage() {
   useEffect(() => {
     loadData();
   }, [userSession]);
+
+  if (isLoading || !userSession || userSession.role !== 'ADMIN') {
+    return (
+      <div className="h-screen bg-[#f0f4f8] flex flex-col items-center justify-center space-y-3">
+        <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+        <span className="text-xs font-mono text-slate-500">Memverifikasi hak akses admin...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen bg-[#f0f4f8] text-slate-900 p-3 sm:p-5 flex gap-0 lg:gap-5 font-sans antialiased w-full overflow-hidden">

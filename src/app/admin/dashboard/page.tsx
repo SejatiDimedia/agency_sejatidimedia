@@ -13,7 +13,11 @@ import { InvoiceModal } from '@/components/portal/InvoiceModal';
 import { InvoiceDetailModal } from '@/components/portal/InvoiceDetailModal';
 import { Lead, LeadStatus, ActiveNavSection, Project, Invoice } from '@/types/portal';
 import { Button, Toast, ConfirmModal } from '@/components/ui';
-import { Plus, Kanban, List, ShieldAlert, BarChart3, History, Search, RefreshCw, Filter, User, ArrowRight, TrendingUp, Clock, CheckSquare, FileText, DollarSign, CheckCircle2, AlertTriangle, Eye, Edit2, Trash2 } from 'lucide-react';
+import {
+  Plus, Kanban, List, ShieldAlert, BarChart3, History, Search, RefreshCw, Filter, User, ArrowRight,
+  TrendingUp, Clock, CheckSquare, FileText, DollarSign, CheckCircle2, AlertTriangle, Eye, Edit2, Trash2,
+  Users, Mail, UserCheck, Shield, Copy, Check, Send, KeyRound, ExternalLink, Building2
+} from 'lucide-react';
 
 export default function AdminDashboardPage() {
   const [activeSection, setActiveSection] = useState<ActiveNavSection>('dashboard-leads');
@@ -25,14 +29,23 @@ export default function AdminDashboardPage() {
   const [activeFilterMonth, setActiveFilterMonth] = useState('November 2024');
   const [showSpamAndLost, setShowSpamAndLost] = useState(true);
 
-  // Phase 5 & 7 Tabs
-  const [activeTab, setActiveTab] = useState<'leads' | 'analytics' | 'audit' | 'invoices'>('leads');
+  // Tabs: Leads, Analytics, Audit, Invoices, Team
+  const [activeTab, setActiveTab] = useState<'leads' | 'analytics' | 'audit' | 'invoices' | 'team'>('leads');
   const [analyticsData, setAnalyticsData] = useState<any>(null);
   const [auditLogs, setAuditLogs] = useState<any[]>([]);
   const [isLoadingAnalytics, setIsLoadingAnalytics] = useState(false);
   const [isLoadingAudit, setIsLoadingAudit] = useState(false);
   const [auditSearch, setAuditSearch] = useState('');
   const [auditFilterAction, setAuditFilterAction] = useState('');
+
+  // Team & Clients States
+  const [users, setUsers] = useState<any[]>([]);
+  const [isLoadingUsers, setIsLoadingUsers] = useState(false);
+  const [userSearch, setUserSearch] = useState('');
+  const [userRoleFilter, setUserRoleFilter] = useState<'ALL' | 'ADMIN' | 'CLIENT'>('ALL');
+  const [userStatusFilter, setUserStatusFilter] = useState<'ALL' | 'ACTIVE' | 'PENDING'>('ALL');
+  const [copiedEmail, setCopiedEmail] = useState<string | null>(null);
+  const [generatingLinkUserId, setGeneratingLinkUserId] = useState<string | null>(null);
 
   // Invoice States
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -106,6 +119,72 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const fetchUsers = async () => {
+    setIsLoadingUsers(true);
+    try {
+      const res = await fetch('/api/admin/users');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.users)) {
+        setUsers(data.users);
+      }
+    } catch (err) {
+      console.error('Failed to fetch users:', err);
+    } finally {
+      setIsLoadingUsers(false);
+    }
+  };
+
+  const handleCopyEmail = (email: string) => {
+    navigator.clipboard.writeText(email);
+    setCopiedEmail(email);
+    setTimeout(() => setCopiedEmail(null), 2000);
+  };
+
+  const handleGenerateMagicLink = async (user: any) => {
+    try {
+      setGeneratingLinkUserId(user.id);
+      const res = await fetch('/api/auth/magic-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: user.email }),
+      });
+      const data = await res.json();
+      if (data.success && data.activationUrl) {
+        navigator.clipboard.writeText(data.activationUrl);
+        setToastNotification({
+          type: 'success',
+          message: `Link Aktivasi untuk ${user.name} berhasil disalin ke clipboard!`,
+        });
+      } else {
+        alert(data.error || 'Gagal membuat magic link');
+      }
+    } catch {
+      alert('Terjadi kesalahan saat memproses link aktivasi');
+    } finally {
+      setGeneratingLinkUserId(null);
+    }
+  };
+
+  // Sync activeTab with sidebar activeSection or URL query params
+  useEffect(() => {
+    if (activeSection === 'team') {
+      setActiveTab('team');
+    }
+  }, [activeSection]);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const tab = params.get('tab');
+      if (tab === 'team' || tab === 'leads' || tab === 'analytics' || tab === 'audit' || tab === 'invoices') {
+        setActiveTab(tab as any);
+        if (tab === 'team') {
+          setActiveSection('team');
+        }
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (activeTab === 'analytics') {
       fetchAnalytics();
@@ -113,6 +192,8 @@ export default function AdminDashboardPage() {
       fetchAuditLogs();
     } else if (activeTab === 'invoices') {
       fetchInvoices();
+    } else if (activeTab === 'team') {
+      fetchUsers();
     }
   }, [activeTab]);
 
@@ -414,6 +495,20 @@ export default function AdminDashboardPage() {
           >
             <FileText className="w-4 h-4" />
             Invoice & Billing
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab('team');
+              setActiveSection('team');
+            }}
+            className={`flex items-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl transition-all whitespace-nowrap cursor-pointer ${
+              activeTab === 'team'
+                ? 'bg-blue-600 text-white shadow-md shadow-blue-500/10'
+                : 'bg-white text-slate-600 hover:bg-slate-50 border border-slate-200/60'
+            }`}
+          >
+            <Users className="w-4 h-4" />
+            Team & Clients
           </button>
         </div>
 
@@ -956,6 +1051,297 @@ export default function AdminDashboardPage() {
                     </tbody>
                   </table>
                 </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Tab 5: Team & Clients Management */}
+        {activeTab === 'team' && (
+          <div className="space-y-6">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                    User Access & Roles
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
+                    <Users className="w-3 h-3" />
+                    {users.length} Terdaftar
+                  </span>
+                </div>
+                <h2 className="text-2xl font-black text-slate-900 font-sora">
+                  Manajemen Tim & Klien Portal
+                </h2>
+                <p className="text-sm text-slate-500 mt-1">
+                  Daftar seluruh pengguna yang memiliki akses ke Client Portal SejatiDimedia beserta status aktivasi dan proyek terkait.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  onClick={fetchUsers}
+                  icon={<RefreshCw className={`w-4 h-4 ${isLoadingUsers ? 'animate-spin' : ''}`} />}
+                >
+                  Segarkan
+                </Button>
+              </div>
+            </div>
+
+            {/* Quick Metrics */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1">
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Pengguna</span>
+                <div className="text-2xl font-bold font-sora text-slate-900">{users.length}</div>
+                <div className="text-xs text-slate-500">Semua role terdaftar</div>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1">
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Klien Aktif</span>
+                <div className="text-2xl font-bold font-sora text-emerald-600">
+                  {users.filter(u => u.role === 'CLIENT' && u.activatedAt).length}
+                </div>
+                <div className="text-xs text-slate-500">Password sudah diatur</div>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1">
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Menunggu Aktivasi</span>
+                <div className="text-2xl font-bold font-sora text-amber-600">
+                  {users.filter(u => u.role === 'CLIENT' && !u.activatedAt).length}
+                </div>
+                <div className="text-xs text-slate-500">Belum aktivasi password</div>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1">
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Administrator</span>
+                <div className="text-2xl font-bold font-sora text-purple-600">
+                  {users.filter(u => u.role === 'ADMIN').length}
+                </div>
+                <div className="text-xs text-slate-500">Akses penuh sistem</div>
+              </div>
+            </div>
+
+            {/* Filter & Search Bar */}
+            <div className="p-4 rounded-2xl bg-white border border-slate-200 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+              <div className="relative flex-1">
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <input
+                  type="text"
+                  placeholder="Cari pengguna berdasarkan nama atau email..."
+                  value={userSearch}
+                  onChange={(e) => setUserSearch(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:border-blue-500 text-slate-800 placeholder-slate-400"
+                />
+              </div>
+
+              <div className="flex items-center gap-2 flex-wrap">
+                <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200/60 text-xs">
+                  <span className="text-slate-400 px-2 font-medium">Role:</span>
+                  {(['ALL', 'CLIENT', 'ADMIN'] as const).map(role => (
+                    <button
+                      key={role}
+                      onClick={() => setUserRoleFilter(role)}
+                      className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                        userRoleFilter === role
+                          ? 'bg-white text-slate-900 shadow-xs'
+                          : 'text-slate-500 hover:text-slate-800'
+                      }`}
+                    >
+                      {role === 'ALL' ? 'Semua' : role === 'CLIENT' ? 'Klien' : 'Admin'}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-1.5 p-1 bg-slate-100 rounded-xl border border-slate-200/60 text-xs">
+                  <span className="text-slate-400 px-2 font-medium">Status:</span>
+                  {(['ALL', 'ACTIVE', 'PENDING'] as const).map(st => (
+                    <button
+                      key={st}
+                      onClick={() => setUserStatusFilter(st)}
+                      className={`px-3 py-1 rounded-lg font-bold transition-all cursor-pointer ${
+                        userStatusFilter === st
+                          ? 'bg-white text-slate-900 shadow-xs'
+                          : 'text-slate-500 hover:text-slate-800'
+                      }`}
+                    >
+                      {st === 'ALL' ? 'Semua' : st === 'ACTIVE' ? 'Aktif' : 'Pending'}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Users Table */}
+            <div className="rounded-3xl bg-white border border-slate-200 shadow-xs overflow-hidden">
+              {isLoadingUsers ? (
+                <div className="p-16 flex flex-col items-center justify-center space-y-3 text-slate-400">
+                  <RefreshCw className="w-8 h-8 animate-spin text-blue-500" />
+                  <span className="text-xs font-medium">Memuat data pengguna...</span>
+                </div>
+              ) : (
+                (() => {
+                  const filteredUsers = users.filter(u => {
+                    const matchesSearch = !userSearch ||
+                      u.name?.toLowerCase().includes(userSearch.toLowerCase()) ||
+                      u.email?.toLowerCase().includes(userSearch.toLowerCase());
+                    const matchesRole = userRoleFilter === 'ALL' || u.role === userRoleFilter;
+                    const matchesStatus = userStatusFilter === 'ALL' ||
+                      (userStatusFilter === 'ACTIVE' ? Boolean(u.activatedAt) : !u.activatedAt);
+                    return matchesSearch && matchesRole && matchesStatus;
+                  });
+
+                  if (filteredUsers.length === 0) {
+                    return (
+                      <div className="p-16 text-center text-slate-400 space-y-2">
+                        <User className="w-10 h-10 mx-auto text-slate-300 stroke-[1.5]" />
+                        <h4 className="text-sm font-bold text-slate-700">Tidak ada pengguna ditemukan</h4>
+                        <p className="text-xs text-slate-400">Coba ubah kata kunci pencarian atau filter role.</p>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs">
+                        <thead className="bg-slate-50/80 border-b border-slate-200 text-[10px] font-mono uppercase tracking-wider text-slate-400">
+                          <tr>
+                            <th className="py-3.5 px-5">Nama & Profil</th>
+                            <th className="py-3.5 px-5">Email & Kontak</th>
+                            <th className="py-3.5 px-5">Role</th>
+                            <th className="py-3.5 px-5">Status Aktivasi</th>
+                            <th className="py-3.5 px-5">Total Proyek</th>
+                            <th className="py-3.5 px-5">Terdaftar</th>
+                            <th className="py-3.5 px-5 text-right">Aksi</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {filteredUsers.map((usr: any) => {
+                            const initials = (usr.name || 'U')
+                              .split(' ')
+                              .map((n: string) => n[0])
+                              .slice(0, 2)
+                              .join('')
+                              .toUpperCase();
+
+                            return (
+                              <tr key={usr.id} className="hover:bg-slate-50/60 transition-colors">
+                                {/* Profil / Nama */}
+                                <td className="py-4 px-5">
+                                  <div className="flex items-center gap-3">
+                                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs shrink-0 shadow-2xs ${
+                                      usr.role === 'ADMIN'
+                                        ? 'bg-purple-100 text-purple-700 border border-purple-200'
+                                        : 'bg-blue-100 text-[#2C5098] border border-blue-200'
+                                    }`}>
+                                      {initials}
+                                    </div>
+                                    <div>
+                                      <div className="font-bold text-slate-900 font-sans text-sm">{usr.name}</div>
+                                      <div className="text-[10px] font-mono text-slate-400">ID: {usr.id.slice(0, 10)}...</div>
+                                    </div>
+                                  </div>
+                                </td>
+
+                                {/* Email */}
+                                <td className="py-4 px-5">
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-mono text-slate-700">{usr.email}</span>
+                                    <button
+                                      onClick={() => handleCopyEmail(usr.email)}
+                                      className="p-1 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
+                                      title="Salin Email"
+                                    >
+                                      {copiedEmail === usr.email ? (
+                                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                                      ) : (
+                                        <Copy className="w-3.5 h-3.5" />
+                                      )}
+                                    </button>
+                                  </div>
+                                </td>
+
+                                {/* Role */}
+                                <td className="py-4 px-5">
+                                  <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold font-mono border ${
+                                    usr.role === 'ADMIN'
+                                      ? 'bg-purple-50 text-purple-700 border-purple-200'
+                                      : 'bg-blue-50 text-[#2C5098] border-blue-200'
+                                  }`}>
+                                    {usr.role === 'ADMIN' ? (
+                                      <>
+                                        <Shield className="w-3 h-3" />
+                                        Admin
+                                      </>
+                                    ) : (
+                                      <>
+                                        <User className="w-3 h-3" />
+                                        Klien
+                                      </>
+                                    )}
+                                  </span>
+                                </td>
+
+                                {/* Status Aktivasi */}
+                                <td className="py-4 px-5">
+                                  {usr.activatedAt ? (
+                                    <span className="inline-flex items-center gap-1.5 text-emerald-700 font-medium">
+                                      <CheckCircle2 className="w-4 h-4 text-emerald-500" />
+                                      <span>Aktif</span>
+                                    </span>
+                                  ) : (
+                                    <span className="inline-flex items-center gap-1.5 text-amber-700 font-medium">
+                                      <Clock className="w-4 h-4 text-amber-500" />
+                                      <span>Menunggu Aktivasi</span>
+                                    </span>
+                                  )}
+                                </td>
+
+                                {/* Projects */}
+                                <td className="py-4 px-5 font-mono font-bold text-slate-800">
+                                  {usr._count?.projects || 0} Proyek
+                                </td>
+
+                                {/* Terdaftar */}
+                                <td className="py-4 px-5 font-mono text-slate-500 text-[11px]">
+                                  {usr.createdAt ? new Date(usr.createdAt).toLocaleDateString('id-ID', {
+                                    day: '2-digit',
+                                    month: 'short',
+                                    year: 'numeric'
+                                  }) : '-'}
+                                </td>
+
+                                {/* Aksi */}
+                                <td className="py-4 px-5 text-right">
+                                  <div className="flex items-center justify-end gap-1.5">
+                                    <button
+                                      onClick={() => handleGenerateMagicLink(usr)}
+                                      disabled={generatingLinkUserId === usr.id}
+                                      className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-slate-100 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-slate-200/80 text-[11px] font-bold transition-all cursor-pointer"
+                                      title="Buat & Salin Magic Link Aktivasi"
+                                    >
+                                      <KeyRound className="w-3.5 h-3.5 text-[#2C5098]" />
+                                      <span>{generatingLinkUserId === usr.id ? 'Membuat...' : 'Magic Link'}</span>
+                                    </button>
+
+                                    <a
+                                      href={`mailto:${usr.email}`}
+                                      className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-xl transition-colors cursor-pointer"
+                                      title="Kirim Email"
+                                    >
+                                      <Mail className="w-4 h-4" />
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  );
+                })()
               )}
             </div>
           </div>

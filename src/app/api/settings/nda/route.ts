@@ -9,6 +9,7 @@ import {
 } from '@/lib/server-template';
 import { getProjects } from '@/lib/api/glio-projects';
 import { revalidatePath } from 'next/cache';
+import { getSession } from '@/lib/auth/session';
 
 export const dynamic = 'force-dynamic';
 
@@ -31,6 +32,14 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await getSession();
+    if (session?.role !== 'ADMIN') {
+      return NextResponse.json(
+        { success: false, error: 'Akses ditolak: Hanya administrator yang diizinkan.' },
+        { status: 403 }
+      );
+    }
+
     const body = await req.json();
     const { ndaBlurEnabled, ndaProjectSlugs, featuredProjectSlugs } = body;
 

@@ -7,11 +7,13 @@ import { useLanguage } from '@/lib/i18n/LanguageContext';
 interface ClientSettingsViewProps {
   userName?: string;
   userEmail?: string;
+  userRole?: 'ADMIN' | 'CLIENT';
 }
 
 export const ClientSettingsView: React.FC<ClientSettingsViewProps> = ({
   userName = 'Client User',
   userEmail = 'client@company.com',
+  userRole = 'CLIENT',
 }) => {
   const { language, t } = useLanguage();
   const [password, setPassword] = useState('');
@@ -271,29 +273,31 @@ export const ClientSettingsView: React.FC<ClientSettingsViewProps> = ({
         </div>
       </div>
 
-      {/* Section 2: Portfolio Showcase & NDA Shortcut */}
-      <div className="p-5 rounded-3xl bg-gradient-to-r from-blue-50/80 via-slate-50 to-indigo-50/80 border border-blue-200/60 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold shrink-0 shadow-sm">
-            <Briefcase className="w-5 h-5" />
+      {/* Section 2: Portfolio Showcase & NDA Shortcut (ADMIN ONLY) */}
+      {userRole === 'ADMIN' && (
+        <div className="p-5 rounded-3xl bg-gradient-to-r from-blue-50/80 via-slate-50 to-indigo-50/80 border border-blue-200/60 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold shrink-0 shadow-sm">
+              <Briefcase className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-extrabold text-slate-900 text-sm">
+                Manajemen Portofolio & Proteksi NDA
+              </h3>
+              <p className="text-xs text-slate-500 font-medium">
+                Pengaturan proyek NDA dan visibilitas galeri portofolio kini dapat dikelola mandiri di menu Portfolio Showcase.
+              </p>
+            </div>
           </div>
-          <div>
-            <h3 className="font-extrabold text-slate-900 text-sm">
-              Manajemen Portofolio & Proteksi NDA
-            </h3>
-            <p className="text-xs text-slate-500 font-medium">
-              Pengaturan proyek NDA dan visibilitas galeri portofolio kini dapat dikelola mandiri di menu Portfolio Showcase.
-            </p>
-          </div>
+          <a
+            href="/portal/portfolio"
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shrink-0 shadow-sm"
+          >
+            <span>Buka Menu Portfolio</span>
+            <ExternalLink className="w-3.5 h-3.5" />
+          </a>
         </div>
-        <a
-          href="/portal/portfolio"
-          className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shrink-0 shadow-sm"
-        >
-          <span>Buka Menu Portfolio</span>
-          <ExternalLink className="w-3.5 h-3.5" />
-        </a>
-      </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Card 1: Account Profile Info */}

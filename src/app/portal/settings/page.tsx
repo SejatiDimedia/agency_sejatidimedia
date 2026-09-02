@@ -106,6 +106,7 @@ export default function SettingsPage() {
           <ClientSettingsView
             userName={userSession?.name}
             userEmail={userSession?.email}
+            userRole={userSession?.role}
           />
         )}
       </main>
