@@ -1924,42 +1924,49 @@ export default function AgencyLandingV2({
             {/* 3 Pricing Cards */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch max-w-6xl mx-auto text-left">
               {/* Card 1: Starter */}
-              <div className="p-7 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-6">
-                <div className="space-y-5">
+              <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-6">
+                <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="space-y-1">
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold">
-                        {t.pricingCards.starterTag}
-                      </span>
-                      <h3 className="text-lg font-sans font-bold text-slate-900">
-                        {t.pricingCards.starterTitle}
-                      </h3>
-                    </div>
-                    <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#2C5098] font-bold">
+                      {t.pricingCards.starterTag}
+                    </span>
+                    <div className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600">
                       <Icon icon="ph:trophy-duotone" className="w-4 h-4" />
                     </div>
                   </div>
 
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    {t.pricingCards.starterDesc}
-                  </p>
+                  <div className="space-y-1">
+                    <h3 className="text-lg font-sans font-bold text-slate-900">
+                      {t.pricingCards.starterTitle}
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {t.pricingCards.starterDesc}
+                    </p>
+                  </div>
 
-                  <div className="flex items-baseline gap-1 pt-1">
-                    <span className="text-3xl font-sans font-bold text-slate-900">Rp 3–7 Jt</span>
-                    <span className="text-[10px] font-mono text-slate-500 uppercase">/ proyek</span>
+                  {/* Scheme & Timeline Module */}
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <div className="text-xs sm:text-[13px] font-sans font-bold text-slate-900 leading-snug">
+                      {t.pricingCards.starterPriceMain || "Fixed Scope & Timeline"}
+                    </div>
+                    <div className="text-[11px] font-mono text-slate-500 flex items-center gap-1.5">
+                      <Icon icon="ph:timer-bold" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
+                      <span>{language === 'en' ? 'Timeline: ' : 'Estimasi: '}<strong className="text-[#2C5098] font-bold">{t.pricingCards.starterTime || "2–4 Minggu"}</strong></span>
+                    </div>
                   </div>
 
                   <button
                     onClick={() => selectPlan('Full-Stack Web App', 'SaaS MVP (Fast Turnaround)')}
-                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 hover:bg-[#2C5098] hover:text-white hover:border-[#2C5098] text-slate-800 transition-all cursor-pointer text-center"
+                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 hover:bg-[#2C5098] hover:text-white hover:border-[#2C5098] text-slate-800 transition-all cursor-pointer text-center flex items-center justify-center gap-2 group/btn"
                   >
-                    {t.pricing.starterBtn || "Mulai dari Sini"}
+                    <span>{t.pricingCards.starterBtn || t.pricing.starterBtn || "Konsultasi Scope MVP"}</span>
+                    <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
                   </button>
                 </div>
 
                 <div className="space-y-3 pt-5 border-t border-slate-100">
                   <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block font-bold">Termasuk:</span>
-                  <ul className="space-y-2.5 text-xs text-slate-600">
+                  <ul className="space-y-2 text-xs text-slate-600">
                     {t.pricingCards.starterIncludes.map((item, idx) => (
                       <li key={idx} className="flex items-start gap-2.5">
                         <div className="mt-0.5 w-4 h-4 rounded-full bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center shrink-0">
@@ -1973,42 +1980,51 @@ export default function AgencyLandingV2({
               </div>
 
               {/* Card 2: Growth (Featured) */}
-              <div className="p-7 sm:p-8 rounded-3xl bg-white border-2 border-[#2C5098] shadow-lg shadow-[#2C5098]/10 flex flex-col justify-between space-y-6 relative">
-                <div className="absolute -top-3 right-6 bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white text-[9px] font-mono font-bold px-3.5 py-1 rounded-full uppercase tracking-wider shadow-xs flex items-center gap-1">
+              <div className="p-6 sm:p-7 rounded-3xl bg-white border-2 border-[#2C5098] shadow-lg shadow-[#2C5098]/10 flex flex-col justify-between space-y-6 relative">
+                <div className="absolute -top-3 right-6 bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white text-[9px] font-mono font-bold px-3 py-0.5 rounded-full uppercase tracking-wider shadow-xs flex items-center gap-1">
                   <Icon icon="ph:crown-duotone" className="w-3 h-3" />
                   {language === 'en' ? 'Most Popular' : 'Paling Populer'}
                 </div>
 
-                <div className="space-y-5">
-                  <div className="space-y-1 pt-1">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between pt-1">
                     <span className="text-[10px] font-mono uppercase tracking-widest text-[#2C5098] font-bold">
                       {t.pricingCards.growthTag}
                     </span>
+                  </div>
+
+                  <div className="space-y-1">
                     <h3 className="text-lg font-sans font-bold text-slate-900">
                       {t.pricingCards.growthTitle}
                     </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {t.pricingCards.growthDesc}
+                    </p>
                   </div>
 
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    {t.pricingCards.growthDesc}
-                  </p>
-
-                  <div className="flex items-baseline gap-1 pt-1">
-                    <span className="text-3xl font-sans font-bold text-slate-900">Rp 10 Jt+</span>
-                    <span className="text-[10px] font-mono text-slate-500 uppercase">/ proyek</span>
+                  {/* Scheme & Timeline Module */}
+                  <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200/70 space-y-1">
+                    <div className="text-xs sm:text-[13px] font-sans font-bold text-slate-900 leading-snug">
+                      {t.pricingCards.growthPriceMain || "Berdasarkan Fitur & Scope"}
+                    </div>
+                    <div className="text-[11px] font-mono text-slate-600 flex items-center gap-1.5">
+                      <Icon icon="ph:timer-bold" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
+                      <span>{language === 'en' ? 'Timeline: ' : 'Estimasi: '}<strong className="text-[#2C5098] font-bold">{t.pricingCards.growthTime || "1–2 Bulan"}</strong></span>
+                    </div>
                   </div>
 
                   <button
                     onClick={() => selectPlan('Full-Stack Web App', 'Medium Scale Production')}
-                    className="w-full py-3 px-4 rounded-xl text-xs font-bold bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white transition-all shadow-md shadow-[#2C5098]/25 cursor-pointer text-center"
+                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white transition-all shadow-md shadow-[#2C5098]/25 cursor-pointer text-center flex items-center justify-center gap-2 group/btn"
                   >
-                    {t.pricing.growthBtn || "Diskusikan Proyek Anda"}
+                    <span>{t.pricingCards.growthBtn || t.pricing.growthBtn || "Minta Estimasi Biaya"}</span>
+                    <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
                   </button>
                 </div>
 
                 <div className="space-y-3 pt-5 border-t border-slate-100">
                   <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block font-bold">Termasuk:</span>
-                  <ul className="space-y-2.5 text-xs text-slate-600">
+                  <ul className="space-y-2 text-xs text-slate-600">
                     {t.pricingCards.growthIncludes.map((item, idx) => (
                       <li key={idx} className="flex items-start gap-2.5">
                         <div className="mt-0.5 w-4 h-4 rounded-full bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white flex items-center justify-center shrink-0">
@@ -2022,42 +2038,49 @@ export default function AgencyLandingV2({
               </div>
 
               {/* Card 3: Custom */}
-              <div className="p-7 sm:p-8 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-6">
-                <div className="space-y-5">
+              <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-6">
+                <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <div className="space-y-1">
-                      <span className="text-[10px] font-mono uppercase tracking-widest text-slate-400 font-bold">
-                        {t.pricingCards.customTag}
-                      </span>
-                      <h3 className="text-lg font-sans font-bold text-slate-900">
-                        {t.pricingCards.customTitle}
-                      </h3>
-                    </div>
-                    <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#2C5098] font-bold">
+                      {t.pricingCards.customTag}
+                    </span>
+                    <div className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600">
                       <Icon icon="hugeicons:customize" className="w-4 h-4" />
                     </div>
                   </div>
 
-                  <p className="text-xs text-slate-600 leading-relaxed">
-                    {t.pricingCards.customDesc}
-                  </p>
+                  <div className="space-y-1">
+                    <h3 className="text-lg font-sans font-bold text-slate-900">
+                      {t.pricingCards.customTitle}
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {t.pricingCards.customDesc}
+                    </p>
+                  </div>
 
-                  <div className="flex items-baseline gap-1 pt-1">
-                    <span className="text-3xl font-sans font-bold text-slate-900">Custom</span>
-                    <span className="text-[10px] font-mono text-slate-500 uppercase">/ scope</span>
+                  {/* Scheme & Timeline Module */}
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <div className="text-xs sm:text-[13px] font-sans font-bold text-slate-900 leading-snug">
+                      {t.pricingCards.customPriceMain || "Custom Architecture & Retainer"}
+                    </div>
+                    <div className="text-[11px] font-mono text-slate-500 flex items-center gap-1.5">
+                      <Icon icon="ph:infinity-bold" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
+                      <span>{language === 'en' ? 'Timeline: ' : 'Estimasi: '}<strong className="text-[#2C5098] font-bold">{t.pricingCards.customTime || "Roadmap Fleksibel"}</strong></span>
+                    </div>
                   </div>
 
                   <button
                     onClick={() => selectPlan('Comprehensive Hybrid Pipeline', 'High-Scale Custom Architecture')}
-                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 hover:bg-[#2C5098] hover:text-white hover:border-[#2C5098] text-slate-800 transition-all cursor-pointer text-center"
+                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 hover:bg-[#2C5098] hover:text-white hover:border-[#2C5098] text-slate-800 transition-all cursor-pointer text-center flex items-center justify-center gap-2 group/btn"
                   >
-                    {t.pricing.customBtn || "Ceritakan Kebutuhan Anda"}
+                    <span>{t.pricingCards.customBtn || t.pricing.customBtn || "Diskusikan Solusi Enterprise"}</span>
+                    <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
                   </button>
                 </div>
 
                 <div className="space-y-3 pt-5 border-t border-slate-100">
                   <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block font-bold">Termasuk:</span>
-                  <ul className="space-y-2.5 text-xs text-slate-600">
+                  <ul className="space-y-2 text-xs text-slate-600">
                     {t.pricingCards.customIncludes.map((item, idx) => (
                       <li key={idx} className="flex items-start gap-2.5">
                         <div className="mt-0.5 w-4 h-4 rounded-full bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center shrink-0">
@@ -2071,17 +2094,50 @@ export default function AgencyLandingV2({
               </div>
             </div>
 
+            {/* Standards Across All Projects - Symmetrical Balanced Layout */}
+            <div className="mt-8 sm:mt-10 pt-7 sm:pt-8 border-t border-slate-200/80 space-y-4">
+              <div className="flex flex-wrap items-center justify-center gap-2 text-center">
+                <div className="w-5 h-5 rounded-md bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center">
+                  <Icon icon="ph:shield-check-bold" className="w-3.5 h-3.5" />
+                </div>
+                <span className="text-xs sm:text-sm font-sans font-bold text-slate-900">
+                  {t.pricingCards.standardTitle || "Standar di Setiap Proyek"}
+                </span>
+                <span className="text-slate-300 hidden sm:inline">•</span>
+                <span className="text-[10px] sm:text-[11px] font-mono text-slate-500">
+                  {language === 'en' ? 'Included automatically in all tiers' : 'Otomatis berlaku untuk semua skema'}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 w-full">
+                {(t.pricingCards.standards || [
+                  "100% Hak Cipta & Source Code",
+                  "Garansi Bug Fixing Resmi",
+                  "Deployment Server Cloud",
+                  "Tanpa Perantara (Direct Dev)"
+                ]).map((std, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-white border border-slate-200/90 shadow-2xs text-[11px] font-sans font-medium text-slate-700 hover:border-[#2C5098]/40 transition-colors text-center"
+                  >
+                    <Icon icon="ph:check-circle-fill" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
+                    <span>{std}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
             {/* Note text below pricing grid */}
-            <div className="pt-6 sm:pt-8 text-center">
+            <div className="pt-6 sm:pt-7 text-center">
               <a
-                href="https://wa.me/6289508436275?text=Halo%20SejatiDimedia,%20saya%20ingin%20berdiskusi%20mengenai%20opsi%20proyek%20dengan%20budget%20yang%20tersedia."
+                href="https://wa.me/6289508436275?text=Halo%20SejatiDimedia,%20saya%20ingin%20berdiskusi%20mengenai%20skema%20pengembangan%20proyek%20dan%20estimasi%20biaya."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 text-xs sm:text-sm text-slate-500 hover:text-[#2C5098] transition-colors group cursor-pointer max-w-xl mx-auto px-4 leading-relaxed"
               >
                 <Icon icon="ph:chat-circle-dots-bold" className="w-4 h-4 text-[#2C5098] group-hover:scale-110 transition-transform shrink-0" />
                 <span className="underline underline-offset-4 decoration-slate-300 group-hover:decoration-[#2C5098]">
-                  {t.pricingCards.budgetNote || "Budget terbatas tapi butuh solusi cepat? Chat saya, kita diskusikan opsi yang realistis untuk kebutuhan Anda."}
+                  {t.pricingCards.budgetNote || "Punya kebutuhan spesifik atau ingin estimasi langsung? Konsultasikan kebutuhan sistem Anda bersama tim kami via WhatsApp."}
                 </span>
               </a>
             </div>
