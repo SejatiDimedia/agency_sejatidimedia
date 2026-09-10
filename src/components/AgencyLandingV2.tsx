@@ -573,34 +573,34 @@ export default function AgencyLandingV2({
         id="hero-section"
         className="w-full relative overflow-hidden bg-white pt-10 sm:pt-14 pb-16 sm:pb-24 lg:pb-28"
       >
-        {/* Hero Serene Horizon / Ambience Background */}
-        <div className="absolute inset-x-0 top-0 h-[480px] sm:h-[600px] lg:h-[680px] overflow-hidden pointer-events-none -z-0">
+        {/* Hero Serene Horizon / Ambience Background - Enhanced Clarity & High Tech Visuals */}
+        <div className="absolute inset-0 h-full w-full overflow-hidden pointer-events-none -z-0">
           <img
             src="/hero_bg.webp"
             alt="SejatiDimedia Hero Background"
-            className="w-full h-full object-cover object-top opacity-80"
+            className="w-full h-full object-cover object-[center_top] lg:object-[82%_top] opacity-95 sm:opacity-100 transition-opacity duration-700"
             fetchPriority="high"
             decoding="async"
           />
-          {/* Top Navbar Soft Light Blend */}
-          <div className="absolute inset-x-0 top-0 h-24 sm:h-32 bg-gradient-to-b from-white/80 via-white/30 to-transparent" />
-          {/* Bottom Smooth Fade-to-White Transition */}
-          <div className="absolute inset-x-0 bottom-0 h-64 sm:h-80 lg:h-96 bg-gradient-to-t from-white via-white/90 to-transparent" />
-          {/* Soft Side Falloff */}
-          <div className="absolute inset-y-0 left-0 w-24 sm:w-48 bg-gradient-to-r from-white/50 to-transparent" />
-          <div className="absolute inset-y-0 right-0 w-24 sm:w-48 bg-gradient-to-l from-white/50 to-transparent" />
+          {/* Subtle Top Navbar Blend */}
+          <div className="absolute inset-x-0 top-0 h-16 sm:h-24 bg-gradient-to-b from-white/70 via-white/20 to-transparent" />
+
+          {/* Smooth Bottom Transition to Next Section */}
+          <div className="absolute inset-x-0 bottom-0 h-28 sm:h-36 bg-gradient-to-t from-white via-white/70 to-transparent" />
         </div>
 
         {/* Ambient Brand Glow behind Headline */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[540px] h-[280px] bg-gradient-to-br from-[#2C5098]/8 to-[#23385B]/5 rounded-full blur-[100px] pointer-events-none -z-0" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[540px] h-[280px] bg-gradient-to-br from-[#2C5098]/12 to-[#23385B]/8 rounded-full blur-[90px] pointer-events-none -z-0" />
 
-        <div className="relative z-10 min-h-[calc(100vh-14rem)] flex flex-col items-center justify-between text-center max-w-4xl mx-auto px-4 sm:px-6">
-          {/* Main Center Content Container */}
-          <div className="flex-1 flex flex-col items-center justify-center space-y-6 sm:space-y-8 w-full pt-16 sm:pt-24 lg:pt-28">
+        <div className="relative z-10 min-h-[calc(100vh-14rem)] flex flex-col items-center justify-between text-center max-w-5xl lg:max-w-6xl mx-auto px-4 sm:px-6">
+          {/* Main Center Content Container - Frameless Seamless Layout (Option 1) */}
+          <div className="flex-1 flex flex-col items-center justify-center space-y-6 sm:space-y-8 w-full pt-16 sm:pt-24 lg:pt-28 relative">
+            {/* Smart Organic Contrast Shield - Seamless feathered radial halo with zero hard borders */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92vw] max-w-4xl h-[460px] bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.92)_0%,_rgba(255,255,255,0.65)_38%,_transparent_72%)] pointer-events-none -z-0" />
 
             {/* Main Headline */}
-            <div className="max-w-4xl">
-              <h1 className="text-3xl sm:text-5xl md:text-6xl font-sans font-bold tracking-tight leading-[1.12] text-slate-900 drop-shadow-2xs">
+            <div className="max-w-4xl mx-auto relative z-10">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-sans font-bold tracking-tight leading-[1.12] text-slate-900 drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
                 {t.hero.title}{' '}
                 <span className="bg-gradient-to-br from-[#2C5098] via-[#284478] to-[#23385B] bg-clip-text text-transparent inline-block font-extrabold pb-0.5">
                   {t.hero.titleHighlight}
@@ -609,14 +609,14 @@ export default function AgencyLandingV2({
             </div>
 
             {/* Subheadline */}
-            <div className="max-w-2xl mx-auto">
-              <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-sans font-medium">
+            <div className="max-w-2xl mx-auto relative z-10">
+              <p className="text-sm sm:text-base md:text-lg text-slate-700 font-medium leading-relaxed font-sans drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
                 {t.hero.subtitle}
               </p>
             </div>
 
             {/* Hero CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2 w-full sm:w-auto relative z-10">
               <button
                 onClick={() => scrollToId('contact-section')}
                 className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white shadow-lg shadow-[#2C5098]/25 hover:shadow-xl hover:shadow-[#2C5098]/35 active:scale-[0.98] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 border border-white/10"
