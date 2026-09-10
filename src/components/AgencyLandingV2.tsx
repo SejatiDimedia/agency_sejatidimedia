@@ -582,57 +582,276 @@ export default function AgencyLandingV2({
             fetchPriority="high"
             decoding="async"
           />
-          {/* Subtle Top Navbar Blend */}
-          <div className="absolute inset-x-0 top-0 h-16 sm:h-24 bg-gradient-to-b from-white/70 via-white/20 to-transparent" />
+          {/* Living Data Sparks & Active Server Pulses (Concentrated on Right Server Farm) */}
+          <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+            {/* Spark 1: Upper Right Server Tower to Main Bus */}
+            <motion.div
+              animate={{
+                x: [0, -130],
+                y: [0, 75],
+                opacity: [0, 1, 0.85, 0],
+                scale: [0.7, 1.05, 1, 0.7],
+              }}
+              transition={{
+                duration: 3.2,
+                repeat: Infinity,
+                repeatDelay: 2.2,
+                ease: 'easeInOut',
+              }}
+              className="hidden sm:block absolute top-[14%] right-[16%] lg:right-[22%] pointer-events-none"
+            >
+              <div className="relative">
+                <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_12px_4px_#38BDF8]" />
+                <div className="absolute top-1/2 right-full -translate-y-1/2 w-11 h-[2px] bg-gradient-to-r from-transparent via-[#38BDF8] to-white -rotate-[30deg] origin-right" />
+              </div>
+            </motion.div>
 
-          {/* Smooth Bottom Transition to Next Section */}
-          <div className="absolute inset-x-0 bottom-0 h-28 sm:h-36 bg-gradient-to-t from-white via-white/70 to-transparent" />
+            {/* Spark 2: High Tower Fast Surge (Upper Right Pillar) */}
+            <motion.div
+              animate={{
+                x: [0, -65],
+                y: [0, 80],
+                opacity: [0, 0.95, 0.8, 0],
+                scale: [0.7, 1, 1, 0.7],
+              }}
+              transition={{
+                duration: 2.6,
+                repeat: Infinity,
+                repeatDelay: 2.8,
+                delay: 1.2,
+                ease: 'easeInOut',
+              }}
+              className="hidden sm:block absolute top-[18%] right-[8%] lg:right-[12%] pointer-events-none"
+            >
+              <div className="relative">
+                <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_3px_#60A5FA]" />
+                <div className="absolute top-1/2 right-full -translate-y-1/2 w-9 h-[1.5px] bg-gradient-to-r from-transparent via-[#60A5FA] to-white -rotate-[45deg] origin-right" />
+              </div>
+            </motion.div>
+
+            {/* Spark 3: Mid-Tower Central Bus into Core */}
+            <motion.div
+              animate={{
+                x: [0, -110],
+                y: [0, -60],
+                opacity: [0, 1, 0.85, 0],
+                scale: [0.7, 1, 1, 0.7],
+              }}
+              transition={{
+                duration: 3.5,
+                repeat: Infinity,
+                repeatDelay: 2.5,
+                delay: 2.0,
+                ease: 'easeInOut',
+              }}
+              className="hidden sm:block absolute top-[36%] right-[14%] lg:right-[18%] pointer-events-none"
+            >
+              <div className="relative">
+                <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_3px_#93C5FD]" />
+                <div className="absolute top-1/2 right-full -translate-y-1/2 w-10 h-[1.5px] bg-gradient-to-r from-transparent via-[#93C5FD] to-white rotate-[30deg] origin-right" />
+              </div>
+            </motion.div>
+
+            {/* Spark 4: Cross-Rack Interconnect (Mid-Low Server Cluster) */}
+            <motion.div
+              animate={{
+                x: [0, -85],
+                y: [0, 48],
+                opacity: [0, 0.9, 0.75, 0],
+                scale: [0.7, 1, 1, 0.7],
+              }}
+              transition={{
+                duration: 2.8,
+                repeat: Infinity,
+                repeatDelay: 2.4,
+                delay: 0.5,
+                ease: 'easeInOut',
+              }}
+              className="hidden sm:block absolute top-[46%] right-[22%] lg:right-[26%] pointer-events-none"
+            >
+              <div className="relative">
+                <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_3px_#38BDF8]" />
+                <div className="absolute top-1/2 right-full -translate-y-1/2 w-8 h-[1.5px] bg-gradient-to-r from-transparent via-[#38BDF8] to-white -rotate-[30deg] origin-right" />
+              </div>
+            </motion.div>
+
+            {/* Spark 5: Lower Server Bay Highway */}
+            <motion.div
+              animate={{
+                x: [0, -95],
+                y: [0, -42],
+                opacity: [0, 0.85, 0.7, 0],
+                scale: [0.7, 1, 1, 0.7],
+              }}
+              transition={{
+                duration: 3.6,
+                repeat: Infinity,
+                repeatDelay: 3.0,
+                delay: 1.6,
+                ease: 'easeInOut',
+              }}
+              className="hidden sm:block absolute top-[60%] right-[11%] lg:right-[15%] pointer-events-none"
+            >
+              <div className="relative">
+                <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_3px_#38BDF8]" />
+                <div className="absolute top-1/2 right-full -translate-y-1/2 w-9 h-[1.5px] bg-gradient-to-r from-transparent via-[#38BDF8] to-white rotate-[25deg] origin-right" />
+              </div>
+            </motion.div>
+
+            {/* Spark 6: Deep Processor Core Highway */}
+            <motion.div
+              animate={{
+                x: [0, -80],
+                y: [0, 44],
+                opacity: [0, 0.95, 0.8, 0],
+                scale: [0.7, 1, 1, 0.7],
+              }}
+              transition={{
+                duration: 3.0,
+                repeat: Infinity,
+                repeatDelay: 2.6,
+                delay: 3.1,
+                ease: 'easeInOut',
+              }}
+              className="hidden md:block absolute top-[28%] right-[28%] lg:right-[32%] pointer-events-none"
+            >
+              <div className="relative">
+                <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_3px_#60A5FA]" />
+                <div className="absolute top-1/2 right-full -translate-y-1/2 w-8 h-[1.5px] bg-gradient-to-r from-transparent via-[#60A5FA] to-white -rotate-[30deg] origin-right" />
+              </div>
+            </motion.div>
+
+            {/* Active Server Status Beacons (Right Server Rack Nodes) */}
+            {/* Beacon 1: High Tower Node */}
+            <div className="hidden sm:block absolute top-[15%] right-[25%] lg:right-[28%] pointer-events-none">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#38BDF8] opacity-75 duration-1000" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white shadow-[0_0_6px_#38BDF8]" />
+              </span>
+            </div>
+
+            {/* Beacon 2: Mid Server Rack Node */}
+            <div className="hidden md:block absolute top-[35%] right-[10%] lg:right-[14%] pointer-events-none">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#60A5FA] opacity-65 duration-1000" style={{ animationDelay: '0.9s' }} />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#93C5FD] shadow-[0_0_6px_#60A5FA]" />
+              </span>
+            </div>
+
+            {/* Beacon 3: Lower Cluster Node */}
+            <div className="hidden sm:block absolute top-[50%] right-[18%] lg:right-[22%] pointer-events-none">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#38BDF8] opacity-60 duration-1000" style={{ animationDelay: '1.7s' }} />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white shadow-[0_0_6px_#38BDF8]" />
+              </span>
+            </div>
+          </div>
+
+          {/* Subtle Top Navbar Blend - Fades out towards the right so it doesn't cloud the 3D servers */}
+          <div className="absolute inset-x-0 top-0 h-16 sm:h-24 bg-gradient-to-b from-white/80 via-white/20 to-transparent [mask-image:linear-gradient(to_right,black_0%,black_50%,transparent_85%)] pointer-events-none" />
+
+          {/* Seamless Bottom Transition to Next Section - Luxury Exponential Scrim into #F8FAFC */}
+          <div
+            className="absolute inset-x-0 bottom-0 h-32 sm:h-40 lg:h-48 pointer-events-none"
+            style={{
+              background:
+                'linear-gradient(to bottom, transparent 0%, rgba(248,250,252,0.02) 20%, rgba(248,250,252,0.1) 40%, rgba(248,250,252,0.32) 60%, rgba(248,250,252,0.68) 80%, rgba(248,250,252,0.92) 93%, #F8FAFC 100%)',
+            }}
+          />
         </div>
 
-        {/* Ambient Brand Glow behind Headline */}
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[540px] h-[280px] bg-gradient-to-br from-[#2C5098]/12 to-[#23385B]/8 rounded-full blur-[90px] pointer-events-none -z-0" />
+        {/* Ambient Brand Glow behind Headline - Breathing Ambient Glow */}
+        <motion.div
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.6, 0.9, 0.6],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+          className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[300px] bg-gradient-to-br from-[#2C5098]/16 via-[#2E54A2]/12 to-[#23385B]/10 rounded-full blur-[95px] pointer-events-none -z-0"
+        />
 
         <div className="relative z-10 min-h-[calc(100vh-14rem)] flex flex-col items-center justify-between text-center max-w-5xl lg:max-w-6xl mx-auto px-4 sm:px-6">
           {/* Main Center Content Container - Frameless Seamless Layout (Option 1) */}
           <div className="flex-1 flex flex-col items-center justify-center space-y-6 sm:space-y-8 w-full pt-16 sm:pt-24 lg:pt-28 relative">
-            {/* Smart Organic Contrast Shield - Seamless feathered radial halo with zero hard borders */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[92vw] max-w-4xl h-[460px] bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.92)_0%,_rgba(255,255,255,0.65)_38%,_transparent_72%)] pointer-events-none -z-0" />
+            {/* Smart Organic Contrast Shield - Seamless feathered radial halo focused behind text */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-3xl lg:max-w-4xl h-[440px] bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.96)_0%,_rgba(255,255,255,0.58)_35%,_transparent_68%)] pointer-events-none -z-0" />
 
             {/* Main Headline */}
-            <div className="max-w-4xl mx-auto relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="max-w-4xl mx-auto relative z-10"
+            >
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-sans font-bold tracking-tight leading-[1.12] text-slate-900 drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
                 {t.hero.title}{' '}
-                <span className="bg-gradient-to-br from-[#2C5098] via-[#284478] to-[#23385B] bg-clip-text text-transparent inline-block font-extrabold pb-0.5">
+                <motion.span
+                  animate={{
+                    backgroundPosition: ['200% center', '-200% center'],
+                  }}
+                  transition={{
+                    duration: 3.5,
+                    repeat: Infinity,
+                    ease: 'linear',
+                  }}
+                  style={{
+                    backgroundImage:
+                      'linear-gradient(110deg, #1E315B 0%, #2C5098 25%, #38BDF8 44%, #FFFFFF 50%, #38BDF8 56%, #2C5098 75%, #1E315B 100%)',
+                    backgroundSize: '250% auto',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                  className="inline-block font-extrabold pb-0.5 drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]"
+                >
                   {t.hero.titleHighlight}
-                </span>.
+                </motion.span>.
               </h1>
-            </div>
+            </motion.div>
 
             {/* Subheadline */}
-            <div className="max-w-2xl mx-auto relative z-10">
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+              className="max-w-2xl mx-auto relative z-10"
+            >
               <p className="text-sm sm:text-base md:text-lg text-slate-700 font-medium leading-relaxed font-sans drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
                 {t.hero.subtitle}
               </p>
-            </div>
+            </motion.div>
 
-            {/* Hero CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2 w-full sm:w-auto relative z-10">
+            {/* Hero CTA Buttons - Executive High-Craft Precision */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2 w-full sm:w-auto relative z-10"
+            >
+              {/* Primary CTA - Clean Solid Executive Button (Borderless) */}
               <button
                 onClick={() => scrollToId('contact-section')}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white shadow-lg shadow-[#2C5098]/25 hover:shadow-xl hover:shadow-[#2C5098]/35 active:scale-[0.98] transition-all duration-300 cursor-pointer flex items-center justify-center gap-2 border border-white/10"
                 id="hero-btn-book-call"
+                className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full font-bold text-xs sm:text-sm text-white bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] shadow-md shadow-[#2C5098]/20 hover:shadow-xl hover:shadow-[#2C5098]/35 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] transition-all duration-200 cursor-pointer group w-full sm:w-auto"
               >
                 <span>{t.hero.btnPrimary}</span>
-                <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
+                <Icon
+                  icon="ph:arrow-right-bold"
+                  className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200 ease-out"
+                />
               </button>
+              {/* Executive Secondary CTA */}
               <button
                 onClick={() => scrollToId('projects-section')}
-                className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-white/90 backdrop-blur-md hover:bg-white text-slate-700 hover:text-slate-900 border border-slate-200/90 hover:border-[#2C5098]/40 shadow-sm active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
                 id="hero-btn-view-projects"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-white/95 backdrop-blur-md hover:bg-white text-slate-700 hover:text-slate-900 border border-slate-200/90 hover:border-[#2C5098]/40 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] transition-all duration-200 cursor-pointer w-full sm:w-auto"
               >
                 <span>{t.hero.btnSecondary}</span>
               </button>
-            </div>
+            </motion.div>
           </div>
 
           {/* Hero Bottom Anchor / Scroll Prompt */}
@@ -661,7 +880,7 @@ export default function AgencyLandingV2({
           ========================================================================= */}
       <motion.section
         id="client-portal-section"
-        className="w-full bg-[#F8FAFC] border-y border-slate-200/70 py-20 sm:py-28 lg:py-32"
+        className="w-full bg-[#F8FAFC] border-b border-slate-200/70 py-20 sm:py-28 lg:py-32"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
