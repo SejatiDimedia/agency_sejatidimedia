@@ -9,6 +9,7 @@ import { Home, Layers, GitMerge, FolderOpen, MessageCircle } from "lucide-react"
 import dynamic from "next/dynamic";
 import ThemeToggle from "./ThemeToggle";
 const AiChatWidget = dynamic(() => import("./AiChatWidget"), { ssr: false });
+const CustomCursor = dynamic(() => import("./CustomCursor"), { ssr: false });
 import AuroraBackground from "./ui/aurora-background";
 import { ThemeMode } from "../types";
 import { useLanguage, Language } from "@/lib/i18n/LanguageContext";
@@ -165,6 +166,7 @@ export default function LayoutWrapper({
 
   return (
     <>
+      <CustomCursor />
       {/* 0. Premium Minimalist Loading Screen Overlay */}
       <AnimatePresence mode="wait">
         {loading && (
@@ -384,9 +386,9 @@ export default function LayoutWrapper({
                       className="h-full w-auto object-contain"
                     />
                   </div>
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-sans font-medium sm:font-semibold tracking-tight text-theme-fore max-w-lg leading-snug">
+                  <p className="text-sm sm:text-base font-sans text-theme-fore-muted max-w-md leading-relaxed">
                     {t.footer.tagline}
-                  </h3>
+                  </p>
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono text-theme-fore-muted">
                     <a
                       href="mailto:sejatidimedia@gmail.com"
@@ -466,14 +468,84 @@ export default function LayoutWrapper({
                 </div>
               </div>
 
-              <div className="relative py-6 select-none border-t border-b border-theme-border/20 overflow-hidden flex items-center justify-center">
-                <h2
-                  style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }}
-                  className="text-[7.5vw] sm:text-[8vw] md:text-[8.5vw] lg:text-[88px] xl:text-[96px] font-zen-dots tracking-wider uppercase leading-none text-center select-none w-full transition-all duration-300 opacity-90 dark:opacity-85 py-3 px-6 whitespace-nowrap"
-                >
-                  <span style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }} className="bg-gradient-to-b from-[#2E54A2] via-[#2E54A2]/80 to-transparent bg-clip-text text-transparent">SEJATI</span>{' '}
-                  <span style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }} className="bg-gradient-to-b from-[#23385B] via-[#23385B]/80 to-transparent bg-clip-text text-transparent">DIMEDIA</span>
-                </h2>
+              <div className="relative py-8 sm:py-10 select-none border-t border-b border-theme-border/20 overflow-hidden flex items-center justify-center group">
+                {/* Ambient Soft Glow Behind the Text */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <motion.div
+                    animate={{
+                      opacity: [0.4, 0.85, 0.4],
+                      scale: [0.96, 1.04, 0.96],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    className="w-[75%] max-w-4xl h-24 bg-gradient-to-r from-transparent via-[#2E54A2]/25 to-transparent blur-3xl rounded-full"
+                  />
+                </div>
+
+                {/* Subtle Electric Light Flare on Top Border */}
+                <motion.div
+                  animate={{
+                    x: ['-100%', '200%'],
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    repeatDelay: 0.5,
+                  }}
+                  className="absolute top-0 left-0 w-48 h-[1.5px] bg-gradient-to-r from-transparent via-[#38BDF8] to-transparent pointer-events-none opacity-80"
+                />
+
+                <div className="relative z-10 w-full flex items-center justify-center">
+                  <h2
+                    style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }}
+                    className="text-[7.5vw] sm:text-[8vw] md:text-[8.5vw] lg:text-[88px] xl:text-[96px] font-zen-dots tracking-wider uppercase leading-none text-center select-none w-full transition-all duration-300 opacity-90 dark:opacity-95 py-3 px-6 whitespace-nowrap relative"
+                  >
+                    {/* Base Vertical Gradient Text */}
+                    <span
+                      style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }}
+                      className="bg-gradient-to-b from-[#2E54A2] via-[#2E54A2]/80 to-transparent bg-clip-text text-transparent"
+                    >
+                      SEJATI
+                    </span>{' '}
+                    <span
+                      style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }}
+                      className="bg-gradient-to-b from-[#23385B] via-[#23385B]/80 to-transparent bg-clip-text text-transparent"
+                    >
+                      DIMEDIA
+                    </span>
+
+                    {/* Animated Kinetic Light Sweep Overlay (Ultra Smooth & Feathered) */}
+                    <motion.span
+                      aria-hidden="true"
+                      animate={{
+                        backgroundPosition: ['250% center', '-250% center'],
+                      }}
+                      transition={{
+                        duration: 6,
+                        repeat: Infinity,
+                        ease: [0.4, 0, 0.2, 1],
+                        repeatDelay: 0.6,
+                      }}
+                      style={{
+                        fontFamily: "'Zen Dots', cursive, sans-serif",
+                        backgroundImage:
+                          'linear-gradient(115deg, transparent 0%, transparent 28%, rgba(56,189,248,0.03) 34%, rgba(56,189,248,0.18) 41%, rgba(56,189,248,0.55) 47%, rgba(255,255,255,0.92) 50%, rgba(56,189,248,0.55) 53%, rgba(56,189,248,0.18) 59%, rgba(56,189,248,0.03) 66%, transparent 72%, transparent 100%)',
+                        backgroundSize: '300% 100%',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        willChange: 'background-position',
+                        transform: 'translateZ(0)',
+                      }}
+                      className="absolute inset-0 w-full text-center py-3 px-6 whitespace-nowrap pointer-events-none select-none drop-shadow-[0_0_18px_rgba(56,189,248,0.4)]"
+                    >
+                      SEJATI DIMEDIA
+                    </motion.span>
+                  </h2>
+                </div>
               </div>
 
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 text-[10px] font-mono tracking-wider text-theme-fore-subtle uppercase">
@@ -713,9 +785,9 @@ export default function LayoutWrapper({
                       className="h-full w-auto object-contain"
                     />
                   </div>
-                  <h3 className="text-lg sm:text-xl md:text-2xl font-sans font-medium sm:font-semibold tracking-tight text-slate-800 max-w-lg leading-snug">
+                  <p className="text-sm sm:text-base font-sans text-slate-600 max-w-md leading-relaxed">
                     {t.footer.tagline}
-                  </h3>
+                  </p>
                   <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-mono text-slate-500">
                     <a
                       href="mailto:sejatidimedia@gmail.com"
@@ -795,14 +867,84 @@ export default function LayoutWrapper({
                 </div>
               </div>
 
-              <div className="relative py-6 select-none border-t border-b border-slate-200/80 overflow-hidden flex items-center justify-center">
-                <h2
-                  style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }}
-                  className="text-[7.5vw] sm:text-[8vw] md:text-[8.5vw] lg:text-[88px] xl:text-[96px] font-zen-dots tracking-wider uppercase leading-none text-center select-none w-full transition-all duration-300 py-3 px-6 whitespace-nowrap"
-                >
-                  <span style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }} className="bg-gradient-to-b from-[#2C5098] via-[#2C5098]/80 to-transparent bg-clip-text text-transparent">SEJATI</span>{' '}
-                  <span style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }} className="bg-gradient-to-b from-[#23385B] via-[#23385B]/80 to-transparent bg-clip-text text-transparent">DIMEDIA</span>
-                </h2>
+              <div className="relative py-8 sm:py-10 select-none border-t border-b border-slate-200/80 overflow-hidden flex items-center justify-center group">
+                {/* Ambient Soft Glow Behind the Text */}
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <motion.div
+                    animate={{
+                      opacity: [0.35, 0.7, 0.35],
+                      scale: [0.96, 1.04, 0.96],
+                    }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    className="w-[75%] max-w-4xl h-24 bg-gradient-to-r from-transparent via-[#2C5098]/12 to-transparent blur-3xl rounded-full"
+                  />
+                </div>
+
+                {/* Subtle Electric Light Flare on Top Border */}
+                <motion.div
+                  animate={{
+                    x: ['-100%', '200%'],
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    repeatDelay: 0.5,
+                  }}
+                  className="absolute top-0 left-0 w-48 h-[1.5px] bg-gradient-to-r from-transparent via-[#38BDF8] to-transparent pointer-events-none opacity-80"
+                />
+
+                <div className="relative z-10 w-full flex items-center justify-center">
+                  <h2
+                    style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }}
+                    className="text-[7.5vw] sm:text-[8vw] md:text-[8.5vw] lg:text-[88px] xl:text-[96px] font-zen-dots tracking-wider uppercase leading-none text-center select-none w-full transition-all duration-300 py-3 px-6 whitespace-nowrap relative"
+                  >
+                    {/* Base Vertical Gradient Text from before */}
+                    <span
+                      style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }}
+                      className="bg-gradient-to-b from-[#2C5098] via-[#2C5098]/80 to-transparent bg-clip-text text-transparent"
+                    >
+                      SEJATI
+                    </span>{' '}
+                    <span
+                      style={{ fontFamily: "'Zen Dots', cursive, sans-serif" }}
+                      className="bg-gradient-to-b from-[#23385B] via-[#23385B]/80 to-transparent bg-clip-text text-transparent"
+                    >
+                      DIMEDIA
+                    </span>
+
+                    {/* Animated Kinetic Light Sweep Overlay (Ultra Smooth & Feathered) */}
+                    <motion.span
+                      aria-hidden="true"
+                      animate={{
+                        backgroundPosition: ['250% center', '-250% center'],
+                      }}
+                      transition={{
+                        duration: 6,
+                        repeat: Infinity,
+                        ease: [0.4, 0, 0.2, 1],
+                        repeatDelay: 0.6,
+                      }}
+                      style={{
+                        fontFamily: "'Zen Dots', cursive, sans-serif",
+                        backgroundImage:
+                          'linear-gradient(115deg, transparent 0%, transparent 28%, rgba(56,189,248,0.03) 34%, rgba(56,189,248,0.18) 41%, rgba(56,189,248,0.55) 47%, rgba(255,255,255,0.92) 50%, rgba(56,189,248,0.55) 53%, rgba(56,189,248,0.18) 59%, rgba(56,189,248,0.03) 66%, transparent 72%, transparent 100%)',
+                        backgroundSize: '300% 100%',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent',
+                        willChange: 'background-position',
+                        transform: 'translateZ(0)',
+                      }}
+                      className="absolute inset-0 w-full text-center py-3 px-6 whitespace-nowrap pointer-events-none select-none drop-shadow-[0_0_18px_rgba(56,189,248,0.4)]"
+                    >
+                      SEJATI DIMEDIA
+                    </motion.span>
+                  </h2>
+                </div>
               </div>
 
               <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 text-[10px] font-mono tracking-wider text-slate-400 uppercase">

@@ -895,7 +895,7 @@ export default function AgencyLandingV2({
 
             <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
               {t.clientPortal?.title || (language === 'en' ? 'Every Project Includes a' : 'Setiap Proyek Dilengkapi')}{' '}
-              <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent font-extrabold">
+              <span className="text-[#2C5098] font-extrabold">
                 {language === 'en' ? 'Dedicated Client Portal' : 'Portal Klien Khusus'}
               </span>
             </h2>
@@ -1510,7 +1510,7 @@ export default function AgencyLandingV2({
             </div>
             <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
               {t.nav.services}{' '}
-              <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent">
+              <span className="text-[#2C5098]">
                 {t.services.mainHeadingHighlight}
               </span>
             </h2>
@@ -1632,7 +1632,7 @@ export default function AgencyLandingV2({
             </div>
             <h2 className="text-2xl sm:text-3.5xl font-sans font-bold tracking-tight leading-[1.12] text-slate-900">
               {t.tech.mainHeading}{' '}
-              <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent">
+              <span className="text-[#2C5098]">
                 {t.tech.mainHeadingHighlight}
               </span>
             </h2>
@@ -2030,7 +2030,7 @@ export default function AgencyLandingV2({
               </div>
               <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
                 {t.portfolio.mainHeading}{' '}
-                <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent">
+                <span className="text-[#2C5098]">
                   {t.portfolio.mainHeadingHighlight}
                 </span>
               </h2>
@@ -2404,7 +2404,7 @@ export default function AgencyLandingV2({
             </div>
             <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
               {t.trust?.mainHeading || "Kenapa Klien Percaya"}{' '}
-              <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent">
+              <span className="text-[#2C5098]">
                 {t.trust?.mainHeadingHighlight || "Bekerja Sama Dengan Saya"}
               </span>
             </h2>
@@ -2501,7 +2501,7 @@ export default function AgencyLandingV2({
                 >
                   <div className="space-y-6">
                     {/* Giant floating number digits in primary color */}
-                    <div className="text-8xl sm:text-9xl font-sans font-bold tracking-tighter leading-none bg-gradient-to-b from-[#2C5098] to-transparent bg-clip-text text-transparent select-none opacity-85">
+                    <div className="text-8xl sm:text-9xl font-sans font-bold tracking-tighter leading-none text-[#2C5098]/15 select-none">
                       {MILESTONES[activeMilestone].step}
                     </div>
 
@@ -2688,7 +2688,7 @@ export default function AgencyLandingV2({
 
             <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
               {t.contact.mainHeading}{' '}
-              <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent">
+              <span className="text-[#2C5098]">
                 {t.contact.mainHeadingHighlight}
               </span>
             </h2>

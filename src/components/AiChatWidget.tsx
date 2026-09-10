@@ -25,6 +25,24 @@ export default function AiChatWidget() {
   const [isHandoffMode, setIsHandoffMode] = useState(false);
   const [isWaitingForName, setIsWaitingForName] = useState(false);
 
+  // Scroll height progress state
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  // Monitor landing page scroll height & progress
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollHeight > 0) {
+        const current = (window.scrollY / scrollHeight) * 100;
+        setScrollProgress(Math.min(100, Math.max(0, current)));
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Initialize Session ID and Pusher
@@ -176,28 +194,72 @@ export default function AiChatWidget() {
 
   return (
     <>
-      {/* Floating Action Button */}
+      {/* Floating Action Button with Landing Page Scroll Height Indicator */}
       <AnimatePresence>
         {!isOpen && (
-          <motion.button
+          <motion.div
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={handleOpen}
-            className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-[100] w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-lg shadow-[#2C5098]/30 flex items-center justify-center cursor-pointer transition-all border border-white/20 group p-0 overflow-hidden"
-            aria-label="Buka Chat AI"
+            className="fixed bottom-20 right-3 sm:bottom-6 sm:right-6 z-[100] flex items-center justify-center group"
           >
-            <img
-              src="/ai-gif2.gif"
-              alt="Chat with us"
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-            />
+            {/* Circular Scroll Progress Ring SVG */}
+            <svg
+              className="absolute -inset-1.5 w-[56px] h-[56px] sm:w-[60px] sm:h-[60px] -rotate-90 pointer-events-none drop-shadow-[0_2px_8px_rgba(44,80,152,0.25)]"
+              viewBox="0 0 60 60"
+            >
+              <defs>
+                <linearGradient id="aiChatScrollGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#38BDF8" />
+                  <stop offset="50%" stopColor="#2C5098" />
+                  <stop offset="100%" stopColor="#60A5FA" />
+                </linearGradient>
+              </defs>
 
-            {/* Subtle ping animation behind button */}
-            <span className="absolute inset-0 rounded-full bg-[#2C5098] animate-ping opacity-25 pointer-events-none" />
-          </motion.button>
+              {/* Background Track Circle */}
+              <circle
+                cx="30"
+                cy="30"
+                r="26"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                className="text-slate-300/40 dark:text-white/20"
+              />
+
+              {/* Dynamic Scroll Progress Ring */}
+              <circle
+                cx="30"
+                cy="30"
+                r="26"
+                fill="none"
+                stroke="url(#aiChatScrollGrad)"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeDasharray={163.36}
+                strokeDashoffset={163.36 - (scrollProgress / 100) * 163.36}
+                className="transition-all duration-150 ease-out"
+              />
+            </svg>
+
+            {/* Inner Floating AI Button */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleOpen}
+              className="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-lg shadow-[#2C5098]/30 flex items-center justify-center cursor-pointer transition-all border border-white/20 p-0 overflow-hidden"
+              aria-label="Buka Chat AI"
+            >
+              <img
+                src="/ai-gif2.gif"
+                alt="Chat with us"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+              />
+
+              {/* Subtle ping animation behind button */}
+              <span className="absolute inset-0 rounded-full bg-[#2C5098] animate-ping opacity-25 pointer-events-none" />
+            </motion.button>
+          </motion.div>
         )}
       </AnimatePresence>
 
@@ -336,9 +398,9 @@ export default function AiChatWidget() {
                     <img src="/ai-gif2.gif" alt="Sedia AI" className="w-full h-full object-cover scale-110" />
                   </div>
                   <div className="px-3.5 py-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 rounded-bl-xs flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-bounce" style={{ animationDelay: '300ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-pulse" style={{ animationDelay: '0ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-pulse" style={{ animationDelay: '150ms' }} />
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-pulse" style={{ animationDelay: '300ms' }} />
                   </div>
                 </div>
               )}
