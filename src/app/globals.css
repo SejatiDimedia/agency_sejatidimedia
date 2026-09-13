@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap');
+@import "tailwindcss";
 
 /* View Transitions for Theme Toggle */
 ::view-transition-old(root),
@@ -16,7 +16,7 @@
   --font-display: "Sora", "Space Grotesk", sans-serif;
   --font-sora: "Sora", sans-serif;
   --font-serif: "Playfair Display", Georgia, serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-mono: "Plus Jakarta Sans", var(--font-jakarta), sans-serif;
   --font-zen-dots: "Zen Dots", var(--font-zen-dots), sans-serif;
 
   --color-theme-deep: var(--background-deep);

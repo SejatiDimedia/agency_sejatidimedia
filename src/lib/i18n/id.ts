@@ -7,6 +7,7 @@ export const id = {
     projects: "Proyek",
     services: "Layanan",
     portfolio: "Portofolio",
+    insights: "Insights",
     capabilities: "Kompetensi",
     pricing: "Harga",
     guarantee: "Jaminan",
@@ -459,5 +460,27 @@ export const id = {
     activeBadge: "Sedang Aktif",
     activateBtn: "Gunakan Template",
     activatedToast: "Template berhasil diubah! Kunjungi halaman utama untuk melihat perubahannya."
+  },
+  insightsPage: {
+    badge: "INSIGHTS & TEKNOLOGI",
+    title: "Catatan Arsitektur & Standar Rekayasa Perangkat Lunak",
+    subtitle: "Ulasan mendalam seputar arsitektur web, optimasi performa, keamanan sistem, dan praktik terbaik engineering langsung dari dapur SejatiDimedia.",
+    searchPlaceholder: "Cari topik artikel (misal: Laravel, Next.js, Database)...",
+    allCategories: "Semua Kategori",
+    readTime: "menit baca",
+    publishedOn: "Diterbitkan pada",
+    backToList: "Kembali ke Semua Insights",
+    shareArticle: "Bagikan Artikel:",
+    copied: "Tautan Tersalin!",
+    copyLink: "Salin Tautan",
+    writtenBy: "Ditulis oleh",
+    relatedTitle: "Artikel Rekayasa Terkait",
+    ctaCard: {
+      badge: "KONSULTASI SISTEM",
+      title: "Punya Masalah Arsitektur atau Ingin Membangun Sistem yang Benar?",
+      description: "Kami siap membantu mengaudit kode, me-refactor arsitektur yang lemot, atau membangun aplikasi bisnis Anda dengan standar enterprise sejak awal.",
+      buttonPrimary: "Konsultasi Gratis via WhatsApp",
+      buttonSecondary: "Hitung Estimasi Proyek"
+    }
   }
 };

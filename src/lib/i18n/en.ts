@@ -7,6 +7,7 @@ export const en = {
     projects: "Projects",
     services: "Services",
     portfolio: "Portfolio",
+    insights: "Insights",
     capabilities: "Capabilities",
     pricing: "Pricing",
     guarantee: "Guarantee",
@@ -459,5 +460,27 @@ export const en = {
     activeBadge: "Currently Active",
     activateBtn: "Use Template",
     activatedToast: "Template successfully updated! Visit the home page to see the changes."
+  },
+  insightsPage: {
+    badge: "ENGINEERING INSIGHTS",
+    title: "System Architecture & Software Engineering Notes",
+    subtitle: "In-depth explorations of web architecture, database scalability, application performance, and development best practices directly from SejatiDimedia's workshop.",
+    searchPlaceholder: "Search topics (e.g. Laravel, Next.js, Architecture)...",
+    allCategories: "All Categories",
+    readTime: "min read",
+    publishedOn: "Published on",
+    backToList: "Back to All Insights",
+    shareArticle: "Share Article:",
+    copied: "Link Copied!",
+    copyLink: "Copy Link",
+    writtenBy: "Written by",
+    relatedTitle: "Related Engineering Articles",
+    ctaCard: {
+      badge: "TECHNICAL CONSULTATION",
+      title: "Facing Similar Architecture Bottlenecks or Building New Systems?",
+      description: "We help audit existing codebases, refactor sluggish legacy apps, and architect mission-critical business software with enterprise standards from day one.",
+      buttonPrimary: "Free Consultation via WhatsApp",
+      buttonSecondary: "Estimate Your Project"
+    }
   }
 };

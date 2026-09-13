@@ -95,7 +95,7 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
         <div className="grid grid-cols-3 gap-2.5">
           {visibleImages.map((img, idx) => {
             const isLastVisibleWithMore = images.length > displayLimit && idx === displayLimit - 1;
-            
+
             return (
               <motion.div
                 key={img.id}
@@ -106,22 +106,20 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
                 }}
                 whileHover={isNdaBlurred ? {} : { scale: 1.03, y: -2 }}
                 whileTap={isNdaBlurred ? {} : { scale: 0.98 }}
-                className={`relative aspect-square w-full rounded-xl overflow-hidden border border-slate-200 dark:border-theme-border/60 bg-slate-50 dark:bg-theme-surface/50 transition-all duration-300 group shadow-sm ${
-                  isNdaBlurred ? 'cursor-not-allowed' : 'hover:border-[#2C5098] cursor-pointer hover:shadow-md'
-                }`}
+                className={`relative aspect-square w-full rounded-xl overflow-hidden border border-slate-200 dark:border-theme-border/60 bg-slate-50 dark:bg-theme-surface/50 transition-all duration-300 group shadow-sm ${isNdaBlurred ? 'cursor-not-allowed' : 'hover:border-[#2C5098] cursor-pointer hover:shadow-md'
+                  }`}
               >
                 <Image
                   src={isNdaBlurred ? NDA_PLACEHOLDER_IMAGE : img.url}
                   alt={isNdaBlurred ? "Redacted NDA Screenshot" : img.name}
                   fill
-                  className={`object-cover transition-all duration-500 ${
-                    isNdaBlurred
+                  className={`object-cover transition-all duration-500 ${isNdaBlurred
                       ? 'filter blur-md scale-110 brightness-75 select-none pointer-events-none'
                       : 'filter brightness-[0.9] group-hover:brightness-100 group-hover:scale-105'
-                  }`}
+                    }`}
                   sizes="(max-w-768px) 33vw, 10vw"
                 />
-                
+
                 {/* Expand Hover Icon (Only when NOT blurred) */}
                 {!isNdaBlurred && !isLastVisibleWithMore && (
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center z-10">
@@ -134,7 +132,7 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
                     </motion.div>
                   </div>
                 )}
-                
+
                 {isLastVisibleWithMore && !isNdaBlurred && (
                   <div className="absolute inset-0 bg-black/75 backdrop-blur-[2px] flex flex-col items-center justify-center z-10 transition-all group-hover:bg-black/80">
                     <span className="text-base font-sans font-extrabold text-white tracking-tight drop-shadow">
@@ -196,7 +194,7 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
                       {images[activeIdx].name}
                     </h3>
                   </div>
-                  
+
                   <div className="flex items-center gap-3">
                     <span className="text-[10px] font-mono text-slate-500 dark:text-theme-fore-subtle bg-white dark:bg-theme-surface/60 border border-slate-200 dark:border-theme-border/40 px-2 py-0.5 rounded">
                       {activeIdx + 1} / {images.length}
@@ -232,9 +230,8 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
                       src={images[activeIdx].url}
                       alt={images[activeIdx].name}
                       fill
-                      className={`object-contain transition-all duration-300 ${
-                        imageLoading ? "opacity-30 scale-[0.98] blur-[2px]" : "opacity-100 scale-100 blur-0"
-                      }`}
+                      className={`object-contain transition-all duration-300 ${imageLoading ? "opacity-30 scale-[0.98] blur-[2px]" : "opacity-100 scale-100 blur-0"
+                        }`}
                       sizes="(max-w-1200px) 95vw, 85vw"
                       priority
                       onLoad={() => setImageLoading(false)}
@@ -269,11 +266,10 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
                         <div
                           key={img.id}
                           onClick={() => setActiveIdx(idx)}
-                          className={`relative w-10 h-10 rounded-lg overflow-hidden border cursor-pointer transition-all flex-shrink-0 ${
-                            idx === activeIdx
+                          className={`relative w-10 h-10 rounded-lg overflow-hidden border cursor-pointer transition-all flex-shrink-0 ${idx === activeIdx
                               ? "border-[#2C5098] scale-105 shadow-sm"
                               : "border-slate-200 opacity-40 hover:opacity-85"
-                          }`}
+                            }`}
                         >
                           <Image
                             src={img.url}

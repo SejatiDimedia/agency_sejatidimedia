@@ -331,6 +331,15 @@ export default function LayoutWrapper({
                   {t.nav.portfolio}
                 </button>
                 <button
+                  onClick={() => router.push("/insights")}
+                  className={`px-4 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors ${pathname.startsWith("/insights")
+                    ? "text-theme-fore bg-theme-surface"
+                    : "text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface"
+                    }`}
+                >
+                  {t.nav.insights || "Insights"}
+                </button>
+                <button
                   onClick={() => handleNavClick("contact-section")}
                   className="px-4 py-1.5 rounded-full text-xs font-semibold text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface cursor-pointer transition-colors"
                 >
@@ -429,6 +438,14 @@ export default function LayoutWrapper({
                           className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left"
                         >
                           {t.nav.portfolio}
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => router.push("/insights")}
+                          className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left"
+                        >
+                          {t.nav.insights || "Insights"}
                         </button>
                       </li>
                     </ul>
@@ -711,6 +728,15 @@ export default function LayoutWrapper({
                     {t.nav.portfolio}
                   </button>
                   <button
+                    onClick={() => router.push("/insights")}
+                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${pathname.startsWith("/insights")
+                      ? "text-[#2C5098] bg-[#2C5098]/8 font-bold"
+                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
+                      }`}
+                  >
+                    {t.nav.insights || "Insights"}
+                  </button>
+                  <button
                     onClick={() => handleNavClick("faq-section")}
                     className="px-3.5 py-1.5 rounded-full text-xs font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100/80 cursor-pointer transition-all duration-200"
                   >
@@ -828,6 +854,14 @@ export default function LayoutWrapper({
                           className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer block text-left"
                         >
                           {t.nav.portfolio}
+                        </button>
+                      </li>
+                      <li>
+                        <button
+                          onClick={() => router.push("/insights")}
+                          className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer block text-left"
+                        >
+                          {t.nav.insights || "Insights"}
                         </button>
                       </li>
                     </ul>

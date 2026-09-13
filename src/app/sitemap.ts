@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { getProjects } from '@/lib/api/glio-projects';
+import { getInsights } from '@/lib/api/insights';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://sejatidimedia.web.id';
@@ -17,6 +18,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('Failed to load projects for sitemap', e);
   }
 
+  let insightRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const insights = await getInsights();
+    insightRoutes = (insights || []).map((i) => ({
+      url: `${baseUrl}/insights/${i.slug}`,
+      lastModified: new Date(i.publishedAt),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    }));
+  } catch (e) {
+    console.error('Failed to load insights for sitemap', e);
+  }
+
   return [
     {
       url: baseUrl,
@@ -30,6 +44,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'daily',
       priority: 0.8,
     },
+    {
+      url: `${baseUrl}/insights`,
+      lastModified: new Date(),
+      changeFrequency: 'daily',
+      priority: 0.9,
+    },
     ...projectRoutes,
+    ...insightRoutes,
   ];
 }

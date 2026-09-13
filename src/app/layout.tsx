@@ -65,7 +65,7 @@ export const viewport: Viewport = {
   themeColor: "#050506",
 };
 
-import { Plus_Jakarta_Sans, Sora, JetBrains_Mono, Inter, Zen_Dots } from "next/font/google";
+import { Plus_Jakarta_Sans, Sora, Inter, Zen_Dots } from "next/font/google";
 import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -80,13 +80,6 @@ const sora = Sora({
   variable: "--font-sora",
   display: "swap",
   weight: ["400", "500", "600", "700", "800"],
-});
-
-const jetbrainsMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
-  weight: ["400", "500", "600"],
 });
 
 const inter = Inter({
@@ -112,7 +105,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${plusJakarta.variable} ${sora.variable} ${jetbrainsMono.variable} ${inter.variable} ${zenDots.variable}`}
+      className={`${plusJakarta.variable} ${sora.variable} ${inter.variable} ${zenDots.variable}`}
     >
       <head>
         <meta name="google-site-verification" content="Wm-o9TjYVWYqL5cxsP8hRnHGlRbdCPbpsNv0pEQN_QY" />

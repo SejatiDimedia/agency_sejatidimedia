@@ -19,7 +19,8 @@ import {
   CreditCard,
   MessageSquare,
   Lock,
-  ShieldCheck
+  ShieldCheck,
+  BookOpen
 } from 'lucide-react';
 import { ActiveNavSection } from '@/types/portal';
 import { SidebarItem } from '@/components/ui';
@@ -321,6 +322,15 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
                       label="Portfolio Showcase"
                       isActive={isPortfolioActive}
                       onClick={() => handleNavigate('/portal/portfolio', 'portfolio')}
+                      collapsed={isCollapsed}
+                    />
+
+                    {/* Insights CMS (ADMIN ONLY) */}
+                    <SidebarItem
+                      icon={<BookOpen className="w-5 h-5" />}
+                      label="Insights CMS"
+                      isActive={pathname === '/portal/insights' || activeSection === 'insights-cms'}
+                      onClick={() => handleNavigate('/portal/insights', 'insights-cms')}
                       collapsed={isCollapsed}
                     />
 
