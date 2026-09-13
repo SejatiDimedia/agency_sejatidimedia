@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,7 +8,8 @@ import {
   ArrowLeft, Save, Eye, Sparkles, Check, Globe, Tag, Clock,
   Calendar, AlertCircle, FileText, ExternalLink, Image as ImageIcon,
   Columns, Edit3, Loader2, CheckCircle2, ShieldAlert, Settings2,
-  Sliders, Layout, Hash, Monitor, Smartphone
+  Sliders, Layout, Hash, Monitor, Smartphone, UploadCloud, Link2,
+  Trash2
 } from 'lucide-react';
 import { Toast } from '@/components/ui';
 import { InsightArticleViewer } from '@/components/insights/InsightArticleViewer';
@@ -33,6 +34,15 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
   const [previewScope, setPreviewScope] = useState<'full' | 'body'>('full');
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
 
+  // Cover Image Type: 'link' vs 'upload'
+  const [coverImageType, setCoverImageType] = useState<'link' | 'upload'>(
+    initialData?.coverImage && initialData.coverImage.includes('r2.') ? 'upload' : 'link'
+  );
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [uploadProgressText, setUploadProgressText] = useState('');
+  const [dragOver, setDragOver] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [formData, setFormData] = useState({
     titleId: initialData?.titleId || '',
     titleEn: initialData?.titleEn || '',
@@ -51,6 +61,60 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
+  const handleFileUpload = async (file: File) => {
+    if (!file) return;
+
+    // Validate size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      setToast({ message: 'Ukuran file terlalu besar (maksimal 10MB)', type: 'error' });
+      return;
+    }
+
+    // Validate format
+    if (!file.type.startsWith('image/')) {
+      setToast({ message: 'Harap pilih file gambar (JPG, PNG, WEBP, AVIF, GIF)', type: 'error' });
+      return;
+    }
+
+    setIsUploadingImage(true);
+    setUploadProgressText(`Mengunggah ${file.name}...`);
+
+    try {
+      const uploadData = new FormData();
+      uploadData.append('file', file);
+
+      const res = await fetch('/api/admin/insights/upload', {
+        method: 'POST',
+        body: uploadData,
+      });
+
+      const result = await res.json();
+      if (res.ok && result.success && result.url) {
+        setFormData((prev) => ({ ...prev, coverImage: result.url }));
+        setToast({ message: 'Gambar sampul berhasil diunggah ke Cloud Storage!', type: 'success' });
+      } else {
+        setToast({ message: result.error || 'Gagal mengunggah gambar ke cloud storage', type: 'error' });
+      }
+    } catch (err) {
+      console.error(err);
+      setToast({ message: 'Terjadi kesalahan jaringan saat mengunggah gambar', type: 'error' });
+    } finally {
+      setIsUploadingImage(false);
+      setUploadProgressText('');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleDropFile = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      handleFileUpload(e.dataTransfer.files[0]);
+    }
+  };
 
   // Auto-calculate read time based on word count
   useEffect(() => {
@@ -684,35 +748,157 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
           {/* Right Column: Cover Image & Preview (5 Cols) */}
           <div className="lg:col-span-5 space-y-6">
             <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
-              <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
-                <ImageIcon className="w-4 h-4 text-blue-600" />
-                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-mono">
-                  Gambar Sampul (Cover Image)
-                </h3>
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <ImageIcon className="w-4 h-4 text-blue-600" />
+                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-mono">
+                    Gambar Sampul (Cover Image)
+                  </h3>
+                </div>
+                {formData.coverImage && (
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, coverImage: '' })}
+                    className="text-xs text-rose-500 hover:text-rose-700 font-bold flex items-center gap-1 transition-colors"
+                    title="Hapus gambar sampul"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    <span>Hapus</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Source Mode Switcher: Link vs Cloud Storage */}
+              <div className="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200/60 shadow-inner">
+                <button
+                  type="button"
+                  onClick={() => setCoverImageType('link')}
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                    coverImageType === 'link'
+                      ? 'bg-white text-blue-700 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <Link2 className="w-3.5 h-3.5" />
+                  <span>Tautan URL</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setCoverImageType('upload')}
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold transition-all ${
+                    coverImageType === 'upload'
+                      ? 'bg-white text-blue-700 shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <UploadCloud className="w-3.5 h-3.5" />
+                  <span>Cloud Storage (R2)</span>
+                </button>
               </div>
 
               <div className="space-y-4 pt-1">
-                <div>
-                  <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1.5">
-                    URL Gambar (Unsplash / Cloud Storage) *
-                  </label>
-                  <input
-                    type="url"
-                    required
-                    value={formData.coverImage}
-                    onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
-                    placeholder="https://images.unsplash.com/..."
-                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-xs font-mono"
-                  />
-                </div>
+                {/* Mode 1: Tautan URL */}
+                {coverImageType === 'link' && (
+                  <div className="space-y-2">
+                    <label className="block text-xs font-mono font-bold uppercase text-slate-500">
+                      URL Gambar (Unsplash / CDN Eksternal) *
+                    </label>
+                    <input
+                      type="url"
+                      required
+                      value={formData.coverImage}
+                      onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
+                      placeholder="https://images.unsplash.com/photo-..."
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-xs font-mono"
+                    />
+                    <p className="text-[11px] text-slate-400">
+                      Masukkan URL gambar beresolusi tinggi langsung (rasio 16:9 direkomendasikan).
+                    </p>
+                  </div>
+                )}
+
+                {/* Mode 2: Upload ke Cloud Storage */}
+                {coverImageType === 'upload' && (
+                  <div className="space-y-3">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp,image/avif,image/gif"
+                      className="hidden"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          handleFileUpload(e.target.files[0]);
+                        }
+                      }}
+                    />
+
+                    <div
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        setDragOver(true);
+                      }}
+                      onDragLeave={() => setDragOver(false)}
+                      onDrop={handleDropFile}
+                      onClick={() => !isUploadingImage && fileInputRef.current?.click()}
+                      className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 ${
+                        dragOver
+                          ? 'border-blue-500 bg-blue-50/50'
+                          : isUploadingImage
+                          ? 'border-slate-300 bg-slate-50 cursor-wait'
+                          : 'border-slate-300 hover:border-blue-400 hover:bg-slate-50/80 bg-slate-50/40'
+                      }`}
+                    >
+                      {isUploadingImage ? (
+                        <div className="py-3 flex flex-col items-center gap-2">
+                          <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+                          <span className="text-xs font-bold text-slate-700 font-mono">
+                            {uploadProgressText || 'Mengunggah gambar ke Cloud Storage...'}
+                          </span>
+                          <span className="text-[11px] text-slate-400">Mohon tunggu sebentar</span>
+                        </div>
+                      ) : (
+                        <div className="py-2 flex flex-col items-center gap-1.5">
+                          <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-1">
+                            <UploadCloud className="w-6 h-6" />
+                          </div>
+                          <p className="text-xs font-bold text-slate-800">
+                            Klik untuk memilih gambar atau tarik ke sini
+                          </p>
+                          <p className="text-[11px] text-slate-400 font-mono">
+                            PNG, JPG, WEBP, AVIF (Maksimal 10MB)
+                          </p>
+                        </div>
+                      )}
+                    </div>
+
+                    {formData.coverImage && (formData.coverImage.includes('r2.') || formData.coverImage.includes('cloudflarestorage')) && (
+                      <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center justify-between">
+                        <div className="flex items-center gap-2 truncate">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                          <span className="truncate font-mono text-[11px]">Tersimpan di Cloud Storage R2</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            fileInputRef.current?.click();
+                          }}
+                          className="text-xs font-bold text-emerald-700 hover:underline shrink-0 ml-2"
+                        >
+                          Ganti File
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 {/* Live Cover Preview */}
-                <div>
+                <div className="pt-2 border-t border-slate-100">
                   <span className="text-[11px] font-mono font-bold uppercase text-slate-400 block mb-2">
-                    Pratinjau Cover
+                    Pratinjau Cover (16:9)
                   </span>
                   {formData.coverImage ? (
-                    <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 shadow-sm">
+                    <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 shadow-sm group">
                       <Image
                         src={formData.coverImage}
                         alt="Cover preview"
@@ -724,9 +910,9 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
                       </div>
                     </div>
                   ) : (
-                    <div className="aspect-[16/9] w-full rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 text-xs">
+                    <div className="aspect-[16/9] w-full rounded-2xl border-2 border-dashed border-slate-200 flex flex-col items-center justify-center text-slate-400 text-xs py-8">
                       <ImageIcon className="w-8 h-8 mb-1 opacity-50" />
-                      <span>Masukkan URL gambar untuk melihat pratinjau</span>
+                      <span>Belum ada gambar sampul yang dipilih</span>
                     </div>
                   )}
                 </div>

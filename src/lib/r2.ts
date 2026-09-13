@@ -10,3 +10,4 @@ export const s3Client = new S3Client({
 });
 
 export const R2_BUCKET = process.env.R2_BUCKET_NAME || '';
+export const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL || '';

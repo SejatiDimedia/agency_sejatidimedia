@@ -251,7 +251,8 @@ export function InsightArticleViewer({
       {/* 1. Article Header */}
       <header className="space-y-4 mb-8">
         <div className="flex flex-wrap items-center gap-3">
-          <span className="px-3 py-1 rounded-full text-xs font-mono font-bold uppercase tracking-wider bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 text-[10px] sm:text-xs font-mono font-bold uppercase tracking-[0.25em] shadow-xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-pulse" />
             {category}
           </span>
           <div className="flex items-center gap-3 text-xs text-slate-500">
