@@ -128,12 +128,12 @@ export async function POST(request: Request) {
           message,
         });
         if (!emailResult.success) {
-          console.error('❌ [Autoresponder Fail] Email not sent:', emailResult.error);
+          console.error('[Autoresponder Fail] Email not sent:', emailResult.error);
         } else {
-          console.log('✅ [Autoresponder Success] Email sent successfully!', emailResult.messageId || 'Simulated');
+          console.log('[Autoresponder Success] Email sent successfully!', emailResult.messageId || 'Simulated');
         }
       } catch (emailErr) {
-        console.error('❌ [Autoresponder Catch Error] Exception thrown:', emailErr);
+        console.error('[Autoresponder Catch Error] Exception thrown:', emailErr);
       }
     }
 

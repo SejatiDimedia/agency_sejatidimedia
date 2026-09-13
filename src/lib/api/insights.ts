@@ -55,7 +55,7 @@ Berikut adalah 5 kesalahan arsitektur yang paling sering kami temukan dan bagaim
 
 Banyak developer menempatkan seluruh query database, logika validasi, pemanggilan API payment gateway, hingga pengiriman email langsung di dalam method Controller.
 
-#### ❌ Contoh Buruk (Fat Controller):
+#### [Anti-Pattern] Contoh Masalah Fat Controller:
 \`\`\`php
 class OrderController extends Controller
 {
@@ -86,7 +86,7 @@ class OrderController extends Controller
 }
 \`\`\`
 
-#### ✅ Solusi Standar Kami: Service Layer & Single-Action Classes
+#### [Best Practice] Standar Rekayasa Kami: Service Layer & Single-Action Classes
 Kami memisahkan logika menjadi **Action Classes** atau **Service Layer** mandiri yang terisolasi dan mudah diuji (*unit testable*). Controller hanya bertugas sebagai *traffic controller* (menerima input, meneruskan ke Service, mengembalikan output).
 
 \`\`\`php
@@ -110,7 +110,7 @@ class OrderController extends Controller
 
 Eloquent ORM sangat intuitif, tetapi jika digunakan tanpa kehati-hatian, satu halaman sederhana bisa memicu ratusan hingga ribuan query SQL ke database dalam satu *request*.
 
-#### ❌ Contoh Masalah N+1 Query:
+#### [Anti-Pattern] Contoh Masalah N+1 Query:
 \`\`\`php
 // Di Controller:
 $orders = Order::where('status', 'PAID')->get(); // 1 Query
@@ -123,7 +123,7 @@ $orders = Order::where('status', 'PAID')->get(); // 1 Query
 \`\`\`
 Jika ada 100 order, kode di atas mengeksekusi **201 query SQL** ke database!
 
-#### ✅ Solusi Standar Kami: Strict Eager Loading & Query Watchdog
+#### [Best Practice] Standar Rekayasa Kami: Strict Eager Loading & Query Watchdog
 Gunakan metode \`with()\` untuk *Eager Loading*, dan aktifkan larangan *lazy loading* di lingkungan local/staging:
 
 \`\`\`php
@@ -149,7 +149,7 @@ Dengan konfigurasi ini, jika ada developer tim yang lupa menuliskan eager loadin
 
 Aplikasi dengan 500 baris data mungkin tidak merasakan perbedaan kecepatan saat menjalankan query filter. Namun ketika tabel transaksi mencapai 100.000 atau 1.000.000 baris, ketiadaan index akan memaksa database melakukan *Full Table Scan*.
 
-#### ❌ Migration Tanpa Index:
+#### [Anti-Pattern] Contoh Migration Tanpa Index:
 \`\`\`php
 Schema::create('invoices', function (Blueprint $table) {
     $table->id();
@@ -161,7 +161,7 @@ Schema::create('invoices', function (Blueprint $table) {
 });
 \`\`\`
 
-#### ✅ Solusi Standar Kami: Komposit & Single Index Terencana
+#### [Best Practice] Standar Rekayasa Kami: Komposit & Single Index Terencana
 \`\`\`php
 Schema::create('invoices', function (Blueprint $table) {
     $table->id();
@@ -188,9 +188,7 @@ Sering kami temukan aplikasi yang memakan waktu loading 5 hingga 10 detik hanya 
 
 Jika server SMTP sedang lambat, browser pengguna akan berputar tanpa henti atau mengalami *HTTP 504 Gateway Timeout*.
 
-#### ✅ Solusi Standar Kami: Event-Driven Architecture & Redis Queues
-Segala proses I/O pihak ketiga dan komputasi berat **wajib dialihkan ke background queue**:
-
+#### [Best Practice] Standar Rekayasa Kami: Event-Driven Architecture & Redis Queues
 \`\`\`php
 // Di Controller / Action:
 $order = $createOrderAction->execute(...);
@@ -214,7 +212,7 @@ Bayangkan skenario berikut:
 
 Hasilnya? **Saldo pengguna terpotong, tapi barang pesanan tidak tercatat!** Ini adalah mimpi buruk operasional yang sering memicu komplain klien.
 
-#### ✅ Solusi Standar Kami: Atomic DB Transaction
+#### [Best Practice] Standar Rekayasa Kami: Atomic DB Transaction
 Setiap operasi yang menyentuh lebih dari satu tabel atau melibatkan transfer nilai **wajib dibungkus dengan transaction**:
 
 \`\`\`php
@@ -251,7 +249,7 @@ Here are 5 architectural pitfalls we encounter most often, along with our engine
 
 A common anti-pattern is writing direct database queries, payment gateway API calls, email dispatches, and intricate business calculations directly inside Controller methods.
 
-#### ✅ Our Standard: Service Layer & Single-Action Classes
+#### [Best Practice] Our Standard: Service Layer & Single-Action Classes
 Controllers should act strictly as HTTP traffic coordinators. All business logic belongs to dedicated, testable Action or Service classes.
 
 ---

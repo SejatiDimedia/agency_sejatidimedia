@@ -137,32 +137,45 @@ export default function InsightDetailClient({ article, relatedArticles }: Insigh
       </h3>
     ),
     h4: ({ children }: any) => {
-      // Check if it's a Bad Example (❌) or Good Example (✅)
-      const text = String(children);
-      const isBad = text.includes("❌");
-      const isGood = text.includes("✅");
+      const rawText = String(children);
+      // Strip emojis like ❌ and ✅ so they NEVER appear in UI
+      const cleanText = rawText.replace(/[❌✅]/g, '').trim();
 
-      if (isBad) {
+      const isProblem =
+        rawText.includes('❌') ||
+        rawText.toLowerCase().includes('anti-pattern') ||
+        rawText.toLowerCase().includes('masalah') ||
+        rawText.toLowerCase().includes('buruk') ||
+        rawText.toLowerCase().includes('tidak disarankan');
+
+      const isSolution =
+        rawText.includes('✅') ||
+        rawText.toLowerCase().includes('best practice') ||
+        rawText.toLowerCase().includes('standar kami') ||
+        rawText.toLowerCase().includes('rekomendasi') ||
+        rawText.toLowerCase().includes('our standard');
+
+      if (isProblem) {
         return (
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-700 dark:text-rose-400 font-bold text-sm mt-6 mb-2">
-            <ShieldAlert className="w-4 h-4 text-rose-500 shrink-0" />
-            <span>{children}</span>
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-800/60 text-rose-800 dark:text-rose-300 font-bold text-sm mt-6 mb-2.5">
+            <ShieldAlert className="w-4 h-4 text-rose-600 dark:text-rose-400 shrink-0" />
+            <span>{cleanText}</span>
           </div>
         );
       }
 
-      if (isGood) {
+      if (isSolution) {
         return (
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 dark:text-emerald-400 font-bold text-sm mt-6 mb-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
-            <span>{children}</span>
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300 font-bold text-sm mt-6 mb-2.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span>{cleanText}</span>
           </div>
         );
       }
 
       return (
         <h4 className="text-base font-sans font-bold text-slate-900 dark:text-white mt-6 mb-2">
-          {children}
+          {cleanText}
         </h4>
       );
     },
