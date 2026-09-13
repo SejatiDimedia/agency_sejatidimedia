@@ -47,26 +47,40 @@ export async function POST(req: NextRequest) {
 
     const key = `insights/${Date.now()}-${cleanFileName}.${fileExtension}`;
 
-    // 5. Upload to Cloudflare R2
-    if (!R2_BUCKET) {
-      throw new Error('R2_BUCKET_NAME belum dikonfigurasi di environment server');
+    // 5. Save local backup copy on disk for instant local rendering
+    try {
+      const fs = await import('fs');
+      const path = await import('path');
+      const localFilePath = path.join(process.cwd(), 'public', 'uploads', key);
+      const dir = path.dirname(localFilePath);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      fs.writeFileSync(localFilePath, buffer);
+    } catch (fsErr) {
+      console.warn('Could not write local upload backup:', fsErr);
     }
 
-    await s3Client.send(
-      new PutObjectCommand({
-        Bucket: R2_BUCKET,
-        Key: key,
-        Body: buffer,
-        ContentType: file.type || 'image/jpeg',
-        CacheControl: 'public, max-age=31536000, immutable',
-      })
-    );
+    // 6. Upload to Cloudflare R2 for durable cloud storage
+    if (R2_BUCKET) {
+      try {
+        await s3Client.send(
+          new PutObjectCommand({
+            Bucket: R2_BUCKET,
+            Key: key,
+            Body: buffer,
+            ContentType: file.type || 'image/jpeg',
+            CacheControl: 'public, max-age=31536000, immutable',
+          })
+        );
+      } catch (r2Err: any) {
+        console.error('Cloudflare R2 upload warning:', r2Err?.message);
+        // Continue if local copy succeeded
+      }
+    }
 
-    // 6. Build Public URL
-    const publicBase = R2_PUBLIC_URL.replace(/\/$/, '');
-    const publicUrl = publicBase
-      ? `${publicBase}/${key}`
-      : `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${R2_BUCKET}/${key}`;
+    // 7. Return reliable app media proxy URL (avoids ISP *.r2.dev TLS block)
+    const publicUrl = `/api/media/${key}`;
 
     return NextResponse.json({
       success: true,

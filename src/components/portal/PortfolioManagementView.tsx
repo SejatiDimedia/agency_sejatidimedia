@@ -252,14 +252,12 @@ export const PortfolioManagementView: React.FC = () => {
 
   return (
     <div className="space-y-8 w-full pb-12">
-      {toast && (
-        <Toast
-          isOpen={!!toast}
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
+      <Toast
+        isOpen={!!toast}
+        message={toast?.message || ''}
+        type={toast?.type}
+        onClose={() => setToast(null)}
+      />
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">

@@ -22,8 +22,10 @@ export async function GET(
     }
 
     const { id } = await params;
-    const insight = await prisma.insight.findUnique({
-      where: { id },
+    const insight = await prisma.insight.findFirst({
+      where: {
+        OR: [{ id }, { slug: id }],
+      },
     });
 
     if (!insight) {
@@ -69,8 +71,10 @@ export async function PUT(
       slug: customSlug,
     } = body;
 
-    const existing = await prisma.insight.findUnique({
-      where: { id },
+    const existing = await prisma.insight.findFirst({
+      where: {
+        OR: [{ id }, { slug: id }],
+      },
     });
 
     if (!existing) {
@@ -82,7 +86,7 @@ export async function PUT(
       slug = slugify(customSlug);
       // Check collision
       const collision = await prisma.insight.findFirst({
-        where: { slug, id: { not: id } },
+        where: { slug, id: { not: existing.id } },
       });
       if (collision) {
         slug = `${slug}-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -90,7 +94,7 @@ export async function PUT(
     }
 
     const updated = await prisma.insight.update({
-      where: { id },
+      where: { id: existing.id },
       data: {
         slug,
         titleId: titleId ?? existing.titleId,
@@ -129,8 +133,18 @@ export async function DELETE(
     }
 
     const { id } = await params;
+    const existing = await prisma.insight.findFirst({
+      where: {
+        OR: [{ id }, { slug: id }],
+      },
+    });
+
+    if (!existing) {
+      return NextResponse.json({ error: 'Artikel tidak ditemukan' }, { status: 404 });
+    }
+
     await prisma.insight.delete({
-      where: { id },
+      where: { id: existing.id },
     });
 
     return NextResponse.json({ success: true, message: 'Artikel berhasil dihapus' });

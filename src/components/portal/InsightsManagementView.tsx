@@ -351,14 +351,12 @@ export function InsightsManagementView() {
       />
 
       {/* Toast Notification */}
-      {toast && (
-        <Toast
-          isOpen={Boolean(toast)}
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
+      <Toast
+        isOpen={Boolean(toast)}
+        message={toast?.message || ''}
+        type={toast?.type}
+        onClose={() => setToast(null)}
+      />
     </div>
   );
 }

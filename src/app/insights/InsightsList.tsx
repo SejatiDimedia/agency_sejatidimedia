@@ -108,9 +108,9 @@ export default function InsightsList({ articles, categories }: InsightsListProps
         </div>
       </div>
 
-      {/* 3. Articles Grid */}
+      {/* 3. Articles Display: Featured Lead Card + Archive Grid */}
       {filteredArticles.length === 0 ? (
-        <div className="text-center py-16 px-4 rounded-3xl bg-white border border-slate-200 shadow-xs">
+        <div className="text-center py-16 px-4 rounded-3xl bg-white border border-slate-200 shadow-xs max-w-xl mx-auto">
           <BookOpen className="w-12 h-12 text-slate-300 mx-auto mb-3" />
           <h3 className="text-lg font-bold text-slate-800">
             {language === "en" ? "No articles found" : "Tidak ada artikel yang cocok"}
@@ -122,96 +122,264 @@ export default function InsightsList({ articles, categories }: InsightsListProps
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          <AnimatePresence mode="popLayout">
-            {filteredArticles.map((article, idx) => {
-              const title = language === "en" ? article.titleEn : article.titleId;
-              const excerpt = language === "en" ? article.excerptEn : article.excerptId;
+        <div className="space-y-10">
+          {/* Featured Lead Story (shown on default view: All category & no search query) */}
+          {selectedCategory === "All" && !searchQuery.trim() && filteredArticles.length > 0 && (
+            (() => {
+              const featured = filteredArticles[0];
+              const fTitle = language === "en" ? featured.titleEn : featured.titleId;
+              const fExcerpt = language === "en" ? featured.excerptEn : featured.excerptId;
 
               return (
-                <motion.article
-                  key={article.slug}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
+                <motion.div
+                  initial={{ opacity: 0, y: 16 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.35, delay: idx * 0.05 }}
-                  className="group flex flex-col h-full rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 shadow-xs hover:shadow-xl hover:shadow-[#2C5098]/10 hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+                  transition={{ duration: 0.5 }}
                 >
-                  <Link href={`/insights/${article.slug}`} className="flex flex-col h-full">
-                    {/* Cover Thumbnail Image */}
-                    <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-50 border-b border-slate-100">
-                      <Image
-                        src={article.coverImage}
-                        alt={title}
-                        fill
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
-                      <div className="absolute top-3 left-3">
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-[0.2em] bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
-                          {article.category}
-                        </span>
-                      </div>
-                    </div>
+                  <Link href={`/insights/${featured.slug}`} className="group block">
+                    <div className="rounded-3xl bg-white border border-slate-200/90 shadow-[0_4px_24px_-6px_rgba(0,0,0,0.06)] hover:shadow-[0_24px_50px_-12px_rgba(44,80,152,0.18)] hover:border-[#2C5098]/50 transition-all duration-300 overflow-hidden relative">
+                      {/* Top hover accent line */}
+                      <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#2C5098] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" />
 
-                    {/* Card Content */}
-                    <div className="flex flex-col flex-1 p-6 sm:p-7 justify-between space-y-4">
-                      <div className="space-y-3">
-                        {/* Meta: Read time & Date */}
-                        <div className="flex items-center gap-3 text-xs font-sans text-slate-500">
-                          <span className="inline-flex items-center gap-1.5 font-medium">
-                            <Clock className="w-3.5 h-3.5 text-slate-400" />
-                            {article.readTimeMinutes} {pageT.readTime}
-                          </span>
-                          <span className="text-slate-300">•</span>
-                          <span className="inline-flex items-center gap-1.5 font-medium">
-                            <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                            {new Date(article.publishedAt).toLocaleDateString(
-                              language === "en" ? "en-US" : "id-ID",
-                              { month: "short", day: "numeric", year: "numeric" }
-                            )}
-                          </span>
-                        </div>
+                      <div className="grid grid-cols-1 lg:grid-cols-12 items-stretch">
+                        {/* Media Col */}
+                        <div className="lg:col-span-7 relative min-h-[260px] sm:min-h-[320px] lg:min-h-[420px] overflow-hidden bg-slate-100">
+                          <Image
+                            src={featured.coverImage}
+                            alt={fTitle}
+                            fill
+                            priority
+                            sizes="(max-width: 1024px) 100vw, 60vw"
+                            className="object-cover group-hover:scale-[1.03] transition-transform duration-700 ease-out"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-black/30" />
 
-                        {/* Title */}
-                        <h2 className="text-lg sm:text-xl font-sans font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors line-clamp-2 leading-snug">
-                          {title}
-                        </h2>
-
-                        {/* Excerpt */}
-                        <p className="text-xs sm:text-sm text-slate-600 line-clamp-3 leading-relaxed font-sans">
-                          {excerpt}
-                        </p>
-                      </div>
-
-                      {/* Footer: Tags & Read more CTA */}
-                      <div className="pt-4 border-t border-slate-100 flex items-center justify-between mt-auto">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          {article.tags.slice(0, 2).map((tag) => (
-                            <span
-                              key={tag}
-                              className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium text-slate-600 bg-slate-100 border border-slate-200/60"
-                            >
-                              <Tag className="w-2.5 h-2.5 opacity-60 text-slate-500" />
-                              {tag}
+                          {/* Top Badges */}
+                          <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-[0.2em] bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+                              {featured.category}
                             </span>
-                          ))}
+                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-[#2C5098] text-white shadow-xs">
+                              {language === "en" ? "FEATURED" : "UTAMA"}
+                            </span>
+                          </div>
+
+                          {/* Bottom-left Read Time */}
+                          <div className="absolute bottom-4 left-4 z-10">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono bg-black/60 text-white/95 backdrop-blur-md border border-white/15">
+                              <Clock className="w-3.5 h-3.5 text-white/80" />
+                              {featured.readTimeMinutes} {pageT.readTime}
+                            </span>
+                          </div>
                         </div>
 
-                        <span className="inline-flex items-center gap-1.5 text-xs font-mono uppercase tracking-wider font-bold text-[#2C5098] group-hover:translate-x-1 transition-transform">
-                          <span>{language === "en" ? "Read Article" : "Baca Artikel"}</span>
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </span>
+                        {/* Content Col */}
+                        <div className="lg:col-span-5 p-6 sm:p-8 lg:p-10 flex flex-col justify-between space-y-6 bg-gradient-to-b from-white via-white to-slate-50/50">
+                          <div className="space-y-4">
+                            {/* Eyebrow & Published Date */}
+                            <div className="flex items-center justify-between gap-2 text-xs">
+                              <span className="text-[10px] font-mono uppercase tracking-[0.25em] font-bold text-[#2C5098]">
+                                {language === "en" ? "FEATURED ARTICLE" : "PILIHAN REDAKSI"}
+                              </span>
+                              <span className="text-slate-400 font-sans text-xs">
+                                {new Date(featured.publishedAt).toLocaleDateString(
+                                  language === "en" ? "en-US" : "id-ID",
+                                  { month: "short", day: "numeric", year: "numeric" }
+                                )}
+                              </span>
+                            </div>
+
+                            {/* Title */}
+                            <h2 className="text-xl sm:text-2xl lg:text-3xl font-sans font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors leading-[1.22] tracking-tight">
+                              {fTitle}
+                            </h2>
+
+                            {/* Excerpt */}
+                            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans line-clamp-4">
+                              {fExcerpt}
+                            </p>
+                          </div>
+
+                          {/* Author Byline & Action */}
+                          <div className="space-y-4 pt-4 border-t border-slate-100">
+                            <div className="flex items-center gap-3">
+                              <div className="relative w-9 h-9 rounded-full overflow-hidden border border-slate-200 shrink-0 bg-slate-100">
+                                <Image
+                                  src={featured.author.avatar}
+                                  alt={featured.author.name}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="text-xs font-bold text-slate-900 truncate">
+                                  {featured.author.name}
+                                </p>
+                                <p className="text-[11px] text-slate-500 truncate font-sans">
+                                  {featured.author.role}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div className="flex items-center justify-between gap-3 pt-2">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                {featured.tags.slice(0, 3).map((tag) => (
+                                  <span
+                                    key={tag}
+                                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium text-slate-600 bg-slate-100 border border-slate-200/60"
+                                  >
+                                    <Tag className="w-2.5 h-2.5 opacity-60 text-slate-500" />
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+
+                              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#2C5098] text-white text-xs font-mono font-bold uppercase tracking-wider shadow-sm group-hover:bg-[#23385B] transition-colors shrink-0">
+                                <span>{language === "en" ? "Read Story" : "Baca Artikel"}</span>
+                                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </Link>
-                </motion.article>
+                </motion.div>
               );
-            })}
-          </AnimatePresence>
+            })()
+          )}
+
+          {/* Section Divider when Featured Card is shown */}
+          {selectedCategory === "All" && !searchQuery.trim() && filteredArticles.length > 1 && (
+            <div className="flex items-center gap-3 pt-4 pb-1">
+              <span className="text-[10px] font-mono uppercase tracking-[0.25em] font-bold text-slate-400">
+                {language === "en" ? "ARCHIVE & ALL ARTICLES" : "ARSIP SEMUA ARTIKEL"}
+              </span>
+              <div className="flex-1 h-[1px] bg-slate-200/80" />
+            </div>
+          )}
+
+          {/* Regular Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            <AnimatePresence mode="popLayout">
+              {(selectedCategory === "All" && !searchQuery.trim()
+                ? filteredArticles.slice(1)
+                : filteredArticles
+              ).map((article, idx) => {
+                const title = language === "en" ? article.titleEn : article.titleId;
+                const excerpt = language === "en" ? article.excerptEn : article.excerptId;
+
+                return (
+                  <motion.article
+                    key={article.slug}
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.35, delay: idx * 0.05 }}
+                    className="group relative flex flex-col h-full rounded-3xl bg-white border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_40px_-12px_rgba(44,80,152,0.16)] hover:border-[#2C5098]/50 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden"
+                  >
+                    {/* Subtle top accent line on hover */}
+                    <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#2C5098] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" />
+
+                    <Link href={`/insights/${article.slug}`} className="flex flex-col h-full">
+                      {/* Cover Thumbnail Image */}
+                      <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100 border-b border-slate-100">
+                        <Image
+                          src={article.coverImage}
+                          alt={title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                          className="object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-50 group-hover:opacity-30 transition-opacity" />
+                        
+                        {/* Floating Category Pill */}
+                        <div className="absolute top-3 left-3 z-10">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-[0.2em] bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+                            {article.category}
+                          </span>
+                        </div>
+
+                        {/* Floating Read Time Pill */}
+                        <div className="absolute bottom-3 right-3 z-10">
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-black/60 text-white/90 backdrop-blur-md border border-white/10">
+                            <Clock className="w-3 h-3 text-white/70" />
+                            {article.readTimeMinutes} {pageT.readTime}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Card Content */}
+                      <div className="flex flex-col flex-1 p-6 sm:p-7 justify-between space-y-4">
+                        <div className="space-y-3">
+                          {/* Author Mini Byline & Date */}
+                          <div className="flex items-center justify-between gap-2 pb-1">
+                            <div className="flex items-center gap-2 min-w-0">
+                              <div className="relative w-6 h-6 rounded-full overflow-hidden border border-slate-200 shrink-0 bg-slate-100">
+                                <Image
+                                  src={article.author.avatar}
+                                  alt={article.author.name}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                              <span className="text-xs font-bold text-slate-700 truncate">
+                                {article.author.name}
+                              </span>
+                            </div>
+
+                            <span className="text-[11px] font-sans text-slate-400 shrink-0">
+                              {new Date(article.publishedAt).toLocaleDateString(
+                                language === "en" ? "en-US" : "id-ID",
+                                { month: "short", day: "numeric", year: "numeric" }
+                              )}
+                            </span>
+                          </div>
+
+                          {/* Title */}
+                          <h2 className="text-lg sm:text-xl font-sans font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors line-clamp-2 leading-snug tracking-tight">
+                            {title}
+                          </h2>
+
+                          {/* Excerpt */}
+                          <p className="text-xs sm:text-sm text-slate-600 line-clamp-3 leading-relaxed font-sans">
+                            {excerpt}
+                          </p>
+                        </div>
+
+                        {/* Footer: Tags & Read CTA */}
+                        <div className="pt-4 border-t border-slate-100 flex items-center justify-between mt-auto gap-2">
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            {article.tags.slice(0, 2).map((tag) => (
+                              <span
+                                key={tag}
+                                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium text-slate-600 bg-slate-100 border border-slate-200/60"
+                              >
+                                <Tag className="w-2.5 h-2.5 opacity-60 text-slate-500" />
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+
+                          <div className="inline-flex items-center gap-2 group/btn shrink-0">
+                            <span className="text-xs font-mono uppercase tracking-wider font-bold text-[#2C5098]">
+                              {language === "en" ? "Read" : "Baca"}
+                            </span>
+                            <div className="w-7 h-7 rounded-full bg-slate-100 group-hover:bg-[#2C5098] text-slate-600 group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-2xs group-hover:shadow-md group-hover:shadow-[#2C5098]/20 group-hover:translate-x-0.5">
+                              <ArrowRight className="w-3.5 h-3.5" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.article>
+                );
+              })}
+            </AnimatePresence>
+          </div>
         </div>
       )}
     </div>

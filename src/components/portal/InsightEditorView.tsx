@@ -36,7 +36,7 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
 
   // Cover Image Type: 'link' vs 'upload'
   const [coverImageType, setCoverImageType] = useState<'link' | 'upload'>(
-    initialData?.coverImage && initialData.coverImage.includes('r2.') ? 'upload' : 'link'
+    initialData?.coverImage && (initialData.coverImage.includes('r2.') || initialData.coverImage.includes('/api/media/') || initialData.coverImage.includes('/uploads/')) ? 'upload' : 'link'
   );
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [uploadProgressText, setUploadProgressText] = useState('');
@@ -143,7 +143,11 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
-          tags: formData.tags.split(',').map((t: string) => t.trim()).filter(Boolean),
+          tags: Array.isArray(formData.tags)
+            ? formData.tags
+            : typeof formData.tags === 'string'
+            ? formData.tags.split(',').map((t: string) => t.trim()).filter(Boolean)
+            : [],
         }),
       });
 
@@ -871,7 +875,7 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
                       )}
                     </div>
 
-                    {formData.coverImage && (formData.coverImage.includes('r2.') || formData.coverImage.includes('cloudflarestorage')) && (
+                    {formData.coverImage && (formData.coverImage.includes('r2.') || formData.coverImage.includes('cloudflarestorage') || formData.coverImage.includes('/api/media/') || formData.coverImage.includes('/uploads/')) && (
                       <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs flex items-center justify-between">
                         <div className="flex items-center gap-2 truncate">
                           <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
@@ -923,14 +927,12 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
       )}
 
       {/* Toast Feedback */}
-      {toast && (
-        <Toast
-          isOpen={Boolean(toast)}
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
+      <Toast
+        isOpen={Boolean(toast)}
+        message={toast?.message || ''}
+        type={toast?.type}
+        onClose={() => setToast(null)}
+      />
     </form>
   );
 }

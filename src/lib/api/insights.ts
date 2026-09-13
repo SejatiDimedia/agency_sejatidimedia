@@ -41,7 +41,7 @@ export const INSIGHTS_DATA: InsightArticle[] = [
     publishedAt: "2026-09-13",
     readTimeMinutes: 7,
     author: DEFAULT_AUTHOR,
-    coverImage: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=1200&auto=format&fit=crop&q=80",
+    coverImage: "/images/insights/laravel_architecture_cover.jpg",
     featured: true,
     contentId: `Sebagai framework PHP paling populer di dunia, **Laravel** menawarkan kemudahan pengembangan yang luar biasa cepat melalui ekosistemnya yang matang: Eloquent ORM, Blade, routing elegan, hingga built-in auth.
 
@@ -293,7 +293,7 @@ Software engineering is about designing scalable foundations. At **SejatiDimedia
     publishedAt: "2026-09-10",
     readTimeMinutes: 5,
     author: DEFAULT_AUTHOR,
-    coverImage: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&auto=format&fit=crop&q=80",
+    coverImage: "/images/insights/nextjs_typescript_cover.jpg",
     featured: false,
     contentId: `Dalam dunia pengembangan aplikasi web modern, memilih teknologi fondasi (*tech stack*) bukan soal mengikuti tren sesaat, melainkan tentang **tiga hal krusial bagi bisnis**:
 1. Kecepatan waktu muat (*load time*) yang berdampak langsung pada retensi pengguna.
@@ -339,7 +339,7 @@ This is why **Next.js App Router** and **TypeScript** form the core foundation o
     publishedAt: "2026-09-05",
     readTimeMinutes: 6,
     author: DEFAULT_AUTHOR,
-    coverImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&auto=format&fit=crop&q=80",
+    coverImage: "/images/insights/client_portal_cover.jpg",
     featured: false,
     contentId: `Keluhan nomor satu di industri pembuatan software bukanlah mahalnya biaya, melainkan: **"Developer-nya susah dihubungi setelah terima DP, dan progres tidak jelas sudah sampai mana."**
 

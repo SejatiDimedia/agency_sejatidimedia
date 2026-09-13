@@ -118,14 +118,12 @@ export const ClientSettingsView: React.FC<ClientSettingsViewProps> = ({
 
   return (
     <div className="space-y-8 max-w-4xl">
-      {toast && (
-        <Toast
-          isOpen={!!toast}
-          message={toast.message}
-          type={toast.type}
-          onClose={() => setToast(null)}
-        />
-      )}
+      <Toast
+        isOpen={!!toast}
+        message={toast?.message || ''}
+        type={toast?.type}
+        onClose={() => setToast(null)}
+      />
 
       {/* Header */}
       <div>
