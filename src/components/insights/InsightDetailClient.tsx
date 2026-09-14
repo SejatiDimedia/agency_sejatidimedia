@@ -581,11 +581,6 @@ export default function InsightDetailClient({
             sizes="(max-width: 1280px) 100vw, 1200px"
             className="object-cover"
           />
-          <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-black/40 to-transparent pointer-events-none" />
-          <div className="absolute bottom-4 left-6 text-white/90 text-xs font-mono font-medium hidden sm:flex items-center gap-2 drop-shadow-md">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block" />
-            <span>{language === "en" ? "Software Engineering Documentation · SejatiDimedia" : "Dokumentasi Rekayasa Perangkat Lunak · SejatiDimedia"}</span>
-          </div>
         </div>
 
         {/* 5. Main Content Grid (Two-Column: Article Body + Single Focused Sticky TOC Sidebar) */}
@@ -610,7 +605,6 @@ export default function InsightDetailClient({
                   href={`/insights?search=${encodeURIComponent(tag)}`}
                   className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold text-[#2C5098] bg-blue-50/80 hover:bg-[#2C5098] hover:text-white border border-blue-200/70 hover:border-[#2C5098] transition-all cursor-pointer shadow-2xs group"
                 >
-                  <Tag className="w-3 h-3 text-[#2C5098]/70 group-hover:text-white transition-colors" />
                   <span>{tag}</span>
                 </Link>
               ))}
@@ -722,19 +716,17 @@ export default function InsightDetailClient({
                           const el = document.getElementById(item.id);
                           if (el) el.scrollIntoView({ behavior: "smooth" });
                         }}
-                        className={`group relative flex items-start gap-2.5 py-2 px-3 rounded-xl text-xs transition-all duration-200 ${
-                          isActive
-                            ? "bg-[#2C5098]/10 text-[#1E315B] font-bold shadow-2xs border border-[#2C5098]/25"
-                            : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/70"
-                        } ${item.level === 3 ? "ml-3 text-[11.5px]" : ""}`}
+                        className={`group relative flex items-start gap-2.5 py-2 px-3 rounded-xl text-xs transition-all duration-200 ${isActive
+                          ? "bg-[#2C5098]/10 text-[#1E315B] font-bold shadow-2xs border border-[#2C5098]/25"
+                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/70"
+                          } ${item.level === 3 ? "ml-3 text-[11.5px]" : ""}`}
                       >
                         {/* Active Dot with glowing ring */}
                         <span
-                          className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 transition-all duration-200 ${
-                            isActive
-                              ? "bg-[#2C5098] ring-4 ring-[#2C5098]/20 scale-110"
-                              : "bg-slate-300 group-hover:bg-slate-400"
-                          }`}
+                          className={`mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 transition-all duration-200 ${isActive
+                            ? "bg-[#2C5098] ring-4 ring-[#2C5098]/20 scale-110"
+                            : "bg-slate-300 group-hover:bg-slate-400"
+                            }`}
                         />
                         <span className="flex-1 leading-snug">{item.text}</span>
                         {isActive && (

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getSession } from '@/lib/auth/session';
 import { prisma } from '@/lib/prisma';
 import { getGlobalAuthorProfile } from '@/lib/server-template';
@@ -102,6 +103,13 @@ export async function POST(req: Request) {
         publishedAt: new Date(),
       },
     });
+
+    try {
+      revalidatePath('/insights');
+      revalidatePath('/');
+    } catch (revalErr) {
+      console.warn('Revalidation error on create insight:', revalErr);
+    }
 
     return NextResponse.json({ success: true, insight: newInsight });
   } catch (error) {

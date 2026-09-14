@@ -403,22 +403,22 @@ export function mapDbInsightToArticle(item: any, globalAuthor?: InsightAuthor): 
 export async function getInsights(): Promise<InsightArticle[]> {
   const globalAuthor = await getGlobalAuthorProfile().catch(() => DEFAULT_AUTHOR);
   try {
-    const dbArticles = await prisma.insight.findMany({
-      where: { isPublished: true },
-      orderBy: { publishedAt: 'desc' },
-    });
+    const totalCount = await prisma.insight.count();
 
-    if (dbArticles.length > 0) {
+    if (totalCount > 0) {
+      // Database has records: strictly query ONLY published articles!
+      const dbArticles = await prisma.insight.findMany({
+        where: { isPublished: true },
+        orderBy: { publishedAt: 'desc' },
+      });
       return dbArticles.map((item) => mapDbInsightToArticle(item, globalAuthor));
     }
 
-    // Auto-seed default articles to database if table is empty
+    // Auto-seed default articles to database only if table is completely empty
     try {
       for (const item of INSIGHTS_DATA) {
-        await prisma.insight.upsert({
-          where: { slug: item.slug },
-          update: {},
-          create: {
+        await prisma.insight.create({
+          data: {
             slug: item.slug,
             titleId: item.titleId,
             titleEn: item.titleEn,
@@ -443,20 +443,19 @@ export async function getInsights(): Promise<InsightArticle[]> {
         where: { isPublished: true },
         orderBy: { publishedAt: 'desc' },
       });
-      if (seeded.length > 0) {
-        return seeded.map((item) => mapDbInsightToArticle(item, globalAuthor));
-      }
+      return seeded.map((item) => mapDbInsightToArticle(item, globalAuthor));
     } catch (seedErr) {
       console.warn("Auto-seed error in getInsights:", seedErr);
     }
   } catch (error) {
     console.error("Database query failed in getInsights, falling back to local store:", error);
+    return [...INSIGHTS_DATA].map((item) => ({
+      ...item,
+      author: globalAuthor,
+    })).sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
   }
 
-  return [...INSIGHTS_DATA].map((item) => ({
-    ...item,
-    author: globalAuthor,
-  })).sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  return [];
 }
 
 export async function getInsightBySlug(slug: string): Promise<InsightArticle | null> {
@@ -465,11 +464,29 @@ export async function getInsightBySlug(slug: string): Promise<InsightArticle | n
     const item = await prisma.insight.findUnique({
       where: { slug },
     });
-    if (item && item.isPublished) {
-      return mapDbInsightToArticle(item, globalAuthor);
+    if (item) {
+      // Article exists in DB: return only if published, otherwise return null for draft articles!
+      if (item.isPublished) {
+        return mapDbInsightToArticle(item, globalAuthor);
+      }
+      return null;
+    }
+
+    // If slug not in DB, check if DB is initialized
+    const totalCount = await prisma.insight.count().catch(() => 0);
+    if (totalCount > 0) {
+      return null;
     }
   } catch (error) {
     console.error("Database query failed in getInsightBySlug, falling back to local store:", error);
+    const article = INSIGHTS_DATA.find((item) => item.slug === slug);
+    if (article) {
+      return {
+        ...article,
+        author: globalAuthor,
+      };
+    }
+    return null;
   }
 
   const article = INSIGHTS_DATA.find((item) => item.slug === slug);

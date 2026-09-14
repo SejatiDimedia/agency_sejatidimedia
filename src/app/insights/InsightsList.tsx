@@ -95,11 +95,10 @@ export default function InsightsList({ articles, categories }: InsightsListProps
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-4 py-2 rounded-full text-xs sm:text-sm font-sans font-bold whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                  isSelected
+                className={`px-4 py-2 rounded-full text-xs sm:text-sm font-sans font-bold whitespace-nowrap transition-all duration-200 cursor-pointer ${isSelected
                     ? "bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-md shadow-[#2C5098]/20 border border-white/20"
                     : "bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-2xs"
-                }`}
+                  }`}
               >
                 {cat === "All" ? pageT.allCategories : cat}
               </button>
@@ -113,12 +112,18 @@ export default function InsightsList({ articles, categories }: InsightsListProps
         <div className="text-center py-16 px-4 rounded-3xl bg-white border border-slate-200 shadow-xs max-w-xl mx-auto">
           <BookOpen className="w-12 h-12 text-slate-300 mx-auto mb-3" />
           <h3 className="text-lg font-bold text-slate-800">
-            {language === "en" ? "No articles found" : "Tidak ada artikel yang cocok"}
+            {articles.length === 0
+              ? (language === "en" ? "No articles published yet" : "Belum ada artikel yang diterbitkan")
+              : (language === "en" ? "No articles found" : "Tidak ada artikel yang cocok")}
           </h3>
           <p className="text-sm text-slate-500 mt-1">
-            {language === "en"
-              ? "Try searching for a different keyword or category."
-              : "Coba cari dengan kata kunci atau kategori yang berbeda."}
+            {articles.length === 0
+              ? (language === "en"
+                ? "All articles are currently in draft or preparation. Please check back later!"
+                : "Semua artikel saat ini masih dalam tahap draft atau penulisan. Silakan periksa kembali nanti!")
+              : (language === "en"
+                ? "Try searching for a different keyword or category."
+                : "Coba cari dengan kata kunci atau kategori yang berbeda.")}
           </p>
         </div>
       ) : (
@@ -225,13 +230,13 @@ export default function InsightsList({ articles, categories }: InsightsListProps
                             <div className="flex items-center justify-between gap-3 pt-2">
                               <div className="flex items-center gap-1.5 flex-wrap">
                                 {featured.tags.slice(0, 3).map((tag) => (
-                                  <span
+                                  <Link
                                     key={tag}
-                                    className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium text-slate-600 bg-slate-100 border border-slate-200/60"
+                                    href={`/insights?search=${encodeURIComponent(tag)}`}
+                                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold text-[#2C5098] bg-blue-50/80 hover:bg-[#2C5098] hover:text-white border border-blue-200/70 hover:border-[#2C5098] transition-all cursor-pointer shadow-2xs group"
                                   >
-                                    <Tag className="w-2.5 h-2.5 opacity-60 text-slate-500" />
-                                    {tag}
-                                  </span>
+                                    <span>{tag}</span>
+                                  </Link>
                                 ))}
                               </div>
 
@@ -294,7 +299,7 @@ export default function InsightsList({ articles, categories }: InsightsListProps
                           className="object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-50 group-hover:opacity-30 transition-opacity" />
-                        
+
                         {/* Floating Category Pill */}
                         <div className="absolute top-3 left-3 z-10">
                           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-[0.2em] bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md">

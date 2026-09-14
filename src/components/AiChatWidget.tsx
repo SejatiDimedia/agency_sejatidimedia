@@ -359,13 +359,13 @@ export default function AiChatWidget() {
 
             {/* Messages Area (Smooth scrollable) */}
             <div 
-              className={`flex-1 min-h-0 overflow-y-auto overscroll-contain custom-scrollbar touch-pan-y ${
+              className={`flex-1 min-h-0 overflow-y-auto overflow-x-hidden overscroll-contain custom-scrollbar touch-pan-y ${
                 isExpanded ? 'p-6 space-y-4' : 'p-4 space-y-3.5'
               }`}
               style={{ WebkitOverflowScrolling: 'touch' }}
             >
               {messages.map((msg, idx) => (
-                <div key={idx} className={`flex items-end gap-2.5 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                <div key={idx} className={`flex items-end gap-2.5 w-full min-w-0 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
                   {/* Avatar */}
                   <div className={`shrink-0 ${isExpanded ? 'w-7.5 h-7.5' : 'w-6.5 h-6.5'} rounded-full overflow-hidden flex items-center justify-center shadow-2xs ${
                     msg.role === 'user' ? 'bg-[#23385B] text-white' : 'bg-[#2C5098]/10 border border-[#2C5098]/20'
@@ -374,18 +374,88 @@ export default function AiChatWidget() {
                   </div>
 
                   {/* Bubble */}
-                  <div className={`${isExpanded ? 'max-w-[85%] sm:max-w-[80%] px-4.5 py-3 text-[13px]' : 'max-w-[82%] px-3.5 py-2.5 text-xs'} leading-relaxed rounded-2xl ${
+                  <div className={`${isExpanded ? 'max-w-[85%] sm:max-w-[80%] px-5 py-3.5 text-[13.5px]' : 'max-w-[86%] px-4 py-3 text-[12.5px]'} min-w-0 max-w-full overflow-hidden break-words leading-relaxed rounded-2xl ${
                     msg.role === 'user'
-                      ? 'bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white rounded-br-xs shadow-2xs'
-                      : 'bg-slate-50 border border-slate-200/80 text-slate-800 rounded-bl-xs'
+                      ? 'bg-gradient-to-br from-[#2C5098] to-[#1E315B] text-white rounded-br-xs shadow-xs'
+                      : 'bg-white border border-slate-200/90 text-slate-800 rounded-bl-xs shadow-xs'
                   }`}>
                     {msg.role === 'user' ? (
-                      <p className="whitespace-pre-wrap">{msg.text}</p>
+                      <p className="whitespace-pre-wrap break-words">{msg.text}</p>
                     ) : (
-                      <div className={`prose prose-sm max-w-none prose-p:my-1 prose-ul:my-1 prose-ul:pl-4 prose-li:my-0.5 text-slate-800 ${
-                        isExpanded ? 'text-[13px] leading-relaxed' : 'text-xs'
+                      <div className={`prose prose-sm max-w-none text-slate-800 break-words ${
+                        isExpanded ? 'text-[13.5px] leading-relaxed' : 'text-[12.5px] leading-relaxed'
                       }`}>
-                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.text}</ReactMarkdown>
+                        <ReactMarkdown 
+                          remarkPlugins={[remarkGfm]}
+                          components={{
+                            h1: ({ node, ...props }) => (
+                              <h1 className="text-sm font-bold text-slate-900 mt-3 mb-1 pb-1 border-b border-slate-100" {...props} />
+                            ),
+                            h2: ({ node, ...props }) => (
+                              <h2 className="text-[13px] font-bold text-slate-900 mt-2.5 mb-1 text-[#2C5098]" {...props} />
+                            ),
+                            h3: ({ node, ...props }) => (
+                              <h3 className="text-xs font-bold text-slate-900 mt-2 mb-0.5" {...props} />
+                            ),
+                            strong: ({ node, ...props }) => (
+                              <strong className="font-semibold text-slate-900" {...props} />
+                            ),
+                            p: ({ node, ...props }) => (
+                              <p className="my-1.5 break-words leading-relaxed text-slate-800" {...props} />
+                            ),
+                            ul: ({ node, ...props }) => (
+                              <ul className="my-2 pl-4 list-disc space-y-1 text-slate-700 marker:text-[#2C5098]" {...props} />
+                            ),
+                            ol: ({ node, ...props }) => (
+                              <ol className="my-2 pl-4 list-decimal space-y-1 text-slate-700 marker:text-[#2C5098]" {...props} />
+                            ),
+                            li: ({ node, ...props }) => (
+                              <li className="leading-relaxed break-words pl-0.5" {...props} />
+                            ),
+                            blockquote: ({ node, ...props }) => (
+                              <blockquote className="my-2 pl-3 py-1.5 border-l-3 border-[#2C5098] bg-blue-50/60 rounded-r-lg text-slate-700 text-[11.5px]" {...props} />
+                            ),
+                            hr: ({ node, ...props }) => (
+                              <hr className="my-2.5 border-slate-200" {...props} />
+                            ),
+                            table: ({ node, ...props }) => (
+                              <div className="my-2.5 w-full max-w-full overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-2xs">
+                                <table className="w-full text-left text-[11px] border-collapse" {...props} />
+                              </div>
+                            ),
+                            thead: ({ node, ...props }) => (
+                              <thead className="bg-slate-100/90 text-slate-800 font-semibold border-b border-slate-200" {...props} />
+                            ),
+                            th: ({ node, ...props }) => (
+                              <th className="px-2.5 py-1.5 whitespace-nowrap font-bold text-slate-900 border-r border-slate-200/60 last:border-r-0" {...props} />
+                            ),
+                            td: ({ node, ...props }) => (
+                              <td className="px-2.5 py-1.5 text-slate-700 border-t border-slate-100 border-r border-slate-100 last:border-r-0 align-top" {...props} />
+                            ),
+                            pre: ({ node, ...props }) => (
+                              <div className="my-2 w-full max-w-full overflow-x-auto rounded-xl bg-slate-900 p-3 text-slate-100 text-[11px] font-mono shadow-inner">
+                                <pre {...props} />
+                              </div>
+                            ),
+                            code: ({ node, className, children, ...props }) => {
+                              const isInline = !className && typeof children === 'string' && !children.includes('\n');
+                              return isInline ? (
+                                <code className="px-1.5 py-0.5 rounded bg-blue-50 text-[#2C5098] font-mono text-[11px] font-semibold border border-blue-100 break-all" {...props}>
+                                  {children}
+                                </code>
+                              ) : (
+                                <code className="font-mono text-[11px] text-slate-100 break-all" {...props}>
+                                  {children}
+                                </code>
+                              );
+                            },
+                            a: ({ node, ...props }) => (
+                              <a className="text-[#2C5098] underline font-semibold hover:text-blue-700 break-all transition-colors" target="_blank" rel="noopener noreferrer" {...props} />
+                            )
+                          }}
+                        >
+                          {msg.text}
+                        </ReactMarkdown>
                       </div>
                     )}
                   </div>

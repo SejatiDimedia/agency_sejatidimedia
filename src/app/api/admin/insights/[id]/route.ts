@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getSession } from '@/lib/auth/session';
 import { prisma } from '@/lib/prisma';
 
@@ -115,6 +116,17 @@ export async function PUT(
       },
     });
 
+    try {
+      revalidatePath('/insights');
+      revalidatePath(`/insights/${updated.slug}`);
+      if (existing.slug !== updated.slug) {
+        revalidatePath(`/insights/${existing.slug}`);
+      }
+      revalidatePath('/');
+    } catch (revalErr) {
+      console.warn('Revalidation error on update insight:', revalErr);
+    }
+
     return NextResponse.json({ success: true, insight: updated });
   } catch (error) {
     console.error('Failed to update insight:', error);
@@ -146,6 +158,14 @@ export async function DELETE(
     await prisma.insight.delete({
       where: { id: existing.id },
     });
+
+    try {
+      revalidatePath('/insights');
+      revalidatePath(`/insights/${existing.slug}`);
+      revalidatePath('/');
+    } catch (revalErr) {
+      console.warn('Revalidation error on delete insight:', revalErr);
+    }
 
     return NextResponse.json({ success: true, message: 'Artikel berhasil dihapus' });
   } catch (error) {
