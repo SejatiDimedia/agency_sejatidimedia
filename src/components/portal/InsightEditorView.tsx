@@ -57,7 +57,29 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
     readTimeMinutes: initialData?.readTimeMinutes || 5,
     isPublished: initialData?.isPublished !== undefined ? initialData.isPublished : true,
     featured: initialData?.featured || false,
+    authorName: initialData?.authorName || 'Timur Dian Radha Sejati',
+    authorRole: initialData?.authorRole || 'Lead Software Engineer · SejatiDimedia',
+    authorAvatar: initialData?.authorAvatar || '/images/author_timur_dian.jpg',
   });
+
+  // Fetch author profile if creating new article
+  useEffect(() => {
+    if (mode === 'create' && !initialData) {
+      fetch('/api/admin/author-profile')
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success && data.profile) {
+            setFormData((prev) => ({
+              ...prev,
+              authorName: data.profile.name || prev.authorName,
+              authorRole: data.profile.role || prev.authorRole,
+              authorAvatar: data.profile.avatar || prev.authorAvatar,
+            }));
+          }
+        })
+        .catch(() => {});
+    }
+  }, [mode, initialData]);
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
@@ -743,6 +765,84 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
                     onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
                     placeholder="Laravel, PHP, Database, Architecture, Performance"
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* 3. Author Details Card */}
+            <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
+              <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+                <FileText className="w-4 h-4 text-blue-600" />
+                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-mono">
+                  Profil Penulis Artikel
+                </h3>
+              </div>
+
+              <div className="space-y-4 pt-1">
+                <div className="flex items-center gap-4 p-3 bg-slate-50 rounded-2xl border border-slate-200/70">
+                  <div className="relative w-14 h-14 rounded-xl overflow-hidden border-2 border-white shadow-sm shrink-0 bg-slate-200">
+                    {formData.authorAvatar ? (
+                      <Image
+                        src={formData.authorAvatar}
+                        alt={formData.authorName}
+                        fill
+                        sizes="56px"
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-slate-400 font-bold text-xs">
+                        No Photo
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0 space-y-0.5">
+                    <span className="text-xs font-bold text-slate-800 block truncate">{formData.authorName}</span>
+                    <span className="text-[11px] text-slate-500 font-mono block truncate">{formData.authorRole}</span>
+                    <span className="text-[10px] text-blue-600 font-bold block">
+                      Foto default dikelola di Menu Settings Portal
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1.5">
+                      Nama Penulis
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.authorName}
+                      onChange={(e) => setFormData({ ...formData, authorName: e.target.value })}
+                      placeholder="Timur Dian Radha Sejati"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-bold"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1.5">
+                      Jabatan / Peran
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.authorRole}
+                      onChange={(e) => setFormData({ ...formData, authorRole: e.target.value })}
+                      placeholder="Lead Software Engineer · SejatiDimedia"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-bold"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1.5">
+                    URL Foto Avatar Penulis
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.authorAvatar}
+                    onChange={(e) => setFormData({ ...formData, authorAvatar: e.target.value })}
+                    placeholder="/images/author_timur_dian.jpg atau URL gambar"
+                    className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-xs font-mono"
                   />
                 </div>
               </div>

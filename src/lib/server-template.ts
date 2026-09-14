@@ -17,6 +17,8 @@ declare global {
   var __globalNdaProjects: string[] | undefined;
   // eslint-disable-next-line no-var
   var __globalFeaturedProjects: string[] | undefined;
+  // eslint-disable-next-line no-var
+  var __globalAuthorProfile: GlobalAuthorProfile | undefined;
 }
 
 export async function getGlobalActiveTemplate(): Promise<TemplateId> {
@@ -336,5 +338,107 @@ export async function setGlobalFeaturedProjectSlugs(slugs: string[]): Promise<bo
   }
 
   return true;
+}
+
+export interface GlobalAuthorProfile {
+  name: string;
+  role: string;
+  avatar: string;
+  bioId?: string;
+  bioEn?: string;
+}
+
+export const DEFAULT_GLOBAL_AUTHOR: GlobalAuthorProfile = {
+  name: 'Timur Dian Radha Sejati',
+  role: 'Lead Software Engineer · SejatiDimedia',
+  avatar: '/images/author_timur_dian.jpg',
+  bioId: 'Software engineer dan konsultan sistem di SejatiDimedia. Berfokus pada perancangan arsitektur berkinerja tinggi, refactoring backend skala enterprise (Laravel / Node.js), hingga pengembangan aplikasi mobile & web modern.',
+  bioEn: 'Software engineer and systems consultant at SejatiDimedia. Specializing in high-performance architecture design, enterprise-scale backend refactoring (Laravel / Node.js), and modern web & mobile engineering.',
+};
+
+const REDIS_AUTHOR_PROFILE_KEY = 'site_author_profile';
+
+export async function getGlobalAuthorProfile(): Promise<GlobalAuthorProfile> {
+  // 1. Check Upstash Redis first
+  if (redis) {
+    try {
+      const redisVal = await redis.get<GlobalAuthorProfile>(REDIS_AUTHOR_PROFILE_KEY);
+      if (redisVal && typeof redisVal === 'object' && redisVal.avatar) {
+        const profile: GlobalAuthorProfile = { ...DEFAULT_GLOBAL_AUTHOR, ...redisVal };
+        globalThis.__globalAuthorProfile = profile;
+        return profile;
+      }
+    } catch (e) {
+      console.warn('Redis get author profile warning:', e);
+    }
+  }
+
+  // 2. Check in-memory cache
+  if (globalThis.__globalAuthorProfile && globalThis.__globalAuthorProfile.avatar) {
+    return globalThis.__globalAuthorProfile;
+  }
+
+  // 3. Check local filesystem
+  try {
+    if (fs.existsSync(SETTINGS_FILE_PATH)) {
+      const content = fs.readFileSync(SETTINGS_FILE_PATH, 'utf-8');
+      const data = JSON.parse(content);
+      if (data.authorProfile && typeof data.authorProfile === 'object' && data.authorProfile.avatar) {
+        const profile: GlobalAuthorProfile = { ...DEFAULT_GLOBAL_AUTHOR, ...data.authorProfile };
+        globalThis.__globalAuthorProfile = profile;
+        return profile;
+      }
+    }
+  } catch {
+    // Read-only filesystem on serverless
+  }
+
+  return DEFAULT_GLOBAL_AUTHOR;
+}
+
+export async function setGlobalAuthorProfile(profile: Partial<GlobalAuthorProfile>): Promise<GlobalAuthorProfile> {
+  const current = await getGlobalAuthorProfile();
+  const updated: GlobalAuthorProfile = {
+    ...current,
+    ...profile,
+    name: profile.name?.trim() || current.name,
+    role: profile.role?.trim() || current.role,
+    avatar: profile.avatar?.trim() || current.avatar,
+  };
+
+  globalThis.__globalAuthorProfile = updated;
+
+  // 1. Save to Upstash Redis
+  if (redis) {
+    try {
+      await redis.set(REDIS_AUTHOR_PROFILE_KEY, updated);
+    } catch (e) {
+      console.warn('Redis set author profile warning:', e);
+    }
+  }
+
+  // 2. Save to local filesystem if writable
+  try {
+    const dir = path.dirname(SETTINGS_FILE_PATH);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    let existingData: any = {};
+    if (fs.existsSync(SETTINGS_FILE_PATH)) {
+      try {
+        existingData = JSON.parse(fs.readFileSync(SETTINGS_FILE_PATH, 'utf-8'));
+      } catch {}
+    }
+    const data = {
+      ...existingData,
+      authorProfile: updated,
+      updatedAt: new Date().toISOString(),
+    };
+    fs.writeFileSync(SETTINGS_FILE_PATH, JSON.stringify(data, null, 2), 'utf-8');
+  } catch {
+    // Safe to ignore on serverless
+  }
+
+  return updated;
 }
 

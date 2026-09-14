@@ -362,7 +362,7 @@ export default function AdminDashboardPage() {
       nextMilestoneTitle: 'Kickoff & Discovery',
       milestonesCount: { total: 4, completed: 0 },
       assignees: [
-        { name: 'Takiya Baksh', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80', role: 'UI/UX' },
+        { name: 'Timur Dian Radha Sejati', avatar: '/images/author_timur_dian.jpg', role: 'Lead Engineer' },
       ],
       milestones: [],
     };

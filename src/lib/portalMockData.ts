@@ -117,7 +117,7 @@ export const INITIAL_PROJECTS: Project[] = [
     nextMilestoneTitle: 'Integrasi Payment Gateway & QRIS',
     milestonesCount: { total: 5, completed: 2 },
     assignees: [
-      { name: 'Timur Dian', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80', role: 'Fullstack Dev' },
+      { name: 'Timur Dian Radha Sejati', avatar: '/images/author_timur_dian.jpg', role: 'Fullstack Dev' },
       { name: 'Sarah UI', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80', role: 'UI/UX Designer' }
     ],
     milestones: [

@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Bell, Share2, UserPlus, Check, Sparkles, ChevronDown, Menu } from 'lucide-react';
 import { SearchInput, Button, AvatarGroup, Avatar } from '@/components/ui';
 
@@ -13,17 +14,9 @@ interface PortalHeaderProps {
   setCurrentRole: (role: 'Admin' | 'Client') => void;
   userName?: string;
   userEmail?: string;
+  userAvatar?: string;
   onMenuClick?: () => void;
 }
-
-const TEAM_MEMBERS = [
-  { name: 'Sarah', src: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80' },
-  { name: 'Alex', src: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&auto=format&fit=crop&q=80' },
-  { name: 'David', src: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&auto=format&fit=crop&q=80' },
-  { name: 'Team Member 4' },
-  { name: 'Team Member 5' },
-  { name: 'Team Member 6' },
-];
 
 export const PortalHeader: React.FC<PortalHeaderProps> = ({
   searchTerm,
@@ -34,10 +27,46 @@ export const PortalHeader: React.FC<PortalHeaderProps> = ({
   setCurrentRole,
   userName,
   userEmail,
+  userAvatar,
   onMenuClick,
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(userAvatar);
+  const [displayName, setDisplayName] = useState<string | undefined>(userName);
+  const [displaySubtitle, setDisplaySubtitle] = useState<string | undefined>(userEmail);
+
+  useEffect(() => {
+    if (userAvatar) setAvatarUrl(userAvatar);
+    if (userName) setDisplayName(userName);
+    if (userEmail) setDisplaySubtitle(userEmail);
+
+    fetch('/api/admin/author-profile')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && data.profile) {
+          if (data.profile.avatar) {
+            setAvatarUrl(data.profile.avatar);
+          }
+          if (currentRole === 'Admin') {
+            if (data.profile.name) setDisplayName(data.profile.name);
+            if (data.profile.role) setDisplaySubtitle(data.profile.role);
+          }
+        }
+      })
+      .catch(() => {});
+  }, [userAvatar, userName, userEmail, currentRole]);
+
+  useEffect(() => {
+    const handleProfileUpdate = (e: any) => {
+      if (e.detail?.avatar) setAvatarUrl(e.detail.avatar);
+      if (e.detail?.name && currentRole === 'Admin') setDisplayName(e.detail.name);
+      if (e.detail?.role && currentRole === 'Admin') setDisplaySubtitle(e.detail.role);
+    };
+
+    window.addEventListener('sejati-profile-updated', handleProfileUpdate);
+    return () => window.removeEventListener('sejati-profile-updated', handleProfileUpdate);
+  }, [currentRole]);
 
   const handleShare = () => {
     if (typeof window !== 'undefined') {
@@ -105,23 +134,27 @@ export const PortalHeader: React.FC<PortalHeaderProps> = ({
         </div>
 
         {/* User Profile Pill */}
-        <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200/80 shrink-0">
+        <Link
+          href="/portal/settings"
+          className="flex items-center gap-2.5 pl-2 border-l border-slate-200/80 shrink-0 hover:opacity-90 transition-opacity cursor-pointer group"
+          title="Pengaturan Akun & Profil"
+        >
           <Avatar
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
-            name={userName || (currentRole === 'Admin' ? 'Takiya Baksh' : 'Client User')}
+            src={avatarUrl || (currentRole === 'Admin' ? '/images/author_timur_dian.jpg' : undefined)}
+            name={displayName || (currentRole === 'Admin' ? 'Timur Dian Radha Sejati' : 'Client User')}
             size="sm"
-            className="ring-2 ring-blue-500/30"
+            className="ring-2 ring-blue-500/30 object-cover group-hover:ring-blue-500/60 transition-all"
           />
           <div className="hidden sm:flex flex-col text-left">
-            <span className="font-bold text-xs text-slate-900 leading-tight">
-              {userName || (currentRole === 'Admin' ? 'Takiya Baksh' : 'Client User')}
+            <span className="font-bold text-xs text-slate-900 leading-tight group-hover:text-blue-600 transition-colors">
+              {displayName || (currentRole === 'Admin' ? 'Timur Dian Radha Sejati' : 'Client User')}
             </span>
             <span className="text-[10px] font-medium text-slate-400">
-              {userEmail || (currentRole === 'Admin' ? 'UI/UX Lead & Admin' : 'Client Portal Access')}
+              {displaySubtitle || (currentRole === 'Admin' ? 'Founder & Lead Engineer' : 'Client Portal Access')}
             </span>
           </div>
-          <ChevronDown className="w-3.5 h-3.5 text-slate-400 hidden sm:block" />
-        </div>
+          <ChevronDown className="w-3.5 h-3.5 text-slate-400 hidden sm:block group-hover:text-slate-600 transition-colors" />
+        </Link>
       </div>
     </header>
   );

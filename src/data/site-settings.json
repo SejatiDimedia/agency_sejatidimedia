@@ -15,5 +15,12 @@
     "erp-digitalisasi-produksi-industry-manufaktur",
     "absensi-hris-app-face-recognition--gps"
   ],
-  "updatedAt": "2026-09-02T02:11:17.597Z"
+  "authorProfile": {
+    "name": "Timur Dian Radha Sejati",
+    "role": "Founder SejatiDimedia",
+    "avatar": "/api/media/insights/1789352301260-Gemini_Generated_Image_vaefn6vaefn6vaef.png",
+    "bioId": "Software engineer dan konsultan sistem di SejatiDimedia. Berfokus pada perancangan arsitektur berkinerja tinggi, refactoring backend skala enterprise, hingga pengembangan aplikasi mobile, web modern dan integrasi AI.",
+    "bioEn": "Software engineer and systems consultant at SejatiDimedia. Specializing in high-performance architecture design, enterprise-scale backend refactoring , modern web, mobile engineering and AI integration."
+  },
+  "updatedAt": "2026-09-14T02:22:53.242Z"
 }

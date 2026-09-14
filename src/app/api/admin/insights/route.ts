@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '@/lib/auth/session';
 import { prisma } from '@/lib/prisma';
+import { getGlobalAuthorProfile } from '@/lib/server-template';
 
 function slugify(text: string): string {
   return text
@@ -36,6 +37,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
+    const defaultAuthor = await getGlobalAuthorProfile();
     const body = await req.json();
     const {
       titleId,
@@ -48,9 +50,9 @@ export async function POST(req: Request) {
       tags = [],
       coverImage,
       readTimeMinutes = 5,
-      authorName = 'Timur Dian',
-      authorRole = 'Lead Software Engineer · SejatiDimedia',
-      authorAvatar = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+      authorName = defaultAuthor.name,
+      authorRole = defaultAuthor.role,
+      authorAvatar = defaultAuthor.avatar,
       isPublished = true,
       featured = false,
       slug: customSlug,

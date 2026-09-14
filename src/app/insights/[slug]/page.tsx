@@ -66,7 +66,7 @@ export default async function InsightDetailPage({
   const { slug } = await params;
   const [article, relatedArticles] = await Promise.all([
     getInsightBySlug(slug),
-    getRelatedInsights(slug, 2),
+    getRelatedInsights(slug, 3),
   ]);
 
   if (!article) {
@@ -80,3 +80,4 @@ export default async function InsightDetailPage({
     />
   );
 }
+

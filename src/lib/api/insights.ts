@@ -1,9 +1,12 @@
 import { prisma } from "@/lib/prisma";
+import { getGlobalAuthorProfile } from "@/lib/server-template";
 
 export interface InsightAuthor {
   name: string;
   role: string;
   avatar: string;
+  bioId?: string;
+  bioEn?: string;
 }
 
 export interface InsightArticle {
@@ -24,10 +27,14 @@ export interface InsightArticle {
 }
 
 const DEFAULT_AUTHOR: InsightAuthor = {
-  name: "Timur Dian",
+  name: "Timur Dian Radha Sejati",
   role: "Lead Software Engineer · SejatiDimedia",
-  avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
+  avatar: "/images/author_timur_dian.jpg",
+  bioId: "Software engineer dan konsultan sistem di SejatiDimedia. Berfokus pada perancangan arsitektur berkinerja tinggi, refactoring backend skala enterprise (Laravel / Node.js), hingga pengembangan aplikasi mobile & web modern.",
+  bioEn: "Software engineer and systems consultant at SejatiDimedia. Specializing in high-performance architecture design, enterprise-scale backend refactoring (Laravel / Node.js), and modern web & mobile engineering.",
 };
+
+const DUMMY_AVATAR = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80";
 
 export const INSIGHTS_DATA: InsightArticle[] = [
   {
@@ -361,7 +368,14 @@ At **SejatiDimedia**, we engineered our dedicated **Client Portal** to eliminate
   }
 ];
 
-export function mapDbInsightToArticle(item: any): InsightArticle {
+export function mapDbInsightToArticle(item: any, globalAuthor?: InsightAuthor): InsightArticle {
+  const fallbackAvatar = globalAuthor?.avatar || DEFAULT_AUTHOR.avatar;
+  const authorAvatar = (!item.authorAvatar || item.authorAvatar === DUMMY_AVATAR)
+    ? fallbackAvatar
+    : item.authorAvatar;
+  const authorName = item.authorName || globalAuthor?.name || DEFAULT_AUTHOR.name;
+  const authorRole = item.authorRole || globalAuthor?.role || DEFAULT_AUTHOR.role;
+
   return {
     slug: item.slug,
     titleId: item.titleId,
@@ -375,9 +389,11 @@ export function mapDbInsightToArticle(item: any): InsightArticle {
     publishedAt: item.publishedAt ? new Date(item.publishedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
     readTimeMinutes: item.readTimeMinutes || 5,
     author: {
-      name: item.authorName || "Timur Dian",
-      role: item.authorRole || "Lead Software Engineer · SejatiDimedia",
-      avatar: item.authorAvatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80",
+      name: authorName,
+      role: authorRole,
+      avatar: authorAvatar,
+      bioId: globalAuthor?.bioId || DEFAULT_AUTHOR.bioId,
+      bioEn: globalAuthor?.bioEn || DEFAULT_AUTHOR.bioEn,
     },
     coverImage: item.coverImage,
     featured: item.featured || false,
@@ -385,6 +401,7 @@ export function mapDbInsightToArticle(item: any): InsightArticle {
 }
 
 export async function getInsights(): Promise<InsightArticle[]> {
+  const globalAuthor = await getGlobalAuthorProfile().catch(() => DEFAULT_AUTHOR);
   try {
     const dbArticles = await prisma.insight.findMany({
       where: { isPublished: true },
@@ -392,7 +409,7 @@ export async function getInsights(): Promise<InsightArticle[]> {
     });
 
     if (dbArticles.length > 0) {
-      return dbArticles.map(mapDbInsightToArticle);
+      return dbArticles.map((item) => mapDbInsightToArticle(item, globalAuthor));
     }
 
     // Auto-seed default articles to database if table is empty
@@ -413,9 +430,9 @@ export async function getInsights(): Promise<InsightArticle[]> {
             tags: item.tags,
             coverImage: item.coverImage,
             readTimeMinutes: item.readTimeMinutes,
-            authorName: item.author.name,
-            authorRole: item.author.role,
-            authorAvatar: item.author.avatar,
+            authorName: globalAuthor.name,
+            authorRole: globalAuthor.role,
+            authorAvatar: globalAuthor.avatar,
             isPublished: true,
             featured: item.featured || false,
             publishedAt: new Date(item.publishedAt),
@@ -427,7 +444,7 @@ export async function getInsights(): Promise<InsightArticle[]> {
         orderBy: { publishedAt: 'desc' },
       });
       if (seeded.length > 0) {
-        return seeded.map(mapDbInsightToArticle);
+        return seeded.map((item) => mapDbInsightToArticle(item, globalAuthor));
       }
     } catch (seedErr) {
       console.warn("Auto-seed error in getInsights:", seedErr);
@@ -436,23 +453,33 @@ export async function getInsights(): Promise<InsightArticle[]> {
     console.error("Database query failed in getInsights, falling back to local store:", error);
   }
 
-  return [...INSIGHTS_DATA].sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+  return [...INSIGHTS_DATA].map((item) => ({
+    ...item,
+    author: globalAuthor,
+  })).sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
 }
 
 export async function getInsightBySlug(slug: string): Promise<InsightArticle | null> {
+  const globalAuthor = await getGlobalAuthorProfile().catch(() => DEFAULT_AUTHOR);
   try {
     const item = await prisma.insight.findUnique({
       where: { slug },
     });
     if (item && item.isPublished) {
-      return mapDbInsightToArticle(item);
+      return mapDbInsightToArticle(item, globalAuthor);
     }
   } catch (error) {
     console.error("Database query failed in getInsightBySlug, falling back to local store:", error);
   }
 
   const article = INSIGHTS_DATA.find((item) => item.slug === slug);
-  return article || null;
+  if (article) {
+    return {
+      ...article,
+      author: globalAuthor,
+    };
+  }
+  return null;
 }
 
 export async function getRelatedInsights(currentSlug: string, limit = 2): Promise<InsightArticle[]> {
@@ -494,3 +521,30 @@ export async function getAllCategories(): Promise<string[]> {
     return ["All", ...categories];
   }
 }
+
+export async function getAdjacentInsights(currentSlug: string): Promise<{
+  prev: InsightArticle | null;
+  next: InsightArticle | null;
+}> {
+  try {
+    const articles = await getInsights();
+    const index = articles.findIndex((item) => item.slug === currentSlug);
+    if (index === -1) {
+      return { prev: null, next: null };
+    }
+    return {
+      prev: index > 0 ? articles[index - 1] : null,
+      next: index < articles.length - 1 ? articles[index + 1] : null,
+    };
+  } catch {
+    const index = INSIGHTS_DATA.findIndex((item) => item.slug === currentSlug);
+    if (index === -1) {
+      return { prev: null, next: null };
+    }
+    return {
+      prev: index > 0 ? INSIGHTS_DATA[index - 1] : null,
+      next: index < INSIGHTS_DATA.length - 1 ? INSIGHTS_DATA[index + 1] : null,
+    };
+  }
+}
+

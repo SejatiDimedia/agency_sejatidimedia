@@ -57,7 +57,7 @@ const INITIAL_DEMO_PROJECT: Project = {
   assignees: [
     {
       name: 'Timur Dian Radha Sejati',
-      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&auto=format&fit=crop&q=80',
+      avatar: '/images/author_timur_dian.jpg',
       role: 'Lead Full-Stack & AI Engineer',
     },
     {

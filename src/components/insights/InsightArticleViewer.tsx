@@ -73,23 +73,22 @@ export function ArticleCodeBlock({ className, children, ...props }: any) {
 // Markdown Custom Components for Authentic Frontend Rendering
 export const articleMarkdownComponents = {
   h1: ({ children }: any) => (
-    <h1 className="text-2xl sm:text-3xl font-sans font-bold text-slate-900 mt-10 mb-4 border-b border-slate-200 pb-2">
+    <h1 className="text-2xl sm:text-3xl font-sora font-extrabold text-slate-900 mt-12 mb-4 pt-3 border-b border-slate-200/80 pb-2">
       {children}
     </h1>
   ),
   h2: ({ children }: any) => (
-    <h2 className="text-xl sm:text-2xl font-sans font-bold text-slate-900 mt-10 mb-4 border-b border-slate-100 pb-2 flex items-center gap-2">
+    <h2 className="text-xl sm:text-2xl font-sora font-extrabold text-slate-900 mt-10 mb-4 pt-2 border-b border-slate-200/80 pb-2 flex items-center gap-2">
       {children}
     </h2>
   ),
   h3: ({ children }: any) => (
-    <h3 className="text-lg sm:text-xl font-sans font-bold text-slate-900 mt-8 mb-3">
+    <h3 className="text-lg sm:text-xl font-sora font-bold text-slate-900 mt-8 mb-3">
       {children}
     </h3>
   ),
   h4: ({ children }: any) => {
     const rawText = String(children);
-    // Strip emojis like ❌ and ✅ so they NEVER appear in UI
     const cleanText = rawText.replace(/[❌✅]/g, '').trim();
 
     const isProblem =
@@ -108,30 +107,40 @@ export const articleMarkdownComponents = {
 
     if (isProblem) {
       return (
-        <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 font-bold text-sm mt-6 mb-2.5">
-          <ShieldAlert className="w-4 h-4 text-rose-600 shrink-0" />
-          <span>{cleanText}</span>
+        <div className="flex items-start gap-3 p-4 rounded-xl bg-rose-50/80 border border-rose-200 text-rose-900 font-bold text-sm sm:text-[14px] mt-6 mb-3 shadow-xs">
+          <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+          <div className="flex-1 leading-snug">
+            <span className="block text-[11px] font-mono uppercase tracking-wider text-rose-600 font-bold mb-0.5">
+              Kelemahan Arsitektur / Anti-Pattern
+            </span>
+            <span>{cleanText}</span>
+          </div>
         </div>
       );
     }
 
     if (isSolution) {
       return (
-        <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 font-bold text-sm mt-6 mb-2.5">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-          <span>{cleanText}</span>
+        <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50/80 border border-emerald-200 text-emerald-950 font-bold text-sm sm:text-[14px] mt-6 mb-3 shadow-xs">
+          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
+          <div className="flex-1 leading-snug">
+            <span className="block text-[11px] font-mono uppercase tracking-wider text-emerald-600 font-bold mb-0.5">
+              Standar Rekayasa Teruji / Best Practice
+            </span>
+            <span>{cleanText}</span>
+          </div>
         </div>
       );
     }
 
     return (
-      <h4 className="text-base font-sans font-bold text-slate-900 mt-6 mb-2">
+      <h4 className="text-base font-sora font-bold text-slate-900 mt-6 mb-2">
         {cleanText}
       </h4>
     );
   },
   p: ({ children }: any) => (
-    <p className="mb-5 text-slate-700 leading-relaxed text-base sm:text-[17px]">
+    <p className="mb-5 text-slate-700 font-sans text-base sm:text-[16.5px] leading-[1.8]">
       {children}
     </p>
   ),
@@ -146,25 +155,42 @@ export const articleMarkdownComponents = {
     </ol>
   ),
   li: ({ children }: any) => (
-    <li className="leading-relaxed marker:font-bold marker:text-slate-900">
+    <li className="leading-relaxed marker:font-bold marker:text-[#2C5098]">
       {children}
     </li>
   ),
   blockquote: ({ children }: any) => (
-    <blockquote className="my-6 pl-4 border-l-4 border-[#2C5098] italic text-slate-600 bg-[#2C5098]/5 py-3 pr-4 rounded-r-xl">
+    <blockquote className="my-8 px-6 py-5 rounded-2xl bg-slate-50/85 border border-slate-200/80 text-slate-700 text-[15.5px] sm:text-base leading-relaxed shadow-xs">
       {children}
     </blockquote>
   ),
   code: ({ inline, className, children, ...props }: any) => {
     if (inline) {
       return (
-        <code className="px-1.5 py-0.5 rounded bg-slate-100 border border-slate-200/80 font-mono text-xs sm:text-sm text-[#2C5098] font-medium" {...props}>
+        <code
+          className="px-1.5 py-0.5 rounded-md bg-slate-100 border border-slate-200/80 font-mono text-xs sm:text-[13px] text-[#1E315B] font-semibold"
+          {...props}
+        >
           {children}
         </code>
       );
     }
     return <ArticleCodeBlock className={className} {...props}>{children}</ArticleCodeBlock>;
   },
+  table: ({ children }: any) => (
+    <div className="my-8 overflow-x-auto rounded-2xl border border-slate-200 shadow-xs">
+      <table className="w-full text-left text-sm text-slate-700">{children}</table>
+    </div>
+  ),
+  thead: ({ children }: any) => (
+    <thead className="bg-slate-100/80 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider border-b border-slate-200">
+      {children}
+    </thead>
+  ),
+  tbody: ({ children }: any) => <tbody className="divide-y divide-slate-100">{children}</tbody>,
+  tr: ({ children }: any) => <tr className="hover:bg-slate-50/70 transition-colors">{children}</tr>,
+  th: ({ children }: any) => <th className="px-4 py-3 font-bold">{children}</th>,
+  td: ({ children }: any) => <td className="px-4 py-3 leading-relaxed">{children}</td>,
   hr: () => <hr className="my-10 border-slate-200" />,
 };
 
@@ -197,9 +223,9 @@ export function InsightArticleViewer({
   readTimeMinutes = 5,
   publishedAt,
   author = {
-    name: 'Timur Dian',
+    name: 'Timur Dian Radha Sejati',
     role: 'Lead Software Engineer · SejatiDimedia',
-    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80',
+    avatar: '/images/author_timur_dian.jpg',
   },
   language = 'id',
   contentOnly = false,
