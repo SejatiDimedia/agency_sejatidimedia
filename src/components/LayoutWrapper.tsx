@@ -5,7 +5,7 @@ import { flushSync } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { Home, Layers, GitMerge, FolderOpen, MessageCircle } from "lucide-react";
+import { Home, Layers, FolderOpen, BookOpen, MessageCircle } from "lucide-react";
 import dynamic from "next/dynamic";
 import ThemeToggle from "./ThemeToggle";
 const AiChatWidget = dynamic(() => import("./AiChatWidget"), { ssr: false });
@@ -613,18 +613,18 @@ export default function LayoutWrapper({
                 <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.services}</span>
               </button>
               <button
-                onClick={() => handleNavClick("methodology-section")}
-                className="flex flex-col items-center justify-center w-[60px] h-12 rounded-xl text-theme-fore-muted hover:text-theme-fore transition-all duration-300"
-              >
-                <GitMerge className="w-5 h-5 mb-1" />
-                <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.workflow}</span>
-              </button>
-              <button
                 onClick={() => router.push("/projects")}
                 className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/projects") ? "text-theme-accent bg-theme-accent/10" : "text-theme-fore-muted hover:text-theme-fore"}`}
               >
                 <FolderOpen className="w-5 h-5 mb-1" />
                 <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.portfolio}</span>
+              </button>
+              <button
+                onClick={() => router.push("/insights")}
+                className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/insights") ? "text-theme-accent bg-theme-accent/10" : "text-theme-fore-muted hover:text-theme-fore"}`}
+              >
+                <BookOpen className="w-5 h-5 mb-1" />
+                <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.insights || "Insights"}</span>
               </button>
               <button
                 onClick={() => handleNavClick("contact-section")}
@@ -1029,18 +1029,18 @@ export default function LayoutWrapper({
                 <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.services}</span>
               </button>
               <button
-                onClick={() => handleNavClick("methodology-section")}
-                className="flex flex-col items-center justify-center w-[60px] h-12 rounded-xl text-slate-600 hover:text-slate-900 transition-all duration-300"
-              >
-                <GitMerge className="w-5 h-5 mb-1" />
-                <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.workflow}</span>
-              </button>
-              <button
                 onClick={() => router.push("/projects")}
                 className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/projects") ? "text-[#2C5098] bg-[#2C5098]/10 font-bold" : "text-slate-600 hover:text-slate-900"}`}
               >
                 <FolderOpen className="w-5 h-5 mb-1" />
                 <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.portfolio}</span>
+              </button>
+              <button
+                onClick={() => router.push("/insights")}
+                className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/insights") ? "text-[#2C5098] bg-[#2C5098]/10 font-bold" : "text-slate-600 hover:text-slate-900"}`}
+              >
+                <BookOpen className="w-5 h-5 mb-1" />
+                <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.insights || "Insights"}</span>
               </button>
               <button
                 onClick={() => handleNavClick("contact-section")}
