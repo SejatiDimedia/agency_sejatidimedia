@@ -58,12 +58,14 @@ export async function POST(req: Request) {
       slug: customSlug,
     } = body;
 
-    if (!titleId || !excerptId || !contentId || !coverImage) {
+    if (!titleId || !excerptId || !contentId) {
       return NextResponse.json(
-        { error: 'Mohon lengkapi Judul, Ringkasan, Konten, dan URL Cover Image' },
+        { error: 'Mohon lengkapi Judul, Ringkasan, dan Konten' },
         { status: 400 }
       );
     }
+
+    const finalCoverImage = coverImage?.trim() || '/images/insights/client_portal_cover.jpg';
 
     let slug = customSlug ? slugify(customSlug) : slugify(titleId);
     if (!slug) {
@@ -90,7 +92,7 @@ export async function POST(req: Request) {
         contentEn: contentEn || null,
         category,
         tags: Array.isArray(tags) ? tags : tags.split(',').map((t: string) => t.trim()).filter(Boolean),
-        coverImage,
+        coverImage: finalCoverImage,
         readTimeMinutes: Number(readTimeMinutes) || 5,
         authorName,
         authorRole,

@@ -150,8 +150,8 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.titleId || !formData.excerptId || !formData.contentId || !formData.coverImage) {
-      setToast({ message: 'Mohon lengkapi Judul, Excerpt, Konten (ID), dan Cover Image', type: 'error' });
+    if (!formData.titleId || !formData.excerptId || !formData.contentId) {
+      setToast({ message: 'Mohon lengkapi Judul, Excerpt, dan Konten (ID)', type: 'error' });
       return;
     }
 
@@ -165,6 +165,7 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          coverImage: formData.coverImage.trim() || '/images/insights/client_portal_cover.jpg',
           tags: Array.isArray(formData.tags)
             ? formData.tags
             : typeof formData.tags === 'string'
@@ -905,14 +906,13 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
                 {coverImageType === 'link' && (
                   <div className="space-y-2">
                     <label className="block text-xs font-mono font-bold uppercase text-slate-500">
-                      URL Gambar (Unsplash / CDN Eksternal) *
+                      URL Gambar (Unsplash / CDN Eksternal)
                     </label>
                     <input
-                      type="url"
-                      required
+                      type="text"
                       value={formData.coverImage}
                       onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
-                      placeholder="https://images.unsplash.com/photo-..."
+                      placeholder="https://images.unsplash.com/photo-... (Opsional)"
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-xs font-mono"
                     />
                     <p className="text-[11px] text-slate-400">
