@@ -377,13 +377,13 @@ export default function LayoutWrapper({
           </header>
 
           {/* 3. Core Body Content Shell */}
-          <main className="relative z-10 flex-grow w-full max-w-7xl mx-auto px-6 pt-28 pb-10">
+          <main className={`relative z-10 flex-grow w-full ${pathname.startsWith("/insights") ? "pt-20 sm:pt-24 pb-12" : "max-w-7xl mx-auto px-6 pt-28 pb-10"}`}>
             {children}
           </main>
 
           {/* 4. High-Fidelity Premium Footer */}
           <footer className="relative z-10 w-full bg-theme-base/30 backdrop-blur-2xl border-t border-theme-border/60 pt-16 pb-28 md:pb-12">
-            <div className="max-w-7xl mx-auto px-6 space-y-16">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-16">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
                 <div className="md:col-span-7 space-y-6 text-left">
                   <div className="h-6 sm:h-7.5 w-auto flex items-center justify-start">
@@ -674,7 +674,7 @@ export default function LayoutWrapper({
               <div
                 className={`pointer-events-auto transition-all duration-300 ease-out flex items-center justify-between gap-2 sm:gap-4 border ${scrolled
                   ? 'w-[95%] sm:w-[92%] max-w-6xl mx-auto px-3 sm:px-6 py-2 sm:py-2.5 rounded-full bg-white/95 backdrop-blur-2xl border-slate-200 shadow-md shadow-slate-900/5'
-                  : 'w-full max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-none bg-transparent border-transparent shadow-none'
+                  : 'w-full max-w-6xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-none bg-transparent border-transparent shadow-none'
                   }`}
               >
                 {/* Brand Logo */}
@@ -793,13 +793,13 @@ export default function LayoutWrapper({
           </header>
 
           {/* Core Body Content */}
-          <main className={`relative z-10 flex-grow w-full ${pathname === "/" ? "pt-16 sm:pt-20 pb-0" : "max-w-7xl mx-auto px-6 pt-28 sm:pt-32 pb-12"}`}>
+          <main className={`relative z-10 flex-grow w-full ${pathname === "/" ? "pt-16 sm:pt-20 pb-0" : pathname.startsWith("/insights") ? "pt-20 sm:pt-24 pb-12" : "max-w-7xl mx-auto px-6 pt-28 sm:pt-32 pb-12"}`}>
             {children}
           </main>
 
           {/* Clean Portal Footer */}
           <footer className="relative z-10 w-full bg-[#F8FAFC] border-t border-slate-200/80 pt-16 pb-28 md:pb-12 text-slate-800">
-            <div className="max-w-7xl mx-auto px-6 space-y-16">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-16">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
                 <div className="md:col-span-7 space-y-6 text-left">
                   <div className="h-6 sm:h-7.5 w-auto flex items-center justify-start">

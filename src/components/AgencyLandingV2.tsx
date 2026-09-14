@@ -578,7 +578,7 @@ export default function AgencyLandingV2({
           <img
             src="/hero_bg.webp"
             alt="SejatiDimedia Hero Background"
-            className="w-full h-full object-cover object-[center_top] lg:object-[82%_top] opacity-95 sm:opacity-100 transition-opacity duration-700"
+            className="w-full h-full object-cover object-[78%_center] sm:object-[80%_top] lg:object-[82%_top] opacity-95 sm:opacity-100 transition-opacity duration-700"
             fetchPriority="high"
             decoding="async"
           />

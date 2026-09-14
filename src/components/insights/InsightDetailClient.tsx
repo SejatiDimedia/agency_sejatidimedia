@@ -410,9 +410,9 @@ export default function InsightDetailClient({
         />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {/* 2. Top Editorial Breadcrumb & Navigation Bar */}
-        <div className="mb-6 flex flex-wrap items-center justify-between gap-4 pt-2">
+        <div className="mb-6 pt-2">
           <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs sm:text-sm font-sans text-slate-500">
             <Link href="/" className="hover:text-[#2C5098] transition-colors">
               {language === "en" ? "Home" : "Beranda"}
@@ -422,92 +422,38 @@ export default function InsightDetailClient({
               Insights
             </Link>
             <span className="text-slate-300">/</span>
-            <span className="text-[#2C5098] font-semibold">{article.category}</span>
+            <span className="text-slate-700 font-semibold">{article.category}</span>
           </nav>
-
-          {/* Reading Comfort & Quick Action Bar */}
-          <div className="flex items-center gap-2">
-            {/* Font Size Toggle */}
-            <div className="flex items-center bg-slate-100 rounded-xl p-0.5 border border-slate-200/80 text-xs font-sans font-bold text-slate-700">
-              <button
-                type="button"
-                onClick={() => setFontSize("normal")}
-                aria-label={language === "en" ? "Standard font size" : "Ukuran font standar"}
-                title={language === "en" ? "Standard font size" : "Ukuran font standar"}
-                className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${fontSize === "normal" ? "bg-white text-[#2C5098] shadow-xs" : "hover:text-slate-900"
-                  }`}
-              >
-                A
-              </button>
-              <button
-                type="button"
-                onClick={() => setFontSize("large")}
-                aria-label={language === "en" ? "Large font size" : "Ukuran font besar"}
-                title={language === "en" ? "Large font size" : "Ukuran font besar"}
-                className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer text-sm ${fontSize === "large" ? "bg-white text-[#2C5098] shadow-xs" : "hover:text-slate-900"
-                  }`}
-              >
-                A+
-              </button>
-            </div>
-
-            {/* Share Native / Copy */}
-            <button
-              type="button"
-              onClick={handleNativeShare}
-              aria-label={language === "en" ? "Share article" : "Bagikan artikel"}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 text-xs font-bold text-slate-700 hover:text-[#2C5098] hover:border-[#2C5098]/30 shadow-xs transition-colors cursor-pointer"
-            >
-              <Share2 className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">{language === "en" ? "Share" : "Bagikan"}</span>
-            </button>
-          </div>
         </div>
 
         {/* 3. Hero Article Header */}
         <header className="space-y-6 mb-12 w-full">
-          {/* Metadata Pill Row */}
-          <div className="flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 text-[10px] font-sans font-bold uppercase tracking-wider shadow-xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
-              {article.category}
-            </span>
-
-            <div className="flex items-center gap-3 text-xs text-slate-500 font-sans">
-              <span className="inline-flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-slate-400" />
-                {article.readTimeMinutes} {language === "en" ? "min read" : "menit baca"}
-              </span>
-              <span>•</span>
-              <span className="inline-flex items-center gap-1.5">
-                <Calendar className="w-3.5 h-3.5 text-slate-400" />
-                {new Date(article.publishedAt).toLocaleDateString(language === "en" ? "en-US" : "id-ID", {
-                  month: "long",
-                  day: "numeric",
-                  year: "numeric",
-                })}
-              </span>
-            </div>
-
-            {article.series && (
+          {/* Eyebrow / Context: Clean Series Pill or Category Badge */}
+          <div>
+            {article.series ? (
               <Link
                 href={`/insights/series/${article.series.slug}`}
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 hover:bg-blue-100/80 text-[#2C5098] border border-[#2C5098]/20 text-[10px] font-sans font-bold uppercase tracking-wider transition-all group shadow-xs"
+                className="inline-flex items-center gap-2 text-xs font-sans font-bold text-[#2C5098] hover:text-[#1E315B] transition-colors group"
               >
-                <Layers className="w-3 h-3 text-[#2C5098] group-hover:rotate-12 transition-transform" />
-                <span>
-                  {language === "en" ? "SERIES" : "SERI"}: {language === "en" ? article.series.titleEn : article.series.titleId}
-                </span>
-                {article.series.part && (
-                  <>
-                    <span className="text-[#2C5098]/40">•</span>
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/70 text-[10px] font-sans font-bold text-[#2C5098] uppercase tracking-wider shadow-2xs">
+                  <Layers className="w-3.5 h-3.5 text-[#2C5098] group-hover:rotate-12 transition-transform" />
+                  <span>{language === "en" ? "Series" : "Seri"}</span>
+                  {article.series.part && (
                     <span className="font-extrabold text-[#1E315B]">
-                      {language === "en" ? `PART ${article.series.part} OF ${article.series.totalParts}` : `PART ${article.series.part} DARI ${article.series.totalParts}`}
+                      · Part {article.series.part}/{article.series.totalParts}
                     </span>
-                  </>
-                )}
-                <ChevronRight className="w-3 h-3 text-[#2C5098]/60 group-hover:translate-x-0.5 transition-transform" />
+                  )}
+                </span>
+                <span className="font-semibold text-slate-700 group-hover:text-[#2C5098] flex items-center gap-1">
+                  {language === "en" ? article.series.titleEn : article.series.titleId}
+                  <ChevronRight className="w-3.5 h-3.5 text-[#2C5098]/60 group-hover:translate-x-0.5 transition-transform" />
+                </span>
               </Link>
+            ) : (
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 text-[10px] font-sans font-bold uppercase tracking-wider shadow-2xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+                {article.category}
+              </span>
             )}
           </div>
 
@@ -523,27 +469,82 @@ export default function InsightDetailClient({
             </p>
           </div>
 
-          {/* Clean Author Byline Bar (Without duplicate aggressive CTA) */}
-          <div className="pt-4 border-t border-slate-200/80 flex items-center gap-3.5 w-full">
-            <div className="relative w-11 h-11 rounded-full overflow-hidden border border-slate-200 shadow-xs shrink-0">
-              <Image
-                src={article.author.avatar}
-                alt={article.author.name}
-                fill
-                sizes="44px"
-                className="object-cover"
-              />
-            </div>
-            <div>
-              <div className="flex items-center gap-1.5">
-                <p className="text-sm font-sans font-bold text-slate-900">
-                  {article.author.name}
-                </p>
-                <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+          {/* Harmonious Unified Byline & Reader Tools Bar */}
+          <div className="pt-5 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-4 w-full">
+            {/* Left: Author Profile, Date & Reading Time */}
+            <div className="flex items-center gap-3.5">
+              <div className="relative w-11 h-11 rounded-full overflow-hidden border border-slate-200 shadow-xs shrink-0">
+                <Image
+                  src={article.author.avatar}
+                  alt={article.author.name}
+                  fill
+                  sizes="44px"
+                  className="object-cover"
+                />
               </div>
-              <p className="text-xs text-slate-500 font-sans">
-                {article.author.role}
-              </p>
+              <div className="text-left">
+                <div className="flex items-center gap-1.5">
+                  <p className="text-sm font-sans font-bold text-slate-900">
+                    {article.author.name}
+                  </p>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+                </div>
+                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-xs text-slate-500 font-sans mt-0.5">
+                  <span>{article.author.role}</span>
+                  <span className="text-slate-300">•</span>
+                  <span>
+                    {new Date(article.publishedAt).toLocaleDateString(language === "en" ? "en-US" : "id-ID", {
+                      month: "long",
+                      day: "numeric",
+                      year: "numeric",
+                    })}
+                  </span>
+                  <span className="text-slate-300">•</span>
+                  <span>
+                    {article.readTimeMinutes} {language === "en" ? "min read" : "menit baca"}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Reading Comfort (Font Size) & Share Actions */}
+            <div className="flex items-center gap-2">
+              {/* Font Size Toggle */}
+              <div className="flex items-center bg-slate-100 rounded-xl p-0.5 border border-slate-200/80 text-xs font-sans font-bold text-slate-700">
+                <button
+                  type="button"
+                  onClick={() => setFontSize("normal")}
+                  aria-label={language === "en" ? "Standard font size" : "Ukuran font standar"}
+                  title={language === "en" ? "Standard font size" : "Ukuran font standar"}
+                  className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer ${
+                    fontSize === "normal" ? "bg-white text-[#2C5098] shadow-xs" : "hover:text-slate-900"
+                  }`}
+                >
+                  A
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFontSize("large")}
+                  aria-label={language === "en" ? "Large font size" : "Ukuran font besar"}
+                  title={language === "en" ? "Large font size" : "Ukuran font besar"}
+                  className={`px-2.5 py-1 rounded-lg transition-colors cursor-pointer text-sm ${
+                    fontSize === "large" ? "bg-white text-[#2C5098] shadow-xs" : "hover:text-slate-900"
+                  }`}
+                >
+                  A+
+                </button>
+              </div>
+
+              {/* Share Native / Copy */}
+              <button
+                type="button"
+                onClick={handleNativeShare}
+                aria-label={language === "en" ? "Share article" : "Bagikan artikel"}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200/80 text-xs font-bold text-slate-700 hover:text-[#2C5098] hover:border-[#2C5098]/30 shadow-xs transition-colors cursor-pointer"
+              >
+                <Share2 className="w-3.5 h-3.5" />
+                <span>{language === "en" ? "Share" : "Bagikan"}</span>
+              </button>
             </div>
           </div>
         </header>

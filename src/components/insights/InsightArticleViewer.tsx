@@ -322,43 +322,32 @@ export function InsightArticleViewer({
     <div className="w-full bg-white text-slate-800 p-6 sm:p-10 rounded-2xl max-w-5xl mx-auto shadow-xs border border-slate-200/80">
       {/* 1. Article Header */}
       <header className="space-y-5 mb-10 w-full">
-        {/* Metadata Row */}
-        <div className="flex flex-wrap items-center gap-3">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 text-[10px] font-sans font-bold uppercase tracking-wider shadow-xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
-            {category}
-          </span>
-          <div className="flex items-center gap-3 text-xs text-slate-500 font-sans">
-            <span className="inline-flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-slate-400" />
-              {readTimeMinutes} {language === 'en' ? 'min read' : 'menit baca'}
-            </span>
-            <span>•</span>
-            <span className="inline-flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-slate-400" />
-              {displayDate}
-            </span>
-          </div>
-
-          {series && (
+        {/* Eyebrow / Context: Clean Series Pill or Category Badge */}
+        <div>
+          {series ? (
             <Link
               href={`/insights/series/${series.slug}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 hover:bg-blue-100/80 text-[#2C5098] border border-[#2C5098]/20 text-[10px] font-sans font-bold uppercase tracking-wider transition-all group shadow-xs"
+              className="inline-flex items-center gap-2 text-xs font-sans font-bold text-[#2C5098] hover:text-[#1E315B] transition-colors group"
             >
-              <Layers className="w-3 h-3 text-[#2C5098] group-hover:rotate-12 transition-transform" />
-              <span>
-                {language === 'en' ? 'SERIES' : 'SERI'}: {language === 'en' ? series.titleEn : series.titleId}
-              </span>
-              {series.part && (
-                <>
-                  <span className="text-[#2C5098]/40">•</span>
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/70 text-[10px] font-sans font-bold text-[#2C5098] uppercase tracking-wider shadow-2xs">
+                <Layers className="w-3.5 h-3.5 text-[#2C5098] group-hover:rotate-12 transition-transform" />
+                <span>{language === 'en' ? 'Series' : 'Seri'}</span>
+                {series.part && (
                   <span className="font-extrabold text-[#1E315B]">
-                    {language === 'en' ? `PART ${series.part} OF ${series.totalParts}` : `PART ${series.part} DARI ${series.totalParts}`}
+                    · Part {series.part}/{series.totalParts}
                   </span>
-                </>
-              )}
-              <ChevronRight className="w-3 h-3 text-[#2C5098]/60 group-hover:translate-x-0.5 transition-transform" />
+                )}
+              </span>
+              <span className="font-semibold text-slate-700 group-hover:text-[#2C5098] flex items-center gap-1">
+                {language === 'en' ? series.titleEn : series.titleId}
+                <ChevronRight className="w-3.5 h-3.5 text-[#2C5098]/60 group-hover:translate-x-0.5 transition-transform" />
+              </span>
             </Link>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 text-[10px] font-sans font-bold uppercase tracking-wider shadow-2xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+              {category}
+            </span>
           )}
         </div>
 
@@ -394,9 +383,13 @@ export function InsightArticleViewer({
                 </p>
                 <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
               </div>
-              <p className="text-xs text-slate-500 font-sans">
-                {author.role}
-              </p>
+              <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-xs text-slate-500 font-sans mt-0.5">
+                <span>{author.role}</span>
+                <span className="text-slate-300">•</span>
+                <span>{displayDate}</span>
+                <span className="text-slate-300">•</span>
+                <span>{readTimeMinutes} {language === 'en' ? 'min read' : 'menit baca'}</span>
+              </div>
             </div>
           </div>
 

@@ -44,7 +44,7 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
   }, [articles, selectedCategory, searchQuery, language]);
 
   return (
-    <div className="min-h-screen py-24 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <div className="min-h-screen max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
       {/* 1. Standard Section Header - Matching Beranda Section Style */}
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 space-y-3">
         {/* Eyebrow / Section Label */}
