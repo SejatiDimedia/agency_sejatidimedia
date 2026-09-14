@@ -29,6 +29,15 @@ const CATEGORY_MAP: Record<string, string> = {
 
 const getCategoryName = (id: string) => CATEGORY_MAP[id] || id;
 
+const getCategoryIcon = (categoryName: string) => {
+  const lower = categoryName.toLowerCase();
+  if (lower === "all" || lower === "semua") return "ph:squares-four-bold";
+  if (lower.includes("ai")) return "ph:sparkle-bold";
+  if (lower.includes("web")) return "ph:globe-bold";
+  if (lower.includes("mobile")) return "ph:device-mobile-bold";
+  return "ph:stack-bold";
+};
+
 function ClientPortalMockup3D({ t }: { t: any }) {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -554,7 +563,7 @@ export default function AgencyLandingV2({
       .filter((p) => featuredProjectSlugs.includes(p.slug))
       .sort((a, b) => featuredProjectSlugs.indexOf(a.slug) - featuredProjectSlugs.indexOf(b.slug));
 
-    // 2. If fewer than 3, backfill with other projects so exactly 3 projects are displayed
+    // 2. Remaining projects backfill if fewer than 3
     if (featured.length < 3) {
       const remaining = projectList.filter((p) => !featuredProjectSlugs.includes(p.slug));
       return [...featured, ...remaining].slice(0, 3);
@@ -2081,14 +2090,18 @@ export default function AgencyLandingV2({
                       <div className="space-y-2 text-left">
                         {project.categories && project.categories.length > 0 && (
                           <div className="flex flex-wrap gap-1.5 pb-1">
-                            {project.categories.map((cat) => (
-                              <span
-                                key={cat}
-                                className="inline-block text-[8px] font-mono uppercase tracking-widest font-bold text-[#2C5098] bg-[#2C5098]/10 border border-[#2C5098]/20 px-2.5 py-0.5 rounded-full"
-                              >
-                                {getCategoryName(cat)}
-                              </span>
-                            ))}
+                            {project.categories.map((cat) => {
+                              const catName = getCategoryName(cat);
+                              return (
+                                <span
+                                  key={cat}
+                                  className="inline-flex items-center gap-1.5 text-[10px] font-sans uppercase tracking-wider font-bold text-white bg-gradient-to-r from-[#2C5098] to-[#23385B] border border-white/10 px-2.5 py-0.5 rounded-full shadow-2xs"
+                                >
+                                  <Icon icon={getCategoryIcon(catName)} className="w-3 h-3 text-white" />
+                                  <span>{catName}</span>
+                                </span>
+                              );
+                            })}
                           </div>
                         )}
                         <h3 className="text-base font-jakarta font-sans font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors">
@@ -2131,6 +2144,17 @@ export default function AgencyLandingV2({
                 <span className="text-xs font-mono text-slate-500">No projects found.</span>
               </div>
             )}
+          </div>
+
+          {/* Action Button: Explore Full Portfolio */}
+          <div className="flex items-center justify-center pt-6">
+            <Link
+              href="/projects"
+              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white text-xs sm:text-sm font-sans font-bold shadow-md shadow-[#2C5098]/20 hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+            >
+              <span>{language === 'en' ? `Explore All Portfolio (${projectList.length})` : `Jelajahi Semua Portofolio (${projectList.length})`}</span>
+              <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       </motion.section>

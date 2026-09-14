@@ -416,8 +416,8 @@ export default function ProjectDetailClient({
                         sizes="(max-w-768px) 100vw, 33vw"
                       />
                       {relIsProfessional && (
-                        <div className="absolute top-2 left-2 z-10">
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[8px] font-mono font-bold uppercase tracking-wider bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-xs">
+                        <div className="absolute top-2.5 left-2.5 z-10">
+                          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 dark:bg-slate-900/95 backdrop-blur-md text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700 shadow-xs">
                             <Briefcase className="w-3 h-3 text-[#2C5098]" />
                             <span>{language === 'en' ? 'Professional' : 'Pengalaman'}</span>
                           </span>

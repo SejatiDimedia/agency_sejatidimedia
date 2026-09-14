@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Clock, Calendar, ArrowRight, Tag, BookOpen, Layers, ChevronRight } from "lucide-react";
+import { Search, Clock, Calendar, ArrowRight, Tag, BookOpen, Layers, ChevronRight, ChevronLeft } from "lucide-react";
 import { InsightArticle, InsightSeriesSummary } from "@/lib/api/insights";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
@@ -42,6 +42,40 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
       return matchesCategory && matchesSearch;
     });
   }, [articles, selectedCategory, searchQuery, language]);
+
+  // Standard display count: 6 items per page for clean 3-column grid alignment
+  const ITEMS_PER_PAGE = 6;
+  const [currentPage, setCurrentPage] = useState<number>(1);
+
+  // Reset to page 1 on category filter or search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedCategory, searchQuery]);
+
+  const isDefaultView = selectedCategory === "All" && !searchQuery.trim();
+
+  // In default view, the 1st article is showcased in the Featured Lead Story Card,
+  // so the archive grid presents the remaining articles.
+  // In filtered / search view, all matching articles are displayed in the grid.
+  const archiveArticles = useMemo(() => {
+    return isDefaultView ? filteredArticles.slice(1) : filteredArticles;
+  }, [filteredArticles, isDefaultView]);
+
+  const totalPages = Math.max(1, Math.ceil(archiveArticles.length / ITEMS_PER_PAGE));
+  const activePage = Math.min(currentPage, totalPages);
+
+  const displayedArchiveArticles = useMemo(() => {
+    const startIndex = (activePage - 1) * ITEMS_PER_PAGE;
+    return archiveArticles.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [archiveArticles, activePage]);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    const archiveAnchor = document.getElementById("insights-archive-section");
+    if (archiveAnchor) {
+      archiveAnchor.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   return (
     <div className="min-h-screen max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
@@ -367,22 +401,21 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
           )}
 
           {/* Section Divider when Featured Card is shown */}
-          {selectedCategory === "All" && !searchQuery.trim() && filteredArticles.length > 1 && (
-            <div className="flex items-center gap-3 pt-4 pb-1">
-              <span className="text-[10px] font-sans uppercase tracking-[0.25em] font-bold text-slate-400">
-                {language === "en" ? "ARCHIVE & ALL ARTICLES" : "ARSIP SEMUA ARTIKEL"}
-              </span>
-              <div className="flex-1 h-[1px] bg-slate-200/80" />
-            </div>
-          )}
+          <div id="insights-archive-section" className="scroll-mt-24">
+            {selectedCategory === "All" && !searchQuery.trim() && filteredArticles.length > 1 && (
+              <div className="flex items-center gap-3 pt-4 pb-1">
+                <span className="text-[10px] font-sans uppercase tracking-[0.25em] font-bold text-slate-400">
+                  {language === "en" ? "ARCHIVE & ALL ARTICLES" : "ARSIP SEMUA ARTIKEL"}
+                </span>
+                <div className="flex-1 h-[1px] bg-slate-200/80" />
+              </div>
+            )}
+          </div>
 
           {/* Regular Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             <AnimatePresence mode="popLayout">
-              {(selectedCategory === "All" && !searchQuery.trim()
-                ? filteredArticles.slice(1)
-                : filteredArticles
-              ).map((article, idx) => {
+              {displayedArchiveArticles.map((article, idx) => {
                 const title = language === "en" ? article.titleEn : article.titleId;
                 const excerpt = language === "en" ? article.excerptEn : article.excerptId;
 
@@ -502,6 +535,72 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
               })}
             </AnimatePresence>
           </div>
+
+          {/* Numbered Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 sm:pt-10 pb-4 border-t border-slate-200/80 mt-8">
+              {/* Pagination Info */}
+              <div className="text-xs font-sans text-slate-500">
+                {language === "en"
+                  ? `Showing ${(activePage - 1) * ITEMS_PER_PAGE + 1}–${Math.min(activePage * ITEMS_PER_PAGE, archiveArticles.length)} of ${archiveArticles.length} articles`
+                  : `Menampilkan ${(activePage - 1) * ITEMS_PER_PAGE + 1}–${Math.min(activePage * ITEMS_PER_PAGE, archiveArticles.length)} dari ${archiveArticles.length} artikel`}
+              </div>
+
+              {/* Page Controls */}
+              <div className="flex items-center gap-1.5">
+                {/* Prev Button */}
+                <button
+                  type="button"
+                  onClick={() => handlePageChange(activePage - 1)}
+                  disabled={activePage === 1}
+                  className={`inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-sans font-bold border transition-all ${
+                    activePage === 1
+                      ? "bg-slate-50 border-slate-200/60 text-slate-300 cursor-not-allowed"
+                      : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 shadow-2xs cursor-pointer"
+                  }`}
+                  aria-label="Previous Page"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span className="hidden sm:inline">{language === "en" ? "Prev" : "Sebelumnya"}</span>
+                </button>
+
+                {/* Page Number Buttons */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => {
+                  const isActive = pageNum === activePage;
+                  return (
+                    <button
+                      key={pageNum}
+                      type="button"
+                      onClick={() => handlePageChange(pageNum)}
+                      className={`w-9 h-9 rounded-xl text-xs font-sans font-bold transition-all duration-200 cursor-pointer ${
+                        isActive
+                          ? "bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-md shadow-[#2C5098]/20 border border-transparent"
+                          : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 shadow-2xs"
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  );
+                })}
+
+                {/* Next Button */}
+                <button
+                  type="button"
+                  onClick={() => handlePageChange(activePage + 1)}
+                  disabled={activePage === totalPages}
+                  className={`inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-sans font-bold border transition-all ${
+                    activePage === totalPages
+                      ? "bg-slate-50 border-slate-200/60 text-slate-300 cursor-not-allowed"
+                      : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 shadow-2xs cursor-pointer"
+                  }`}
+                  aria-label="Next Page"
+                >
+                  <span className="hidden sm:inline">{language === "en" ? "Next" : "Selanjutnya"}</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>
