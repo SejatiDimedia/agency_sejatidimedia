@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { getInsights, getAllCategories } from "@/lib/api/insights";
+import { getInsights, getAllCategories, getInsightSeriesList } from "@/lib/api/insights";
 import InsightsList from "./InsightsList";
 
 export const revalidate = 60;
@@ -16,10 +16,11 @@ export const metadata: Metadata = {
 };
 
 export default async function InsightsPage() {
-  const [articles, categories] = await Promise.all([
+  const [articles, categories, seriesList] = await Promise.all([
     getInsights(),
     getAllCategories(),
+    getInsightSeriesList(),
   ]);
 
-  return <InsightsList articles={articles} categories={categories} />;
+  return <InsightsList articles={articles} categories={categories} seriesList={seriesList} />;
 }

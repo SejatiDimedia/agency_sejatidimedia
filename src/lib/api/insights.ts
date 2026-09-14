@@ -9,6 +9,65 @@ export interface InsightAuthor {
   bioEn?: string;
 }
 
+export interface SeriesCurriculumItem {
+  part: number;
+  slug: string;
+  titleId: string;
+  titleEn?: string | null;
+  readTimeMinutes: number;
+  isCurrent: boolean;
+}
+
+export interface SeriesAdjacentPart {
+  part: number;
+  slug: string;
+  titleId: string;
+  titleEn?: string | null;
+}
+
+export interface InsightSeriesInfo {
+  id: string;
+  slug: string;
+  titleId: string;
+  titleEn?: string | null;
+  descriptionId: string;
+  descriptionEn?: string | null;
+  badge?: string | null;
+  part: number;
+  totalParts: number;
+  curriculum: SeriesCurriculumItem[];
+  prevPart?: SeriesAdjacentPart | null;
+  nextPart?: SeriesAdjacentPart | null;
+}
+
+export interface InsightSeriesSummary {
+  id: string;
+  slug: string;
+  titleId: string;
+  titleEn?: string | null;
+  descriptionId: string;
+  descriptionEn?: string | null;
+  badge?: string | null;
+  category: string;
+  coverImage?: string | null;
+  totalArticles: number;
+  totalReadTimeMinutes: number;
+  updatedAt: string;
+}
+
+export interface InsightSeriesDetail extends InsightSeriesSummary {
+  articles: Array<{
+    slug: string;
+    titleId: string;
+    titleEn?: string | null;
+    excerptId: string;
+    excerptEn?: string | null;
+    readTimeMinutes: number;
+    seriesPart: number;
+    publishedAt: string;
+  }>;
+}
+
 export interface InsightArticle {
   slug: string;
   titleId: string;
@@ -24,6 +83,9 @@ export interface InsightArticle {
   author: InsightAuthor;
   coverImage: string;
   featured?: boolean;
+  seriesId?: string | null;
+  seriesPart?: number | null;
+  series?: InsightSeriesInfo | null;
 }
 
 const DEFAULT_AUTHOR: InsightAuthor = {
@@ -35,6 +97,23 @@ const DEFAULT_AUTHOR: InsightAuthor = {
 };
 
 const DUMMY_AVATAR = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80";
+
+export const DEFAULT_SERIES_DATA: InsightSeriesSummary[] = [
+  {
+    id: "series-laravel-architecture",
+    slug: "arsitektur-laravel-skala-bisnis",
+    titleId: "Arsitektur Laravel Skala Bisnis",
+    titleEn: "Enterprise Laravel Architecture at Scale",
+    descriptionId: "Panduan rekayasa sistem Laravel komprehensif dari SejatiDimedia untuk menangani beban transaksi tinggi, mencegah bottleneck database, dan membangun arsitektur kode enterprise yang bersih.",
+    descriptionEn: "Comprehensive Laravel system engineering playbook from SejatiDimedia for handling high transaction throughput, eliminating database bottlenecks, and building clean enterprise codebases.",
+    badge: "ENGINEERING PLAYBOOK",
+    category: "Backend",
+    coverImage: "/images/insights/laravel_architecture_cover.jpg",
+    totalArticles: 1,
+    totalReadTimeMinutes: 7,
+    updatedAt: "2026-09-14",
+  },
+];
 
 export const INSIGHTS_DATA: InsightArticle[] = [
   {
@@ -50,6 +129,31 @@ export const INSIGHTS_DATA: InsightArticle[] = [
     author: DEFAULT_AUTHOR,
     coverImage: "/images/insights/laravel_architecture_cover.jpg",
     featured: true,
+    seriesId: "series-laravel-architecture",
+    seriesPart: 1,
+    series: {
+      id: "series-laravel-architecture",
+      slug: "arsitektur-laravel-skala-bisnis",
+      titleId: "Arsitektur Laravel Skala Bisnis",
+      titleEn: "Enterprise Laravel Architecture at Scale",
+      descriptionId: "Panduan rekayasa sistem Laravel komprehensif dari SejatiDimedia untuk menangani beban transaksi tinggi, mencegah bottleneck database, dan membangun arsitektur kode enterprise yang bersih.",
+      descriptionEn: "Comprehensive Laravel system engineering playbook from SejatiDimedia for handling high transaction throughput, eliminating database bottlenecks, and building clean enterprise codebases.",
+      badge: "ENGINEERING PLAYBOOK",
+      part: 1,
+      totalParts: 1,
+      curriculum: [
+        {
+          part: 1,
+          slug: "kesalahan-arsitektur-laravel-developer",
+          titleId: "5 Kesalahan Arsitektur yang Sering Dilakukan Laravel Developer (Dan Cara Kami Mencegahnya di Skala Bisnis)",
+          titleEn: "5 Architectural Pitfalls in Laravel Applications & How We Prevent Them at Scale",
+          readTimeMinutes: 7,
+          isCurrent: true,
+        },
+      ],
+      prevPart: null,
+      nextPart: null,
+    },
     contentId: `Sebagai framework PHP paling populer di dunia, **Laravel** menawarkan kemudahan pengembangan yang luar biasa cepat melalui ekosistemnya yang matang: Eloquent ORM, Blade, routing elegan, hingga built-in auth.
 
 Namun, kemudahan ini ibarat pisau bermata dua. Di **SejatiDimedia**, kami sering kali diajak untuk mengaudit atau me-*refactor* aplikasi Laravel milik klien yang awalnya dibangun oleh freelance dev atau software house lain. Masalah klasiknya hampir selalu sama: **aplikasi mulai lemot, server sering kehabisan memory (OOM), dan setiap penambahan fitur baru malah merusak fitur lama.**
@@ -239,6 +343,20 @@ Jika terjadi error di tengah jalan, seluruh perubahan akan di-*rollback* secara 
 
 ---
 
+### 6. Rangkuman Matriks Perbandingan Arsitektur
+
+Berikut adalah perbandingan ringkas antara pendekatan konvensional dengan standar rekayasa yang kami terapkan di SejatiDimedia:
+
+| Aspek Rekayasa | Pendekatan Konvensional (Fat Architecture) | Standar Rekayasa SejatiDimedia | Dampak Bisnis Nyata |
+| :--- | :--- | :--- | :--- |
+| **Penempatan Logika** | Menumpuk di Controller (Fat Controller) | Action Classes & Service Layer terisolasi | Kode mudah diuji, minim regresi saat update |
+| **Query Database** | Eloquent tanpa eager loading (N+1 Query) | Strict Eager Loading & Query Watchdog | Load time 5-10x lebih kencang & hemat RAM |
+| **Proses I/O Berat** | Sinkron pada HTTP Request (Rawan timeout) | Asinkron dengan Redis Background Queues | Transaksi instan tanpa pengguna menunggu |
+| **Integritas Data** | Eksekusi query terpisah tanpa proteksi ACID | Terproteksi Atomic \`DB::transaction\` | Nol risiko selisih saldo atau transaksi menggantung |
+| **Validasi & Kontrak** | Validasi manual di Controller | Dedicated Form Request & DTO strictly typed | Keamanan teruji dan type-safety enterprise |
+
+---
+
 ### Kesimpulan
 
 Membangun aplikasi web bukan sekadar membuat fitur yang tampak berjalan di komputer lokal. Di skala bisnis, **fondasi arsitektur menentukan apakah sistem Anda siap bertumbuh atau justru menjadi beban teknis yang mahal untuk diperbaiki**.
@@ -282,6 +400,20 @@ Sending emails, generating PDF invoices, or calling third-party APIs synchronous
 ### 5. Omitting Database Transactions on Multi-Table Writes
 
 Failing to wrap multi-step financial or inventory updates inside \`DB::transaction\` leads to partial writes, data corruption, and customer billing discrepancies when runtime exceptions occur.
+
+---
+
+### 6. Architecture Comparison Matrix
+
+Here is a side-by-side summary comparing conventional implementations against SejatiDimedia's enterprise standards:
+
+| Engineering Dimension | Conventional Architecture (Fat Controller) | SejatiDimedia Enterprise Standard | Real Business Impact |
+| :--- | :--- | :--- | :--- |
+| **Logic Placement** | Tangled inside HTTP Controllers | Isolated Action Classes & Dedicated Services | Easily testable, regression-free deployments |
+| **Database Queries** | Lazy Eloquent loops (N+1 Query explosion) | Strict Eager Loading & Query Watchdogs | 5-10x faster response times, reduced RAM |
+| **Heavy I/O Work** | Synchronous during HTTP requests | Asynchronous via Redis Background Workers | Instant user feedback without request timeouts |
+| **Data Integrity** | Discrete queries without ACID guarantees | Enforced Atomic \`DB::transaction\` blocks | Zero billing discrepancies or orphan records |
+| **Input Contracts** | Ad-hoc controller validation | Dedicated Form Requests & Strongly Typed DTOs | Enterprise security and hardened type contracts |
 
 ---
 
@@ -368,13 +500,35 @@ At **SejatiDimedia**, we engineered our dedicated **Client Portal** to eliminate
   }
 ];
 
-export function mapDbInsightToArticle(item: any, globalAuthor?: InsightAuthor): InsightArticle {
+export function mapDbInsightToArticle(
+  item: any,
+  globalAuthor?: InsightAuthor,
+  seriesInfo?: InsightSeriesInfo | null
+): InsightArticle {
   const fallbackAvatar = globalAuthor?.avatar || DEFAULT_AUTHOR.avatar;
   const authorAvatar = (!item.authorAvatar || item.authorAvatar === DUMMY_AVATAR)
     ? fallbackAvatar
     : item.authorAvatar;
   const authorName = item.authorName || globalAuthor?.name || DEFAULT_AUTHOR.name;
   const authorRole = item.authorRole || globalAuthor?.role || DEFAULT_AUTHOR.role;
+
+  let resolvedSeries: InsightSeriesInfo | null = null;
+  if (seriesInfo !== undefined) {
+    resolvedSeries = seriesInfo;
+  } else if (item.series) {
+    resolvedSeries = {
+      id: item.series.id,
+      slug: item.series.slug,
+      titleId: item.series.titleId,
+      titleEn: item.series.titleEn,
+      descriptionId: item.series.descriptionId || '',
+      descriptionEn: item.series.descriptionEn || '',
+      badge: item.series.badge || 'ENGINEERING SERIES',
+      part: item.seriesPart || 1,
+      totalParts: 1,
+      curriculum: [],
+    };
+  }
 
   return {
     slug: item.slug,
@@ -397,6 +551,9 @@ export function mapDbInsightToArticle(item: any, globalAuthor?: InsightAuthor): 
     },
     coverImage: item.coverImage,
     featured: item.featured || false,
+    seriesId: item.seriesId || null,
+    seriesPart: item.seriesPart || null,
+    series: resolvedSeries,
   };
 }
 
@@ -409,6 +566,19 @@ export async function getInsights(): Promise<InsightArticle[]> {
       // Database has records: strictly query ONLY published articles!
       const dbArticles = await prisma.insight.findMany({
         where: { isPublished: true },
+        include: {
+          series: {
+            select: {
+              id: true,
+              slug: true,
+              titleId: true,
+              titleEn: true,
+              descriptionId: true,
+              descriptionEn: true,
+              badge: true,
+            },
+          },
+        },
         orderBy: { publishedAt: 'desc' },
       });
       return dbArticles.map((item) => mapDbInsightToArticle(item, globalAuthor));
@@ -441,6 +611,19 @@ export async function getInsights(): Promise<InsightArticle[]> {
       }
       const seeded = await prisma.insight.findMany({
         where: { isPublished: true },
+        include: {
+          series: {
+            select: {
+              id: true,
+              slug: true,
+              titleId: true,
+              titleEn: true,
+              descriptionId: true,
+              descriptionEn: true,
+              badge: true,
+            },
+          },
+        },
         orderBy: { publishedAt: 'desc' },
       });
       return seeded.map((item) => mapDbInsightToArticle(item, globalAuthor));
@@ -463,11 +646,71 @@ export async function getInsightBySlug(slug: string): Promise<InsightArticle | n
   try {
     const item = await prisma.insight.findUnique({
       where: { slug },
+      include: {
+        series: true,
+      },
     });
     if (item) {
       // Article exists in DB: return only if published, otherwise return null for draft articles!
       if (item.isPublished) {
-        return mapDbInsightToArticle(item, globalAuthor);
+        let seriesInfo: InsightSeriesInfo | null = null;
+        if (item.seriesId && item.series) {
+          const siblings = await prisma.insight.findMany({
+            where: {
+              seriesId: item.seriesId,
+              isPublished: true,
+            },
+            orderBy: [{ seriesPart: 'asc' }, { publishedAt: 'asc' }],
+            select: {
+              slug: true,
+              titleId: true,
+              titleEn: true,
+              seriesPart: true,
+              readTimeMinutes: true,
+            },
+          });
+
+          const curriculum: SeriesCurriculumItem[] = siblings.map((sib, idx) => ({
+            part: sib.seriesPart ?? (idx + 1),
+            slug: sib.slug,
+            titleId: sib.titleId,
+            titleEn: sib.titleEn,
+            readTimeMinutes: sib.readTimeMinutes,
+            isCurrent: sib.slug === item.slug,
+          }));
+
+          const currentIndex = curriculum.findIndex((c) => c.slug === item.slug);
+          const prevPart = currentIndex > 0 ? {
+            part: curriculum[currentIndex - 1].part,
+            slug: curriculum[currentIndex - 1].slug,
+            titleId: curriculum[currentIndex - 1].titleId,
+            titleEn: curriculum[currentIndex - 1].titleEn,
+          } : null;
+
+          const nextPart = currentIndex >= 0 && currentIndex < curriculum.length - 1 ? {
+            part: curriculum[currentIndex + 1].part,
+            slug: curriculum[currentIndex + 1].slug,
+            titleId: curriculum[currentIndex + 1].titleId,
+            titleEn: curriculum[currentIndex + 1].titleEn,
+          } : null;
+
+          seriesInfo = {
+            id: item.series.id,
+            slug: item.series.slug,
+            titleId: item.series.titleId,
+            titleEn: item.series.titleEn,
+            descriptionId: item.series.descriptionId,
+            descriptionEn: item.series.descriptionEn,
+            badge: item.series.badge,
+            part: item.seriesPart || (currentIndex >= 0 ? currentIndex + 1 : 1),
+            totalParts: curriculum.length,
+            curriculum,
+            prevPart,
+            nextPart,
+          };
+        }
+
+        return mapDbInsightToArticle(item, globalAuthor, seriesInfo);
       }
       return null;
     }
@@ -497,6 +740,122 @@ export async function getInsightBySlug(slug: string): Promise<InsightArticle | n
     };
   }
   return null;
+}
+
+export async function getInsightSeriesList(): Promise<InsightSeriesSummary[]> {
+  try {
+    const totalCount = await prisma.insightSeries.count().catch(() => 0);
+    if (totalCount > 0) {
+      const seriesList = await prisma.insightSeries.findMany({
+        where: { isPublished: true },
+        include: {
+          insights: {
+            where: { isPublished: true },
+            select: {
+              id: true,
+              readTimeMinutes: true,
+            },
+          },
+        },
+        orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
+      });
+
+      return seriesList.map((s) => ({
+        id: s.id,
+        slug: s.slug,
+        titleId: s.titleId,
+        titleEn: s.titleEn,
+        descriptionId: s.descriptionId,
+        descriptionEn: s.descriptionEn,
+        badge: s.badge,
+        category: s.category,
+        coverImage: s.coverImage,
+        totalArticles: s.insights.length,
+        totalReadTimeMinutes: s.insights.reduce((acc, curr) => acc + (curr.readTimeMinutes || 0), 0),
+        updatedAt: s.updatedAt.toISOString().split('T')[0],
+      }));
+    }
+    return DEFAULT_SERIES_DATA;
+  } catch (error) {
+    console.error("Database query failed in getInsightSeriesList, fallback to local:", error);
+    return DEFAULT_SERIES_DATA;
+  }
+}
+
+export async function getInsightSeriesBySlug(slug: string): Promise<InsightSeriesDetail | null> {
+  try {
+    const s = await prisma.insightSeries.findUnique({
+      where: { slug },
+      include: {
+        insights: {
+          where: { isPublished: true },
+          orderBy: [{ seriesPart: 'asc' }, { publishedAt: 'asc' }],
+          select: {
+            slug: true,
+            titleId: true,
+            titleEn: true,
+            excerptId: true,
+            excerptEn: true,
+            readTimeMinutes: true,
+            seriesPart: true,
+            publishedAt: true,
+          },
+        },
+      },
+    });
+
+    if (s && s.isPublished) {
+      return {
+        id: s.id,
+        slug: s.slug,
+        titleId: s.titleId,
+        titleEn: s.titleEn,
+        descriptionId: s.descriptionId,
+        descriptionEn: s.descriptionEn,
+        badge: s.badge,
+        category: s.category,
+        coverImage: s.coverImage,
+        totalArticles: s.insights.length,
+        totalReadTimeMinutes: s.insights.reduce((acc, curr) => acc + (curr.readTimeMinutes || 0), 0),
+        updatedAt: s.updatedAt.toISOString().split('T')[0],
+        articles: s.insights.map((art, idx) => ({
+          slug: art.slug,
+          titleId: art.titleId,
+          titleEn: art.titleEn,
+          excerptId: art.excerptId,
+          excerptEn: art.excerptEn,
+          readTimeMinutes: art.readTimeMinutes,
+          seriesPart: art.seriesPart ?? (idx + 1),
+          publishedAt: art.publishedAt ? new Date(art.publishedAt).toISOString().split('T')[0] : '',
+        })),
+      };
+    }
+
+    const totalCount = await prisma.insightSeries.count().catch(() => 0);
+    if (totalCount > 0) return null;
+  } catch (error) {
+    console.error("Database query failed in getInsightSeriesBySlug, fallback:", error);
+  }
+
+  // Fallback from DEFAULT_SERIES_DATA
+  const def = DEFAULT_SERIES_DATA.find((s) => s.slug === slug);
+  if (!def) return null;
+
+  const matchingArticles = INSIGHTS_DATA.filter((item) => item.seriesId === def.id).sort((a, b) => (a.seriesPart || 0) - (b.seriesPart || 0));
+
+  return {
+    ...def,
+    articles: matchingArticles.map((art, idx) => ({
+      slug: art.slug,
+      titleId: art.titleId,
+      titleEn: art.titleEn,
+      excerptId: art.excerptId,
+      excerptEn: art.excerptEn,
+      readTimeMinutes: art.readTimeMinutes,
+      seriesPart: art.seriesPart ?? (idx + 1),
+      publishedAt: art.publishedAt,
+    })),
+  };
 }
 
 export async function getRelatedInsights(currentSlug: string, limit = 2): Promise<InsightArticle[]> {

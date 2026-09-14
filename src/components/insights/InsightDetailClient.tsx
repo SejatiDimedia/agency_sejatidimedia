@@ -7,6 +7,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import {
   ArrowRight,
+  ArrowLeft,
   ArrowUp,
   Calendar,
   Clock,
@@ -20,10 +21,21 @@ import {
   Link2,
   BookOpen,
   Code2,
+  Layers,
+  ChevronRight,
 } from "lucide-react";
 import { InsightArticle } from "@/lib/api/insights";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { Toast } from "@/components/ui/Toast";
+import CodeBlockBeautified from "./CodeBlockBeautified";
+import {
+  BeautifiedTable,
+  BeautifiedThead,
+  BeautifiedTbody,
+  BeautifiedTr,
+  BeautifiedTh,
+  BeautifiedTd,
+} from "./TableBeautified";
 
 interface InsightDetailClientProps {
   article: InsightArticle;
@@ -83,63 +95,6 @@ function slugify(text: string): string {
     .replace(/[^a-z0-9\s-]/g, "")
     .trim()
     .replace(/\s+/g, "-");
-}
-
-// Code Block with macOS Terminal Window Header & Interactive Copy Button
-function CodeBlock({ className, children, language = "id", ...props }: any) {
-  const [copied, setCopied] = useState(false);
-  const match = /language-(\w+)/.exec(className || "");
-  const languageName = match ? match[1].toUpperCase() : "CODE";
-  const codeContent = String(children).replace(/\n$/, "");
-
-  const handleCopy = () => {
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
-      navigator.clipboard.writeText(codeContent);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
-  return (
-    <div className="relative my-7 rounded-2xl overflow-hidden border border-slate-800 bg-[#0d1117] shadow-xl text-left">
-      {/* Terminal Header Bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-[#161b22] border-b border-slate-800/80 text-xs font-mono">
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56] inline-block" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] inline-block" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f] inline-block" />
-          <span className="ml-2 font-mono font-bold text-slate-400 text-[11px] tracking-wider">
-            {languageName}
-          </span>
-        </div>
-        <button
-          type="button"
-          onClick={handleCopy}
-          aria-label={language === "en" ? "Copy code snippet" : "Salin baris kode"}
-          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono text-slate-300 hover:text-white bg-slate-800/90 hover:bg-slate-700/90 transition-all cursor-pointer border border-slate-700/50"
-        >
-          {copied ? (
-            <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-400 font-bold">{language === "en" ? "Copied!" : "Tersalin!"}</span>
-            </>
-          ) : (
-            <>
-              <Copy className="w-3.5 h-3.5 text-slate-400" />
-              <span>{language === "en" ? "Copy" : "Salin"}</span>
-            </>
-          )}
-        </button>
-      </div>
-
-      {/* Code Body */}
-      <pre className="p-4 sm:p-5 overflow-x-auto text-xs sm:text-[13.5px] font-mono text-slate-200 leading-relaxed scrollbar-thin scrollbar-thumb-slate-700">
-        <code className={className} {...props}>
-          {children}
-        </code>
-      </pre>
-    </div>
-  );
 }
 
 export default function InsightDetailClient({
@@ -235,7 +190,7 @@ export default function InsightDetailClient({
       return (
         <h1
           id={id}
-          className="group text-2xl sm:text-3xl font-sora font-extrabold text-slate-900 mt-14 mb-5 pt-4 border-b border-slate-200/80 flex items-center justify-between scroll-mt-28"
+          className="group text-2xl sm:text-3xl font-sans font-extrabold text-slate-900 mt-14 mb-5 pt-4 border-b border-slate-200/80 flex items-center justify-between scroll-mt-28"
         >
           <span>{children}</span>
           <a
@@ -268,7 +223,7 @@ export default function InsightDetailClient({
       return (
         <h2
           id={id}
-          className="group text-xl sm:text-2xl font-sora font-extrabold text-slate-900 mt-12 mb-4 pt-3 border-b border-slate-200/80 flex items-center justify-between scroll-mt-28"
+          className="group text-xl sm:text-2xl font-sans font-extrabold text-slate-900 mt-12 mb-4 pt-3 border-b border-slate-200/80 flex items-center justify-between scroll-mt-28"
         >
           <span className="flex items-center gap-2">{children}</span>
           <a
@@ -301,7 +256,7 @@ export default function InsightDetailClient({
       return (
         <h3
           id={id}
-          className="group text-lg sm:text-xl font-sora font-bold text-slate-900 mt-9 mb-3 flex items-center justify-between scroll-mt-28"
+          className="group text-lg sm:text-xl font-sans font-bold text-slate-900 mt-9 mb-3 flex items-center justify-between scroll-mt-28"
         >
           <span>{children}</span>
           <a
@@ -354,7 +309,7 @@ export default function InsightDetailClient({
           <div className="flex items-start gap-3 p-4 rounded-xl bg-rose-50/80 border border-rose-200 text-rose-900 font-bold text-sm sm:text-[14px] mt-6 mb-3 shadow-xs">
             <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
             <div className="flex-1 leading-snug">
-              <span className="block text-[11px] font-mono uppercase tracking-wider text-rose-600 font-bold mb-0.5">
+              <span className="block text-[11px] font-sans uppercase tracking-wider text-rose-600 font-bold mb-0.5">
                 {language === "en" ? "Architecture Pitfall / Anti-Pattern" : "Kelemahan Arsitektur / Anti-Pattern"}
               </span>
               <span>{cleanText}</span>
@@ -368,7 +323,7 @@ export default function InsightDetailClient({
           <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50/80 border border-emerald-200 text-emerald-950 font-bold text-sm sm:text-[14px] mt-6 mb-3 shadow-xs">
             <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
             <div className="flex-1 leading-snug">
-              <span className="block text-[11px] font-mono uppercase tracking-wider text-emerald-600 font-bold mb-0.5">
+              <span className="block text-[11px] font-sans uppercase tracking-wider text-emerald-600 font-bold mb-0.5">
                 {language === "en" ? "Proven Engineering Standard / Best Practice" : "Standar Rekayasa Teruji / Best Practice"}
               </span>
               <span>{cleanText}</span>
@@ -378,7 +333,7 @@ export default function InsightDetailClient({
       }
 
       return (
-        <h4 className="text-base font-sora font-bold text-slate-900 mt-6 mb-2">
+        <h4 className="text-base font-sans font-bold text-slate-900 mt-6 mb-2">
           {cleanText}
         </h4>
       );
@@ -411,34 +366,35 @@ export default function InsightDetailClient({
         {children}
       </blockquote>
     ),
+    pre: ({ children }: any) => <>{children}</>,
     code: ({ inline, className, children, ...props }: any) => {
       if (inline) {
         return (
           <code
-            className="px-1.5 py-0.5 rounded-md bg-slate-100 border border-slate-200/80 font-mono text-xs sm:text-[13px] text-[#1E315B] font-semibold"
+            className="px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 font-sans text-xs sm:text-[12.5px] text-[#1E315B] dark:text-blue-300 font-semibold"
             {...props}
           >
             {children}
           </code>
         );
       }
-      return <CodeBlock className={className} language={language} {...props}>{children}</CodeBlock>;
+      return (
+        <CodeBlockBeautified className={className} language={language} {...props}>
+          {children}
+        </CodeBlockBeautified>
+      );
     },
-    table: ({ children }: any) => (
-      <div className="my-8 overflow-x-auto rounded-2xl border border-slate-200 shadow-xs">
-        <table className="w-full text-left text-sm text-slate-700">{children}</table>
-      </div>
-    ),
-    thead: ({ children }: any) => (
-      <thead className="bg-slate-100/80 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider border-b border-slate-200">
+    table: ({ children, ...props }: any) => (
+      <BeautifiedTable language={language} {...props}>
         {children}
-      </thead>
+      </BeautifiedTable>
     ),
-    tbody: ({ children }: any) => <tbody className="divide-y divide-slate-100">{children}</tbody>,
-    tr: ({ children }: any) => <tr className="hover:bg-slate-50/70 transition-colors">{children}</tr>,
-    th: ({ children }: any) => <th className="px-4 py-3 font-bold">{children}</th>,
-    td: ({ children }: any) => <td className="px-4 py-3 leading-relaxed">{children}</td>,
-    hr: () => <hr className="my-10 border-slate-200" />,
+    thead: BeautifiedThead,
+    tbody: BeautifiedTbody,
+    tr: BeautifiedTr,
+    th: BeautifiedTh,
+    td: BeautifiedTd,
+    hr: () => <hr className="my-10 border-slate-200 dark:border-slate-800" />,
   };
 
   return (
@@ -472,7 +428,7 @@ export default function InsightDetailClient({
           {/* Reading Comfort & Quick Action Bar */}
           <div className="flex items-center gap-2">
             {/* Font Size Toggle */}
-            <div className="flex items-center bg-slate-100 rounded-xl p-0.5 border border-slate-200/80 text-xs font-mono font-bold text-slate-700">
+            <div className="flex items-center bg-slate-100 rounded-xl p-0.5 border border-slate-200/80 text-xs font-sans font-bold text-slate-700">
               <button
                 type="button"
                 onClick={() => setFontSize("normal")}
@@ -512,8 +468,8 @@ export default function InsightDetailClient({
         <header className="space-y-6 mb-12 w-full">
           {/* Metadata Pill Row */}
           <div className="flex flex-wrap items-center gap-3">
-            <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 text-[11px] font-mono font-bold uppercase tracking-wider shadow-xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 text-[10px] font-sans font-bold uppercase tracking-wider shadow-xs">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
               {article.category}
             </span>
 
@@ -532,10 +488,31 @@ export default function InsightDetailClient({
                 })}
               </span>
             </div>
+
+            {article.series && (
+              <Link
+                href={`/insights/series/${article.series.slug}`}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 hover:bg-blue-100/80 text-[#2C5098] border border-[#2C5098]/20 text-[10px] font-sans font-bold uppercase tracking-wider transition-all group shadow-xs"
+              >
+                <Layers className="w-3 h-3 text-[#2C5098] group-hover:rotate-12 transition-transform" />
+                <span>
+                  {language === "en" ? "SERIES" : "SERI"}: {language === "en" ? article.series.titleEn : article.series.titleId}
+                </span>
+                {article.series.part && (
+                  <>
+                    <span className="text-[#2C5098]/40">•</span>
+                    <span className="font-extrabold text-[#1E315B]">
+                      {language === "en" ? `PART ${article.series.part} OF ${article.series.totalParts}` : `PART ${article.series.part} DARI ${article.series.totalParts}`}
+                    </span>
+                  </>
+                )}
+                <ChevronRight className="w-3 h-3 text-[#2C5098]/60 group-hover:translate-x-0.5 transition-transform" />
+              </Link>
+            )}
           </div>
 
           {/* Main Editorial Headline - Full Width */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] font-sora font-extrabold tracking-tight text-slate-900 leading-[1.18] w-full">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] font-sans font-extrabold tracking-tight text-slate-900 leading-[1.18] w-full">
             {title}
           </h1>
 
@@ -559,7 +536,7 @@ export default function InsightDetailClient({
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <p className="text-sm font-sora font-bold text-slate-900">
+                <p className="text-sm font-sans font-bold text-slate-900">
                   {article.author.name}
                 </p>
                 <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
@@ -570,6 +547,85 @@ export default function InsightDetailClient({
             </div>
           </div>
         </header>
+
+        {/* Series Curriculum Box */}
+        {article.series && article.series.curriculum && article.series.curriculum.length > 0 && (
+          <div className="mb-10 rounded-3xl border border-blue-100/90 bg-gradient-to-br from-blue-50/60 via-indigo-50/30 to-white p-6 sm:p-7 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-blue-100/80">
+              <div>
+                <div className="flex items-center gap-2 text-xs font-sans font-bold text-blue-700 uppercase tracking-wider">
+                  <BookOpen className="w-4 h-4 text-blue-600" />
+                  <span>{language === "en" ? "Curriculum Track / Series" : "Silabus Seri Rekayasa"}</span>
+                </div>
+                <h3 className="text-base sm:text-lg font-sans font-extrabold text-slate-900 mt-1">
+                  {language === "en" ? article.series.titleEn : article.series.titleId}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 font-sans mt-0.5">
+                  {language === "en" ? article.series.descriptionEn : article.series.descriptionId}
+                </p>
+              </div>
+              <Link
+                href={`/insights/series/${article.series.slug}`}
+                className="inline-flex items-center gap-1 text-xs font-sans font-bold text-blue-600 hover:text-blue-700 shrink-0"
+              >
+                <span>{language === "en" ? "View Series Hub" : "Lihat Silabus Lengkap"}</span>
+                <ChevronRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            {/* Curriculum items list */}
+            <div className="mt-4 space-y-2">
+              {article.series.curriculum.map((item) => {
+                const isCurrent = item.isCurrent;
+                const itemTitle = language === "en" ? item.titleEn : item.titleId;
+                return (
+                  <div
+                    key={item.part}
+                    className={`flex items-center justify-between gap-3 p-3 rounded-xl transition-all ${
+                      isCurrent
+                        ? "bg-[#2C5098] text-white shadow-xs"
+                        : "bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/70 hover:border-blue-200 shadow-2xs"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      <span
+                        className={`w-7 h-7 rounded-lg flex items-center justify-center font-sans text-xs font-bold shrink-0 ${
+                          isCurrent ? "bg-white/20 text-white" : "bg-slate-100 text-slate-600"
+                        }`}
+                      >
+                        {item.part}
+                      </span>
+                      <div className="min-w-0">
+                        {isCurrent ? (
+                          <p className="text-xs sm:text-sm font-sans font-bold truncate">
+                            {itemTitle}
+                          </p>
+                        ) : (
+                          <Link
+                            href={`/insights/${item.slug}`}
+                            className="text-xs sm:text-sm font-sans font-semibold hover:underline truncate block"
+                          >
+                            {itemTitle}
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className={`text-[11px] font-sans ${isCurrent ? "text-blue-100" : "text-slate-400"}`}>
+                        {item.readTimeMinutes}m
+                      </span>
+                      {isCurrent && (
+                        <span className="px-2 py-0.5 rounded-md bg-white/20 text-[10px] font-sans font-bold uppercase tracking-wider">
+                          {language === "en" ? "Reading" : "Sedang Dibaca"}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* 4. Featured Cover Image with Technical Frame */}
         <div className="relative aspect-[16/9] w-full rounded-3xl overflow-hidden mb-12 shadow-xl border border-slate-200/90 bg-slate-100">
@@ -596,19 +652,58 @@ export default function InsightDetailClient({
 
             {/* Article Tags Section */}
             <div className="mt-12 pt-6 border-t border-slate-200/80 flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mr-1">
+              <span className="text-xs font-sans font-bold text-slate-400 uppercase tracking-wider mr-1">
                 {language === "en" ? "Related Topics:" : "Topik Terkait:"}
               </span>
               {article.tags.map((tag) => (
                 <Link
                   key={tag}
                   href={`/insights?search=${encodeURIComponent(tag)}`}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold text-[#2C5098] bg-blue-50/80 hover:bg-[#2C5098] hover:text-white border border-blue-200/70 hover:border-[#2C5098] transition-all cursor-pointer shadow-2xs group"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-sans font-bold text-[#2C5098] bg-blue-50/80 hover:bg-[#2C5098] hover:text-white border border-blue-200/70 hover:border-[#2C5098] transition-all cursor-pointer shadow-2xs group"
                 >
                   <span>{tag}</span>
                 </Link>
               ))}
             </div>
+
+            {/* Series Stepper Navigation */}
+            {article.series && (article.series.prevPart || article.series.nextPart) && (
+              <div className="mt-10 p-5 sm:p-6 rounded-3xl bg-slate-50 border border-slate-200/90 grid grid-cols-1 sm:grid-cols-2 gap-4 shadow-2xs">
+                {article.series.prevPart ? (
+                  <Link
+                    href={`/insights/${article.series.prevPart.slug}`}
+                    className="flex flex-col p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-blue-300 hover:shadow-sm transition-all group text-left"
+                  >
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-sans font-bold text-slate-400 uppercase tracking-wider group-hover:text-[#2C5098]">
+                      <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+                      {language === "en" ? `PREVIOUS PART · ${article.series.prevPart.part}` : `PART SEBELUMNYA · ${article.series.prevPart.part}`}
+                    </span>
+                    <span className="mt-1.5 text-sm font-sans font-bold text-slate-800 group-hover:text-[#2C5098] line-clamp-2">
+                      {language === "en" ? article.series.prevPart.titleEn : article.series.prevPart.titleId}
+                    </span>
+                  </Link>
+                ) : (
+                  <div className="hidden sm:block" />
+                )}
+
+                {article.series.nextPart ? (
+                  <Link
+                    href={`/insights/${article.series.nextPart.slug}`}
+                    className="flex flex-col p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-blue-300 hover:shadow-sm transition-all group sm:text-right"
+                  >
+                    <span className="inline-flex items-center gap-1.5 sm:justify-end text-[11px] font-sans font-bold text-[#2C5098] uppercase tracking-wider">
+                      {language === "en" ? `NEXT PART · ${article.series.nextPart.part}` : `PART SELANJUTNYA · ${article.series.nextPart.part}`}
+                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                    </span>
+                    <span className="mt-1.5 text-sm font-sans font-bold text-slate-800 group-hover:text-[#2C5098] line-clamp-2">
+                      {language === "en" ? article.series.nextPart.titleEn : article.series.nextPart.titleId}
+                    </span>
+                  </Link>
+                ) : (
+                  <div className="hidden sm:block" />
+                )}
+              </div>
+            )}
 
             {/* Author Spotlight Bio Card (ONE authoritative place for author bio) */}
             <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-200/90 flex flex-col sm:flex-row items-start gap-5">
@@ -623,10 +718,10 @@ export default function InsightDetailClient({
               </div>
               <div className="space-y-2 flex-1">
                 <div className="flex items-center gap-2">
-                  <h4 className="font-sora font-bold text-base text-slate-900">
+                  <h4 className="font-sans font-bold text-base text-slate-900">
                     {article.author.name}
                   </h4>
-                  <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/60 text-[10px] font-mono font-bold uppercase">
+                  <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/60 text-[10px] font-sans font-bold uppercase">
                     {language === "en" ? "Author & Lead Engineer" : "Penulis & Lead Engineer"}
                   </span>
                 </div>
@@ -656,7 +751,7 @@ export default function InsightDetailClient({
               <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none" />
               <div className="relative z-10 space-y-4 max-w-2xl">
 
-                <h3 className="text-2xl sm:text-3xl font-sora font-extrabold tracking-tight text-white leading-snug">
+                <h3 className="text-2xl sm:text-3xl font-sans font-extrabold tracking-tight text-white leading-snug">
                   {language === "en"
                     ? "Facing Architecture Bottlenecks or Building Mission-Critical Systems?"
                     : "Punya Masalah Arsitektur atau Ingin Membangun Sistem yang Benar?"}
@@ -695,11 +790,11 @@ export default function InsightDetailClient({
             <aside className="lg:col-span-4 hidden lg:block sticky top-28">
               <div className="p-5 rounded-2xl bg-white border border-slate-200/90 shadow-xs">
                 <div className="flex items-center justify-between pb-3 mb-3 border-b border-slate-100">
-                  <h4 className="font-sora font-bold text-xs uppercase tracking-wider text-slate-900 flex items-center gap-2">
+                  <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-slate-900 flex items-center gap-2">
                     <BookOpen className="w-4 h-4 text-[#2C5098]" />
                     <span>{language === "en" ? "Table of Contents" : "Daftar Isi Artikel"}</span>
                   </h4>
-                  <span className="text-[10px] font-mono font-bold text-slate-400">
+                  <span className="text-[10px] font-sans font-bold text-slate-400">
                     {language === "en" ? `${tocItems.length} sections` : `${tocItems.length} bagian`}
                   </span>
                 </div>
@@ -730,7 +825,7 @@ export default function InsightDetailClient({
                         />
                         <span className="flex-1 leading-snug">{item.text}</span>
                         {isActive && (
-                          <span className="shrink-0 text-[9.5px] font-mono font-bold uppercase tracking-wider text-[#2C5098] bg-white px-1.5 py-0.5 rounded-md shadow-2xs border border-blue-200/60 self-center">
+                          <span className="shrink-0 text-[9.5px] font-sans font-bold uppercase tracking-wider text-[#2C5098] bg-white px-1.5 py-0.5 rounded-md shadow-2xs border border-blue-200/60 self-center">
                             {language === "en" ? "Active" : "Aktif"}
                           </span>
                         )}
@@ -748,10 +843,10 @@ export default function InsightDetailClient({
           <section className="mt-20 pt-12 border-t border-slate-200">
             <div className="flex items-center justify-between mb-8">
               <div>
-                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#2C5098] block mb-1">
+                <span className="text-[11px] font-sans font-bold uppercase tracking-wider text-[#2C5098] block mb-1">
                   {language === "en" ? "FURTHER EXPLORATION" : "EKSPLORASI LANJUTAN"}
                 </span>
-                <h3 className="text-xl sm:text-2xl font-sora font-extrabold text-slate-900">
+                <h3 className="text-xl sm:text-2xl font-sans font-extrabold text-slate-900">
                   {language === "en" ? "Related Engineering Articles" : "Artikel Rekayasa Terkait"}
                 </h3>
               </div>
@@ -783,8 +878,9 @@ export default function InsightDetailClient({
                         sizes="(max-width: 768px) 100vw, 380px"
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                       />
-                      <div className="absolute top-3 left-3">
-                        <span className="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-white/95 backdrop-blur-md text-[#2C5098] shadow-xs">
+                      <div className="absolute top-3 left-3 z-10">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
                           {rel.category}
                         </span>
                       </div>
@@ -796,7 +892,7 @@ export default function InsightDetailClient({
                           <Clock className="w-3 h-3" />
                           <span>{rel.readTimeMinutes} {language === "en" ? "min read" : "menit baca"}</span>
                         </div>
-                        <h4 className="font-sora font-bold text-sm text-slate-900 group-hover:text-[#2C5098] transition-colors leading-snug">
+                        <h4 className="font-sans font-bold text-sm text-slate-900 group-hover:text-[#2C5098] transition-colors leading-snug">
                           {relTitle}
                         </h4>
                         <p className="text-xs text-slate-500 font-sans line-clamp-3 mt-1.5 leading-relaxed">

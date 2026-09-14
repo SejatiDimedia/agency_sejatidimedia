@@ -1071,7 +1071,7 @@ export default function AdminDashboardPage() {
                     {users.length} Terdaftar
                   </span>
                 </div>
-                <h2 className="text-2xl font-black text-slate-900 font-sora">
+                <h2 className="text-2xl font-black text-slate-900 font-sans">
                   Manajemen Tim & Klien Portal
                 </h2>
                 <p className="text-sm text-slate-500 mt-1">
@@ -1094,13 +1094,13 @@ export default function AdminDashboardPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1">
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Total Pengguna</span>
-                <div className="text-2xl font-bold font-sora text-slate-900">{users.length}</div>
+                <div className="text-2xl font-bold font-sans text-slate-900">{users.length}</div>
                 <div className="text-xs text-slate-500">Semua role terdaftar</div>
               </div>
 
               <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1">
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Klien Aktif</span>
-                <div className="text-2xl font-bold font-sora text-emerald-600">
+                <div className="text-2xl font-bold font-sans text-emerald-600">
                   {users.filter(u => u.role === 'CLIENT' && u.activatedAt).length}
                 </div>
                 <div className="text-xs text-slate-500">Password sudah diatur</div>
@@ -1108,7 +1108,7 @@ export default function AdminDashboardPage() {
 
               <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1">
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Menunggu Aktivasi</span>
-                <div className="text-2xl font-bold font-sora text-amber-600">
+                <div className="text-2xl font-bold font-sans text-amber-600">
                   {users.filter(u => u.role === 'CLIENT' && !u.activatedAt).length}
                 </div>
                 <div className="text-xs text-slate-500">Belum aktivasi password</div>
@@ -1116,7 +1116,7 @@ export default function AdminDashboardPage() {
 
               <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-xs space-y-1">
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Administrator</span>
-                <div className="text-2xl font-bold font-sora text-purple-600">
+                <div className="text-2xl font-bold font-sans text-purple-600">
                   {users.filter(u => u.role === 'ADMIN').length}
                 </div>
                 <div className="text-xs text-slate-500">Akses penuh sistem</div>

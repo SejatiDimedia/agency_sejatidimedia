@@ -27,6 +27,16 @@ export async function GET(
       where: {
         OR: [{ id }, { slug: id }],
       },
+      include: {
+        series: {
+          select: {
+            id: true,
+            titleId: true,
+            titleEn: true,
+            slug: true,
+          },
+        },
+      },
     });
 
     if (!insight) {
@@ -69,6 +79,8 @@ export async function PUT(
       authorAvatar,
       isPublished,
       featured,
+      seriesId,
+      seriesPart,
       slug: customSlug,
     } = body;
 
@@ -113,6 +125,8 @@ export async function PUT(
         authorAvatar: authorAvatar ?? existing.authorAvatar,
         isPublished: isPublished !== undefined ? Boolean(isPublished) : existing.isPublished,
         featured: featured !== undefined ? Boolean(featured) : existing.featured,
+        seriesId: seriesId !== undefined ? (seriesId ? seriesId : null) : existing.seriesId,
+        seriesPart: seriesPart !== undefined ? (seriesPart !== null && seriesPart !== '' ? Number(seriesPart) : null) : existing.seriesPart,
       },
     });
 

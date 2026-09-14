@@ -6,9 +6,29 @@ import Image from 'next/image';
 import {
   Plus, Search, Edit2, Trash2, ExternalLink, Eye, CheckCircle2,
   Clock, Calendar, Tag, BookOpen, AlertCircle, Sparkles, Loader2,
-  FileText, Star
+  FileText, Star, Layers, X
 } from 'lucide-react';
 import { Toast, ConfirmModal } from '@/components/ui';
+
+interface SeriesItem {
+  id: string;
+  slug: string;
+  titleId: string;
+  titleEn?: string | null;
+  descriptionId: string;
+  descriptionEn?: string | null;
+  coverImage?: string | null;
+  category: string;
+  badge?: string | null;
+  isPublished: boolean;
+  order: number;
+  insights?: Array<{
+    id: string;
+    slug: string;
+    titleId: string;
+    seriesPart?: number | null;
+  }>;
+}
 
 interface InsightItem {
   id: string;
@@ -28,6 +48,13 @@ interface InsightItem {
   authorAvatar: string;
   isPublished: boolean;
   featured: boolean;
+  seriesId?: string | null;
+  seriesPart?: number | null;
+  series?: {
+    id: string;
+    titleId: string;
+    slug: string;
+  } | null;
   publishedAt: string;
   updatedAt: string;
 }
@@ -40,6 +67,24 @@ export function InsightsManagementView() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState<'ALL' | 'PUBLISHED' | 'DRAFT'>('ALL');
+
+  // Series State
+  const [seriesList, setSeriesList] = useState<SeriesItem[]>([]);
+  const [isSeriesModalOpen, setIsSeriesModalOpen] = useState(false);
+  const [seriesModalView, setSeriesModalView] = useState<'list' | 'form'>('list');
+  const [editingSeries, setEditingSeries] = useState<SeriesItem | null>(null);
+  const [isSavingSeries, setIsSavingSeries] = useState(false);
+  const [seriesForm, setSeriesForm] = useState({
+    titleId: '',
+    titleEn: '',
+    slug: '',
+    descriptionId: '',
+    descriptionEn: '',
+    category: 'Backend',
+    badge: 'ENGINEERING PLAYBOOK',
+    coverImage: '/images/insights/laravel_architecture_cover.jpg',
+    isPublished: true,
+  });
 
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
@@ -66,8 +111,22 @@ export function InsightsManagementView() {
     }
   };
 
+  // 2. Fetch Series
+  const fetchSeries = async () => {
+    try {
+      const res = await fetch('/api/admin/insights/series');
+      const data = await res.json();
+      if (data.success && Array.isArray(data.series)) {
+        setSeriesList(data.series);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     fetchInsights();
+    fetchSeries();
   }, []);
 
   // 2. Delete
@@ -91,6 +150,99 @@ export function InsightsManagementView() {
       setToast({ message: 'Terjadi kesalahan saat menghapus', type: 'error' });
     } finally {
       setIsDeleting(false);
+    }
+  };
+
+  // Series Handlers
+  const openCreateSeries = () => {
+    setEditingSeries(null);
+    setSeriesForm({
+      titleId: '',
+      titleEn: '',
+      slug: '',
+      descriptionId: '',
+      descriptionEn: '',
+      category: 'Backend',
+      badge: 'ENGINEERING PLAYBOOK',
+      coverImage: '/images/insights/laravel_architecture_cover.jpg',
+      isPublished: true,
+    });
+    setSeriesModalView('form');
+  };
+
+  const openEditSeries = (s: SeriesItem) => {
+    setEditingSeries(s);
+    setSeriesForm({
+      titleId: s.titleId,
+      titleEn: s.titleEn || '',
+      slug: s.slug,
+      descriptionId: s.descriptionId,
+      descriptionEn: s.descriptionEn || '',
+      category: s.category,
+      badge: s.badge || 'ENGINEERING PLAYBOOK',
+      coverImage: s.coverImage || '/images/insights/laravel_architecture_cover.jpg',
+      isPublished: s.isPublished,
+    });
+    setSeriesModalView('form');
+  };
+
+  const handleSaveSeries = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!seriesForm.titleId || !seriesForm.descriptionId) {
+      setToast({ message: 'Judul dan deskripsi seri wajib diisi', type: 'error' });
+      return;
+    }
+
+    setIsSavingSeries(true);
+    try {
+      const url = editingSeries ? `/api/admin/insights/series/${editingSeries.id}` : '/api/admin/insights/series';
+      const method = editingSeries ? 'PUT' : 'POST';
+
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(seriesForm),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setToast({
+          message: editingSeries ? 'Seri berhasil diperbarui!' : 'Seri baru berhasil dibuat!',
+          type: 'success',
+        });
+        setSeriesModalView('list');
+        fetchSeries();
+      } else {
+        setToast({ message: data.error || 'Gagal menyimpan seri', type: 'error' });
+      }
+    } catch (err) {
+      console.error(err);
+      setToast({ message: 'Terjadi kesalahan jaringan', type: 'error' });
+    } finally {
+      setIsSavingSeries(false);
+    }
+  };
+
+  const handleDeleteSeries = async (seriesId: string) => {
+    if (!confirm('Apakah Anda yakin ingin menghapus seri ini? Artikel di dalamnya akan tetap aman dan menjadi artikel mandiri.')) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/admin/insights/series/${seriesId}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success) {
+        setToast({ message: 'Seri berhasil dihapus', type: 'success' });
+        fetchSeries();
+        fetchInsights();
+      } else {
+        setToast({ message: data.error || 'Gagal menghapus seri', type: 'error' });
+      }
+    } catch (err) {
+      console.error(err);
+      setToast({ message: 'Terjadi kesalahan saat menghapus', type: 'error' });
     }
   };
 
@@ -132,13 +284,27 @@ export function InsightsManagementView() {
           </p>
         </div>
 
-        <Link
-          href="/portal/insights/new"
-          className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all hover:scale-[1.02] cursor-pointer shrink-0"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Tulis Artikel Baru</span>
-        </Link>
+        <div className="flex items-center gap-3 shrink-0">
+          <button
+            type="button"
+            onClick={() => {
+              setSeriesModalView('list');
+              setIsSeriesModalOpen(true);
+            }}
+            className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 hover:text-blue-700 font-bold text-sm border border-slate-200 shadow-xs transition-colors cursor-pointer"
+          >
+            <Layers className="w-4 h-4 text-blue-600" />
+            <span>Kelola Seri ({seriesList.length})</span>
+          </button>
+
+          <Link
+            href="/portal/insights/new"
+            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all hover:scale-[1.02] cursor-pointer"
+          >
+            <Plus className="w-4 h-4" />
+            <span>Tulis Artikel Baru</span>
+          </Link>
+        </div>
       </div>
 
       {/* 2. Quick Stat Counters */}
@@ -256,9 +422,17 @@ export function InsightsManagementView() {
                           >
                             {item.titleId}
                           </Link>
-                          <p className="text-xs text-slate-400 font-mono truncate mt-0.5">
-                            /insights/{item.slug}
-                          </p>
+                          <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                            <span className="text-xs text-slate-400 font-mono truncate">
+                              /insights/{item.slug}
+                            </span>
+                            {item.series && (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200/60">
+                                <Layers className="w-2.5 h-2.5 text-blue-600" />
+                                Seri: {item.series.titleId} · Part {item.seriesPart || 1}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </td>
@@ -303,13 +477,13 @@ export function InsightsManagementView() {
                     </td>
 
                     {/* Aksi */}
-                    <td className="py-4 px-6 whitespace-nowrap text-right">
+                    <td className="py-4 px-6 text-right whitespace-nowrap">
                       <div className="flex items-center justify-end gap-1.5">
                         <Link
                           href={`/insights/${item.slug}`}
                           target="_blank"
-                          title="Buka halaman publik"
-                          className="p-2 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors"
+                          title="Buka halaman baca publik"
+                          className="p-2 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
                         >
                           <Eye className="w-4 h-4" />
                         </Link>
@@ -349,6 +523,209 @@ export function InsightsManagementView() {
         variant="danger"
         isLoading={isDeleting}
       />
+
+      {/* 6. SERIES MANAGEMENT MODAL */}
+      {isSeriesModalOpen && (
+        <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            {/* Modal Header */}
+            <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+                  <Layers className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="font-sans font-bold text-base text-slate-900">
+                    {seriesModalView === 'list' ? 'Kelola Seri Artikel' : (editingSeries ? 'Edit Seri Artikel' : 'Tambah Seri Baru')}
+                  </h3>
+                  <p className="text-xs text-slate-500">
+                    {seriesModalView === 'list' ? 'Daftar kurikulum topik rekayasa terstruktur SejatiDimedia' : 'Lengkapi metadata seri pembelajaran'}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsSeriesModalOpen(false)}
+                className="p-2 rounded-xl text-slate-400 hover:text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto flex-1 space-y-4">
+              {seriesModalView === 'list' ? (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold uppercase text-slate-400">
+                      Total {seriesList.length} Seri Terdaftar
+                    </span>
+                    <button
+                      type="button"
+                      onClick={openCreateSeries}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-all cursor-pointer"
+                    >
+                      <Plus className="w-3.5 h-3.5" />
+                      <span>Buat Seri Baru</span>
+                    </button>
+                  </div>
+
+                  {seriesList.length === 0 ? (
+                    <div className="text-center py-10 border-2 border-dashed border-slate-200 rounded-2xl p-6 space-y-2">
+                      <Layers className="w-8 h-8 text-slate-300 mx-auto" />
+                      <p className="text-xs font-bold text-slate-600">Belum ada seri artikel</p>
+                      <p className="text-[11px] text-slate-400">Buat seri pertama Anda (misal: "Arsitektur Laravel Enterprise") untuk mengelompokkan artikel menjadi kurikulum terpadu.</p>
+                    </div>
+                  ) : (
+                    <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden">
+                      {seriesList.map((s) => (
+                        <div key={s.id} className="p-4 flex items-center justify-between gap-4 hover:bg-slate-50 transition-colors">
+                          <div className="min-w-0 space-y-1">
+                            <div className="flex items-center gap-2">
+                              <h4 className="font-bold text-sm text-slate-900 truncate">{s.titleId}</h4>
+                              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-bold">
+                                {s.category}
+                              </span>
+                            </div>
+                            <p className="text-xs text-slate-500 line-clamp-1">{s.descriptionId}</p>
+                            <span className="text-[11px] font-mono text-slate-400 block">
+                              {s.insights?.length || 0} artikel terhubung · slug: <code>{s.slug}</code>
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <button
+                              type="button"
+                              onClick={() => openEditSeries(s)}
+                              className="p-2 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
+                              title="Edit Seri"
+                            >
+                              <Edit2 className="w-4 h-4" />
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteSeries(s.id)}
+                              className="p-2 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                              title="Hapus Seri"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <form onSubmit={handleSaveSeries} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1">
+                      Judul Seri (Bahasa Indonesia) *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={seriesForm.titleId}
+                      onChange={(e) => setSeriesForm({ ...seriesForm, titleId: e.target.value })}
+                      placeholder="Contoh: Arsitektur Laravel Enterprise"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-bold"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1">
+                        Judul Seri (English)
+                      </label>
+                      <input
+                        type="text"
+                        value={seriesForm.titleEn}
+                        onChange={(e) => setSeriesForm({ ...seriesForm, titleEn: e.target.value })}
+                        placeholder="Contoh: Enterprise Laravel Architecture"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1">
+                        Kategori Seri
+                      </label>
+                      <select
+                        value={seriesForm.category}
+                        onChange={(e) => setSeriesForm({ ...seriesForm, category: e.target.value })}
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-bold bg-white"
+                      >
+                        {CATEGORIES.map((cat) => (
+                          <option key={cat} value={cat}>{cat}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1">
+                      Deskripsi Ringkas Seri (ID) *
+                    </label>
+                    <textarea
+                      required
+                      rows={2}
+                      value={seriesForm.descriptionId}
+                      onChange={(e) => setSeriesForm({ ...seriesForm, descriptionId: e.target.value })}
+                      placeholder="Ringkasan apa saja yang dipelajari dan diselesaikan pada rangkaian seri ini..."
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1">
+                        Label Badge Seri
+                      </label>
+                      <input
+                        type="text"
+                        value={seriesForm.badge}
+                        onChange={(e) => setSeriesForm({ ...seriesForm, badge: e.target.value })}
+                        placeholder="ENGINEERING PLAYBOOK"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-mono"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1">
+                        Custom Slug (Opsional)
+                      </label>
+                      <input
+                        type="text"
+                        value={seriesForm.slug}
+                        onChange={(e) => setSeriesForm({ ...seriesForm, slug: e.target.value })}
+                        placeholder="arsitektur-laravel-skala-bisnis"
+                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-end gap-2 pt-4 border-t border-slate-100">
+                    <button
+                      type="button"
+                      onClick={() => setSeriesModalView('list')}
+                      className="px-4 py-2 rounded-xl border border-slate-200 text-slate-600 hover:bg-slate-50 text-xs font-bold transition-colors cursor-pointer"
+                    >
+                      Batal
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isSavingSeries}
+                      className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-xs transition-colors disabled:opacity-50 cursor-pointer"
+                    >
+                      {isSavingSeries ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : null}
+                      <span>{editingSeries ? 'Perbarui Seri' : 'Simpan Seri Baru'}</span>
+                    </button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Toast Notification */}
       <Toast

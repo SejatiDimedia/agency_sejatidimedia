@@ -185,26 +185,46 @@ model InvoiceItem {
   updatedAt   DateTime @updatedAt
 }
 
+model InsightSeries {
+  id            String    @id @default(cuid())
+  slug          String    @unique
+  titleId       String
+  titleEn       String?
+  descriptionId String    @db.Text
+  descriptionEn String?   @db.Text
+  coverImage    String?
+  category      String    @default("Backend")
+  badge         String?   @default("ENGINEERING SERIES")
+  isPublished   Boolean   @default(true)
+  order         Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  insights      Insight[]
+}
+
 model Insight {
-  id              String   @id @default(cuid())
-  slug            String   @unique
+  id              String         @id @default(cuid())
+  slug            String         @unique
   titleId         String
   titleEn         String?
   excerptId       String
   excerptEn       String?
-  contentId       String   @db.Text
-  contentEn       String?  @db.Text
-  category        String   @default("Backend")
-  tags            String[] @default([])
+  contentId       String         @db.Text
+  contentEn       String?        @db.Text
+  category        String         @default("Backend")
+  tags            String[]       @default([])
   coverImage      String
-  readTimeMinutes Int      @default(5)
-  authorName      String   @default("Timur Dian")
-  authorRole      String   @default("Lead Software Engineer · SejatiDimedia")
-  authorAvatar    String   @default("https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80")
-  isPublished     Boolean  @default(true)
-  featured        Boolean  @default(false)
-  publishedAt     DateTime @default(now())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  readTimeMinutes Int            @default(5)
+  authorName      String         @default("Timur Dian")
+  authorRole      String         @default("Lead Software Engineer · SejatiDimedia")
+  authorAvatar    String         @default("https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80")
+  isPublished     Boolean        @default(true)
+  featured        Boolean        @default(false)
+  seriesId        String?
+  series          InsightSeries? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+  seriesPart      Int?
+  publishedAt     DateTime       @default(now())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
 }
 

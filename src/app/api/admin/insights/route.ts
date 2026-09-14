@@ -21,6 +21,16 @@ export async function GET() {
     }
 
     const insights = await prisma.insight.findMany({
+      include: {
+        series: {
+          select: {
+            id: true,
+            titleId: true,
+            titleEn: true,
+            slug: true,
+          },
+        },
+      },
       orderBy: { publishedAt: 'desc' },
     });
 
@@ -56,6 +66,8 @@ export async function POST(req: Request) {
       authorAvatar = defaultAuthor.avatar,
       isPublished = true,
       featured = false,
+      seriesId = null,
+      seriesPart = null,
       slug: customSlug,
     } = body;
 
@@ -100,6 +112,8 @@ export async function POST(req: Request) {
         authorAvatar,
         isPublished: Boolean(isPublished),
         featured: Boolean(featured),
+        seriesId: seriesId ? seriesId : null,
+        seriesPart: seriesPart !== null && seriesPart !== undefined && seriesPart !== '' ? Number(seriesPart) : null,
         publishedAt: new Date(),
       },
     });

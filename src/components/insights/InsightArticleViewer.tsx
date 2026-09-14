@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
+import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import {
@@ -14,7 +15,22 @@ import {
   ShieldAlert,
   CheckCircle2,
   BookOpen,
+  Layers,
+  ChevronRight,
+  ArrowLeft,
+  ArrowRight,
+  ExternalLink,
 } from 'lucide-react';
+import { InsightSeriesInfo } from '@/lib/api/insights';
+import CodeBlockBeautified from './CodeBlockBeautified';
+import {
+  BeautifiedTable,
+  BeautifiedThead,
+  BeautifiedTbody,
+  BeautifiedTr,
+  BeautifiedTh,
+  BeautifiedTd,
+} from './TableBeautified';
 
 interface TocItem {
   id: string;
@@ -70,58 +86,9 @@ function slugify(text: string): string {
     .replace(/\s+/g, '-');
 }
 
-// Code Block with Mac OS Terminal Header & Interactive Copy Button
-export function ArticleCodeBlock({ className, children, ...props }: any) {
-  const [copied, setCopied] = useState(false);
-  const match = /language-(\w+)/.exec(className || '');
-  const languageName = match ? match[1].toUpperCase() : 'CODE';
-  const codeContent = String(children).replace(/\n$/, '');
-
-  const handleCopy = () => {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(codeContent);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
-
-  return (
-    <div className="relative my-7 rounded-2xl overflow-hidden border border-slate-800 bg-[#0d1117] shadow-xl text-left">
-      {/* Terminal Window Header Bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-[#161b22] border-b border-slate-800 text-xs font-mono">
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-[#ff5f56] inline-block" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[#ffbd2e] inline-block" />
-          <span className="w-2.5 h-2.5 rounded-full bg-[#27c93f] inline-block" />
-          <span className="ml-2 font-bold text-slate-400 text-[11px] tracking-wider">{languageName}</span>
-        </div>
-        <button
-          type="button"
-          onClick={handleCopy}
-          className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-mono text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-700/80 transition-all cursor-pointer border border-slate-700/50"
-        >
-          {copied ? (
-            <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-400 font-bold">Tersalin!</span>
-            </>
-          ) : (
-            <>
-              <Copy className="w-3.5 h-3.5 text-slate-400" />
-              <span>Salin</span>
-            </>
-          )}
-        </button>
-      </div>
-
-      {/* Code Body */}
-      <pre className="p-4 sm:p-5 overflow-x-auto text-xs sm:text-[13.5px] font-mono text-slate-200 leading-relaxed scrollbar-thin scrollbar-thumb-slate-700">
-        <code className={className} {...props}>
-          {children}
-        </code>
-      </pre>
-    </div>
-  );
+// Beautified Code Block with macOS Window Header, Line Numbers, Syntax Highlighting & Copy
+export function ArticleCodeBlock(props: any) {
+  return <CodeBlockBeautified {...props} />;
 }
 
 export interface InsightArticleViewerProps {
@@ -143,6 +110,7 @@ export interface InsightArticleViewerProps {
   language?: 'id' | 'en';
   contentOnly?: boolean;
   isEditorPreview?: boolean;
+  series?: InsightSeriesInfo | null;
 }
 
 export function InsightArticleViewer({
@@ -154,6 +122,7 @@ export function InsightArticleViewer({
   tags = [],
   readTimeMinutes = 5,
   publishedAt,
+  series = null,
   author = {
     name: 'Timur Dian Radha Sejati',
     role: 'Lead Software Engineer · SejatiDimedia',
@@ -211,7 +180,7 @@ export function InsightArticleViewer({
       const text = getNodeText(children);
       const id = slugify(text);
       return (
-        <h1 id={id} className="text-2xl sm:text-3xl font-sora font-extrabold text-slate-900 mt-12 mb-4 pt-3 border-b border-slate-200/80 pb-2 scroll-mt-24">
+        <h1 id={id} className="text-2xl sm:text-3xl font-sans font-extrabold text-slate-900 mt-12 mb-4 pt-3 border-b border-slate-200/80 pb-2 scroll-mt-24">
           {children}
         </h1>
       );
@@ -220,7 +189,7 @@ export function InsightArticleViewer({
       const text = getNodeText(children);
       const id = slugify(text);
       return (
-        <h2 id={id} className="text-xl sm:text-2xl font-sora font-extrabold text-slate-900 mt-10 mb-4 pt-2 border-b border-slate-200/80 pb-2 flex items-center gap-2 scroll-mt-24">
+        <h2 id={id} className="text-xl sm:text-2xl font-sans font-extrabold text-slate-900 mt-10 mb-4 pt-2 border-b border-slate-200/80 pb-2 flex items-center gap-2 scroll-mt-24">
           {children}
         </h2>
       );
@@ -229,7 +198,7 @@ export function InsightArticleViewer({
       const text = getNodeText(children);
       const id = slugify(text);
       return (
-        <h3 id={id} className="text-lg sm:text-xl font-sora font-bold text-slate-900 mt-8 mb-3 scroll-mt-24">
+        <h3 id={id} className="text-lg sm:text-xl font-sans font-bold text-slate-900 mt-8 mb-3 scroll-mt-24">
           {children}
         </h3>
       );
@@ -257,7 +226,7 @@ export function InsightArticleViewer({
           <div className="flex items-start gap-3 p-4 rounded-xl bg-rose-50/80 border border-rose-200 text-rose-900 font-bold text-sm sm:text-[14px] mt-6 mb-3 shadow-xs">
             <ShieldAlert className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
             <div className="flex-1 leading-snug">
-              <span className="block text-[11px] font-mono uppercase tracking-wider text-rose-600 font-bold mb-0.5">
+              <span className="block text-[11px] font-sans uppercase tracking-wider text-rose-600 font-bold mb-0.5">
                 Kelemahan Arsitektur / Anti-Pattern
               </span>
               <span>{cleanText}</span>
@@ -271,7 +240,7 @@ export function InsightArticleViewer({
           <div className="flex items-start gap-3 p-4 rounded-xl bg-emerald-50/80 border border-emerald-200 text-emerald-950 font-bold text-sm sm:text-[14px] mt-6 mb-3 shadow-xs">
             <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
             <div className="flex-1 leading-snug">
-              <span className="block text-[11px] font-mono uppercase tracking-wider text-emerald-600 font-bold mb-0.5">
+              <span className="block text-[11px] font-sans uppercase tracking-wider text-emerald-600 font-bold mb-0.5">
                 Standar Rekayasa Teruji / Best Practice
               </span>
               <span>{cleanText}</span>
@@ -281,7 +250,7 @@ export function InsightArticleViewer({
       }
 
       return (
-        <h4 className="text-base font-sora font-bold text-slate-900 mt-6 mb-2">
+        <h4 className="text-base font-sans font-bold text-slate-900 mt-6 mb-2">
           {cleanText}
         </h4>
       );
@@ -311,34 +280,31 @@ export function InsightArticleViewer({
         {children}
       </blockquote>
     ),
+    pre: ({ children }: any) => <>{children}</>,
     code: ({ inline, className, children, ...props }: any) => {
       if (inline) {
         return (
           <code
-            className="px-1.5 py-0.5 rounded-md bg-slate-100 border border-slate-200/80 font-mono text-xs sm:text-[13px] text-[#1E315B] font-semibold"
+            className="px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 font-sans text-xs sm:text-[12.5px] text-[#1E315B] dark:text-blue-300 font-semibold"
             {...props}
           >
             {children}
           </code>
         );
       }
-      return <ArticleCodeBlock className={className} {...props}>{children}</ArticleCodeBlock>;
+      return <ArticleCodeBlock className={className} language={language} {...props}>{children}</ArticleCodeBlock>;
     },
-    table: ({ children }: any) => (
-      <div className="my-8 overflow-x-auto rounded-2xl border border-slate-200 shadow-xs bg-white">
-        <table className="w-full text-left text-sm text-slate-700">{children}</table>
-      </div>
-    ),
-    thead: ({ children }: any) => (
-      <thead className="bg-slate-100/80 text-xs font-mono font-bold text-slate-900 uppercase tracking-wider border-b border-slate-200">
+    table: ({ children, ...props }: any) => (
+      <BeautifiedTable language={language} {...props}>
         {children}
-      </thead>
+      </BeautifiedTable>
     ),
-    tbody: ({ children }: any) => <tbody className="divide-y divide-slate-100">{children}</tbody>,
-    tr: ({ children }: any) => <tr className="hover:bg-slate-50/70 transition-colors">{children}</tr>,
-    th: ({ children }: any) => <th className="px-4 py-3 font-bold">{children}</th>,
-    td: ({ children }: any) => <td className="px-4 py-3 leading-relaxed">{children}</td>,
-    hr: () => <hr className="my-10 border-slate-200" />,
+    thead: BeautifiedThead,
+    tbody: BeautifiedTbody,
+    tr: BeautifiedTr,
+    th: BeautifiedTh,
+    td: BeautifiedTd,
+    hr: () => <hr className="my-10 border-slate-200 dark:border-slate-800" />,
   };
 
   // If contentOnly is requested, render just the markdown body
@@ -358,8 +324,8 @@ export function InsightArticleViewer({
       <header className="space-y-5 mb-10 w-full">
         {/* Metadata Row */}
         <div className="flex flex-wrap items-center gap-3">
-          <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 text-[11px] font-mono font-bold uppercase tracking-wider shadow-xs">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098] animate-pulse" />
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 text-[10px] font-sans font-bold uppercase tracking-wider shadow-xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
             {category}
           </span>
           <div className="flex items-center gap-3 text-xs text-slate-500 font-sans">
@@ -373,10 +339,31 @@ export function InsightArticleViewer({
               {displayDate}
             </span>
           </div>
+
+          {series && (
+            <Link
+              href={`/insights/series/${series.slug}`}
+              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 hover:bg-blue-100/80 text-[#2C5098] border border-[#2C5098]/20 text-[10px] font-sans font-bold uppercase tracking-wider transition-all group shadow-xs"
+            >
+              <Layers className="w-3 h-3 text-[#2C5098] group-hover:rotate-12 transition-transform" />
+              <span>
+                {language === 'en' ? 'SERIES' : 'SERI'}: {language === 'en' ? series.titleEn : series.titleId}
+              </span>
+              {series.part && (
+                <>
+                  <span className="text-[#2C5098]/40">•</span>
+                  <span className="font-extrabold text-[#1E315B]">
+                    {language === 'en' ? `PART ${series.part} OF ${series.totalParts}` : `PART ${series.part} DARI ${series.totalParts}`}
+                  </span>
+                </>
+              )}
+              <ChevronRight className="w-3 h-3 text-[#2C5098]/60 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          )}
         </div>
 
-        {/* Headline: Sora typography */}
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-sora font-extrabold tracking-tight text-slate-900 leading-[1.2] w-full">
+        {/* Headline: Plus Jakarta Sans typography */}
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-[42px] font-sans font-extrabold tracking-tight text-slate-900 leading-[1.2] w-full">
           {displayTitle}
         </h1>
 
@@ -402,7 +389,7 @@ export function InsightArticleViewer({
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <p className="text-sm font-sora font-bold text-slate-900">
+                <p className="text-sm font-sans font-bold text-slate-900">
                   {author.name}
                 </p>
                 <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
@@ -415,7 +402,7 @@ export function InsightArticleViewer({
 
           <div className="flex items-center gap-2">
             {/* Font Switcher */}
-            <div className="inline-flex items-center p-0.5 rounded-xl bg-slate-100 border border-slate-200/80 text-xs font-mono font-bold text-slate-600">
+            <div className="inline-flex items-center p-0.5 rounded-xl bg-slate-100 border border-slate-200/80 text-xs font-sans font-bold text-slate-600">
               <button
                 type="button"
                 onClick={() => setFontSize('normal')}
@@ -463,6 +450,85 @@ export function InsightArticleViewer({
         </div>
       </header>
 
+      {/* Series Curriculum Box */}
+      {series && series.curriculum && series.curriculum.length > 0 && (
+        <div className="mb-10 rounded-3xl border border-blue-100/90 bg-gradient-to-br from-blue-50/60 via-indigo-50/30 to-white p-5 sm:p-7 shadow-xs">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-blue-100/80">
+            <div>
+              <div className="flex items-center gap-2 text-xs font-sans font-bold text-blue-700 uppercase tracking-wider">
+                <BookOpen className="w-4 h-4 text-blue-600" />
+                <span>{language === 'en' ? 'Curriculum Track / Series' : 'Silabus Seri Rekayasa'}</span>
+              </div>
+              <h3 className="text-base sm:text-lg font-sans font-extrabold text-slate-900 mt-1">
+                {language === 'en' ? series.titleEn : series.titleId}
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-600 font-sans mt-0.5">
+                {language === 'en' ? series.descriptionEn : series.descriptionId}
+              </p>
+            </div>
+            <Link
+              href={`/insights/series/${series.slug}`}
+              className="inline-flex items-center gap-1 text-xs font-sans font-bold text-blue-600 hover:text-blue-700 shrink-0"
+            >
+              <span>{language === 'en' ? 'View Series Hub' : 'Lihat Silabus Lengkap'}</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {/* Curriculum items list */}
+          <div className="mt-4 space-y-2">
+            {series.curriculum.map((item) => {
+              const isCurrent = item.isCurrent;
+              const itemTitle = language === 'en' ? item.titleEn : item.titleId;
+              return (
+                <div
+                  key={item.part}
+                  className={`flex items-center justify-between gap-3 p-3 rounded-xl transition-all ${
+                    isCurrent
+                      ? 'bg-[#2C5098] text-white shadow-xs'
+                      : 'bg-white hover:bg-slate-50 text-slate-700 border border-slate-200/70 hover:border-blue-200 shadow-2xs'
+                  }`}
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span
+                      className={`w-7 h-7 rounded-lg flex items-center justify-center font-sans text-xs font-bold shrink-0 ${
+                        isCurrent ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
+                      }`}
+                    >
+                      {item.part}
+                    </span>
+                    <div className="min-w-0">
+                      {isCurrent ? (
+                        <p className="text-xs sm:text-sm font-sans font-bold truncate">
+                          {itemTitle}
+                        </p>
+                      ) : (
+                        <Link
+                          href={`/insights/${item.slug}`}
+                          className="text-xs sm:text-sm font-sans font-semibold hover:underline truncate block"
+                        >
+                          {itemTitle}
+                        </Link>
+                      )}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <span className={`text-[11px] font-sans ${isCurrent ? 'text-blue-100' : 'text-slate-400'}`}>
+                      {item.readTimeMinutes}m
+                    </span>
+                    {isCurrent && (
+                      <span className="px-2 py-0.5 rounded-md bg-white/20 text-[10px] font-sans font-bold uppercase tracking-wider">
+                        {language === 'en' ? 'Reading' : 'Sedang Dibaca'}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* 2. Featured Cover Image (Safe Image rendering) */}
       {coverImage && (
         <div className="relative aspect-[16/9] w-full rounded-3xl overflow-hidden mb-12 shadow-xl border border-slate-200/90 bg-slate-100">
@@ -491,18 +557,57 @@ export function InsightArticleViewer({
           {/* Tags Section with Blue Badges */}
           {tagsList.length > 0 && (
             <div className="mt-12 pt-6 border-t border-slate-200/80 flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-mono font-bold text-slate-400 uppercase tracking-wider mr-1">
+              <span className="text-xs font-sans font-bold text-slate-400 uppercase tracking-wider mr-1">
                 {language === 'en' ? 'Related Topics:' : 'Topik Terkait:'}
               </span>
               {tagsList.map((tag) => (
                 <span
                   key={tag}
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-semibold bg-blue-50 text-blue-700 border border-blue-200/70 hover:bg-blue-100 transition-colors shadow-2xs"
+                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-sans font-medium text-slate-600 bg-slate-100 border border-slate-200/70 hover:bg-[#2C5098] hover:text-white hover:border-[#2C5098] transition-colors shadow-2xs"
                 >
-                  <Tag className="w-3 h-3 text-blue-500" />
-                  {tag}
+                  <Tag className="w-2.5 h-2.5 opacity-60" />
+                  <span>{tag}</span>
                 </span>
               ))}
+            </div>
+          )}
+
+          {/* Series Stepper Navigation */}
+          {series && (series.prevPart || series.nextPart) && (
+            <div className="mt-10 p-5 sm:p-6 rounded-3xl bg-slate-50 border border-slate-200/90 grid grid-cols-1 sm:grid-cols-2 gap-4 shadow-2xs">
+              {series.prevPart ? (
+                <Link
+                  href={`/insights/${series.prevPart.slug}`}
+                  className="flex flex-col p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-blue-300 hover:shadow-sm transition-all group text-left"
+                >
+                  <span className="inline-flex items-center gap-1.5 text-[11px] font-sans font-bold text-slate-400 uppercase tracking-wider group-hover:text-[#2C5098]">
+                    <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-1 transition-transform" />
+                    {language === 'en' ? `PREVIOUS PART · ${series.prevPart.part}` : `PART SEBELUMNYA · ${series.prevPart.part}`}
+                  </span>
+                  <span className="mt-1.5 text-sm font-sans font-bold text-slate-800 group-hover:text-[#2C5098] line-clamp-2">
+                    {language === 'en' ? series.prevPart.titleEn : series.prevPart.titleId}
+                  </span>
+                </Link>
+              ) : (
+                <div className="hidden sm:block" />
+              )}
+
+              {series.nextPart ? (
+                <Link
+                  href={`/insights/${series.nextPart.slug}`}
+                  className="flex flex-col p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-blue-300 hover:shadow-sm transition-all group sm:text-right"
+                >
+                  <span className="inline-flex items-center gap-1.5 sm:justify-end text-[11px] font-sans font-bold text-[#2C5098] uppercase tracking-wider">
+                    {language === 'en' ? `NEXT PART · ${series.nextPart.part}` : `PART SELANJUTNYA · ${series.nextPart.part}`}
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                  <span className="mt-1.5 text-sm font-sans font-bold text-slate-800 group-hover:text-[#2C5098] line-clamp-2">
+                    {language === 'en' ? series.nextPart.titleEn : series.nextPart.titleId}
+                  </span>
+                </Link>
+              ) : (
+                <div className="hidden sm:block" />
+              )}
             </div>
           )}
 
@@ -520,10 +625,10 @@ export function InsightArticleViewer({
             </div>
             <div className="space-y-1.5 flex-1">
               <div className="flex items-center gap-2">
-                <h4 className="text-base font-sora font-bold text-slate-900">
+                <h4 className="text-base font-sans font-bold text-slate-900">
                   {author.name}
                 </h4>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200/60">
+                <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-blue-50 text-[#2C5098] border border-[#2C5098]/20 shadow-xs">
                   Penulis Resmi
                 </span>
               </div>
@@ -539,32 +644,38 @@ export function InsightArticleViewer({
           </div>
 
           {/* 5. Consultation CTA Card */}
-          <div className="mt-10 p-7 sm:p-9 rounded-3xl bg-gradient-to-br from-[#23385B] via-[#2C5098] to-[#1E315B] text-white shadow-xl relative overflow-hidden text-center sm:text-left">
-            <div className="absolute top-0 right-0 w-80 h-80 bg-white/5 rounded-full blur-3xl pointer-events-none" />
-            <div className="relative z-10 space-y-3 max-w-2xl">
-              <span className="inline-block text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-wider text-blue-200 bg-white/10 px-3 py-1 rounded-full border border-white/10">
-                {language === 'en' ? 'SYSTEM CONSULTATION' : 'KONSULTASI SISTEM'}
-              </span>
-              <h3 className="text-lg sm:text-2xl font-sora font-extrabold tracking-tight text-white leading-snug">
+          <div className="mt-14 p-8 sm:p-10 rounded-3xl bg-gradient-to-br from-[#1E315B] via-[#2C5098] to-[#23385B] text-white shadow-2xl relative overflow-hidden text-left">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none" />
+            <div className="relative z-10 space-y-4 max-w-2xl">
+              <h3 className="text-2xl sm:text-3xl font-sans font-extrabold tracking-tight text-white leading-snug">
                 {language === 'en'
-                  ? 'Having Architecture Challenges or Need High-Performance Systems?'
+                  ? 'Facing Architecture Bottlenecks or Building Mission-Critical Systems?'
                   : 'Punya Masalah Arsitektur atau Ingin Membangun Sistem yang Benar?'}
               </h3>
-              <p className="text-slate-200 text-xs sm:text-sm leading-relaxed">
+
+              <p className="text-slate-200 text-sm sm:text-base leading-relaxed font-sans">
                 {language === 'en'
-                  ? 'We audit legacy codebases, eliminate bottlenecks, and build reliable enterprise software architectures.'
+                  ? 'We audit legacy codebases, eliminate performance bottlenecks, and engineer resilient enterprise software from day one.'
                   : 'Kami siap membantu mengaudit kode, me-refactor arsitektur yang lemot, atau membangun aplikasi bisnis Anda dengan standar enterprise sejak awal.'}
               </p>
-              <div className="pt-2 flex flex-col sm:flex-row items-center gap-3 justify-start">
+
+              <div className="pt-3 flex flex-col sm:flex-row items-center gap-3 justify-start">
                 <a
                   href={waConsultUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-xs shadow-md transition-all cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white text-[#1E315B] hover:bg-slate-100 font-bold text-sm shadow-md transition-all hover:scale-[1.02] cursor-pointer"
                 >
-                  <MessageSquare className="w-4 h-4" />
-                  <span>{language === 'en' ? 'Free Consultation via WhatsApp' : 'Konsultasi Gratis via WhatsApp'}</span>
+                  <span>{language === 'en' ? 'Free WhatsApp Consultation' : 'Konsultasi Gratis via WhatsApp'}</span>
+                  <ExternalLink className="w-4 h-4" />
                 </a>
+                <Link
+                  href="/#contact-section"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-sm border border-white/20 transition-all cursor-pointer"
+                >
+                  <span>{language === 'en' ? 'Calculate Project Estimate' : 'Hitung Estimasi Proyek'}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
             </div>
           </div>
@@ -576,7 +687,7 @@ export function InsightArticleViewer({
             <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 shadow-xs">
               <div className="flex items-center gap-2 pb-3 mb-4 border-b border-slate-200/80">
                 <BookOpen className="w-4 h-4 text-[#2C5098]" />
-                <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-900">
+                <h3 className="text-xs font-sans font-bold uppercase tracking-wider text-slate-900">
                   {language === 'en' ? 'Table of Contents' : 'Daftar Isi'}
                 </h3>
               </div>

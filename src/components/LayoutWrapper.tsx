@@ -233,7 +233,7 @@ export default function LayoutWrapper({
                       transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                     >
                       <span
-                        className={`font-sora font-extrabold text-[11px] tracking-[0.3em] uppercase ${
+                        className={`font-sans font-extrabold text-[11px] tracking-[0.3em] uppercase ${
                           template === 'professional' || theme === 'light'
                             ? 'text-slate-800'
                             : 'text-slate-200'

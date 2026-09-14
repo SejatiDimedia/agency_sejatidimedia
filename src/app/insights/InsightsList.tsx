@@ -4,16 +4,17 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Clock, Calendar, ArrowRight, Tag, BookOpen } from "lucide-react";
-import { InsightArticle } from "@/lib/api/insights";
+import { Search, Clock, Calendar, ArrowRight, Tag, BookOpen, Layers, ChevronRight } from "lucide-react";
+import { InsightArticle, InsightSeriesSummary } from "@/lib/api/insights";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface InsightsListProps {
   articles: InsightArticle[];
   categories: string[];
+  seriesList?: InsightSeriesSummary[];
 }
 
-export default function InsightsList({ articles, categories }: InsightsListProps) {
+export default function InsightsList({ articles, categories, seriesList = [] }: InsightsListProps) {
   const { language, t } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -47,7 +48,7 @@ export default function InsightsList({ articles, categories }: InsightsListProps
       {/* 1. Standard Section Header - Matching Beranda Section Style */}
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 space-y-3">
         {/* Eyebrow / Section Label */}
-        <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
+        <div className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.3em] text-[#2C5098] font-bold">
           <span>{pageT.badge || (language === 'en' ? 'ENGINEERING INSIGHTS' : 'INSIGHTS & TEKNOLOGI')}</span>
         </div>
 
@@ -96,8 +97,8 @@ export default function InsightsList({ articles, categories }: InsightsListProps
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-4 py-2 rounded-full text-xs sm:text-sm font-sans font-bold whitespace-nowrap transition-all duration-200 cursor-pointer ${isSelected
-                    ? "bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-md shadow-[#2C5098]/20 border border-white/20"
-                    : "bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-2xs"
+                  ? "bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-md shadow-[#2C5098]/20 border border-white/20"
+                  : "bg-white border border-slate-200 text-slate-600 hover:text-slate-900 hover:border-slate-300 shadow-2xs"
                   }`}
               >
                 {cat === "All" ? pageT.allCategories : cat}
@@ -160,20 +161,26 @@ export default function InsightsList({ articles, categories }: InsightsListProps
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-black/30" />
 
                           {/* Top Badges */}
-                          <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-[0.2em] bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md">
+                          <div className="absolute top-4 left-4 flex items-center gap-2 z-10 flex-wrap">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md">
                               <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
                               {featured.category}
                             </span>
-                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-[#2C5098] text-white shadow-xs">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-[#2C5098] text-white border border-[#2C5098] shadow-xs">
                               {language === "en" ? "FEATURED" : "UTAMA"}
                             </span>
+                            {featured.series && (
+                              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-[#1E315B] text-white border border-white/20 shadow-xs">
+                                <Layers className="w-3 h-3 text-blue-200" />
+                                Part {featured.seriesPart || featured.series.part}
+                              </span>
+                            )}
                           </div>
 
                           {/* Bottom-left Read Time */}
                           <div className="absolute bottom-4 left-4 z-10">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono bg-black/60 text-white/95 backdrop-blur-md border border-white/15">
-                              <Clock className="w-3.5 h-3.5 text-white/80" />
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-medium bg-black/60 text-white/95 backdrop-blur-md border border-white/15">
+                              <Clock className="w-3 h-3 text-white/80" />
                               {featured.readTimeMinutes} {pageT.readTime}
                             </span>
                           </div>
@@ -184,7 +191,7 @@ export default function InsightsList({ articles, categories }: InsightsListProps
                           <div className="space-y-4">
                             {/* Eyebrow & Published Date */}
                             <div className="flex items-center justify-between gap-2 text-xs">
-                              <span className="text-[10px] font-mono uppercase tracking-[0.25em] font-bold text-[#2C5098]">
+                              <span className="text-[10px] font-sans uppercase tracking-[0.25em] font-bold text-[#2C5098]">
                                 {language === "en" ? "FEATURED ARTICLE" : "PILIHAN REDAKSI"}
                               </span>
                               <span className="text-slate-400 font-sans text-xs">
@@ -233,14 +240,14 @@ export default function InsightsList({ articles, categories }: InsightsListProps
                                   <Link
                                     key={tag}
                                     href={`/insights?search=${encodeURIComponent(tag)}`}
-                                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-mono font-bold text-[#2C5098] bg-blue-50/80 hover:bg-[#2C5098] hover:text-white border border-blue-200/70 hover:border-[#2C5098] transition-all cursor-pointer shadow-2xs group"
+                                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-sans font-bold text-[#2C5098] bg-blue-50/80 hover:bg-[#2C5098] hover:text-white border border-blue-200/70 hover:border-[#2C5098] transition-all cursor-pointer shadow-2xs group"
                                   >
                                     <span>{tag}</span>
                                   </Link>
                                 ))}
                               </div>
 
-                              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#2C5098] text-white text-xs font-mono font-bold uppercase tracking-wider shadow-sm group-hover:bg-[#23385B] transition-colors shrink-0">
+                              <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#2C5098] text-white text-xs font-sans font-bold uppercase tracking-wider shadow-sm group-hover:bg-[#23385B] transition-colors shrink-0">
                                 <span>{language === "en" ? "Read Story" : "Baca Artikel"}</span>
                                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                               </span>
@@ -255,10 +262,114 @@ export default function InsightsList({ articles, categories }: InsightsListProps
             })()
           )}
 
+          {/* Series Showcase Shelf: Engineering Curriculum Tracks (Card Silabus - NO top border) */}
+          {selectedCategory === "All" && !searchQuery.trim() && seriesList && seriesList.length > 0 && (
+            <section className="pt-2 pb-6 my-4">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 pb-4 border-b border-slate-200/80">
+                <div>
+                  <div className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.3em] text-[#2C5098] font-bold mb-1.5">
+                    <span>{language === "en" ? "STRUCTURED CURRICULUM" : "KURIKULUM TERSTRUKTUR"}</span>
+                  </div>
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-sans font-extrabold text-slate-900 tracking-tight leading-tight">
+                    {language === "en" ? (
+                      <>
+                        <span>Engineering Series & </span>
+                        <span className="text-[#2C5098]">Playbooks</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Seri Rekayasa & </span>
+                        <span className="text-[#2C5098]">Engineering Playbooks</span>
+                      </>
+                    )}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-slate-600 font-sans mt-1.5 max-w-2xl leading-relaxed">
+                    {language === "en"
+                      ? "Deep multi-part technical playbooks covering architecture, performance, anti-patterns, and scalable production standards."
+                      : "Kumpulan artikel bertahap (multi-part) yang membahas arsitektur mendalam, bedah masalah developer, hingga standar produksi skala bisnis."}
+                  </p>
+                </div>
+
+                <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-medium text-slate-600 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/80 shrink-0 self-start sm:self-end shadow-2xs">
+                  <BookOpen className="w-3 h-3 text-[#2C5098]" />
+                  {seriesList.length} {language === "en" ? (seriesList.length > 1 ? "Playbooks" : "Playbook") : "Seri"}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {seriesList.map((series) => {
+                  const sTitle = (language === "en" ? (series.titleEn || series.titleId) : series.titleId) || "";
+                  const sDesc = (language === "en" ? (series.descriptionEn || series.descriptionId) : series.descriptionId) || "";
+
+                  return (
+                    <Link
+                      key={series.id}
+                      href={`/insights/series/${series.slug}`}
+                      className="group flex flex-col rounded-3xl bg-white border border-slate-200/90 hover:border-[#2C5098]/40 shadow-xs hover:shadow-xl transition-all duration-300 overflow-hidden relative"
+                    >
+                      {/* NO top border/line indicator */}
+                      <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100 border-b border-slate-100">
+                        <Image
+                          src={series.coverImage ?? "/images/insights/laravel_architecture_cover.jpg"}
+                          alt={sTitle}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 400px"
+                          className="object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/15 to-transparent" />
+
+                        <div className="absolute top-3 left-3 z-10">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 backdrop-blur-md text-[#2C5098] border border-[#2C5098]/20 shadow-xs">
+                            <Layers className="w-3 h-3 text-[#2C5098]" />
+                            {series.badge || (language === "en" ? "SERIES" : "SERI")}
+                          </span>
+                        </div>
+
+                        <div className="absolute bottom-3 left-3 right-3 z-10 flex items-center justify-between">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-medium bg-black/60 backdrop-blur-md text-white/95 border border-white/15">
+                            <BookOpen className="w-3 h-3 text-blue-300" />
+                            {series.totalArticles} {language === "en" ? "Parts" : "Bagian"}
+                          </span>
+                          {series.totalReadTimeMinutes > 0 && (
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-medium bg-black/60 backdrop-blur-md text-white/95 border border-white/15">
+                              <Clock className="w-3 h-3 text-white/80" />
+                              {series.totalReadTimeMinutes}m
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
+                        <div className="space-y-2">
+                          <div className="text-[10px] font-sans font-bold text-[#2C5098] uppercase tracking-wider">
+                            {series.category}
+                          </div>
+                          <h4 className="text-base sm:text-lg font-sans font-extrabold text-slate-900 group-hover:text-[#2C5098] transition-colors leading-snug line-clamp-2">
+                            {sTitle}
+                          </h4>
+                          <p className="text-xs sm:text-sm text-slate-600 font-sans line-clamp-2 leading-relaxed">
+                            {sDesc}
+                          </p>
+                        </div>
+
+                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-[#2C5098]">
+                          <span>{language === "en" ? "Explore Syllabus" : "Pelajari Silabus"}</span>
+                          <div className="w-6 h-6 rounded-full bg-blue-50 group-hover:bg-[#2C5098] group-hover:text-white flex items-center justify-center transition-all duration-300">
+                            <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                          </div>
+                        </div>
+                      </div>
+                    </Link>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
           {/* Section Divider when Featured Card is shown */}
           {selectedCategory === "All" && !searchQuery.trim() && filteredArticles.length > 1 && (
             <div className="flex items-center gap-3 pt-4 pb-1">
-              <span className="text-[10px] font-mono uppercase tracking-[0.25em] font-bold text-slate-400">
+              <span className="text-[10px] font-sans uppercase tracking-[0.25em] font-bold text-slate-400">
                 {language === "en" ? "ARCHIVE & ALL ARTICLES" : "ARSIP SEMUA ARTIKEL"}
               </span>
               <div className="flex-1 h-[1px] bg-slate-200/80" />
@@ -300,18 +411,24 @@ export default function InsightsList({ articles, categories }: InsightsListProps
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-50 group-hover:opacity-30 transition-opacity" />
 
-                        {/* Floating Category Pill */}
-                        <div className="absolute top-3 left-3 z-10">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[9px] sm:text-[10px] font-mono font-bold uppercase tracking-[0.2em] bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md">
+                        {/* Floating Category & Series Pill */}
+                        <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 flex-wrap max-w-[90%]">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md">
                             <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
                             {article.category}
                           </span>
+                          {article.series && (
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-[#1E315B] text-white border border-white/20 shadow-xs">
+                              <Layers className="w-3 h-3 text-blue-200" />
+                              Part {article.seriesPart || article.series.part}
+                            </span>
+                          )}
                         </div>
 
                         {/* Floating Read Time Pill */}
                         <div className="absolute bottom-3 right-3 z-10">
-                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono bg-black/60 text-white/90 backdrop-blur-md border border-white/10">
-                            <Clock className="w-3 h-3 text-white/70" />
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-medium bg-black/60 text-white/95 backdrop-blur-md border border-white/15">
+                            <Clock className="w-3 h-3 text-white/80" />
                             {article.readTimeMinutes} {pageT.readTime}
                           </span>
                         </div>
@@ -359,18 +476,18 @@ export default function InsightsList({ articles, categories }: InsightsListProps
                         <div className="pt-4 border-t border-slate-100 flex items-center justify-between mt-auto gap-2">
                           <div className="flex items-center gap-1.5 flex-wrap">
                             {article.tags.slice(0, 2).map((tag) => (
-                              <span
+                              <Link
                                 key={tag}
-                                className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium text-slate-600 bg-slate-100 border border-slate-200/60"
+                                href={`/insights?search=${encodeURIComponent(tag)}`}
+                                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-sans font-bold text-[#2C5098] bg-blue-50/80 hover:bg-[#2C5098] hover:text-white border border-blue-200/70 hover:border-[#2C5098] transition-all cursor-pointer shadow-2xs group"
                               >
-                                <Tag className="w-2.5 h-2.5 opacity-60 text-slate-500" />
-                                {tag}
-                              </span>
+                                <span>{tag}</span>
+                              </Link>
                             ))}
                           </div>
 
                           <div className="inline-flex items-center gap-2 group/btn shrink-0">
-                            <span className="text-xs font-mono uppercase tracking-wider font-bold text-[#2C5098]">
+                            <span className="text-xs font-sans uppercase tracking-wider font-bold text-[#2C5098]">
                               {language === "en" ? "Read" : "Baca"}
                             </span>
                             <div className="w-7 h-7 rounded-full bg-slate-100 group-hover:bg-[#2C5098] text-slate-600 group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-2xs group-hover:shadow-md group-hover:shadow-[#2C5098]/20 group-hover:translate-x-0.5">

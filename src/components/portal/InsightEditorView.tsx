@@ -9,7 +9,7 @@ import {
   Calendar, AlertCircle, FileText, ExternalLink, Image as ImageIcon,
   Columns, Edit3, Loader2, CheckCircle2, ShieldAlert, Settings2,
   Sliders, Layout, Hash, Monitor, Smartphone, UploadCloud, Link2,
-  Trash2, Maximize2, X
+  Trash2, Maximize2, X, BookOpen
 } from 'lucide-react';
 import { Toast } from '@/components/ui';
 import { InsightArticleViewer } from '@/components/insights/InsightArticleViewer';
@@ -34,6 +34,9 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
   const [previewScope, setPreviewScope] = useState<'full' | 'body'>('full');
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
   const [isFullScreenPreviewOpen, setIsFullScreenPreviewOpen] = useState(false);
+
+  // Series List
+  const [availableSeries, setAvailableSeries] = useState<Array<{ id: string; titleId: string; slug: string; category: string; badge?: string }>>([]);
 
   // Cover Image Type: 'link' vs 'upload'
   const [coverImageType, setCoverImageType] = useState<'link' | 'upload'>(
@@ -63,7 +66,21 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
     authorAvatar: initialData?.authorAvatar || '/images/author_timur_dian.jpg',
     authorBioId: initialData?.authorBioId || '',
     authorBioEn: initialData?.authorBioEn || '',
+    seriesId: initialData?.seriesId || '',
+    seriesPart: initialData?.seriesPart !== undefined && initialData?.seriesPart !== null ? String(initialData.seriesPart) : '',
   });
+
+  // Fetch available series for selector
+  useEffect(() => {
+    fetch('/api/admin/insights/series')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.series)) {
+          setAvailableSeries(data.series);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Fetch author profile if creating new article
   useEffect(() => {
@@ -182,6 +199,8 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
         body: JSON.stringify({
           ...formData,
           coverImage: formData.coverImage.trim() || '/images/insights/client_portal_cover.jpg',
+          seriesId: formData.seriesId || null,
+          seriesPart: formData.seriesPart ? Number(formData.seriesPart) : null,
           tags: Array.isArray(formData.tags)
             ? formData.tags
             : typeof formData.tags === 'string'
@@ -219,6 +238,31 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
   };
 
   const currentContent = activeLangTab === 'id' ? formData.contentId : formData.contentEn;
+
+  const activeSeriesObj = availableSeries.find((s) => s.id === formData.seriesId);
+  const previewSeriesInfo = activeSeriesObj
+    ? {
+        id: activeSeriesObj.id,
+        slug: activeSeriesObj.slug,
+        titleId: activeSeriesObj.titleId,
+        titleEn: (activeSeriesObj as any).titleEn || activeSeriesObj.titleId,
+        descriptionId: (activeSeriesObj as any).descriptionId || '',
+        descriptionEn: (activeSeriesObj as any).descriptionEn || '',
+        badge: activeSeriesObj.badge || 'ENGINEERING PLAYBOOK',
+        part: Number(formData.seriesPart) || 1,
+        totalParts: Math.max(Number(formData.seriesPart) || 1, 2),
+        curriculum: [
+          {
+            part: Number(formData.seriesPart) || 1,
+            slug: formData.slug || 'artikel-ini',
+            titleId: (activeLangTab === 'id' ? formData.titleId : formData.titleEn) || 'Bab Saat Ini',
+            titleEn: formData.titleEn || formData.titleId,
+            readTimeMinutes: formData.readTimeMinutes,
+            isCurrent: true,
+          },
+        ],
+      }
+    : null;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 pb-24 text-slate-800">
@@ -659,6 +703,7 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
                         language={activeLangTab}
                         contentOnly={previewScope === 'body'}
                         isEditorPreview={true}
+                        series={previewSeriesInfo}
                         author={{
                           name: formData.authorName,
                           role: formData.authorRole,
@@ -759,15 +804,14 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
                       Estimasi Waktu Baca (Menit)
                     </label>
                     <div className="relative">
+                      <Clock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                       <input
                         type="number"
                         min={1}
-                        max={60}
                         value={formData.readTimeMinutes}
-                        onChange={(e) => setFormData({ ...formData, readTimeMinutes: Number(e.target.value) })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-bold"
+                        onChange={(e) => setFormData({ ...formData, readTimeMinutes: Number(e.target.value) || 1 })}
+                        className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                       />
-                      <Clock className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                     </div>
                   </div>
                 </div>
@@ -781,7 +825,7 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
                     type="text"
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    placeholder="Kosongkan untuk generate otomatis dari judul artikel"
+                    placeholder="kesalahan-arsitektur-laravel-developer"
                     className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-mono"
                   />
                   <p className="text-[11px] text-slate-400 mt-1 font-mono">
@@ -805,7 +849,82 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
               </div>
             </div>
 
-            {/* 3. Author Details Card */}
+            {/* 3. Series / Playbook Track Card */}
+            <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="flex items-center gap-2">
+                  <BookOpen className="w-4 h-4 text-blue-600" />
+                  <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-mono">
+                    Pengelompokan Seri (Engineering Series)
+                  </h3>
+                </div>
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200/60">
+                  Playbook
+                </span>
+              </div>
+
+              <div className="space-y-4 pt-1">
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  Gabungkan artikel ini ke dalam serial pembelajaran mendalam (misal: <em>Arsitektur Laravel Enterprise</em>) agar pembaca mendapatkan navigasi bab berurutan dan kurikulum interaktif.
+                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="sm:col-span-2">
+                    <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1.5">
+                      Pilih Seri Pembahasan
+                    </label>
+                    <select
+                      value={formData.seriesId}
+                      onChange={(e) => {
+                        const sId = e.target.value;
+                        setFormData((prev) => ({
+                          ...prev,
+                          seriesId: sId,
+                          seriesPart: sId && !prev.seriesPart ? '1' : prev.seriesPart,
+                        }));
+                      }}
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-bold bg-white"
+                    >
+                      <option value="">— Bukan Bagian Seri (Artikel Mandiri) —</option>
+                      {availableSeries.map((ser) => (
+                        <option key={ser.id} value={ser.id}>
+                          {ser.titleId} ({ser.category})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1.5">
+                      Nomor Part / Episode
+                    </label>
+                    <input
+                      type="number"
+                      min={1}
+                      max={99}
+                      value={formData.seriesPart}
+                      disabled={!formData.seriesId}
+                      onChange={(e) => setFormData({ ...formData, seriesPart: e.target.value })}
+                      placeholder="Contoh: 1"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-bold disabled:bg-slate-100 disabled:text-slate-400"
+                    />
+                  </div>
+                </div>
+
+                {formData.seriesId && (
+                  <div className="p-3 bg-blue-50/70 rounded-2xl border border-blue-200/70 text-blue-900 text-xs flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
+                      <span>
+                        Artikel ini akan tampil sebagai <strong>Part {formData.seriesPart || 1}</strong> pada kurikulum seri terpilih.
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* 4. Author Details Card */}
             <div className="bg-white p-6 sm:p-7 rounded-3xl border border-slate-200/80 shadow-xs space-y-4">
               <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
                 <FileText className="w-4 h-4 text-blue-600" />
@@ -1156,6 +1275,7 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
                 language={activeLangTab}
                 contentOnly={previewScope === 'body'}
                 isEditorPreview={true}
+                series={previewSeriesInfo}
                 author={{
                   name: formData.authorName,
                   role: formData.authorRole,

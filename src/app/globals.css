@@ -11,12 +11,12 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --font-sans: "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-jakarta: "Plus Jakarta Sans", sans-serif;
-  --font-display: "Sora", "Space Grotesk", sans-serif;
-  --font-sora: "Sora", sans-serif;
+  --font-sans: var(--font-jakarta), "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-jakarta: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
+  --font-display: var(--font-jakarta), "Plus Jakarta Sans", "Inter", sans-serif;
+  --font-sora: var(--font-jakarta), "Plus Jakarta Sans", sans-serif;
   --font-serif: "Playfair Display", Georgia, serif;
-  --font-mono: "Plus Jakarta Sans", var(--font-jakarta), sans-serif;
+  --font-mono: var(--font-jakarta), "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
   --font-zen-dots: "Zen Dots", var(--font-zen-dots), sans-serif;
 
   --color-theme-deep: var(--background-deep);
@@ -37,13 +37,15 @@
 
 body,
 .font-sans,
-.font-jakarta {
-  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
-}
-
+.font-jakarta,
 .font-sora,
-.font-display {
-  font-family: 'Sora', sans-serif;
+.font-display,
+.font-mono,
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-jakarta), 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
 }
 
 .font-zen-dots,
@@ -248,4 +250,83 @@ html.dark {
   body.custom-cursor-active [contenteditable="true"] {
     cursor: text !important;
   }
+}
+
+/* ==========================================================================
+   Syntax Highlighting Theme (Tokyo Night / GitHub Dark Dimmed Hybrid)
+   ========================================================================== */
+.prism-code .token.comment,
+.prism-code .token.prolog,
+.prism-code .token.doctype,
+.prism-code .token.cdata {
+  color: #768390;
+  font-style: italic;
+}
+
+.prism-code .token.punctuation {
+  color: #8b949e;
+}
+
+.prism-code .token.namespace {
+  opacity: 0.7;
+}
+
+.prism-code .token.property,
+.prism-code .token.tag,
+.prism-code .token.boolean,
+.prism-code .token.number,
+.prism-code .token.constant,
+.prism-code .token.symbol,
+.prism-code .token.deleted {
+  color: #ff9e64; /* warm orange/amber */
+}
+
+.prism-code .token.selector,
+.prism-code .token.attr-name,
+.prism-code .token.string,
+.prism-code .token.char,
+.prism-code .token.builtin,
+.prism-code .token.inserted {
+  color: #7ee787; /* vivid emerald green */
+}
+
+.prism-code .token.operator,
+.prism-code .token.entity,
+.prism-code .token.url,
+.language-css .prism-code .token.string,
+.style .prism-code .token.string {
+  color: #79c0ff; /* sky blue */
+}
+
+.prism-code .token.atrule,
+.prism-code .token.attr-value,
+.prism-code .token.keyword {
+  color: #d2a8ff; /* vibrant lilac/purple */
+  font-weight: 600;
+}
+
+.prism-code .token.function,
+.prism-code .token.class-name,
+.prism-code .token.class-name-definition {
+  color: #58a6ff; /* bright cyan blue */
+  font-weight: 500;
+}
+
+.prism-code .token.regex,
+.prism-code .token.important,
+.prism-code .token.variable {
+  color: #ffa657; /* soft coral */
+}
+
+.prism-code .token.important,
+.prism-code .token.bold {
+  font-weight: bold;
+}
+
+.prism-code .token.italic {
+  font-style: italic;
+}
+
+.prism-code .token.entity {
+  cursor: help;
 }

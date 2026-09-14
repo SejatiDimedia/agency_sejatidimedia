@@ -170,7 +170,7 @@ export const Toast: React.FC<ToastProps> = ({
               {/* Message Details */}
               <div className="flex-1 min-w-0 pr-1 pt-0.5">
                 <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <h4 className="font-sora font-bold text-xs sm:text-[13px] text-slate-900 tracking-tight">
+                  <h4 className="font-sans font-bold text-xs sm:text-[13px] text-slate-900 tracking-tight">
                     {currentTitle || style.defaultTitle}
                   </h4>
                   <span
