@@ -4,7 +4,7 @@ import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, Clock, Calendar, ArrowRight, Tag, BookOpen, Layers, ChevronRight, ChevronLeft } from "lucide-react";
+import { Search, Clock, Calendar, ArrowRight, Tag, BookOpen, Layers, ChevronRight, ChevronLeft, RotateCcw, HelpCircle } from "lucide-react";
 import { InsightArticle, InsightSeriesSummary } from "@/lib/api/insights";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
@@ -144,23 +144,99 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
 
       {/* 3. Articles Display: Featured Lead Card + Archive Grid */}
       {filteredArticles.length === 0 ? (
-        <div className="text-center py-16 px-4 rounded-3xl bg-white border border-slate-200 shadow-xs max-w-xl mx-auto">
-          <BookOpen className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-          <h3 className="text-lg font-bold text-slate-800">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4 }}
+          className="text-center py-16 px-6 sm:px-10 rounded-3xl bg-white border border-slate-200/90 shadow-[0_4px_24px_-6px_rgba(0,0,0,0.06)] max-w-2xl mx-auto relative overflow-hidden my-8"
+        >
+          {/* Subtle background glow */}
+          <div className="absolute top-0 right-1/2 translate-x-1/2 w-80 h-80 bg-blue-500/5 rounded-full blur-3xl pointer-events-none -z-10" />
+
+          {/* Architectural Layered Graphic (Clean, professional, no stars/sparkles) */}
+          <div className="relative w-24 h-24 mx-auto mb-6 flex items-center justify-center">
+            <div className="absolute inset-0 rounded-3xl bg-slate-100/80 border border-slate-200/80 -rotate-6 transition-transform duration-300" />
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-blue-50 to-[#2C5098]/10 border border-[#2C5098]/25 rotate-3 shadow-md" />
+            <div className="relative z-10 w-14 h-14 rounded-2xl bg-white border border-slate-200 shadow-xs flex items-center justify-center">
+              <Search className="w-7 h-7 text-[#2C5098]" />
+            </div>
+          </div>
+
+          {/* Title & Description (No badge pill) */}
+          <h3 className="text-xl sm:text-2xl font-sans font-bold text-slate-900 tracking-tight">
             {articles.length === 0
-              ? (language === "en" ? "No articles published yet" : "Belum ada artikel yang diterbitkan")
-              : (language === "en" ? "No articles found" : "Tidak ada artikel yang cocok")}
+              ? (language === "en" ? "Articles Are Under Engineering Curation" : "Katalog Artikel Sedang Disiapkan")
+              : searchQuery.trim()
+              ? (language === "en" ? `No Articles Found for "${searchQuery}"` : `Tidak Ada Artikel untuk "${searchQuery}"`)
+              : (language === "en" ? `No Articles in "${selectedCategory}" Yet` : `Belum Ada Artikel di Kategori ${selectedCategory}`)}
           </h3>
-          <p className="text-sm text-slate-500 mt-1">
+
+          <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed mt-2 font-sans">
             {articles.length === 0
               ? (language === "en"
-                ? "All articles are currently in draft or preparation. Please check back later!"
-                : "Semua artikel saat ini masih dalam tahap draft atau penulisan. Silakan periksa kembali nanti!")
+                ? "Our engineering team is preparing deep-dive whitepapers and architecture teardowns. Please check back shortly!"
+                : "Tim software engineer kami sedang menyusun dokumentasi arsitektur dan panduan teknis mendalam. Silakan kunjungi kembali nanti!")
+              : searchQuery.trim()
+              ? (language === "en"
+                ? "We couldn't find any architectural teardown matching this search. Try a different term or reset filters."
+                : "Tidak ditemukan ulasan atau panduan sistem yang cocok dengan kata kunci tersebut. Coba gunakan istilah lain atau reset filter.")
               : (language === "en"
-                ? "Try searching for a different keyword or category."
-                : "Coba cari dengan kata kunci atau kategori yang berbeda.")}
+                ? `Articles under "${selectedCategory}" are currently in drafting. Explore our other engineering disciplines below.`
+                : `Pembahasan seputar topik "${selectedCategory}" sedang dalam tahap penulisan. Jelajahi disiplin rekayasa lainnya di bawah ini.`)}
           </p>
-        </div>
+
+          {/* Action Buttons (1 line labels) */}
+          <div className="flex flex-wrap items-center justify-center gap-3 mt-7">
+            {(searchQuery.trim() !== "" || selectedCategory !== "All") && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCategory("All");
+                  setCurrentPage(1);
+                }}
+                className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white text-xs sm:text-sm font-sans font-bold shadow-md shadow-[#2C5098]/20 hover:scale-[1.02] active:scale-95 transition-all cursor-pointer whitespace-nowrap"
+              >
+                <RotateCcw className="w-3.5 h-3.5 shrink-0" />
+                <span>{language === "en" ? "Reset Filters" : "Reset Pencarian & Filter"}</span>
+              </button>
+            )}
+
+            <Link
+              href="/#contact-section"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-sans font-bold border border-slate-200 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer whitespace-nowrap"
+            >
+              <HelpCircle className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
+              <span>{language === "en" ? "Request a Topic" : "Request Topik Rekayasa"}</span>
+            </Link>
+          </div>
+
+          {/* Quick Category Suggestions */}
+          {categories.length > 0 && (
+            <div className="mt-8 pt-6 border-t border-slate-100">
+              <p className="text-[11px] font-mono text-slate-400 uppercase tracking-wider mb-2.5">
+                {language === "en" ? "Or explore other disciplines:" : "Atau jelajahi topik rekayasa lainnya:"}
+              </p>
+              <div className="flex flex-wrap items-center justify-center gap-1.5">
+                {categories.filter(c => c !== selectedCategory && c !== "All").map((cat) => (
+                  <button
+                    key={cat}
+                    type="button"
+                    onClick={() => {
+                      setSelectedCategory(cat);
+                      setSearchQuery("");
+                      setCurrentPage(1);
+                    }}
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-sans font-semibold bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-[#2C5098] border border-slate-200/80 hover:border-[#2C5098]/30 transition-colors cursor-pointer"
+                  >
+                    <span>{cat}</span>
+                    <ArrowRight className="w-3 h-3 opacity-50" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </motion.div>
       ) : (
         <div className="space-y-10">
           {/* Featured Lead Story (shown on default view: All category & no search query) */}

@@ -8,7 +8,7 @@ import {
   Clock, Calendar, Tag, BookOpen, AlertCircle, Sparkles, Loader2,
   FileText, Star, Layers, X
 } from 'lucide-react';
-import { Toast, ConfirmModal } from '@/components/ui';
+import { Toast, ConfirmModal, Checkbox } from '@/components/ui';
 
 interface SeriesItem {
   id: string;
@@ -267,6 +267,103 @@ export function InsightsManagementView() {
   const publishedCount = insights.filter((i) => i.isPublished).length;
   const draftCount = totalCount - publishedCount;
 
+  // Multiple Selection & Bulk Status Update
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [isUpdatingStatus, setIsUpdatingStatus] = useState(false);
+
+  // Clear selections when filter or search changes
+  useEffect(() => {
+    setSelectedIds([]);
+  }, [searchTerm, selectedCategory, statusFilter]);
+
+  const isAllSelected =
+    filteredInsights.length > 0 &&
+    filteredInsights.every((item) => selectedIds.includes(item.id));
+
+  const isSomeSelected =
+    filteredInsights.some((item) => selectedIds.includes(item.id)) && !isAllSelected;
+
+  const toggleSelectAll = () => {
+    if (isAllSelected) {
+      const filteredIds = new Set(filteredInsights.map((i) => i.id));
+      setSelectedIds((prev) => prev.filter((id) => !filteredIds.has(id)));
+    } else {
+      const filteredIds = filteredInsights.map((i) => i.id);
+      setSelectedIds((prev) => Array.from(new Set([...prev, ...filteredIds])));
+    }
+  };
+
+  const toggleSelectOne = (id: string) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkStatusChange = async (targetPublishStatus: boolean) => {
+    if (selectedIds.length === 0) return;
+
+    setIsUpdatingStatus(true);
+    try {
+      const res = await fetch('/api/admin/insights/bulk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ids: selectedIds,
+          isPublished: targetPublishStatus,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        setToast({
+          message: data.message || `Status ${selectedIds.length} artikel berhasil diubah!`,
+          type: 'success',
+        });
+        setSelectedIds([]);
+        fetchInsights();
+      } else {
+        setToast({
+          message: data.error || 'Gagal mengubah status artikel',
+          type: 'error',
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      setToast({
+        message: 'Terjadi kesalahan saat memproses perubahan status massal',
+        type: 'error',
+      });
+    } finally {
+      setIsUpdatingStatus(false);
+    }
+  };
+
+  const handleSingleStatusToggle = async (item: InsightItem) => {
+    try {
+      const res = await fetch(`/api/admin/insights/${item.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          isPublished: !item.isPublished,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setToast({
+          message: `Status artikel diubah menjadi ${!item.isPublished ? 'Published' : 'Draft'}`,
+          type: 'success',
+        });
+        fetchInsights();
+      }
+    } catch (err) {
+      console.error(err);
+      setToast({
+        message: 'Gagal mengubah status artikel',
+        type: 'error',
+      });
+    }
+  };
+
   return (
     <div className="space-y-6 pb-12 text-slate-800">
       {/* 1. Header & Metrics Bar */}
@@ -377,23 +474,128 @@ export function InsightsManagementView() {
 
       {/* 4. Articles Table / List */}
       <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
+        {/* Bulk Action Toolbar */}
+        {selectedIds.length > 0 && (
+          <div className="bg-gradient-to-r from-blue-50 via-indigo-50/60 to-blue-50 border-b border-blue-100 px-6 py-3 flex flex-wrap items-center justify-between gap-3 animate-in fade-in duration-200">
+            <div className="flex items-center gap-3">
+              <span className="inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-mono font-bold bg-blue-600 text-white shadow-xs">
+                {selectedIds.length} artikel dipilih
+              </span>
+              <span className="text-xs text-slate-600 font-medium hidden sm:inline">
+                Pilih tindakan status massal:
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2">
+              {/* Button: Ubah ke Draft (Main Request) */}
+              <button
+                type="button"
+                onClick={() => handleBulkStatusChange(false)}
+                disabled={isUpdatingStatus}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-amber-500 hover:bg-amber-600 active:bg-amber-700 text-white shadow-sm transition-all disabled:opacity-50 cursor-pointer"
+                title="Ubah semua artikel terpilih menjadi Draft"
+              >
+                {isUpdatingStatus ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <FileText className="w-3.5 h-3.5" />
+                )}
+                <span>Ubah Jadi Draft</span>
+              </button>
+
+              {/* Button: Publikasikan */}
+              <button
+                type="button"
+                onClick={() => handleBulkStatusChange(true)}
+                disabled={isUpdatingStatus}
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white shadow-sm transition-all disabled:opacity-50 cursor-pointer"
+                title="Publikasikan semua artikel terpilih"
+              >
+                {isUpdatingStatus ? (
+                  <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                ) : (
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                )}
+                <span>Publikasikan</span>
+              </button>
+
+              {/* Button: Batal Pilih */}
+              <button
+                type="button"
+                onClick={() => setSelectedIds([])}
+                className="inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-semibold text-slate-500 hover:text-slate-800 hover:bg-white/80 transition-all cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+                <span>Batal</span>
+              </button>
+            </div>
+          </div>
+        )}
+
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-20 space-y-3">
             <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
             <span className="text-xs font-bold text-slate-500 font-mono">Memuat artikel...</span>
           </div>
         ) : filteredInsights.length === 0 ? (
-          <div className="text-center py-16 px-4 space-y-3">
-            <BookOpen className="w-12 h-12 text-slate-300 mx-auto" />
-            <p className="text-sm font-bold text-slate-700">Belum ada artikel yang sesuai</p>
-            <p className="text-xs text-slate-400">Klik tombol "Tulis Artikel Baru" di atas untuk mulai membuat tulisan di halaman editor.</p>
+          <div className="text-center py-16 px-6 max-w-lg mx-auto space-y-4">
+            <div className="relative w-16 h-16 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto text-blue-600 shadow-sm">
+              <BookOpen className="w-8 h-8 text-blue-600" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="text-base font-bold text-slate-800">
+                {insights.length === 0
+                  ? "Database Artikel Masih Kosong"
+                  : "Tidak Ada Artikel yang Cocok"}
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                {insights.length === 0
+                  ? "Belum ada artikel insight yang dibuat di sistem. Mulai tulis artikel perdana Anda sekarang."
+                  : "Tidak ditemukan artikel dengan kombinasi pencarian, status, atau kategori yang dipilih saat ini."}
+              </p>
+            </div>
+
+            <div className="flex items-center justify-center gap-2 pt-2">
+              {(searchTerm.trim() !== "" || selectedCategory !== "ALL" || statusFilter !== "ALL") && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchTerm("");
+                    setSelectedCategory("ALL");
+                    setStatusFilter("ALL");
+                  }}
+                  className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-all cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  <span>Reset Filter</span>
+                </button>
+              )}
+              <Link
+                href="/portal/insights/new"
+                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white shadow-xs transition-all cursor-pointer"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Tulis Artikel Baru</span>
+              </Link>
+            </div>
           </div>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-slate-50/80 border-b border-slate-100 text-[11px] font-mono uppercase tracking-wider text-slate-500 font-bold">
-                  <th className="py-3.5 px-6">Artikel</th>
+                  <th className="py-3.5 pl-6 pr-2 w-12 text-center">
+                    <div className="flex items-center justify-center">
+                      <Checkbox
+                        checked={isAllSelected}
+                        indeterminate={isSomeSelected}
+                        onChange={toggleSelectAll}
+                        title={isAllSelected ? "Batal pilih semua" : "Pilih semua artikel"}
+                        aria-label="Pilih semua artikel"
+                      />
+                    </div>
+                  </th>
+                  <th className="py-3.5 px-4">Artikel</th>
                   <th className="py-3.5 px-4">Kategori</th>
                   <th className="py-3.5 px-4">Status</th>
                   <th className="py-3.5 px-4">Waktu Baca</th>
@@ -402,62 +604,88 @@ export function InsightsManagementView() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-sm">
-                {filteredInsights.map((item) => (
-                  <tr key={item.id} className="hover:bg-slate-50/60 transition-colors">
-                    {/* Artikel & Cover */}
-                    <td className="py-4 px-6">
-                      <div className="flex items-center gap-3.5 max-w-md">
-                        <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-slate-200/80">
-                          <Image
-                            src={item.coverImage}
-                            alt={item.titleId}
-                            fill
-                            className="object-cover"
+                {filteredInsights.map((item) => {
+                  const isSelected = selectedIds.includes(item.id);
+                  return (
+                    <tr
+                      key={item.id}
+                      className={`hover:bg-slate-50/60 transition-colors ${
+                        isSelected ? 'bg-blue-50/40' : ''
+                      }`}
+                    >
+                      {/* Checkbox */}
+                      <td className="py-4 pl-6 pr-2 w-12 text-center">
+                        <div className="flex items-center justify-center">
+                          <Checkbox
+                            checked={isSelected}
+                            onChange={() => toggleSelectOne(item.id)}
+                            title={isSelected ? "Batal pilih artikel ini" : "Pilih artikel ini"}
+                            aria-label={`Pilih artikel ${item.titleId}`}
                           />
                         </div>
-                        <div className="min-w-0">
-                          <Link
-                            href={`/portal/insights/${item.id}/edit`}
-                            className="font-bold text-slate-900 line-clamp-1 hover:text-blue-600 transition-colors"
-                          >
-                            {item.titleId}
-                          </Link>
-                          <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                            <span className="text-xs text-slate-400 font-mono truncate">
-                              /insights/{item.slug}
-                            </span>
-                            {item.series && (
-                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200/60">
-                                <Layers className="w-2.5 h-2.5 text-blue-600" />
-                                Seri: {item.series.titleId} · Part {item.seriesPart || 1}
+                      </td>
+
+                      {/* Artikel & Cover */}
+                      <td className="py-4 px-4">
+                        <div className="flex items-center gap-3.5 max-w-md">
+                          <div className="relative w-14 h-14 rounded-xl overflow-hidden bg-slate-100 shrink-0 border border-slate-200/80">
+                            <Image
+                              src={item.coverImage}
+                              alt={item.titleId}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <div className="min-w-0">
+                            <Link
+                              href={`/portal/insights/${item.id}/edit`}
+                              className="font-bold text-slate-900 line-clamp-1 hover:text-blue-600 transition-colors"
+                            >
+                              {item.titleId}
+                            </Link>
+                            <div className="flex items-center gap-2 mt-0.5 flex-wrap">
+                              <span className="text-xs text-slate-400 font-mono truncate">
+                                /insights/{item.slug}
                               </span>
-                            )}
+                              {item.series && (
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-blue-50 text-blue-700 border border-blue-200/60">
+                                  <Layers className="w-2.5 h-2.5 text-blue-600" />
+                                  Seri: {item.series.titleId} · Part {item.seriesPart || 1}
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    {/* Kategori & Tags */}
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      <span className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-slate-100 text-slate-700 border border-slate-200">
-                        {item.category}
-                      </span>
-                    </td>
+                      {/* Kategori & Tags */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <span className="inline-flex px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase bg-slate-100 text-slate-700 border border-slate-200">
+                          {item.category}
+                        </span>
+                      </td>
 
-                    {/* Status */}
-                    <td className="py-4 px-4 whitespace-nowrap">
-                      {item.isPublished ? (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                          Published
-                        </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200/80">
-                          <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
-                          Draft
-                        </span>
-                      )}
-                    </td>
+                      {/* Status */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <button
+                          type="button"
+                          onClick={() => handleSingleStatusToggle(item)}
+                          title={`Klik untuk cepat ubah status ke ${item.isPublished ? 'Draft' : 'Published'}`}
+                          className="cursor-pointer transition-transform hover:scale-105 active:scale-95 text-left"
+                        >
+                          {item.isPublished ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80 hover:bg-emerald-100/80 transition-colors">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                              Published
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200/80 hover:bg-amber-100/80 transition-colors">
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                              Draft
+                            </span>
+                          )}
+                        </button>
+                      </td>
 
                     {/* Waktu Baca */}
                     <td className="py-4 px-4 whitespace-nowrap text-xs text-slate-500">
@@ -504,7 +732,8 @@ export function InsightsManagementView() {
                       </div>
                     </td>
                   </tr>
-                ))}
+                );
+              })}
               </tbody>
             </table>
           </div>
