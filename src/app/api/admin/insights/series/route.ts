@@ -100,10 +100,10 @@ export async function POST(req: Request) {
     const newSeries = await prisma.insightSeries.create({
       data: {
         slug,
-        titleId,
-        titleEn: titleEn || null,
-        descriptionId,
-        descriptionEn: descriptionEn || null,
+        titleId: titleId.trim(),
+        titleEn: titleEn ? String(titleEn).trim() : null,
+        descriptionId: descriptionId.trim(),
+        descriptionEn: descriptionEn ? String(descriptionEn).trim() : null,
         coverImage: coverImage?.trim() || '/images/insights/client_portal_cover.jpg',
         category: formatCategories(category),
         badge: badge || 'ENGINEERING SERIES',

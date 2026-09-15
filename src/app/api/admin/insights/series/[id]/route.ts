@@ -117,9 +117,9 @@ export async function PUT(
       data: {
         slug,
         titleId: titleId ?? existing.titleId,
-        titleEn: titleEn !== undefined ? titleEn : existing.titleEn,
+        titleEn: titleEn !== undefined ? (typeof titleEn === 'string' && titleEn.trim() ? titleEn.trim() : null) : existing.titleEn,
         descriptionId: descriptionId ?? existing.descriptionId,
-        descriptionEn: descriptionEn !== undefined ? descriptionEn : existing.descriptionEn,
+        descriptionEn: descriptionEn !== undefined ? (typeof descriptionEn === 'string' && descriptionEn.trim() ? descriptionEn.trim() : null) : existing.descriptionEn,
         coverImage: coverImage !== undefined ? coverImage : existing.coverImage,
         category: category !== undefined ? formatCategories(category) : existing.category,
         badge: badge ?? existing.badge,

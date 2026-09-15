@@ -339,7 +339,7 @@ export function InsightArticleViewer({
                 )}
               </span>
               <span className="font-semibold text-slate-700 group-hover:text-[#2C5098] flex items-center gap-1">
-                {language === 'en' ? series.titleEn : series.titleId}
+                {language === 'en' ? (series.titleEn || series.titleId) : series.titleId}
                 <ChevronRight className="w-3.5 h-3.5 text-[#2C5098]/60 group-hover:translate-x-0.5 transition-transform" />
               </span>
             </Link>
@@ -453,10 +453,10 @@ export function InsightArticleViewer({
                 <span>{language === 'en' ? 'Curriculum Track / Series' : 'Silabus Seri Rekayasa'}</span>
               </div>
               <h3 className="text-base sm:text-lg font-sans font-extrabold text-slate-900 mt-1">
-                {language === 'en' ? series.titleEn : series.titleId}
+                {language === 'en' ? (series.titleEn || series.titleId) : series.titleId}
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 font-sans mt-0.5">
-                {language === 'en' ? series.descriptionEn : series.descriptionId}
+                {language === 'en' ? (series.descriptionEn || series.descriptionId) : series.descriptionId}
               </p>
             </div>
             <Link
@@ -578,7 +578,7 @@ export function InsightArticleViewer({
                     {language === 'en' ? `PREVIOUS PART · ${series.prevPart.part}` : `PART SEBELUMNYA · ${series.prevPart.part}`}
                   </span>
                   <span className="mt-1.5 text-sm font-sans font-bold text-slate-800 group-hover:text-[#2C5098] line-clamp-2">
-                    {language === 'en' ? series.prevPart.titleEn : series.prevPart.titleId}
+                    {language === 'en' ? (series.prevPart.titleEn || series.prevPart.titleId) : series.prevPart.titleId}
                   </span>
                 </Link>
               ) : (
@@ -595,7 +595,7 @@ export function InsightArticleViewer({
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </span>
                   <span className="mt-1.5 text-sm font-sans font-bold text-slate-800 group-hover:text-[#2C5098] line-clamp-2">
-                    {language === 'en' ? series.nextPart.titleEn : series.nextPart.titleId}
+                    {language === 'en' ? (series.nextPart.titleEn || series.nextPart.titleId) : series.nextPart.titleId}
                   </span>
                 </Link>
               ) : (

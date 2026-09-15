@@ -932,6 +932,11 @@ export function InsightsManagementView() {
                             <div className="min-w-0 space-y-1">
                               <div className="flex items-center gap-2 flex-wrap">
                                 <h4 className="font-bold text-sm text-slate-900 truncate">{s.titleId}</h4>
+                                {s.titleEn && (
+                                  <span className="text-xs text-slate-500 font-sans italic truncate">
+                                    / {s.titleEn}
+                                  </span>
+                                )}
                                 <div className="flex items-center gap-1.5 flex-wrap">
                                   {s.category.split(',').map((cat) => cat.trim()).filter(Boolean).map((cat) => (
                                     <span key={cat} className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-bold">
@@ -940,7 +945,10 @@ export function InsightsManagementView() {
                                   ))}
                                 </div>
                               </div>
-                              <p className="text-xs text-slate-500 line-clamp-1">{s.descriptionId}</p>
+                              <p className="text-xs text-slate-500 line-clamp-1">
+                                {s.descriptionId}
+                                {s.descriptionEn ? ` • [EN: ${s.descriptionEn}]` : ''}
+                              </p>
                               <span className="text-[11px] font-mono text-slate-400 block">
                                 {s.insights?.length || 0} artikel terhubung · slug: <code>{s.slug}</code>
                               </span>

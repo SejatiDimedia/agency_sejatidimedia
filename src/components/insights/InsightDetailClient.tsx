@@ -445,7 +445,7 @@ export default function InsightDetailClient({
                   )}
                 </span>
                 <span className="font-semibold text-slate-700 group-hover:text-[#2C5098] flex items-center gap-1">
-                  {language === "en" ? article.series.titleEn : article.series.titleId}
+                  {language === "en" ? (article.series.titleEn || article.series.titleId) : article.series.titleId}
                   <ChevronRight className="w-3.5 h-3.5 text-[#2C5098]/60 group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </Link>
@@ -559,10 +559,10 @@ export default function InsightDetailClient({
                   <span>{language === "en" ? "Curriculum Track / Series" : "Silabus Seri Rekayasa"}</span>
                 </div>
                 <h3 className="text-base sm:text-lg font-sans font-extrabold text-slate-900 mt-1">
-                  {language === "en" ? article.series.titleEn : article.series.titleId}
+                  {language === "en" ? (article.series.titleEn || article.series.titleId) : article.series.titleId}
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 font-sans mt-0.5">
-                  {language === "en" ? article.series.descriptionEn : article.series.descriptionId}
+                  {language === "en" ? (article.series.descriptionEn || article.series.descriptionId) : article.series.descriptionId}
                 </p>
               </div>
               <Link
@@ -680,7 +680,7 @@ export default function InsightDetailClient({
                       {language === "en" ? `PREVIOUS PART · ${article.series.prevPart.part}` : `PART SEBELUMNYA · ${article.series.prevPart.part}`}
                     </span>
                     <span className="mt-1.5 text-sm font-sans font-bold text-slate-800 group-hover:text-[#2C5098] line-clamp-2">
-                      {language === "en" ? article.series.prevPart.titleEn : article.series.prevPart.titleId}
+                      {language === "en" ? (article.series.prevPart.titleEn || article.series.prevPart.titleId) : article.series.prevPart.titleId}
                     </span>
                   </Link>
                 ) : (
@@ -697,7 +697,7 @@ export default function InsightDetailClient({
                       <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                     </span>
                     <span className="mt-1.5 text-sm font-sans font-bold text-slate-800 group-hover:text-[#2C5098] line-clamp-2">
-                      {language === "en" ? article.series.nextPart.titleEn : article.series.nextPart.titleId}
+                      {language === "en" ? (article.series.nextPart.titleEn || article.series.nextPart.titleId) : article.series.nextPart.titleId}
                     </span>
                   </Link>
                 ) : (

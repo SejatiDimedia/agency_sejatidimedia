@@ -36,7 +36,7 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
   const [isFullScreenPreviewOpen, setIsFullScreenPreviewOpen] = useState(false);
 
   // Series List
-  const [availableSeries, setAvailableSeries] = useState<Array<{ id: string; titleId: string; slug: string; category: string; badge?: string }>>([]);
+  const [availableSeries, setAvailableSeries] = useState<Array<{ id: string; titleId: string; titleEn?: string | null; slug: string; category: string; badge?: string }>>([]);
 
   // Cover Image Type: 'link' vs 'upload'
   const [coverImageType, setCoverImageType] = useState<'link' | 'upload'>(
@@ -890,7 +890,7 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
                       <option value="">— Bukan Bagian Seri (Artikel Mandiri) —</option>
                       {availableSeries.map((ser) => (
                         <option key={ser.id} value={ser.id}>
-                          {ser.titleId} ({ser.category})
+                          {ser.titleId}{ser.titleEn ? ` / ${ser.titleEn}` : ''} ({ser.category})
                         </option>
                       ))}
                     </select>
