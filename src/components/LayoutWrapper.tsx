@@ -286,7 +286,7 @@ export default function LayoutWrapper({
                 onClick={() => handleNavClick("home")}
                 id="logo-header-trigger"
               >
-                <div className="h-6 sm:h-7.5 w-auto hover:opacity-90 transition-opacity duration-200 flex items-center shrink-0">
+                <div className="h-7 sm:h-8 w-auto hover:opacity-90 transition-opacity duration-200 flex items-center shrink-0">
                   <Image
                     src="/SejatiDimedia_Logo.svg"
                     alt="SejatiDimedia Logo"
@@ -386,14 +386,19 @@ export default function LayoutWrapper({
             <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-16">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
                 <div className="md:col-span-7 space-y-6 text-left">
-                  <div className="h-6 sm:h-7.5 w-auto flex items-center justify-start">
-                    <Image
-                      src="/SejatiDimedia_Logo.svg"
-                      alt="SejatiDimedia Logo"
-                      width={173}
-                      height={34}
-                      className="h-full w-auto object-contain"
-                    />
+                  <div
+                    className="flex items-center cursor-pointer select-none shrink-0"
+                    onClick={() => handleNavClick("home")}
+                  >
+                    <div className="h-7 sm:h-8 w-auto hover:opacity-90 transition-opacity duration-200 flex items-center shrink-0">
+                      <Image
+                        src="/SejatiDimedia_Logo.svg"
+                        alt="SejatiDimedia Logo"
+                        width={173}
+                        height={34}
+                        className="h-full w-auto object-contain"
+                      />
+                    </div>
                   </div>
                   <p className="text-sm sm:text-base font-sans text-theme-fore-muted max-w-md leading-relaxed">
                     {t.footer.tagline}
@@ -683,7 +688,7 @@ export default function LayoutWrapper({
                   onClick={() => handleNavClick("home")}
                   id="logo-header-trigger"
                 >
-                  <div className="h-6 sm:h-7.5 w-auto hover:opacity-90 transition-opacity duration-200 flex items-center shrink-0">
+                  <div className="h-7 sm:h-8 w-auto hover:opacity-90 transition-opacity duration-200 flex items-center shrink-0">
                     <Image
                       src="/SejatiDimedia_Logo.svg"
                       alt="SejatiDimedia Logo"
@@ -802,14 +807,19 @@ export default function LayoutWrapper({
             <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-16">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
                 <div className="md:col-span-7 space-y-6 text-left">
-                  <div className="h-6 sm:h-7.5 w-auto flex items-center justify-start">
-                    <Image
-                      src="/SejatiDimedia_Logo.svg"
-                      alt="SejatiDimedia Logo"
-                      width={173}
-                      height={34}
-                      className="h-full w-auto object-contain"
-                    />
+                  <div
+                    className="flex items-center cursor-pointer select-none shrink-0"
+                    onClick={() => handleNavClick("home")}
+                  >
+                    <div className="h-7 sm:h-8 w-auto hover:opacity-90 transition-opacity duration-200 flex items-center shrink-0">
+                      <Image
+                        src="/SejatiDimedia_Logo.svg"
+                        alt="SejatiDimedia Logo"
+                        width={173}
+                        height={34}
+                        className="h-full w-auto object-contain"
+                      />
+                    </div>
                   </div>
                   <p className="text-sm sm:text-base font-sans text-slate-600 max-w-md leading-relaxed">
                     {t.footer.tagline}

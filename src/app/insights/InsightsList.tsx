@@ -167,8 +167,8 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
             {articles.length === 0
               ? (language === "en" ? "Articles Are Under Engineering Curation" : "Katalog Artikel Sedang Disiapkan")
               : searchQuery.trim()
-              ? (language === "en" ? `No Articles Found for "${searchQuery}"` : `Tidak Ada Artikel untuk "${searchQuery}"`)
-              : (language === "en" ? `No Articles in "${selectedCategory}" Yet` : `Belum Ada Artikel di Kategori ${selectedCategory}`)}
+                ? (language === "en" ? `No Articles Found for "${searchQuery}"` : `Tidak Ada Artikel untuk "${searchQuery}"`)
+                : (language === "en" ? `No Articles in "${selectedCategory}" Yet` : `Belum Ada Artikel di Kategori ${selectedCategory}`)}
           </h3>
 
           <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto leading-relaxed mt-2 font-sans">
@@ -177,12 +177,12 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
                 ? "Our engineering team is preparing deep-dive whitepapers and architecture teardowns. Please check back shortly!"
                 : "Tim software engineer kami sedang menyusun dokumentasi arsitektur dan panduan teknis mendalam. Silakan kunjungi kembali nanti!")
               : searchQuery.trim()
-              ? (language === "en"
-                ? "We couldn't find any architectural teardown matching this search. Try a different term or reset filters."
-                : "Tidak ditemukan ulasan atau panduan sistem yang cocok dengan kata kunci tersebut. Coba gunakan istilah lain atau reset filter.")
-              : (language === "en"
-                ? `Articles under "${selectedCategory}" are currently in drafting. Explore our other engineering disciplines below.`
-                : `Pembahasan seputar topik "${selectedCategory}" sedang dalam tahap penulisan. Jelajahi disiplin rekayasa lainnya di bawah ini.`)}
+                ? (language === "en"
+                  ? "We couldn't find any architectural teardown matching this search. Try a different term or reset filters."
+                  : "Tidak ditemukan ulasan atau panduan sistem yang cocok dengan kata kunci tersebut. Coba gunakan istilah lain atau reset filter.")
+                : (language === "en"
+                  ? `Articles under "${selectedCategory}" are currently in drafting. Explore our other engineering disciplines below.`
+                  : `Pembahasan seputar topik "${selectedCategory}" sedang dalam tahap penulisan. Jelajahi disiplin rekayasa lainnya di bawah ini.`)}
           </p>
 
           {/* Action Buttons (1 line labels) */}
@@ -201,14 +201,6 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
                 <span>{language === "en" ? "Reset Filters" : "Reset Pencarian & Filter"}</span>
               </button>
             )}
-
-            <Link
-              href="/#contact-section"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-2xl bg-slate-50 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-sans font-bold border border-slate-200 transition-all hover:scale-[1.02] active:scale-95 cursor-pointer whitespace-nowrap"
-            >
-              <HelpCircle className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
-              <span>{language === "en" ? "Request a Topic" : "Request Topik Rekayasa"}</span>
-            </Link>
           </div>
 
           {/* Quick Category Suggestions */}
@@ -629,11 +621,10 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
                   type="button"
                   onClick={() => handlePageChange(activePage - 1)}
                   disabled={activePage === 1}
-                  className={`inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-sans font-bold border transition-all ${
-                    activePage === 1
-                      ? "bg-slate-50 border-slate-200/60 text-slate-300 cursor-not-allowed"
-                      : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 shadow-2xs cursor-pointer"
-                  }`}
+                  className={`inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-sans font-bold border transition-all ${activePage === 1
+                    ? "bg-slate-50 border-slate-200/60 text-slate-300 cursor-not-allowed"
+                    : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 shadow-2xs cursor-pointer"
+                    }`}
                   aria-label="Previous Page"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -648,11 +639,10 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
                       key={pageNum}
                       type="button"
                       onClick={() => handlePageChange(pageNum)}
-                      className={`w-9 h-9 rounded-xl text-xs font-sans font-bold transition-all duration-200 cursor-pointer ${
-                        isActive
-                          ? "bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-md shadow-[#2C5098]/20 border border-transparent"
-                          : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 shadow-2xs"
-                      }`}
+                      className={`w-9 h-9 rounded-xl text-xs font-sans font-bold transition-all duration-200 cursor-pointer ${isActive
+                        ? "bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-md shadow-[#2C5098]/20 border border-transparent"
+                        : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 hover:text-slate-900 shadow-2xs"
+                        }`}
                     >
                       {pageNum}
                     </button>
@@ -664,11 +654,10 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
                   type="button"
                   onClick={() => handlePageChange(activePage + 1)}
                   disabled={activePage === totalPages}
-                  className={`inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-sans font-bold border transition-all ${
-                    activePage === totalPages
-                      ? "bg-slate-50 border-slate-200/60 text-slate-300 cursor-not-allowed"
-                      : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 shadow-2xs cursor-pointer"
-                  }`}
+                  className={`inline-flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-sans font-bold border transition-all ${activePage === totalPages
+                    ? "bg-slate-50 border-slate-200/60 text-slate-300 cursor-not-allowed"
+                    : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50 hover:border-slate-300 shadow-2xs cursor-pointer"
+                    }`}
                   aria-label="Next Page"
                 >
                   <span className="hidden sm:inline">{language === "en" ? "Next" : "Selanjutnya"}</span>
