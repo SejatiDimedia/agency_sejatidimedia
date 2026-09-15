@@ -49,6 +49,17 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
     return seriesList.filter((s) => s.totalArticles > 0);
   }, [seriesList]);
 
+  const displayedSeriesList = useMemo(() => {
+    if (searchQuery.trim()) return [];
+    if (selectedCategory === "All") return validSeriesList;
+    return validSeriesList.filter((s) =>
+      s.category
+        .split(',')
+        .map((c) => c.trim().toLowerCase())
+        .includes(selectedCategory.toLowerCase())
+    );
+  }, [validSeriesList, selectedCategory, searchQuery]);
+
   // Standard display count: 6 items per page for clean 3-column grid alignment
   const ITEMS_PER_PAGE = 6;
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -60,12 +71,10 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
 
   const isDefaultView = selectedCategory === "All" && !searchQuery.trim();
 
-  // In default view, the 1st article is showcased in the Featured Lead Story Card,
-  // so the archive grid presents the remaining articles.
-  // In filtered / search view, all matching articles are displayed in the grid.
+  // All matching articles are displayed in the archive grid, ensuring no parts are omitted.
   const archiveArticles = useMemo(() => {
-    return isDefaultView ? filteredArticles.slice(1) : filteredArticles;
-  }, [filteredArticles, isDefaultView]);
+    return filteredArticles;
+  }, [filteredArticles]);
 
   const totalPages = Math.max(1, Math.ceil(archiveArticles.length / ITEMS_PER_PAGE));
   const activePage = Math.min(currentPage, totalPages);
@@ -371,7 +380,7 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
           )}
 
           {/* Series Showcase Shelf: Engineering Curriculum Tracks (Card Silabus - NO top border) */}
-          {selectedCategory === "All" && !searchQuery.trim() && validSeriesList && validSeriesList.length > 0 && (
+          {displayedSeriesList && displayedSeriesList.length > 0 && (
             <section className="pt-2 pb-6 my-4">
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 pb-4 border-b border-slate-200/80">
                 <div>
@@ -400,12 +409,12 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
 
                 <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-medium text-slate-600 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/80 shrink-0 self-start sm:self-end shadow-2xs">
                   <BookOpen className="w-3 h-3 text-[#2C5098]" />
-                  {validSeriesList.length} {language === "en" ? (validSeriesList.length > 1 ? "Playbooks" : "Playbook") : "Seri"}
+                  {displayedSeriesList.length} {language === "en" ? (displayedSeriesList.length > 1 ? "Playbooks" : "Playbook") : "Seri"}
                 </span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {validSeriesList.map((series) => {
+                {displayedSeriesList.map((series) => {
                   const sTitle = (language === "en" ? (series.titleEn || series.titleId) : series.titleId) || "";
                   const sDesc = (language === "en" ? (series.descriptionEn || series.descriptionId) : series.descriptionId) || "";
 
@@ -449,8 +458,19 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
 
                       <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
                         <div className="space-y-2">
-                          <div className="text-[10px] font-sans font-bold text-[#2C5098] uppercase tracking-wider">
-                            {series.category}
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            {series.category
+                              .split(',')
+                              .map((cat) => cat.trim())
+                              .filter(Boolean)
+                              .map((cat) => (
+                                <span
+                                  key={cat}
+                                  className="text-[10px] font-sans font-bold text-[#2C5098] bg-blue-50/80 px-2 py-0.5 rounded-md uppercase tracking-wider border border-blue-200/50"
+                                >
+                                  {cat}
+                                </span>
+                              ))}
                           </div>
                           <h4 className="text-base sm:text-lg font-sans font-extrabold text-slate-900 group-hover:text-[#2C5098] transition-colors leading-snug line-clamp-2">
                             {sTitle}
@@ -476,7 +496,7 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
 
           {/* Section Divider when Featured Card is shown */}
           <div id="insights-archive-section" className="scroll-mt-24">
-            {selectedCategory === "All" && !searchQuery.trim() && filteredArticles.length > 1 && (
+            {selectedCategory === "All" && !searchQuery.trim() && filteredArticles.length > 0 && (
               <div className="flex items-center gap-3 pt-4 pb-1">
                 <span className="text-[10px] font-sans uppercase tracking-[0.25em] font-bold text-slate-400">
                   {language === "en" ? "ARCHIVE & ALL ARTICLES" : "ARSIP SEMUA ARTIKEL"}

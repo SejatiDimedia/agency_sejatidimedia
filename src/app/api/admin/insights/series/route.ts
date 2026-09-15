@@ -12,6 +12,18 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
+function formatCategories(input: unknown): string {
+  if (Array.isArray(input)) {
+    const list = input.map((c) => String(c).trim()).filter(Boolean);
+    return list.length > 0 ? list.join(', ') : 'Backend';
+  }
+  if (typeof input === 'string') {
+    const list = input.split(',').map((c) => c.trim()).filter(Boolean);
+    return list.length > 0 ? list.join(', ') : 'Backend';
+  }
+  return 'Backend';
+}
+
 export async function GET() {
   try {
     const session = await getSession();
@@ -93,7 +105,7 @@ export async function POST(req: Request) {
         descriptionId,
         descriptionEn: descriptionEn || null,
         coverImage: coverImage?.trim() || '/images/insights/client_portal_cover.jpg',
-        category,
+        category: formatCategories(category),
         badge: badge || 'ENGINEERING SERIES',
         order: Number(order) || 0,
         isPublished: Boolean(isPublished),

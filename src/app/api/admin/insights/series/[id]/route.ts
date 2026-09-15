@@ -12,6 +12,18 @@ function slugify(text: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
+function formatCategories(input: unknown): string {
+  if (Array.isArray(input)) {
+    const list = input.map((c) => String(c).trim()).filter(Boolean);
+    return list.length > 0 ? list.join(', ') : 'Backend';
+  }
+  if (typeof input === 'string') {
+    const list = input.split(',').map((c) => c.trim()).filter(Boolean);
+    return list.length > 0 ? list.join(', ') : 'Backend';
+  }
+  return 'Backend';
+}
+
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
@@ -109,7 +121,7 @@ export async function PUT(
         descriptionId: descriptionId ?? existing.descriptionId,
         descriptionEn: descriptionEn !== undefined ? descriptionEn : existing.descriptionEn,
         coverImage: coverImage !== undefined ? coverImage : existing.coverImage,
-        category: category ?? existing.category,
+        category: category !== undefined ? formatCategories(category) : existing.category,
         badge: badge ?? existing.badge,
         order: order !== undefined ? Number(order) : existing.order,
         isPublished: isPublished !== undefined ? Boolean(isPublished) : existing.isPublished,

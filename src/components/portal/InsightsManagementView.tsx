@@ -6,7 +6,7 @@ import Image from 'next/image';
 import {
   Plus, Search, Edit2, Trash2, ExternalLink, Eye, CheckCircle2,
   Clock, Calendar, Tag, BookOpen, AlertCircle, Sparkles, Loader2,
-  FileText, Star, Layers, X, UploadCloud, Image as ImageIcon, Link2
+  FileText, Star, Layers, X, UploadCloud, Image as ImageIcon, Link2, Check
 } from 'lucide-react';
 import { Toast, ConfirmModal, Checkbox } from '@/components/ui';
 
@@ -85,6 +85,67 @@ export function InsightsManagementView() {
     coverImage: '/images/insights/laravel_architecture_cover.jpg',
     isPublished: true,
   });
+
+  // Categories management (Multi-category & Custom category addition)
+  const [availableCategories, setAvailableCategories] = useState<string[]>(CATEGORIES);
+  const [newCategoryInput, setNewCategoryInput] = useState('');
+
+  // Synchronize available categories with existing series and articles
+  useEffect(() => {
+    const set = new Set<string>(CATEGORIES);
+    insights.forEach((i) => {
+      if (i.category) set.add(i.category.trim());
+    });
+    seriesList.forEach((s) => {
+      if (s.category) {
+        s.category.split(',').forEach((c) => {
+          const trimmed = c.trim();
+          if (trimmed) set.add(trimmed);
+        });
+      }
+    });
+    setAvailableCategories(Array.from(set));
+  }, [insights, seriesList]);
+
+  // Selected categories for the series being created/edited
+  const selectedSeriesCategories = React.useMemo(() => {
+    return seriesForm.category
+      ? seriesForm.category.split(',').map((c) => c.trim()).filter(Boolean)
+      : [];
+  }, [seriesForm.category]);
+
+  const handleToggleSeriesCategory = (cat: string) => {
+    let updated: string[];
+    if (selectedSeriesCategories.includes(cat)) {
+      if (selectedSeriesCategories.length <= 1) {
+        setToast({ message: 'Seri harus memiliki minimal 1 kategori', type: 'error' });
+        return;
+      }
+      updated = selectedSeriesCategories.filter((c) => c !== cat);
+    } else {
+      updated = [...selectedSeriesCategories, cat];
+    }
+    setSeriesForm((prev) => ({ ...prev, category: updated.join(', ') }));
+  };
+
+  const handleAddNewCategory = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const trimmed = newCategoryInput.trim();
+    if (!trimmed) return;
+    const formatted = trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+
+    if (!availableCategories.includes(formatted)) {
+      setAvailableCategories((prev) => [...prev, formatted]);
+    }
+
+    if (!selectedSeriesCategories.includes(formatted)) {
+      const updated = [...selectedSeriesCategories, formatted].join(', ');
+      setSeriesForm((prev) => ({ ...prev, category: updated }));
+    }
+
+    setNewCategoryInput('');
+    setToast({ message: `Kategori "${formatted}" berhasil ditambahkan & dipilih!`, type: 'success' });
+  };
 
   // Series Cover Upload State
   const [seriesCoverMode, setSeriesCoverMode] = useState<'upload' | 'link'>('upload');
@@ -871,9 +932,13 @@ export function InsightsManagementView() {
                             <div className="min-w-0 space-y-1">
                               <div className="flex items-center gap-2 flex-wrap">
                                 <h4 className="font-bold text-sm text-slate-900 truncate">{s.titleId}</h4>
-                                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-bold">
-                                  {s.category}
-                                </span>
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  {s.category.split(',').map((cat) => cat.trim()).filter(Boolean).map((cat) => (
+                                    <span key={cat} className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-bold">
+                                      {cat}
+                                    </span>
+                                  ))}
+                                </div>
                               </div>
                               <p className="text-xs text-slate-500 line-clamp-1">{s.descriptionId}</p>
                               <span className="text-[11px] font-mono text-slate-400 block">
@@ -920,33 +985,105 @@ export function InsightsManagementView() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1">
-                        Judul Seri (English)
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1">
+                      Judul Seri (English)
+                    </label>
+                    <input
+                      type="text"
+                      value={seriesForm.titleEn}
+                      onChange={(e) => setSeriesForm({ ...seriesForm, titleEn: e.target.value })}
+                      placeholder="Contoh: Enterprise Laravel Architecture"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                    />
+                  </div>
+
+                  {/* Multi-Category Selector & Custom Category Creation */}
+                  <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/60 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-mono font-bold uppercase text-slate-700">
+                        Kategori Seri <span className="text-blue-600 font-bold">({selectedSeriesCategories.length} Dipilih)</span>
                       </label>
-                      <input
-                        type="text"
-                        value={seriesForm.titleEn}
-                        onChange={(e) => setSeriesForm({ ...seriesForm, titleEn: e.target.value })}
-                        placeholder="Contoh: Enterprise Laravel Architecture"
-                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
-                      />
+                      <span className="text-[11px] text-slate-400">Bisa memilih lebih dari 1 kategori</span>
                     </div>
 
-                    <div>
-                      <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1">
-                        Kategori Seri
-                      </label>
-                      <select
-                        value={seriesForm.category}
-                        onChange={(e) => setSeriesForm({ ...seriesForm, category: e.target.value })}
-                        className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-bold bg-white"
-                      >
-                        {CATEGORIES.map((cat) => (
-                          <option key={cat} value={cat}>{cat}</option>
-                        ))}
-                      </select>
+                    {/* Selected Category Badges */}
+                    <div className="flex flex-wrap items-center gap-1.5 min-h-[38px] p-2 rounded-xl bg-white border border-slate-200 shadow-2xs">
+                      {selectedSeriesCategories.length === 0 ? (
+                        <span className="text-xs text-slate-400 italic px-1">Pilih minimal satu kategori di bawah</span>
+                      ) : (
+                        selectedSeriesCategories.map((cat) => (
+                          <span
+                            key={cat}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold font-sans bg-blue-600 text-white shadow-2xs animate-in fade-in zoom-in-95 duration-150"
+                          >
+                            <span>{cat}</span>
+                            <button
+                              type="button"
+                              onClick={() => handleToggleSeriesCategory(cat)}
+                              className="hover:bg-blue-700 rounded p-0.5 transition-colors cursor-pointer"
+                              title={`Hapus kategori ${cat}`}
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))
+                      )}
+                    </div>
+
+                    {/* Available Categories Toggle Buttons */}
+                    <div className="space-y-1.5">
+                      <span className="text-[10px] font-mono uppercase font-bold text-slate-400 block">
+                        Pilihan Kategori Tersedia:
+                      </span>
+                      <div className="flex flex-wrap items-center gap-1.5">
+                        {availableCategories.map((cat) => {
+                          const isSelected = selectedSeriesCategories.includes(cat);
+                          return (
+                            <button
+                              key={cat}
+                              type="button"
+                              onClick={() => handleToggleSeriesCategory(cat)}
+                              className={`px-3 py-1 rounded-lg text-xs font-bold font-sans transition-all cursor-pointer inline-flex items-center gap-1.5 ${
+                                isSelected
+                                  ? 'bg-blue-50 text-blue-700 border border-blue-300 shadow-2xs ring-1 ring-blue-400/40'
+                                  : 'bg-white hover:bg-slate-100 text-slate-600 border border-slate-200 hover:border-slate-300'
+                              }`}
+                            >
+                              <span>{cat}</span>
+                              {isSelected ? <Check className="w-3 h-3 text-blue-600" /> : <Plus className="w-3 h-3 text-slate-400" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Add Custom Category Input */}
+                    <div className="pt-2 border-t border-slate-200/80">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="text"
+                          value={newCategoryInput}
+                          onChange={(e) => setNewCategoryInput(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              handleAddNewCategory();
+                            }
+                          }}
+                          placeholder="Tambah kategori baru (misal: DevOps, AI, Mobile)..."
+                          className="flex-1 px-3.5 py-2 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-xs font-sans bg-white"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleAddNewCategory()}
+                          disabled={!newCategoryInput.trim()}
+                          className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 disabled:opacity-40 text-white text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5 shrink-0 shadow-2xs"
+                        >
+                          <Plus className="w-3.5 h-3.5" />
+                          <span>Tambah Kategori</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
 
@@ -1032,14 +1169,16 @@ export function InsightsManagementView() {
                           <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/25" />
 
                           {/* Live Preview Badges */}
-                          <div className="absolute top-3 left-3 flex items-center gap-1.5 z-10">
+                          <div className="absolute top-3 left-3 flex items-center gap-1.5 z-10 flex-wrap max-w-[90%]">
                             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 text-[#2C5098] backdrop-blur-md shadow-xs">
                               <Layers className="w-2.5 h-2.5 text-[#2C5098]" />
                               {seriesForm.badge || 'SERI'}
                             </span>
-                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-black/60 text-white/90 backdrop-blur-md">
-                              {seriesForm.category}
-                            </span>
+                            {selectedSeriesCategories.map((cat) => (
+                              <span key={cat} className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-black/60 text-white/90 backdrop-blur-md">
+                                {cat}
+                              </span>
+                            ))}
                           </div>
 
                           {/* Hover action overlay */}

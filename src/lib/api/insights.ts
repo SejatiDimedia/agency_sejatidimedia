@@ -899,12 +899,34 @@ export async function getRelatedInsights(currentSlug: string, limit = 2): Promis
 
 export async function getAllCategories(): Promise<string[]> {
   try {
-    const articles = await getInsights();
-    const categories = Array.from(new Set(articles.map((item) => item.category)));
-    return ["All", ...categories];
+    const [articles, seriesList] = await Promise.all([getInsights(), getInsightSeriesList()]);
+    const set = new Set<string>();
+    articles.forEach((item) => {
+      if (item.category) set.add(item.category.trim());
+    });
+    seriesList.forEach((s) => {
+      if (s.category) {
+        s.category.split(',').forEach((c) => {
+          const trimmed = c.trim();
+          if (trimmed) set.add(trimmed);
+        });
+      }
+    });
+    return ["All", ...Array.from(set)];
   } catch {
-    const categories = Array.from(new Set(INSIGHTS_DATA.map((item) => item.category)));
-    return ["All", ...categories];
+    const set = new Set<string>();
+    INSIGHTS_DATA.forEach((item) => {
+      if (item.category) set.add(item.category.trim());
+    });
+    DEFAULT_SERIES_DATA.forEach((s) => {
+      if (s.category) {
+        s.category.split(',').forEach((c) => {
+          const trimmed = c.trim();
+          if (trimmed) set.add(trimmed);
+        });
+      }
+    });
+    return ["All", ...Array.from(set)];
   }
 }
 

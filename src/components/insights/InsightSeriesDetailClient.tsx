@@ -51,7 +51,9 @@ export default function InsightSeriesDetailClient({ series }: InsightSeriesDetai
           <span className="text-slate-300">/</span>
           <span className="text-slate-500">{language === "en" ? "Series" : "Seri"}</span>
           <span className="text-slate-300">/</span>
-          <span className="text-[#2C5098] font-semibold">{series.category}</span>
+          <span className="text-[#2C5098] font-semibold">
+            {series.category.split(',').map((c) => c.trim()).filter(Boolean).join(' • ')}
+          </span>
         </nav>
 
         {/* 2. Series Header Showcase */}
@@ -67,10 +69,19 @@ export default function InsightSeriesDetailClient({ series }: InsightSeriesDetai
 
               {/* Standardized Category & Parts Badges */}
               <div className="flex flex-wrap items-center gap-2.5">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 shadow-xs">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
-                  {series.category}
-                </span>
+                {series.category
+                  .split(',')
+                  .map((c) => c.trim())
+                  .filter(Boolean)
+                  .map((cat) => (
+                    <span
+                      key={cat}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 shadow-xs"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+                      {cat}
+                    </span>
+                  ))}
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-slate-100 text-slate-700 border border-slate-200/80 shadow-xs">
                   <Layers className="w-3 h-3 text-[#2C5098]" />
                   {series.articles.length} {language === "en" ? "Curriculum Parts" : "Part Kurikulum"}
