@@ -86,6 +86,7 @@ export interface InsightArticle {
   seriesId?: string | null;
   seriesPart?: number | null;
   series?: InsightSeriesInfo | null;
+  isPublished?: boolean;
 }
 
 const DEFAULT_AUTHOR: InsightAuthor = {
@@ -596,6 +597,7 @@ export function mapDbInsightToArticle(
     seriesId: item.seriesId || null,
     seriesPart: item.seriesPart || null,
     series: resolvedSeries,
+    isPublished: item.isPublished,
   };
 }
 
@@ -673,11 +675,8 @@ export async function getInsights(): Promise<InsightArticle[]> {
       console.warn("Auto-seed error in getInsights:", seedErr);
     }
   } catch (error) {
-    console.error("Database query failed in getInsights, falling back to local store:", error);
-    return [...INSIGHTS_DATA].map((item) => ({
-      ...item,
-      author: globalAuthor,
-    })).sort((a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime());
+    console.error("Database query failed in getInsights:", error);
+    return [];
   }
 
   return [];
@@ -757,30 +756,12 @@ export async function getInsightBySlug(slug: string): Promise<InsightArticle | n
       return null;
     }
 
-    // If slug not in DB, check if DB is initialized
-    const totalCount = await prisma.insight.count().catch(() => 0);
-    if (totalCount > 0) {
-      return null;
-    }
+    return null;
   } catch (error) {
-    console.error("Database query failed in getInsightBySlug, falling back to local store:", error);
-    const article = INSIGHTS_DATA.find((item) => item.slug === slug);
-    if (article) {
-      return {
-        ...article,
-        author: globalAuthor,
-      };
-    }
+    console.error("Database query failed in getInsightBySlug:", error);
     return null;
   }
 
-  const article = INSIGHTS_DATA.find((item) => item.slug === slug);
-  if (article) {
-    return {
-      ...article,
-      author: globalAuthor,
-    };
-  }
   return null;
 }
 
@@ -789,7 +770,12 @@ export async function getInsightSeriesList(): Promise<InsightSeriesSummary[]> {
     const totalCount = await prisma.insightSeries.count().catch(() => 0);
     if (totalCount > 0) {
       const seriesList = await prisma.insightSeries.findMany({
-        where: { isPublished: true },
+        where: {
+          isPublished: true,
+          insights: {
+            some: { isPublished: true },
+          },
+        },
         include: {
           insights: {
             where: { isPublished: true },
@@ -802,25 +788,27 @@ export async function getInsightSeriesList(): Promise<InsightSeriesSummary[]> {
         orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
       });
 
-      return seriesList.map((s) => ({
-        id: s.id,
-        slug: s.slug,
-        titleId: s.titleId,
-        titleEn: s.titleEn,
-        descriptionId: s.descriptionId,
-        descriptionEn: s.descriptionEn,
-        badge: s.badge,
-        category: s.category,
-        coverImage: s.coverImage,
-        totalArticles: s.insights.length,
-        totalReadTimeMinutes: s.insights.reduce((acc, curr) => acc + (curr.readTimeMinutes || 0), 0),
-        updatedAt: s.updatedAt.toISOString().split('T')[0],
-      }));
+      return seriesList
+        .filter((s) => s.insights && s.insights.length > 0)
+        .map((s) => ({
+          id: s.id,
+          slug: s.slug,
+          titleId: s.titleId,
+          titleEn: s.titleEn,
+          descriptionId: s.descriptionId,
+          descriptionEn: s.descriptionEn,
+          badge: s.badge,
+          category: s.category,
+          coverImage: s.coverImage,
+          totalArticles: s.insights.length,
+          totalReadTimeMinutes: s.insights.reduce((acc, curr) => acc + (curr.readTimeMinutes || 0), 0),
+          updatedAt: s.updatedAt.toISOString().split('T')[0],
+        }));
     }
-    return DEFAULT_SERIES_DATA;
+    return [];
   } catch (error) {
-    console.error("Database query failed in getInsightSeriesList, fallback to local:", error);
-    return DEFAULT_SERIES_DATA;
+    console.error("Database query failed in getInsightSeriesList:", error);
+    return [];
   }
 }
 
@@ -846,7 +834,7 @@ export async function getInsightSeriesBySlug(slug: string): Promise<InsightSerie
       },
     });
 
-    if (s && s.isPublished) {
+    if (s && s.isPublished && s.insights && s.insights.length > 0) {
       return {
         id: s.id,
         slug: s.slug,
@@ -873,31 +861,11 @@ export async function getInsightSeriesBySlug(slug: string): Promise<InsightSerie
       };
     }
 
-    const totalCount = await prisma.insightSeries.count().catch(() => 0);
-    if (totalCount > 0) return null;
+    return null;
   } catch (error) {
-    console.error("Database query failed in getInsightSeriesBySlug, fallback:", error);
+    console.error("Database query failed in getInsightSeriesBySlug:", error);
+    return null;
   }
-
-  // Fallback from DEFAULT_SERIES_DATA
-  const def = DEFAULT_SERIES_DATA.find((s) => s.slug === slug);
-  if (!def) return null;
-
-  const matchingArticles = INSIGHTS_DATA.filter((item) => item.seriesId === def.id).sort((a, b) => (a.seriesPart || 0) - (b.seriesPart || 0));
-
-  return {
-    ...def,
-    articles: matchingArticles.map((art, idx) => ({
-      slug: art.slug,
-      titleId: art.titleId,
-      titleEn: art.titleEn,
-      excerptId: art.excerptId,
-      excerptEn: art.excerptEn,
-      readTimeMinutes: art.readTimeMinutes,
-      seriesPart: art.seriesPart ?? (idx + 1),
-      publishedAt: art.publishedAt,
-    })),
-  };
 }
 
 export async function getRelatedInsights(currentSlug: string, limit = 2): Promise<InsightArticle[]> {

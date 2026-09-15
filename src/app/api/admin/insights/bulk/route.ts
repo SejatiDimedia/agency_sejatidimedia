@@ -39,6 +39,8 @@ export async function POST(req: Request) {
 
       try {
         revalidatePath('/insights');
+        revalidatePath('/insights', 'page');
+        revalidatePath('/insights', 'layout');
         revalidatePath('/');
       } catch (revalErr) {
         console.warn('Revalidation error on bulk update insights:', revalErr);
@@ -60,6 +62,8 @@ export async function POST(req: Request) {
 
       try {
         revalidatePath('/insights');
+        revalidatePath('/insights', 'page');
+        revalidatePath('/insights', 'layout');
         revalidatePath('/');
       } catch (revalErr) {
         console.warn('Revalidation error on bulk delete insights:', revalErr);

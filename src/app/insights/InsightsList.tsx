@@ -31,6 +31,8 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
 
   const filteredArticles = useMemo(() => {
     return articles.filter((article) => {
+      if (article.isPublished === false) return false;
+
       const matchesCategory =
         selectedCategory === "All" || article.category === selectedCategory;
 
@@ -42,6 +44,10 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
       return matchesCategory && matchesSearch;
     });
   }, [articles, selectedCategory, searchQuery, language]);
+
+  const validSeriesList = useMemo(() => {
+    return seriesList.filter((s) => s.totalArticles > 0);
+  }, [seriesList]);
 
   // Standard display count: 6 items per page for clean 3-column grid alignment
   const ITEMS_PER_PAGE = 6;
@@ -365,7 +371,7 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
           )}
 
           {/* Series Showcase Shelf: Engineering Curriculum Tracks (Card Silabus - NO top border) */}
-          {selectedCategory === "All" && !searchQuery.trim() && seriesList && seriesList.length > 0 && (
+          {selectedCategory === "All" && !searchQuery.trim() && validSeriesList && validSeriesList.length > 0 && (
             <section className="pt-2 pb-6 my-4">
               <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 pb-4 border-b border-slate-200/80">
                 <div>
@@ -394,12 +400,12 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
 
                 <span className="inline-flex items-center gap-1.5 text-[10px] font-sans font-medium text-slate-600 bg-slate-100 px-3 py-1 rounded-full border border-slate-200/80 shrink-0 self-start sm:self-end shadow-2xs">
                   <BookOpen className="w-3 h-3 text-[#2C5098]" />
-                  {seriesList.length} {language === "en" ? (seriesList.length > 1 ? "Playbooks" : "Playbook") : "Seri"}
+                  {validSeriesList.length} {language === "en" ? (validSeriesList.length > 1 ? "Playbooks" : "Playbook") : "Seri"}
                 </span>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {seriesList.map((series) => {
+                {validSeriesList.map((series) => {
                   const sTitle = (language === "en" ? (series.titleEn || series.titleId) : series.titleId) || "";
                   const sDesc = (language === "en" ? (series.descriptionEn || series.descriptionId) : series.descriptionId) || "";
 

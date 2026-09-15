@@ -6,7 +6,7 @@ import Image from 'next/image';
 import {
   Plus, Search, Edit2, Trash2, ExternalLink, Eye, CheckCircle2,
   Clock, Calendar, Tag, BookOpen, AlertCircle, Sparkles, Loader2,
-  FileText, Star, Layers, X
+  FileText, Star, Layers, X, UploadCloud, Image as ImageIcon, Link2
 } from 'lucide-react';
 import { Toast, ConfirmModal, Checkbox } from '@/components/ui';
 
@@ -85,6 +85,48 @@ export function InsightsManagementView() {
     coverImage: '/images/insights/laravel_architecture_cover.jpg',
     isPublished: true,
   });
+
+  // Series Cover Upload State
+  const [seriesCoverMode, setSeriesCoverMode] = useState<'upload' | 'link'>('upload');
+  const [isUploadingSeriesCover, setIsUploadingSeriesCover] = useState(false);
+  const [seriesCoverDragOver, setSeriesCoverDragOver] = useState(false);
+  const seriesFileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleSeriesCoverUpload = async (file: File) => {
+    if (!file.type.startsWith('image/')) {
+      setToast({ message: 'Harap pilih file gambar (JPG, PNG, WEBP, AVIF, GIF)', type: 'error' });
+      return;
+    }
+
+    setIsUploadingSeriesCover(true);
+    try {
+      const uploadData = new FormData();
+      uploadData.append('file', file);
+      uploadData.append('folder', 'series');
+
+      const res = await fetch('/api/admin/insights/upload', {
+        method: 'POST',
+        body: uploadData,
+      });
+
+      const result = await res.json();
+      if (res.ok && result.success && result.url) {
+        setSeriesForm((prev) => ({ ...prev, coverImage: result.url }));
+        const savingsMsg = result.savingsPercent ? ` (${result.savingsPercent} lebih hemat, format WebP)` : '';
+        setToast({ message: `Cover seri berhasil dioptimasi ke WebP & disimpan!${savingsMsg}`, type: 'success' });
+      } else {
+        setToast({ message: result.error || 'Gagal mengunggah cover seri', type: 'error' });
+      }
+    } catch (err) {
+      console.error(err);
+      setToast({ message: 'Terjadi kesalahan jaringan saat mengunggah cover seri', type: 'error' });
+    } finally {
+      setIsUploadingSeriesCover(false);
+      if (seriesFileInputRef.current) {
+        seriesFileInputRef.current.value = '';
+      }
+    }
+  };
 
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
@@ -167,6 +209,9 @@ export function InsightsManagementView() {
       coverImage: '/images/insights/laravel_architecture_cover.jpg',
       isPublished: true,
     });
+    setSeriesCoverMode('upload');
+    setIsUploadingSeriesCover(false);
+    setSeriesCoverDragOver(false);
     setSeriesModalView('form');
   };
 
@@ -183,6 +228,9 @@ export function InsightsManagementView() {
       coverImage: s.coverImage || '/images/insights/laravel_architecture_cover.jpg',
       isPublished: s.isPublished,
     });
+    setSeriesCoverMode('upload');
+    setIsUploadingSeriesCover(false);
+    setSeriesCoverDragOver(false);
     setSeriesModalView('form');
   };
 
@@ -756,7 +804,7 @@ export function InsightsManagementView() {
       {/* 6. SERIES MANAGEMENT MODAL */}
       {isSeriesModalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-3xl w-full max-h-[85vh] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
             {/* Modal Header */}
             <div className="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
               <div className="flex items-center gap-2.5">
@@ -768,7 +816,7 @@ export function InsightsManagementView() {
                     {seriesModalView === 'list' ? 'Kelola Seri Artikel' : (editingSeries ? 'Edit Seri Artikel' : 'Tambah Seri Baru')}
                   </h3>
                   <p className="text-xs text-slate-500">
-                    {seriesModalView === 'list' ? 'Daftar kurikulum topik rekayasa terstruktur SejatiDimedia' : 'Lengkapi metadata seri pembelajaran'}
+                    {seriesModalView === 'list' ? 'Daftar kurikulum topik rekayasa terstruktur SejatiDimedia' : 'Lengkapi metadata & cover seri pembelajaran'}
                   </p>
                 </div>
               </div>
@@ -809,24 +857,36 @@ export function InsightsManagementView() {
                     <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden">
                       {seriesList.map((s) => (
                         <div key={s.id} className="p-4 flex items-center justify-between gap-4 hover:bg-slate-50 transition-colors">
-                          <div className="min-w-0 space-y-1">
-                            <div className="flex items-center gap-2">
-                              <h4 className="font-bold text-sm text-slate-900 truncate">{s.titleId}</h4>
-                              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-bold">
-                                {s.category}
+                          <div className="flex items-center gap-3.5 min-w-0">
+                            {s.coverImage && (
+                              <div className="relative w-16 h-11 rounded-xl overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
+                                <Image
+                                  src={s.coverImage}
+                                  alt={s.titleId}
+                                  fill
+                                  className="object-cover"
+                                />
+                              </div>
+                            )}
+                            <div className="min-w-0 space-y-1">
+                              <div className="flex items-center gap-2 flex-wrap">
+                                <h4 className="font-bold text-sm text-slate-900 truncate">{s.titleId}</h4>
+                                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200 font-bold">
+                                  {s.category}
+                                </span>
+                              </div>
+                              <p className="text-xs text-slate-500 line-clamp-1">{s.descriptionId}</p>
+                              <span className="text-[11px] font-mono text-slate-400 block">
+                                {s.insights?.length || 0} artikel terhubung · slug: <code>{s.slug}</code>
                               </span>
                             </div>
-                            <p className="text-xs text-slate-500 line-clamp-1">{s.descriptionId}</p>
-                            <span className="text-[11px] font-mono text-slate-400 block">
-                              {s.insights?.length || 0} artikel terhubung · slug: <code>{s.slug}</code>
-                            </span>
                           </div>
                           <div className="flex items-center gap-1.5 shrink-0">
                             <button
                               type="button"
                               onClick={() => openEditSeries(s)}
                               className="p-2 rounded-xl text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
-                              title="Edit Seri"
+                              title="Edit Seri & Cover"
                             >
                               <Edit2 className="w-4 h-4" />
                             </button>
@@ -902,6 +962,176 @@ export function InsightsManagementView() {
                       placeholder="Ringkasan apa saja yang dipelajari dan diselesaikan pada rangkaian seri ini..."
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                     />
+                  </div>
+
+                  {/* Fitur Unggah & Konfigurasi Cover Series */}
+                  <div className="p-4 rounded-2xl border border-slate-200 bg-slate-50/60 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <ImageIcon className="w-4 h-4 text-blue-600" />
+                        <label className="text-xs font-mono font-bold uppercase text-slate-700">
+                          Gambar Sampul Seri (Cover Image)
+                        </label>
+                      </div>
+                      {/* Mode Switcher: Upload vs URL */}
+                      <div className="flex items-center bg-white p-0.5 rounded-xl border border-slate-200 text-xs font-semibold shadow-2xs">
+                        <button
+                          type="button"
+                          onClick={() => setSeriesCoverMode('upload')}
+                          className={`px-3 py-1 rounded-lg transition-all ${
+                            seriesCoverMode === 'upload'
+                              ? 'bg-blue-600 text-white shadow-2xs font-bold'
+                              : 'text-slate-500 hover:text-slate-800'
+                          }`}
+                        >
+                          <span className="flex items-center gap-1.5">
+                            <UploadCloud className="w-3.5 h-3.5" />
+                            Upload (WebP)
+                          </span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSeriesCoverMode('link')}
+                          className={`px-3 py-1 rounded-lg transition-all ${
+                            seriesCoverMode === 'link'
+                              ? 'bg-blue-600 text-white shadow-2xs font-bold'
+                              : 'text-slate-500 hover:text-slate-800'
+                          }`}
+                        >
+                          <span className="flex items-center gap-1.5">
+                            <Link2 className="w-3.5 h-3.5" />
+                            Tautan URL
+                          </span>
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Hidden file input */}
+                    <input
+                      ref={seriesFileInputRef}
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp,image/avif,image/gif"
+                      className="hidden"
+                      onChange={(e) => {
+                        if (e.target.files && e.target.files[0]) {
+                          handleSeriesCoverUpload(e.target.files[0]);
+                        }
+                      }}
+                    />
+
+                    {/* Live Preview Card if Cover Image exists */}
+                    {seriesForm.coverImage ? (
+                      <div className="space-y-2">
+                        <div className="relative aspect-[16/8] w-full rounded-2xl overflow-hidden bg-slate-200 border border-slate-200/80 shadow-inner group">
+                          <Image
+                            src={seriesForm.coverImage}
+                            alt={seriesForm.titleId || 'Cover Seri'}
+                            fill
+                            className="object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/25" />
+
+                          {/* Live Preview Badges */}
+                          <div className="absolute top-3 left-3 flex items-center gap-1.5 z-10">
+                            <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 text-[#2C5098] backdrop-blur-md shadow-xs">
+                              <Layers className="w-2.5 h-2.5 text-[#2C5098]" />
+                              {seriesForm.badge || 'SERI'}
+                            </span>
+                            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-black/60 text-white/90 backdrop-blur-md">
+                              {seriesForm.category}
+                            </span>
+                          </div>
+
+                          {/* Hover action overlay */}
+                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2 z-20">
+                            <button
+                              type="button"
+                              onClick={() => seriesFileInputRef.current?.click()}
+                              className="px-3.5 py-2 rounded-xl bg-white text-slate-800 text-xs font-bold hover:bg-blue-50 transition-colors shadow-sm flex items-center gap-1.5 cursor-pointer"
+                            >
+                              <UploadCloud className="w-3.5 h-3.5 text-blue-600" />
+                              <span>Ganti Cover</span>
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setSeriesForm({ ...seriesForm, coverImage: '' })}
+                              className="px-3.5 py-2 rounded-xl bg-rose-600 text-white text-xs font-bold hover:bg-rose-700 transition-colors shadow-sm flex items-center gap-1.5 cursor-pointer"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                              <span>Hapus</span>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 px-1">
+                          <span className="truncate max-w-sm">File: <span className="text-blue-600">{seriesForm.coverImage}</span></span>
+                          <span className="text-emerald-600 font-bold shrink-0">✓ Siap ditampilkan</span>
+                        </div>
+                      </div>
+                    ) : null}
+
+                    {/* Mode Upload: Dropzone when empty */}
+                    {seriesCoverMode === 'upload' && !seriesForm.coverImage && (
+                      <div
+                        onDragOver={(e) => {
+                          e.preventDefault();
+                          setSeriesCoverDragOver(true);
+                        }}
+                        onDragLeave={() => setSeriesCoverDragOver(false)}
+                        onDrop={(e) => {
+                          e.preventDefault();
+                          setSeriesCoverDragOver(false);
+                          if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                            handleSeriesCoverUpload(e.dataTransfer.files[0]);
+                          }
+                        }}
+                        onClick={() => !isUploadingSeriesCover && seriesFileInputRef.current?.click()}
+                        className={`border-2 border-dashed rounded-2xl p-6 text-center cursor-pointer transition-all flex flex-col items-center justify-center gap-2 ${
+                          seriesCoverDragOver
+                            ? 'border-blue-500 bg-blue-50/60'
+                            : 'border-slate-300 hover:border-blue-400 hover:bg-white bg-white/60'
+                        } ${isUploadingSeriesCover ? 'opacity-60 pointer-events-none' : ''}`}
+                      >
+                        {isUploadingSeriesCover ? (
+                          <>
+                            <Loader2 className="w-6 h-6 text-blue-600 animate-spin" />
+                            <span className="text-xs font-bold text-slate-700 font-mono">
+                              Mengompres & Mengunggah ke WebP...
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600 shadow-2xs">
+                              <UploadCloud className="w-5 h-5" />
+                            </div>
+                            <div className="space-y-0.5">
+                              <p className="text-xs font-bold text-slate-800">
+                                Klik untuk unggah cover seri atau seret file ke sini
+                              </p>
+                              <p className="text-[11px] text-slate-400">
+                                JPG, PNG, WEBP — Otomatis dikompres ke format WebP (16:9 disarankan)
+                              </p>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Mode Link: Input URL */}
+                    {seriesCoverMode === 'link' && (
+                      <div className="space-y-1">
+                        <input
+                          type="text"
+                          value={seriesForm.coverImage}
+                          onChange={(e) => setSeriesForm({ ...seriesForm, coverImage: e.target.value })}
+                          placeholder="https://images.unsplash.com/... atau /images/insights/client_portal_cover.jpg"
+                          className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-xs font-mono bg-white"
+                        />
+                        <p className="text-[10px] text-slate-400">
+                          Masukkan URL gambar cover langsung (atau beralih ke mode Upload di atas).
+                        </p>
+                      </div>
+                    )}
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

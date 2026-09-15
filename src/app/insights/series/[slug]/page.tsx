@@ -3,14 +3,8 @@ import { notFound } from "next/navigation";
 import { getInsightSeriesBySlug, getInsightSeriesList } from "@/lib/api/insights";
 import InsightSeriesDetailClient from "@/components/insights/InsightSeriesDetailClient";
 
-export const revalidate = 60;
-
-export async function generateStaticParams() {
-  const seriesList = await getInsightSeriesList();
-  return seriesList.map((s) => ({
-    slug: s.slug,
-  }));
-}
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateMetadata({
   params,

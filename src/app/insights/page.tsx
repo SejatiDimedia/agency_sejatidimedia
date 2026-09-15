@@ -2,7 +2,8 @@ import { Metadata } from "next";
 import { getInsights, getAllCategories, getInsightSeriesList } from "@/lib/api/insights";
 import InsightsList from "./InsightsList";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Insights & Rekayasa Perangkat Lunak | SejatiDimedia",

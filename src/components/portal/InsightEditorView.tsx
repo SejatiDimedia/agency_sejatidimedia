@@ -138,6 +138,7 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
     try {
       const uploadData = new FormData();
       uploadData.append('file', file);
+      uploadData.append('folder', 'insights');
 
       const res = await fetch('/api/admin/insights/upload', {
         method: 'POST',
@@ -147,7 +148,8 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
       const result = await res.json();
       if (res.ok && result.success && result.url) {
         setFormData((prev) => ({ ...prev, coverImage: result.url }));
-        setToast({ message: 'Gambar sampul berhasil diunggah ke Cloud Storage!', type: 'success' });
+        const savingsText = result.savingsPercent ? ` (${result.savingsPercent} lebih hemat, format WebP)` : '';
+        setToast({ message: `Gambar sampul berhasil dioptimasi ke WebP & disimpan!${savingsText}`, type: 'success' });
       } else {
         setToast({ message: result.error || 'Gagal mengunggah gambar ke cloud storage', type: 'error' });
       }

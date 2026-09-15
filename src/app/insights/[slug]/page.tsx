@@ -3,14 +3,8 @@ import { notFound } from "next/navigation";
 import { getInsightBySlug, getRelatedInsights, getInsights } from "@/lib/api/insights";
 import InsightDetailClient from "@/components/insights/InsightDetailClient";
 
-export const revalidate = 60;
-
-export async function generateStaticParams() {
-  const articles = await getInsights();
-  return articles.map((article) => ({
-    slug: article.slug,
-  }));
-}
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export async function generateMetadata({
   params,

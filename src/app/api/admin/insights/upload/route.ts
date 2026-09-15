@@ -37,57 +37,93 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 4. Generate S3/R2 Key
-    const buffer = Buffer.from(await file.arrayBuffer());
-    const fileExtension = file.name.split('.').pop() || 'jpg';
-    const cleanFileName = file.name
+    // 4. Determine Target Folder ('insights' or 'series')
+    const folderParam = req.nextUrl.searchParams.get('folder') || (formData.get('folder') as string);
+    const targetFolder = folderParam === 'series' ? 'series' : 'insights';
+
+    // 5. Read Buffer and Convert/Compress to WebP using Sharp
+    const rawBuffer = Buffer.from(await file.arrayBuffer());
+    const originalSize = file.size;
+
+    const cleanBaseName = file.name
       .replace(/\.[^/.]+$/, '')
       .replace(/[^a-zA-Z0-9_-]/g, '_')
       .substring(0, 50);
 
-    const key = `insights/${Date.now()}-${cleanFileName}.${fileExtension}`;
+    let finalBuffer: Buffer = rawBuffer;
+    let contentType = file.type || 'image/jpeg';
+    let fileExtension = 'webp';
 
-    // 5. Save local backup copy on disk for instant local rendering
-    try {
-      const fs = await import('fs');
-      const path = await import('path');
-      const localFilePath = path.join(process.cwd(), 'public', 'uploads', key);
-      const dir = path.dirname(localFilePath);
-      if (!fs.existsSync(dir)) {
-        fs.mkdirSync(dir, { recursive: true });
-      }
-      fs.writeFileSync(localFilePath, buffer);
-    } catch (fsErr) {
-      console.warn('Could not write local upload backup:', fsErr);
-    }
-
-    // 6. Upload to Cloudflare R2 for durable cloud storage
-    if (R2_BUCKET) {
+    // Check if SVG (keep as vector SVG without rasterizing to WebP)
+    if (file.type === 'image/svg+xml') {
+      contentType = 'image/svg+xml';
+      fileExtension = 'svg';
+    } else {
       try {
-        await s3Client.send(
-          new PutObjectCommand({
-            Bucket: R2_BUCKET,
-            Key: key,
-            Body: buffer,
-            ContentType: file.type || 'image/jpeg',
-            CacheControl: 'public, max-age=31536000, immutable',
+        const sharp = (await import('sharp')).default;
+        finalBuffer = await sharp(rawBuffer)
+          .rotate() // Automatically orient using EXIF
+          .resize({
+            width: 1920,
+            withoutEnlargement: true,
+            fit: 'inside',
           })
-        );
-      } catch (r2Err: any) {
-        console.error('Cloudflare R2 upload warning:', r2Err?.message);
-        // Continue if local copy succeeded
+          .webp({
+            quality: 82,
+            effort: 4,
+          })
+          .toBuffer();
+
+        contentType = 'image/webp';
+        fileExtension = 'webp';
+      } catch (sharpErr) {
+        console.warn('Sharp WebP conversion fallback:', sharpErr);
+        fileExtension = file.name.split('.').pop() || 'jpg';
       }
     }
 
-    // 7. Return reliable app media proxy URL (avoids ISP *.r2.dev TLS block)
+    const key = `${targetFolder}/${Date.now()}-${cleanBaseName}.${fileExtension}`;
+
+    // 6. Upload directly to Cloudflare R2 Cloud Storage (strictly cloud, no local repo files)
+    if (!R2_BUCKET) {
+      return NextResponse.json(
+        { error: 'Cloud Storage (R2_BUCKET_NAME) belum dikonfigurasi di server' },
+        { status: 500 }
+      );
+    }
+
+    try {
+      await s3Client.send(
+        new PutObjectCommand({
+          Bucket: R2_BUCKET,
+          Key: key,
+          Body: finalBuffer,
+          ContentType: contentType,
+          CacheControl: 'public, max-age=31536000, immutable',
+        })
+      );
+    } catch (r2Err: any) {
+      console.error('[Cloudflare R2 Upload Error]', r2Err?.message);
+      return NextResponse.json(
+        { error: `Gagal mengunggah ke Cloud Storage: ${r2Err?.message || 'Koneksi cloud gagal'}` },
+        { status: 500 }
+      );
+    }
+
+    // 8. Return reliable app media proxy URL (avoids ISP *.r2.dev TLS block)
     const publicUrl = `/api/media/${key}`;
+    const finalSize = finalBuffer.length;
+    const savedPercent = originalSize > 0 ? Math.max(0, Math.round(((originalSize - finalSize) / originalSize) * 100)) : 0;
 
     return NextResponse.json({
       success: true,
       url: publicUrl,
       key,
-      name: file.name,
-      size: file.size,
+      name: `${cleanBaseName}.${fileExtension}`,
+      format: fileExtension,
+      originalSize,
+      size: finalSize,
+      savingsPercent: `${savedPercent}%`,
     });
   } catch (error: any) {
     console.error('[POST /api/admin/insights/upload Error]', error);
