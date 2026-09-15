@@ -1089,7 +1089,7 @@ export function InsightsManagementView() {
 
                   <div>
                     <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1">
-                      Deskripsi Ringkas Seri (ID) *
+                      Deskripsi Ringkas Seri (Bahasa Indonesia) *
                     </label>
                     <textarea
                       required
@@ -1097,6 +1097,19 @@ export function InsightsManagementView() {
                       value={seriesForm.descriptionId}
                       onChange={(e) => setSeriesForm({ ...seriesForm, descriptionId: e.target.value })}
                       placeholder="Ringkasan apa saja yang dipelajari dan diselesaikan pada rangkaian seri ini..."
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-mono font-bold uppercase text-slate-500 mb-1">
+                      Deskripsi Ringkas Seri (English)
+                    </label>
+                    <textarea
+                      rows={2}
+                      value={seriesForm.descriptionEn}
+                      onChange={(e) => setSeriesForm({ ...seriesForm, descriptionEn: e.target.value })}
+                      placeholder="Brief overview of curriculum topics, architectural patterns, and production outcomes in this series..."
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm"
                     />
                   </div>
