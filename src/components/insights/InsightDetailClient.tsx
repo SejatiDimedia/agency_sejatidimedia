@@ -462,9 +462,11 @@ export default function InsightDetailClient({
             {title}
           </h1>
 
-          {/* Lead-in Excerpt Paragraph - Full Width Editorial Deck */}
+          {/* Lead-in Excerpt Paragraph - Full Width Editorial Deck (Harmonized with Content Font Size) */}
           <div className="w-full">
-            <p className="text-lg sm:text-xl lg:text-[21px] text-slate-600 font-sans font-normal leading-[1.68] tracking-[-0.012em]">
+            <p className={`font-sans text-slate-600 leading-[1.8] ${
+              fontSize === "large" ? "text-lg sm:text-[18.5px]" : "text-base sm:text-[16.5px]"
+            }`}>
               {excerpt}
             </p>
           </div>

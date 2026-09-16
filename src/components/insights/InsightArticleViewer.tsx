@@ -356,9 +356,11 @@ export function InsightArticleViewer({
           {displayTitle}
         </h1>
 
-        {/* Editorial Deck Excerpt: Non-italic, full-width, clean */}
+        {/* Editorial Deck Excerpt: Non-italic, full-width, harmonized with content text size */}
         <div className="w-full">
-          <p className="text-base sm:text-lg lg:text-[20px] text-slate-600 font-sans font-normal leading-[1.68] tracking-[-0.012em]">
+          <p className={`font-sans text-slate-600 leading-[1.8] ${
+            fontSize === 'large' ? 'text-lg sm:text-[18.5px]' : 'text-base sm:text-[16.5px]'
+          }`}>
             {displayExcerpt}
           </p>
         </div>
