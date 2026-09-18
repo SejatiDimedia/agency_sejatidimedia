@@ -1424,14 +1424,14 @@ export default function AgencyLandingV2({
                   {t.about?.phase1Label || (language === 'en' ? '01 / BACKGROUND' : '01 / LATAR BELAKANG')}
                 </span>
                 <h3 className="text-base sm:text-lg font-sans font-bold text-slate-900">
-                  {t.about?.phase1Title || (language === 'en' ? '5 Years in Operations & ERP Systems' : '5 Tahun di Sistem Operasional & ERP')}
+                  {t.about?.phase1Title || (language === 'en' ? '6 Years in Operations & ERP Systems' : '6 Tahun di Sistem Operasional & ERP')}
                 </h3>
               </div>
               <div className="md:col-span-8 space-y-3">
                 <p className="text-sm sm:text-base text-slate-700 font-sans leading-relaxed">
                   {t.about?.p1 || (language === 'en'
-                    ? 'During my 5 years as a software developer in manufacturing, I regularly managed ERP, inventory, and production workflows used daily by operational teams.'
-                    : 'Selama 5 tahun sebagai software developer di industri manufaktur, saya terbiasa mengelola sistem seperti ERP, inventori, dan alur produksi yang digunakan setiap hari oleh tim operasional.')}
+                    ? 'During my 5+ years as a software developer in manufacturing, I regularly managed ERP, inventory, and production workflows used daily by operational teams.'
+                    : 'Selama 5+ tahun sebagai software developer di industri manufaktur, saya terbiasa mengelola sistem seperti ERP, inventori, dan alur produksi yang digunakan setiap hari oleh tim operasional.')}
                 </p>
                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-mono text-slate-500 pt-1">
                   {(t.about?.phase1Tags || (language === 'en'
