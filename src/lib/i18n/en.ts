@@ -364,7 +364,7 @@ export const en = {
     customBtn: "Discuss Enterprise Solution",
     customIncludes: [
       'Multi-Platform (Web + Mobile + Tablet)',
-      'Legacy Integrations (SAP / ERP / IoT)',
+      'Legacy Integrations',
       'Custom AI Pipeline (LLM / Agent / RAG)',
       'High-Concurrency & Enterprise NDA'
     ],

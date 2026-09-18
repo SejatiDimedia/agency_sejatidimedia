@@ -364,7 +364,7 @@ export const id = {
     customBtn: "Diskusikan Solusi Enterprise",
     customIncludes: [
       'Multi-Platform (Web + Mobile + Tablet)',
-      'Integrasi Sistem Eksisting (SAP / ERP / IoT)',
+      'Integrasi Sistem Eksisting',
       'Pipeline AI Kustom (LLM / Agent / RAG)',
       'High-Concurrency & Terikat NDA Bisnis'
     ],

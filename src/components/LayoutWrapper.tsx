@@ -571,32 +571,8 @@ export default function LayoutWrapper({
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 text-[10px] font-mono tracking-wider text-theme-fore-subtle uppercase">
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1.5">
-                  <span>© {new Date().getFullYear()} SEJATIDIMEDIA. {t.footer.rights}</span>
-                  <span className="text-theme-border/60">•</span>
-                  <button className="hover:text-theme-fore transition-colors cursor-pointer">
-                    {t.legal.privacy}
-                  </button>
-                  <span className="text-theme-border/60">•</span>
-                  <button className="hover:text-theme-fore transition-colors cursor-pointer">
-                    {t.legal.terms}
-                  </button>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <a href="#instagram" className="hover:text-theme-fore transition-colors">
-                    INSTAGRAM
-                  </a>
-                  <span className="text-theme-border/40">•</span>
-                  <a href="#linkedin" className="hover:text-theme-fore transition-colors">
-                    LINKEDIN
-                  </a>
-                  <span className="text-theme-border/40">•</span>
-                  <a href="#twitter" className="hover:text-theme-fore transition-colors">
-                    X(TWITTER)
-                  </a>
-                </div>
+              <div className="flex items-center justify-center pt-4 text-[10px] font-mono tracking-wider text-theme-fore-subtle uppercase text-center">
+                <span>© {new Date().getFullYear()} SEJATIDIMEDIA. {t.footer.rights}</span>
               </div>
             </div>
           </footer>
@@ -992,32 +968,8 @@ export default function LayoutWrapper({
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-4 text-[10px] font-mono tracking-wider text-slate-400 uppercase">
-                <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1.5">
-                  <span>© {new Date().getFullYear()} SEJATIDIMEDIA. {t.footer.rights}</span>
-                  <span className="text-slate-300">•</span>
-                  <button className="hover:text-slate-900 transition-colors cursor-pointer">
-                    {t.legal.privacy}
-                  </button>
-                  <span className="text-slate-300">•</span>
-                  <button className="hover:text-slate-900 transition-colors cursor-pointer">
-                    {t.legal.terms}
-                  </button>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <a href="#instagram" className="hover:text-slate-900 transition-colors">
-                    INSTAGRAM
-                  </a>
-                  <span className="text-slate-300">•</span>
-                  <a href="#linkedin" className="hover:text-slate-900 transition-colors">
-                    LINKEDIN
-                  </a>
-                  <span className="text-slate-300">•</span>
-                  <a href="#twitter" className="hover:text-slate-900 transition-colors">
-                    X(TWITTER)
-                  </a>
-                </div>
+              <div className="flex items-center justify-center pt-4 text-[10px] font-mono tracking-wider text-slate-400 uppercase text-center">
+                <span>© {new Date().getFullYear()} SEJATIDIMEDIA. {t.footer.rights}</span>
               </div>
             </div>
           </footer>
