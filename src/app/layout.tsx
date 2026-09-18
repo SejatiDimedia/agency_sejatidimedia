@@ -1,4 +1,5 @@
 import "./globals.css";
+import "@/lib/icons-bundle";
 import type { Metadata, Viewport } from "next";
 import NextTopLoader from 'nextjs-toploader';
 import Script from 'next/script';

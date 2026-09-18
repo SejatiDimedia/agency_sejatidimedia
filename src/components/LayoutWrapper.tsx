@@ -15,6 +15,7 @@ import { ThemeMode } from "../types";
 import { useLanguage, Language } from "@/lib/i18n/LanguageContext";
 import { TemplateId, getActiveTemplate } from "@/lib/templates";
 import { Icon } from "@iconify/react";
+import "@/lib/icons-bundle";
 
 export default function LayoutWrapper({
   children,
