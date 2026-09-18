@@ -18,6 +18,8 @@ export interface Project {
   summary?: string | null;
   summaryId?: string | null;
   summaryEn?: string | null;
+  clientSummaryId?: string | null;
+  clientSummaryEn?: string | null;
   bannerImage?: string | null;
   thumbnail?: string | null;
   technologies: string[];
@@ -184,6 +186,8 @@ export const MOCK_PROJECTS: Project[] = [
     summary: "Platform ERP multi-tenant untuk manajemen proses internal perusahaan dengan fokus pada Human Capital Management (HCM).",
     summaryId: "Platform ERP multi-tenant untuk manajemen proses internal perusahaan dengan fokus pada Human Capital Management (HCM).",
     summaryEn: "Multi-tenant ERP platform for internal company processes focusing on Human Capital Management (HCM).",
+    clientSummaryId: "# Nexus ERP Suite\n### Solusi Sentralisasi Manajemen SDM & Operasional Bisnis\n\n## Ringkasan Proyek\nNexus ERP Suite dirancang untuk menyederhanakan pengelolaan Human Capital Management (HCM) perusahaan, mulai dari struktur organisasi, kehadiran karyawan, hingga evaluasi performa dalam satu portal terpadu.\n\n## Manfaat Utama\n- Sentralisasi data karyawan tanpa tercecer di lembar kerja terpisah\n- Akses mandiri (employee self-service) untuk pengajuan izin dan cuti\n- Efisiensi audit data dan laporan berkala untuk manajemen",
+    clientSummaryEn: "# Nexus ERP Suite\n### Centralized HR & Operational Business Management Solution\n\n## Project Overview\nNexus ERP Suite is designed to streamline Human Capital Management (HCM) operations, centralizing organizational structures, employee attendance, and performance evaluations into a unified portal.\n\n## Key Benefits\n- Centralized employee records eliminating fragmented spreadsheets\n- Employee self-service for leave requests and attendance logs\n- Streamlined auditing and real-time operational reports for leadership",
     description: "Platform ERP multi-tenant untuk manajemen proses internal perusahaan, dengan fokus pada Human Capital Management (HCM), dikembangkan sebagai proyek independen. Dirancang agar proses HR yang biasanya tersebar di banyak file/tools bisa terpusat dalam satu sistem.",
     descriptionId: "Platform ERP multi-tenant untuk manajemen proses internal perusahaan, dengan fokus pada Human Capital Management (HCM), dikembangkan sebagai proyek independen. Dirancang agar proses HR yang biasanya tersebar di banyak file/tools bisa terpusat dalam satu sistem.",
     descriptionEn: "A multi-tenant ERP platform for managing internal company workflows with a strong focus on Human Capital Management (HCM), developed as an independent project. Designed to centralize HR processes usually scattered across tools.",

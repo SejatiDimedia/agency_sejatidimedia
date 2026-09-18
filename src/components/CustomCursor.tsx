@@ -91,7 +91,7 @@ export default function CustomCursor() {
           scale: isMouseDown ? 0.7 : isHoveringClickable ? 0.6 : 1,
         }}
         transition={{ duration: 0.12, ease: "easeOut" }}
-        className="fixed top-0 left-0 w-2 h-2 rounded-full bg-[#2C5098] dark:bg-[#38BDF8] pointer-events-none z-[99999] shadow-[0_0_6px_rgba(56,189,248,0.6)] will-change-transform"
+        className="fixed top-0 left-0 w-2.5 h-2.5 rounded-full bg-[#2C5098] dark:bg-[#38BDF8] ring-1 ring-white/80 dark:ring-slate-900/80 pointer-events-none z-[9999999] shadow-[0_0_8px_rgba(56,189,248,0.7)] will-change-transform"
       />
 
       {/* 2. Crystal-Clear Trailing Halo Ring (Zero blur, 100% razor sharp text readability) */}
@@ -105,10 +105,10 @@ export default function CustomCursor() {
           scale: isMouseDown ? 0.8 : isHoveringClickable ? 1.4 : 1,
         }}
         transition={{ duration: 0.2, ease: "easeOut" }}
-        className={`fixed top-0 left-0 rounded-full pointer-events-none z-[99998] will-change-transform bg-transparent transition-colors duration-200 ${
+        className={`fixed top-0 left-0 rounded-full pointer-events-none z-[9999998] will-change-transform bg-transparent transition-colors duration-200 ${
           isHoveringClickable
-            ? "w-9 h-9 border border-[#2C5098] dark:border-[#38BDF8] shadow-[0_0_12px_rgba(56,189,248,0.25)]"
-            : "w-7 h-7 border border-[#2C5098]/30 dark:border-[#38BDF8]/30"
+            ? "w-9 h-9 border border-[#2C5098] dark:border-[#38BDF8] shadow-[0_0_12px_rgba(56,189,248,0.35)]"
+            : "w-7 h-7 border border-[#2C5098]/40 dark:border-[#38BDF8]/40"
         }`}
       />
     </>

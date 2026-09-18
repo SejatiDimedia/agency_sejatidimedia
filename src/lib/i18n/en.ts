@@ -159,6 +159,8 @@ export const en = {
   projectDetail: {
     back: "Back to Portfolio",
     detail: "Project Details",
+    tabSummary: "Project Summary",
+    tabDetail: "Project Details",
     spec: "Project Specifications",
     status: "Status",
     statusComplete: "Completed",

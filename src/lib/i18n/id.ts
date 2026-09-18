@@ -159,6 +159,8 @@ export const id = {
   projectDetail: {
     back: "Kembali ke Portofolio",
     detail: "Detail Proyek",
+    tabSummary: "Ringkasan Project",
+    tabDetail: "Detail Proyek",
     spec: "Spesifikasi Proyek",
     status: "Status",
     statusComplete: "Selesai",

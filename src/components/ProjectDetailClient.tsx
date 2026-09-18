@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, ExternalLink, Calendar, CheckCircle2, Clock, ShieldAlert, Briefcase, Lock, ShieldCheck } from "lucide-react";
+import { ArrowLeft, ExternalLink, Calendar, CheckCircle2, Clock, ShieldAlert, Briefcase, Lock, ShieldCheck, FileText, Code2 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -74,6 +74,26 @@ export default function ProjectDetailClient({
   const displayThumbnail = (isDummy ? "/logo.svg" : project.thumbnail) as string;
 
   const showcaseImages = project.documents?.filter((doc) => doc.type.startsWith("image/")) || [];
+
+  const displayClientSummary = language === 'en'
+    ? (project.clientSummaryEn || project.clientSummaryId || "")
+    : (project.clientSummaryId || project.clientSummaryEn || "");
+
+  const hasClientSummary = Boolean(displayClientSummary && displayClientSummary.trim().length > 0);
+
+  const [activeTab, setActiveTab] = useState<'summary' | 'detail'>(
+    hasClientSummary ? 'summary' : 'detail'
+  );
+
+  useEffect(() => {
+    if (!hasClientSummary) {
+      setActiveTab('detail');
+    }
+  }, [hasClientSummary]);
+
+  useEffect(() => {
+    setActiveTab(hasClientSummary ? 'summary' : 'detail');
+  }, [project.slug]);
 
   const displayDescription = language === 'en'
     ? (project.descriptionEn || project.summaryEn || project.description || project.summary || "")
@@ -202,20 +222,65 @@ export default function ProjectDetailClient({
         {/* Left Column: Project Description */}
         <div className="lg:col-span-8 space-y-6">
           <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border shadow-md text-left space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-theme-border/40 pb-2">
-              <h2 className="text-xl font-sans font-bold text-slate-900 dark:text-theme-fore">
-                {t.projectDetail?.detail || (language === 'en' ? 'Project Details' : 'Detail Proyek')}
-              </h2>
-              {isNdaActive && (
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
-                  <ShieldAlert className="w-3 h-3 text-amber-600" />
-                  <span>NDA Mode Active</span>
-                </span>
-              )}
-            </div>
+            {/* Header with Tab Switcher when Client Summary is available */}
+            {hasClientSummary ? (
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-theme-border/40 pb-3">
+                <div className="inline-flex items-center p-1 bg-slate-100/90 dark:bg-theme-surface/80 rounded-xl border border-slate-200/70 dark:border-theme-border/60 shadow-2xs">
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('summary')}
+                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-sans font-semibold transition-all duration-200 cursor-pointer ${
+                      activeTab === 'summary'
+                        ? 'bg-white dark:bg-theme-elevated text-[#2C5098] dark:text-blue-400 shadow-sm border border-slate-200/80 dark:border-theme-border'
+                        : 'text-slate-600 dark:text-theme-fore-muted hover:text-slate-900 dark:hover:text-theme-fore'
+                    }`}
+                  >
+                    <FileText className="w-3.5 h-3.5" />
+                    <span>{t.projectDetail?.tabSummary || (language === 'en' ? 'Project Summary' : 'Ringkasan Project')}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('detail')}
+                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-sans font-semibold transition-all duration-200 cursor-pointer ${
+                      activeTab === 'detail'
+                        ? 'bg-white dark:bg-theme-elevated text-[#2C5098] dark:text-blue-400 shadow-sm border border-slate-200/80 dark:border-theme-border'
+                        : 'text-slate-600 dark:text-theme-fore-muted hover:text-slate-900 dark:hover:text-theme-fore'
+                    }`}
+                  >
+                    <Code2 className="w-3.5 h-3.5" />
+                    <span>{t.projectDetail?.tabDetail || (language === 'en' ? 'Project Details' : 'Detail Proyek')}</span>
+                  </button>
+                </div>
+
+                {isNdaActive && activeTab === 'detail' && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                    <ShieldAlert className="w-3 h-3 text-amber-600" />
+                    <span>NDA Mode Active</span>
+                  </span>
+                )}
+              </div>
+            ) : (
+              <div className="flex items-center justify-between border-b border-slate-100 dark:border-theme-border/40 pb-2">
+                <h2 className="text-xl font-sans font-bold text-slate-900 dark:text-theme-fore">
+                  {t.projectDetail?.detail || (language === 'en' ? 'Project Details' : 'Detail Proyek')}
+                </h2>
+                {isNdaActive && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
+                    <ShieldAlert className="w-3 h-3 text-amber-600" />
+                    <span>NDA Mode Active</span>
+                  </span>
+                )}
+              </div>
+            )}
 
             <div className="text-sm sm:text-base text-slate-600 dark:text-theme-fore-muted leading-relaxed text-left">
-              {isNdaActive ? (
+              {activeTab === 'summary' ? (
+                <div className="space-y-4">
+                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                    {displayClientSummary}
+                  </ReactMarkdown>
+                </div>
+              ) : isNdaActive ? (
                 <>
                   {/* Readable Intro Portion */}
                   <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>

@@ -173,7 +173,7 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setActiveIdx(null)}
-              className="fixed inset-0 z-[999999] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 sm:p-6 select-none"
+              className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 sm:p-6 select-none"
             >
               {/* Modal Card (Screen-filling size) */}
               <motion.div
