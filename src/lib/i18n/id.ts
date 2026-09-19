@@ -24,7 +24,7 @@ export const id = {
     card1Title: "Sistem Manufaktur Nyata",
     card1Desc: "Terbiasa membangun sistem berskala enterprise di industri manufaktur yang menangani transaksi, inventori, dan proses kerja harian secara akurat.",
     card2Title: "Bisa Diuji Langsung",
-    card2Desc: "Kode dapat diaudit di GitHub, aplikasi aktif dan bisa dicoba langsung — memberikan bukti konkret, tidak hanya sebatas screenshot portofolio.",
+    card2Desc: "Kode dapat diaudit di GitHub, aplikasi aktif dan bisa dicoba langsung untuk memberikan bukti konkret, tidak hanya sebatas screenshot portofolio.",
     btnPrimary: "Konsultasi Kebutuhan Sistem Anda",
     btnSecondary: "Lihat Studi Kasus Proyek",
     stat1Title: "Pengalaman Operasional di Industri Manufaktur",
@@ -32,16 +32,19 @@ export const id = {
     stat3Title: "Akses Progress via Client Portal Real-Time",
   },
   clientPortal: {
+    badge: "Fitur Unggulan",
     eyebrow: "FITUR UNGGULAN",
-    title: "Pantau Progress Proyek Anda, Kapan Saja",
-    subtitle: "Setiap klien mendapat akses ke portal khusus untuk memantau progress pengerjaan, milestone, hingga invoice — tanpa perlu menunggu update manual atau bertanya 'sampai mana progressnya?'",
-    mockupTitle: "Dashboard Klien — Proyek Aktif",
-    point1Title: "Progress Real-Time",
-    point1Desc: "Lihat status setiap fase pengerjaan — dari planning, development, hingga testing.",
-    point2Title: "Invoice & Pembayaran Transparan",
-    point2Desc: "Riwayat billing dan status pembayaran tercatat jelas, tidak ada biaya tersembunyi.",
-    point3Title: "Update Tanpa Perlu Bertanya",
-    point3Desc: "Setiap milestone selesai, Anda mendapat notifikasi — bukan Anda yang harus mengejar update."
+    title: "Pantau Proyek Secara Real-Time",
+    mainHeading: "Pantau Proyek Secara Real-Time",
+    mainHeadingHighlight: "Lewat Client Portal Khusus",
+    subtitle: "Setiap klien mendapat akses ke portal khusus untuk memantau progress pengerjaan, milestone, hingga invoice tanpa perlu menunggu update manual atau bertanya 'sampai mana progressnya?'",
+    mockupTitle: "Dashboard Klien: Proyek Aktif",
+    point1Title: "Status Pengerjaan Real-Time",
+    point1Desc: "Lihat status setiap fase pengerjaan, mulai dari planning, development, hingga testing.",
+    point2Title: "File & Deliverables Terpusat",
+    point2Desc: "Akses dokumen kontrak, NDA, invoice, dan link preview aplikasi dalam satu dashboard aman.",
+    point3Title: "Notifikasi Otomatis",
+    point3Desc: "Setiap milestone selesai, Anda mendapat notifikasi langsung sehingga tidak perlu mengejar update."
   },
   about: {
     eyebrow: "TENTANG SAYA",
@@ -62,18 +65,43 @@ export const id = {
     card1Title: "5+ Tahun Pengalaman Manufaktur",
     card1Desc: "ERP, Production, Inventory & Operational Workflow",
     card2Title: "Sistem Digital Terintegrasi",
-    card2Desc: "Bukan sekadar website, tapi sistem operasional nyata"
+    card2Desc: "Bukan sekadar website, tapi sistem operasional nyata",
+    valuesBadge: "PRINSIP & NILAI",
+    valuesTitle: "Nilai yang Kami Pegang",
+    valuesSubtitle: "Prinsip kerja dan komitmen nyata yang diterapkan pada setiap pengerjaan, dari baris kode pertama hingga sistem beroperasi.",
+    values: [
+      {
+        title: "Integritas",
+        tag: "Transparansi Penuh",
+        desc: "Progres proyek bisa Anda pantau langsung lewat portal klien. Biaya disepakati di awal tanpa biaya tersembunyi, dan setiap perubahan dibahas secara terbuka."
+      },
+      {
+        title: "Inovasi",
+        tag: "Modern & Terbukti",
+        desc: "Kami memanfaatkan teknologi modern yang sudah terbukti untuk menghadirkan solusi baru bagi masalah operasional nyata Anda, tanpa kerumitan berlebih yang membebani biaya."
+      },
+      {
+        title: "Kolaborasi",
+        tag: "Diskusi Langsung",
+        desc: "Anda berdiskusi langsung dengan developer yang menulis kode Anda. Tanpa perantara sales, keputusan teknis diambil lebih cepat, presisi, dan tepat sasaran."
+      },
+      {
+        title: "Keandalan",
+        tag: "Stabil & Terdampingi",
+        desc: "Sistem dibangun di atas arsitektur yang stabil, diuji sebelum rilis, dan tetap kami dampingi setelah berjalan agar operasional bisnis Anda tidak terganggu."
+      }
+    ]
   },
   services: {
     sectionTitle: "Layanan",
     portfolio: "Portofolio",
     mainHeading: "Dari ide hingga production. Saya menangani seluruh siklus pengembangan.",
     mainHeadingHighlight: "Pengembangan Perangkat Lunak",
-    desc: "Setiap sistem saya bangun dari kebutuhan operasional nyata — bukan template generik. Arsitektur bersih, keamanan terjaga, dan performa yang dirancang untuk tumbuh bersama bisnis Anda.",
+    desc: "Setiap sistem saya bangun dari kebutuhan operasional nyata, bukan template generik. Arsitektur bersih, keamanan terjaga, dan performa yang dirancang untuk tumbuh bersama bisnis Anda.",
     items: [
       {
         title: "Web Application Development",
-        desc: "Website company profile, dashboard admin, hingga platform SaaS custom — dibangun dengan arsitektur yang scalable dan performa tinggi.",
+        desc: "Website company profile, dashboard admin, hingga platform SaaS custom yang dibangun dengan arsitektur scalable dan performa tinggi.",
       },
       {
         title: "Mobile App Development",
@@ -81,7 +109,7 @@ export const id = {
       },
       {
         title: "REST API & Cloud Integration",
-        desc: "Backend API yang aman, terstruktur, dan siap menangani skala — lengkap dengan autentikasi, integrasi pembayaran, dan sistem real-time.",
+        desc: "Backend API yang aman, terstruktur, dan siap menangani skala, lengkap dengan autentikasi, integrasi pembayaran, dan sistem real-time.",
       },
       {
         title: "Integrasi AI / LLM",
@@ -93,7 +121,7 @@ export const id = {
     badge: "Teknologi",
     mainHeading: "Teknologi yang ",
     mainHeadingHighlight: "Digunakan",
-    desc: "Tools dipilih berdasarkan kebutuhan proyek, bukan sekadar tren — memastikan performa, keamanan, dan kemudahan maintenance jangka panjang.",
+    desc: "Tools dipilih berdasarkan kebutuhan proyek, bukan sekadar tren, guna memastikan performa, keamanan, dan kemudahan maintenance jangka panjang.",
     frontend: "Frontend",
     frontendDesc: "Untuk antarmuka yang cepat, responsif, dan interaktif.",
     backend: "Backend & API",
@@ -111,7 +139,7 @@ export const id = {
   credibility: {
     badge: "Kredibilitas",
     mainHeading: "Latar Belakang & Kemampuan",
-    desc: "Sebelum menekuni proyek independen, saya bekerja sebagai Software Developer di industri manufaktur — menangani sistem yang harus akurat dan diandalkan untuk proses operasional sehari-hari. Pengalaman itu saya bawa ke setiap proyek: kode yang bukan sekadar jalan, tapi juga stabil dan mudah dirawat jangka panjang.",
+    desc: "Sebelum menekuni proyek independen, saya bekerja sebagai Software Developer di industri manufaktur untuk menangani sistem yang harus akurat dan diandalkan dalam operasional sehari-hari. Pengalaman itu saya bawa ke setiap proyek: kode yang bukan sekadar jalan, tapi juga stabil dan mudah dirawat jangka panjang.",
     card1Title: "Pengalaman Manufaktur",
     card1Desc: "Berpengalaman mengembangkan & memelihara sistem internal (seperti ERP, inventori, dan HCM) di perusahaan manufaktur nyata yang menuntut keandalan tinggi.",
     card1Btn: "Lihat Kompetensi",
@@ -129,13 +157,13 @@ export const id = {
     mainHeading: "Skema Pengembangan Sistem yang Jelas & Transparan",
     subDesc: "Tanpa biaya tersembunyi. Ruang lingkup, arsitektur, dan deliverable disepakati jelas sejak hari pertama.",
     starterLabel: "Untuk Validasi Ide",
-    starterTitle: "Starter — MVP Prototype",
+    starterTitle: "Starter: MVP Prototype",
     starterDesc: "Sempurna untuk startup atau bisnis yang ingin memvalidasi ide dengan cepat ke pasar menggunakan aplikasi fungsional.",
     starterPrice: "Fixed Scope & Timeline",
     starterTime: "Estimasi: 2–4 Minggu",
     starterBtn: "Konsultasi Scope MVP",
     growthLabel: "Untuk Rilis ke Publik",
-    growthTitle: "Growth — Production Ready",
+    growthTitle: "Growth: Production Ready",
     growthDesc: "Aplikasi skala penuh dengan arsitektur tangguh, keamanan tingkat lanjut, dan performa optimal untuk operasional bisnis harian.",
     growthPrice: "Berdasarkan Fitur & Scope",
     growthTime: "Estimasi: 1–2 Bulan",
@@ -229,7 +257,7 @@ export const id = {
     item1Title: "Revisi Terstruktur",
     item1Desc: "Setiap paket sudah mencakup alokasi revisi. Anda tidak akan terjebak dengan hasil akhir yang tidak sesuai ekspektasi.",
     item2Title: "100% Hak Cipta Anda",
-    item2Desc: "Source code, desain, dan seluruh aset digital sepenuhnya milik Anda setelah proyek lunas — tanpa lisensi berulang.",
+    item2Desc: "Source code, desain, dan seluruh aset digital sepenuhnya milik Anda setelah proyek lunas, tanpa lisensi berulang.",
     item3Title: "Pembayaran Bertahap",
     item3Desc: "Pembayaran dilakukan per milestone, sehingga Anda bisa mengevaluasi progress sebelum melanjutkan ke tahap berikutnya secara aman."
   },
@@ -330,7 +358,7 @@ export const id = {
   ],
   pricingCards: {
     starterTag: "Validasi Ide & MVP",
-    starterTitle: "Starter — MVP Prototype",
+    starterTitle: "Starter: MVP Prototype",
     starterDesc: "Validasi ide bisnis atau produk baru ke pasar secara cepat dan fungsional sebelum komitmen anggaran besar.",
     starterPrice: "Fixed Scope",
     starterPriceMain: "Fixed Scope & Timeline",
@@ -343,7 +371,7 @@ export const id = {
       'Waktu Pengerjaan Cepat 2–4 Minggu'
     ],
     growthTag: "Operasional & Scale-Up",
-    growthTitle: "Growth — Production Ready",
+    growthTitle: "Growth: Production Ready",
     growthDesc: "Aplikasi skala penuh dengan multi-user, backend tangguh, dan integrasi lengkap untuk operasional bisnis harian.",
     growthPrice: "Berdasarkan Fitur",
     growthPriceMain: "Berdasarkan Fitur & Scope",
@@ -427,7 +455,7 @@ export const id = {
     secure: "Transaksi aman & terjamin"
   },
   footer: {
-    tagline: "Partner teknis untuk bisnis yang ingin sistem digitalnya dibangun dengan benar — sejak awal.",
+    tagline: "Partner teknis untuk bisnis yang ingin sistem digitalnya dibangun dengan benar sejak awal.",
     contact: "Kontak",
     contactBadge: "Hubungi Kontak",
     whatsapp: "WhatsApp",
@@ -444,12 +472,12 @@ export const id = {
     mainHeading: "Kenapa Klien Percaya",
     mainHeadingHighlight: "Bekerja Sama Dengan Saya",
     items: [
-      { title: "Komunikasi Langsung Tanpa Perantara", desc: "Anda bicara langsung dengan yang mengerjakan sistem Anda — bukan lewat account manager atau tim support berlapis." },
+      { title: "Komunikasi Langsung Tanpa Perantara", desc: "Anda bicara langsung dengan yang mengerjakan sistem Anda, bukan lewat account manager atau tim support berlapis." },
       { title: "Kode Bersih & Terstruktur", desc: "Arsitektur dibangun dengan standar industri terbaik, rapi, dan terdokumentasi, sehingga mudah diskalakan atau diserahkan ke tim lain di masa depan." },
       { title: "Pendampingan Pasca-Launch", desc: "Mendampingi Anda selama fase kritis pasca-peluncuran untuk memastikan sistem berjalan stabil, memperbaiki bug, dan menjaga performa." },
       { title: "Revisi Terstruktur", desc: "Proses feedback yang terstruktur di setiap milestone (tahapan), mencegah rombak total di akhir dan menjaga proyek tetap on-track." },
       { title: "Pembayaran Bertahap", desc: "Skema pembayaran termin berbasis milestone (berkala). Anda hanya membayar saat fitur yang disepakati benar-benar selesai dan lulus uji coba." },
-      { title: "100% Hak Cipta Anda", desc: "Seluruh source code dan hak cipta sepenuhnya milik Anda setelah proyek selesai — bukan disewakan atau di-lock ke platform saya." }
+      { title: "100% Hak Cipta Anda", desc: "Seluruh source code dan hak cipta sepenuhnya milik Anda setelah proyek selesai, bukan disewakan atau dikunci ke platform saya." }
     ]
   },
   templateSettings: {

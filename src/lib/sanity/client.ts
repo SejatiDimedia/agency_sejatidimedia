@@ -18,8 +18,8 @@ export const sanityClient = isSanityConfigured
 
 // Default high-fidelity Indonesian/English copywriting from current static landing page
 export const DEFAULT_COPYWRITING = {
-  heroTitle: "Software Developer Independen — Membangun Website, Aplikasi, dan Sistem Backend yang Siap Diandalkan.",
-  heroSubtitle: "Berbekal pengalaman sebagai Software Developer di industri manufaktur, saya membangun produk digital dengan kode custom, arsitektur yang rapi, dan komunikasi langsung — tanpa perantara.",
+  heroTitle: "Software Developer Independen: Membangun Website, Aplikasi, dan Sistem Backend yang Siap Diandalkan.",
+  heroSubtitle: "Berbekal pengalaman sebagai Software Developer di industri manufaktur, saya membangun produk digital dengan kode custom, arsitektur yang rapi, dan komunikasi langsung, tanpa perantara.",
   contactTagline: "Parameter proyek Anda telah diterima secara langsung. Saya akan mempelajari kebutuhan Anda dan menghubungi Anda dalam waktu 12 jam.",
   processesTitle: "Proses Kerja Terstruktur untuk Hasil Terbaik",
 };

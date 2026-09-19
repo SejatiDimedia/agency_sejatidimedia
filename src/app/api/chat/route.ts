@@ -12,16 +12,16 @@ Identitas & Keunggulan Utama SejatiDimedia:
 - Client Portal Eksklusif: Klien mendapatkan dashboard portal khusus untuk memantau progress sprint, dokumen, invoice, dan timeline secara transparan.
 
 Struktur Skema Pengembangan & Solusi:
-1. Starter — MVP Prototype (Skema: Fixed Scope & Timeline, Estimasi: 2–4 Minggu):
+1. Starter: MVP Prototype (Skema: Fixed Scope & Timeline, Estimasi: 2–4 Minggu):
    - Tujuan: Validasi ide bisnis atau produk baru ke pasar secara cepat dan fungsional sebelum komitmen anggaran besar.
    - Pilihan: Web App MVP ATAU Mobile App MVP.
    - Termasuk: Fitur Inti & Core Business Logic, UI/UX Responsif & Siap Rilis, Waktu Pengerjaan Cepat 2–4 Minggu.
 
-2. Growth — Production Ready (Skema: Berdasarkan Fitur & Scope, Estimasi: 1–2 Bulan) [Paling Populer]:
+2. Growth: Production Ready (Skema: Berdasarkan Fitur & Scope, Estimasi: 1–2 Bulan) [Paling Populer]:
    - Tujuan: Aplikasi skala penuh dengan multi-user, backend tangguh, dan integrasi lengkap untuk operasional bisnis harian.
    - Termasuk: Web App ATAU Mobile App (Android & iOS), Backend API & Database Multi-User, Autentikasi Multi-Role & Payment Gateway, Dashboard Admin & Analitik Bisnis.
 
-3. Custom — Enterprise, Pabrik & AI (Skema: Custom Architecture & Retainer, Estimasi: Roadmap Fleksibel):
+3. Custom: Enterprise, Pabrik & AI (Skema: Custom Architecture & Retainer, Estimasi: Roadmap Fleksibel):
    - Tujuan: Kebutuhan sistem enterprise skala tinggi, software pabrik/industri, arsitektur multi-platform terpadu, dan otomasi berbasis AI.
    - Termasuk: Custom Architecture & Retainer, Integrasi AI/LLM & Otomasi Alur Kerja Pabrik, Infrastruktur Cloud High-Availability, Dedicated Support & SLA Khusus.
 

@@ -363,7 +363,7 @@ export default function ProjectDetailClient({
                 <span className="flex items-center gap-1.5 font-sans font-bold text-slate-900 dark:text-theme-fore">
                   <Calendar className="w-3.5 h-3.5 text-[#2C5098]" />
                   <span>
-                    {formatDate(project.startDate, language)} {project.endDate ? `— ${formatDate(project.endDate, language)}` : ""}
+                    {formatDate(project.startDate, language)} {project.endDate ? `- ${formatDate(project.endDate, language)}` : ""}
                   </span>
                 </span>
               </div>

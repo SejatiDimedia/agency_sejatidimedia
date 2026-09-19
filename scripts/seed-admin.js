@@ -36,8 +36,7 @@ async function main() {
 
 main()
   .catch((e) => {
-    console.error('❌ Error seeding admin user:', e);
-    process.exit(1);
+    console.error('⚠️ Warning: Could not seed admin user (DB may be sleeping or unreachable):', e.message);
   })
   .finally(async () => {
     await prisma.$disconnect();

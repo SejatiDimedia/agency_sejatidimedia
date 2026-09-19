@@ -24,7 +24,7 @@ export const en = {
     card1Title: "Real Manufacturing Systems",
     card1Desc: "Accustomed to building enterprise-scale systems in the manufacturing industry that handle transactions, inventory, and daily workflows accurately.",
     card2Title: "Testable Products",
-    card2Desc: "Code can be audited on GitHub, applications are active and can be tested directly — providing concrete evidence, not just portfolio screenshots.",
+    card2Desc: "Code can be audited on GitHub, applications are active and can be tested directly to provide concrete evidence, not just portfolio screenshots.",
     btnPrimary: "Consult Your System Needs",
     btnSecondary: "View Project Case Studies",
     stat1Title: "Operational Experience in Manufacturing Industry",
@@ -32,16 +32,19 @@ export const en = {
     stat3Title: "Progress Access via Real-Time Client Portal",
   },
   clientPortal: {
+    badge: "KEY FEATURE",
     eyebrow: "KEY FEATURE",
     title: "Track Your Project Progress, Anytime",
-    subtitle: "Every client gets access to a dedicated portal to monitor development progress, milestones, and invoices — no manual status calls required.",
-    mockupTitle: "Client Dashboard — Active Project",
+    mainHeading: "Track Your Project Progress, Anytime",
+    mainHeadingHighlight: "Via Dedicated Client Portal",
+    subtitle: "Every client gets access to a dedicated portal to monitor development progress, milestones, and invoices without manual status calls required.",
+    mockupTitle: "Client Dashboard: Active Project",
     point1Title: "Real-Time Progress",
-    point1Desc: "View the status of every development phase — from planning, development, to testing.",
+    point1Desc: "View the status of every development phase, from planning, development, to testing.",
     point2Title: "Transparent Invoices & Billing",
     point2Desc: "Billing history and payment status are clearly logged with no hidden fees.",
     point3Title: "Proactive Updates",
-    point3Desc: "Get notified automatically when milestones complete — no need to chase for progress."
+    point3Desc: "Get notified automatically when milestones complete, so there is no need to chase for progress."
   },
   about: {
     eyebrow: "ABOUT ME",
@@ -62,18 +65,43 @@ export const en = {
     card1Title: "5+ Years Manufacturing Experience",
     card1Desc: "ERP, Production, Inventory & Operational Workflow",
     card2Title: "Integrated Digital Systems",
-    card2Desc: "Not just a website, but a real operational system"
+    card2Desc: "Not just a website, but a real operational system",
+    valuesBadge: "CORE PRINCIPLES",
+    valuesTitle: "Values We Uphold",
+    valuesSubtitle: "Engineering disciplines and practical commitments applied to every project, from the first line of code to live operations.",
+    values: [
+      {
+        title: "Integrity",
+        tag: "Full Transparency",
+        desc: "Track project progress live via your dedicated client portal. Scope and pricing are agreed upfront with zero hidden fees, and every change is discussed openly."
+      },
+      {
+        title: "Innovation",
+        tag: "Modern & Proven",
+        desc: "We leverage proven modern technologies to deliver fresh solutions for your real operational challenges, without unnecessary complexity or bloated costs."
+      },
+      {
+        title: "Collaboration",
+        tag: "Direct Discussion",
+        desc: "You discuss directly with the developer building your software. With zero sales intermediaries, technical decisions are made faster, precisely, and right on target."
+      },
+      {
+        title: "Reliability",
+        tag: "Stable & Supported",
+        desc: "Systems are engineered on stable architectures, rigorously tested before release, and supported post-launch to keep your business operations running smoothly."
+      }
+    ]
   },
   services: {
     sectionTitle: "Services",
     portfolio: "Portfolio",
     mainHeading: "From idea to production. I handle the entire development cycle.",
     mainHeadingHighlight: "Software Development",
-    desc: "Every system I build starts from real operational needs — not generic templates. Clean architecture, ironclad security, and performance designed to grow with your business.",
+    desc: "Every system I build starts from real operational needs, not generic templates. Clean architecture, ironclad security, and performance designed to grow with your business.",
     items: [
       {
         title: "Web Application Development",
-        desc: "Company profile websites, admin dashboards, to custom SaaS platforms — built with a scalable architecture and high performance.",
+        desc: "Company profile websites, admin dashboards, to custom SaaS platforms built with a scalable architecture and high performance.",
       },
       {
         title: "Mobile App Development",
@@ -81,7 +109,7 @@ export const en = {
       },
       {
         title: "REST API & Cloud Integration",
-        desc: "Secure, structured, and scalable Backend APIs — complete with authentication, payment integration, and real-time systems.",
+        desc: "Secure, structured, and scalable Backend APIs, complete with authentication, payment integration, and real-time systems.",
       },
       {
         title: "AI & LLM Integration",
@@ -93,7 +121,7 @@ export const en = {
     badge: "Technology",
     mainHeading: "Technologies ",
     mainHeadingHighlight: "Used",
-    desc: "Tools are chosen based on project needs, not just trends — ensuring long-term performance, security, and ease of maintenance.",
+    desc: "Tools are chosen based on project needs, not just trends, ensuring long-term performance, security, and ease of maintenance.",
     frontend: "Frontend",
     frontendDesc: "For fast, responsive, and interactive interfaces.",
     backend: "Backend & API",
@@ -111,7 +139,7 @@ export const en = {
   credibility: {
     badge: "Credibility",
     mainHeading: "Background & Capabilities",
-    desc: "Before taking on independent projects, I worked as a Software Developer in the manufacturing industry — handling systems that must be accurate and reliable for daily operations. I bring that experience to every project: code that doesn't just work, but is stable and easily maintainable in the long run.",
+    desc: "Before taking on independent projects, I worked as a Software Developer in the manufacturing industry, handling systems that must be accurate and reliable for daily operations. I bring that experience to every project: code that doesn't just work, but is stable and easily maintainable in the long run.",
     card1Title: "Manufacturing Experience",
     card1Desc: "Experienced in developing & maintaining internal systems (like ERP, inventory, and HCM) in real manufacturing companies that demand high reliability.",
     card1Btn: "See Capabilities",
@@ -129,13 +157,13 @@ export const en = {
     mainHeading: "Clear & Transparent Development Schemes",
     subDesc: "No hidden costs. Scope, architecture, and deliverables are clearly defined from day one.",
     starterLabel: "For Idea Validation",
-    starterTitle: "Starter — MVP Prototype",
+    starterTitle: "Starter: MVP Prototype",
     starterDesc: "Perfect for startups or businesses wanting to quickly validate ideas in the market using a functional application.",
     starterPrice: "Fixed Scope & Timeline",
     starterTime: "Est: 2–4 Weeks",
     starterBtn: "Consult MVP Scope",
     growthLabel: "For Public Release",
-    growthTitle: "Growth — Production Ready",
+    growthTitle: "Growth: Production Ready",
     growthDesc: "Full-scale applications with robust architecture, advanced security, and optimal performance for daily business operations.",
     growthPrice: "Based on Scope & Features",
     growthTime: "Est: 1–2 Months",
@@ -229,7 +257,7 @@ export const en = {
     item1Title: "Structured Revisions",
     item1Desc: "Every package includes a revision allocation. You won't be stuck with final results that don't match your expectations.",
     item2Title: "100% Copyright Yours",
-    item2Desc: "Source code, design, and all digital assets are entirely yours after the project is paid off — no recurring licenses.",
+    item2Desc: "Source code, design, and all digital assets are entirely yours after the project is paid off, with no recurring licenses.",
     item3Title: "Milestone Payments",
     item3Desc: "Payments are made per milestone, so you can securely evaluate progress before moving on to the next stage."
   },
@@ -330,7 +358,7 @@ export const en = {
   ],
   pricingCards: {
     starterTag: "Idea Validation & MVP",
-    starterTitle: "Starter — MVP Prototype",
+    starterTitle: "Starter: MVP Prototype",
     starterDesc: "Quickly validate new product ideas or business concepts in the market before committing large budgets.",
     starterPrice: "Fixed Scope",
     starterPriceMain: "Fixed Scope & Timeline",
@@ -343,7 +371,7 @@ export const en = {
       'Fast Turnaround in 2–4 Weeks'
     ],
     growthTag: "Operations & Scale-Up",
-    growthTitle: "Growth — Production Ready",
+    growthTitle: "Growth: Production Ready",
     growthDesc: "Full-scale production software with multi-user, robust backend, and complete integrations for daily operations.",
     growthPrice: "Based on Features",
     growthPriceMain: "Based on Scope & Features",
@@ -427,7 +455,7 @@ export const en = {
     secure: "Secure & guaranteed transactions"
   },
   footer: {
-    tagline: "Technical partner for businesses that want their digital systems built right — from the start.",
+    tagline: "Technical partner for businesses that want their digital systems built right from the start.",
     contact: "Contact",
     contactBadge: "Contact Us",
     whatsapp: "WhatsApp",
@@ -444,12 +472,12 @@ export const en = {
     mainHeading: "Why Clients Trust",
     mainHeadingHighlight: "Working With Me",
     items: [
-      { title: "Direct Communication Without Intermediaries", desc: "You speak directly with the person building your system — not through account managers or layered support teams." },
+      { title: "Direct Communication Without Intermediaries", desc: "You speak directly with the person building your system, not through account managers or layered support teams." },
       { title: "Clean & Structured Code", desc: "The architecture is built with the best industry standards, neat, and documented, making it easy to scale or hand over to another team in the future." },
       { title: "Post-Launch Support", desc: "Accompanying you during the critical post-launch phase to ensure the system runs stably, fixing bugs, and maintaining performance." },
       { title: "Structured Revisions", desc: "A structured feedback process at each milestone, preventing a total overhaul at the end and keeping the project on-track." },
       { title: "Gradual Payments", desc: "A milestone-based payment scheme. You only pay when the agreed features are fully completed and pass testing." },
-      { title: "100% Your Copyright", desc: "All source code and copyright belong entirely to you after project completion — not rented or locked to my platform." }
+      { title: "100% Your Copyright", desc: "All source code and copyright belong entirely to you after project completion, not rented or locked to my platform." }
     ]
   },
   templateSettings: {

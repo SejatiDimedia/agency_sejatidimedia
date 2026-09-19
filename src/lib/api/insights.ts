@@ -119,7 +119,7 @@ export const DEFAULT_SERIES_DATA: InsightSeriesSummary[] = [
     slug: "fullstack-modern-nextjs",
     titleId: "Fullstack Modern dengan Next.js & React",
     titleEn: "Modern Fullstack with Next.js & React",
-    descriptionId: "Panduan membangun aplikasi web enterprise menggunakan Next.js App Router, React Server Components, dan TypeScript — dari fondasi arsitektur hingga optimasi performa production.",
+    descriptionId: "Panduan membangun aplikasi web enterprise menggunakan Next.js App Router, React Server Components, dan TypeScript, dari fondasi arsitektur hingga optimasi performa production.",
     descriptionEn: "A comprehensive guide to building enterprise web applications with Next.js App Router, React Server Components, and TypeScript.",
     badge: "ENGINEERING PLAYBOOK",
     category: "Architecture",
@@ -133,7 +133,7 @@ export const DEFAULT_SERIES_DATA: InsightSeriesSummary[] = [
     slug: "membangun-saas-produk-first",
     titleId: "Panduan Membangun SaaS Produk-First",
     titleEn: "Product-First SaaS Building Guide",
-    descriptionId: "Seri playbook komprehensif tentang strategi, arsitektur, dan operasi membangun produk SaaS — dari validasi ide, desain multi-tenant, billing & subscription, hingga growth di pasar Indonesia.",
+    descriptionId: "Seri playbook komprehensif tentang strategi, arsitektur, dan operasi membangun produk SaaS: dari validasi ide, desain multi-tenant, billing & subscription, hingga growth di pasar Indonesia.",
     descriptionEn: "A comprehensive playbook series on strategy, architecture, and operations for building SaaS products.",
     badge: "PRODUCT PLAYBOOK",
     category: "Best Practices",
@@ -147,7 +147,7 @@ export const DEFAULT_SERIES_DATA: InsightSeriesSummary[] = [
     slug: "keamanan-hardening-aplikasi-web",
     titleId: "Keamanan & Hardening Aplikasi Web",
     titleEn: "Web Application Security & Hardening",
-    descriptionId: "Seri mendalam tentang ancaman keamanan nyata pada aplikasi web bisnis — dari injeksi SQL, XSS, CSRF, IDOR, hingga audit keamanan dan secure deployment checklist.",
+    descriptionId: "Seri mendalam tentang ancaman keamanan nyata pada aplikasi web bisnis: dari injeksi SQL, XSS, CSRF, IDOR, hingga audit keamanan dan secure deployment checklist.",
     descriptionEn: "An in-depth series on real security threats to business web applications.",
     badge: "SECURITY SERIES",
     category: "Security",
@@ -503,7 +503,7 @@ Dengan TypeScript yang ketat (*strict mode*), seluruh data mulai dari skema data
 
 ### 3. SEO & Dynamic Social Preview yang Sempurna
 Fitur bawaan \`generateMetadata\` di Next.js App Router memungkinkan pembuatan OpenGraph banner dinamis dan metadata teroptimasi untuk setiap halaman, memudahkan produk klien kami viral di media sosial.`,
-    contentEn: `In modern web development, choosing a tech stack isn't about chasing buzzwords—it is about three business imperatives:
+    contentEn: `In modern web development, choosing a tech stack isn't about chasing buzzwords: it is about three business imperatives:
 1. Blazing load times that directly impact user conversion and retention.
 2. Long-term code maintainability across multi-year lifecycles.
 3. Resilient type safety to eradicate runtime exceptions.
@@ -536,8 +536,8 @@ Oleh karena itu, kami membangun **Client Portal SejatiDimedia** sebagai pilar op
 2. **Transparent Billing & Invoicing**: Riwayat termin pembayaran, bukti transfer, dan status invoice tercatat resmi tanpa ada biaya tersembunyi.
 3. **Dokumentasi & Deliverables Terpusat**: Semua link repositori Git, desain Figma, dan credential staging tersimpan aman dalam satu dashboard terlindungi.
 
-Transparansi bukan sekadar fitur tambahan—bagi kami, transparansi adalah produk inti.`,
-    contentEn: `The number one complaint in custom software development isn't pricing—it is communication breakdown: *"The developer vanished after the deposit, and we have no idea what is being built."*
+Transparansi bukan sekadar fitur tambahan, bagi kami transparansi adalah produk inti.`,
+    contentEn: `The number one complaint in custom software development isn't pricing, it is communication breakdown: *"The developer vanished after the deposit, and we have no idea what is being built."*
 
 At **SejatiDimedia**, we engineered our dedicated **Client Portal** to eliminate guesswork and foster total transparency through real-time milestone tracking and centralized billing.`
   }

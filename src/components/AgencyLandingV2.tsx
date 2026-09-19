@@ -199,7 +199,7 @@ function ClientPortalMockup3D({ t }: { t: any }) {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-slate-900 leading-tight">
-                    {t.clientPortal?.mockupTitle || "Dashboard Klien — Proyek Aktif"}
+                    {t.clientPortal?.mockupTitle || "Dashboard Klien: Proyek Aktif"}
                   </p>
                   <div className="flex items-center gap-1.5 mt-0.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
@@ -1326,7 +1326,7 @@ export default function AgencyLandingV2({
                         <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-2xs space-y-2 text-xs text-slate-800">
                           <div>
                             <p className="text-[10px] font-mono text-slate-400">To: timur@example.com</p>
-                            <p className="font-semibold text-slate-900 mt-0.5">[SejatiDimedia] Milestone 2 Completed — Preview Ready</p>
+                            <p className="font-semibold text-slate-900 mt-0.5">[SejatiDimedia] Milestone 2 Completed: Preview Ready</p>
                           </div>
                           <p className="text-slate-600 leading-relaxed text-[11px]">
                             Hello Timur, all Sprint 2 deliverables have passed QA testing. You can review the live staging build at:
@@ -1496,6 +1496,85 @@ export default function AgencyLandingV2({
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Section: Nilai yang Kami Pegang (Core Values) */}
+          <div className="pt-16 sm:pt-20 border-t border-slate-200/90 text-left">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-10">
+              <div className="space-y-2 max-w-xl">
+                <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
+                  <span>{t.about?.valuesBadge || (language === 'en' ? 'CORE PRINCIPLES' : 'PRINSIP & NILAI')}</span>
+                </div>
+                <h3 className="text-2xl sm:text-3xl lg:text-3.5xl font-sora font-extrabold text-slate-900 tracking-tight leading-tight">
+                  {t.about?.valuesTitle || (language === 'en' ? 'Values We Uphold' : 'Nilai yang Kami Pegang')}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed pt-0.5">
+                  {t.about?.valuesSubtitle || (language === 'en'
+                    ? 'Engineering disciplines and practical commitments applied to every project, from the first line of code to live operations.'
+                    : 'Prinsip kerja dan komitmen nyata yang diterapkan pada setiap pengerjaan, dari baris kode pertama hingga sistem beroperasi.')}
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 text-left">
+              {[
+                {
+                  title: t.about?.values?.[0]?.title || (language === 'en' ? 'Integrity' : 'Integritas'),
+                  tag: t.about?.values?.[0]?.tag || (language === 'en' ? 'Full Transparency' : 'Transparansi Penuh'),
+                  desc: t.about?.values?.[0]?.desc || (language === 'en'
+                    ? 'Track project progress live via your dedicated client portal. Scope and pricing are agreed upfront with zero hidden fees, and every change is discussed openly.'
+                    : 'Progres proyek bisa Anda pantau langsung lewat portal klien. Biaya disepakati di awal tanpa biaya tersembunyi, dan setiap perubahan dibahas secara terbuka.'),
+                  icon: 'ph:shield-check-duotone'
+                },
+                {
+                  title: t.about?.values?.[1]?.title || (language === 'en' ? 'Innovation' : 'Inovasi'),
+                  tag: t.about?.values?.[1]?.tag || (language === 'en' ? 'Modern & Proven' : 'Modern & Terbukti'),
+                  desc: t.about?.values?.[1]?.desc || (language === 'en'
+                    ? 'We leverage proven modern technologies to deliver fresh solutions for your real operational challenges, without unnecessary complexity or bloated costs.'
+                    : 'Kami memanfaatkan teknologi modern yang sudah terbukti untuk menghadirkan solusi baru bagi masalah operasional nyata Anda, tanpa kerumitan berlebih yang membebani biaya.'),
+                  icon: 'ph:lightbulb-filament-duotone'
+                },
+                {
+                  title: t.about?.values?.[2]?.title || (language === 'en' ? 'Collaboration' : 'Kolaborasi'),
+                  tag: t.about?.values?.[2]?.tag || (language === 'en' ? 'Direct Discussion' : 'Diskusi Langsung'),
+                  desc: t.about?.values?.[2]?.desc || (language === 'en'
+                    ? 'You discuss directly with the developer building your software. With zero sales intermediaries, technical decisions are made faster, precisely, and right on target.'
+                    : 'Anda berdiskusi langsung dengan developer yang menulis kode Anda. Tanpa perantara sales, keputusan teknis diambil lebih cepat, presisi, dan tepat sasaran.'),
+                  icon: 'ph:users-three-duotone'
+                },
+                {
+                  title: t.about?.values?.[3]?.title || (language === 'en' ? 'Reliability' : 'Keandalan'),
+                  tag: t.about?.values?.[3]?.tag || (language === 'en' ? 'Stable & Supported' : 'Stabil & Terdampingi'),
+                  desc: t.about?.values?.[3]?.desc || (language === 'en'
+                    ? 'Systems are engineered on stable architectures, rigorously tested before release, and supported post-launch to keep your business operations running smoothly.'
+                    : 'Sistem dibangun di atas arsitektur yang stabil, diuji sebelum rilis, dan tetap kami dampingi setelah berjalan agar operasional bisnis Anda tidak terganggu.'),
+                  icon: 'ph:seal-check-duotone'
+                }
+              ].map((val, idx) => (
+                <div
+                  key={idx}
+                  className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:border-[#2C5098]/40 hover:shadow-md transition-all flex flex-col sm:flex-row gap-5 items-start group"
+                >
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 shrink-0 group-hover:scale-105 transition-transform">
+                    <Icon icon={val.icon} className="w-6 h-6" />
+                  </div>
+                  <div className="flex-1 min-w-0 space-y-2">
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                      <h4 className="text-base sm:text-lg font-sora font-bold text-slate-900 tracking-tight">
+                        <span className="text-[#2C5098] font-mono font-bold mr-2">0{idx + 1}</span>
+                        {val.title}
+                      </h4>
+                      <span className="text-xs font-mono font-medium text-slate-400">
+                        {val.tag}
+                      </span>
+                    </div>
+                    <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed">
+                      {val.desc}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
