@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { TemplateId } from '@/lib/templates';
 import { Project } from '@/lib/api/glio-projects';
+import { InsightArticle } from '@/lib/api/insights';
 
 // Dynamic import of both landing page versions
 const AgencyLandingV1 = dynamic(() => import('./AgencyLanding'), {
@@ -19,6 +20,7 @@ interface LandingPageSelectorProps {
   copy?: any;
   projects?: Project[];
   featuredProjectSlugs?: string[];
+  recentInsights?: InsightArticle[];
 }
 
 export default function LandingPageSelector({
@@ -26,6 +28,7 @@ export default function LandingPageSelector({
   copy,
   projects,
   featuredProjectSlugs,
+  recentInsights = [],
 }: LandingPageSelectorProps) {
   const [template, setTemplate] = useState<TemplateId>(initialTemplate);
 
@@ -51,9 +54,23 @@ export default function LandingPageSelector({
   }, []);
 
   if (template === 'classic') {
-    return <AgencyLandingV1 copy={copy} projects={projects} featuredProjectSlugs={featuredProjectSlugs} />;
+    return (
+      <AgencyLandingV1
+        copy={copy}
+        projects={projects}
+        featuredProjectSlugs={featuredProjectSlugs}
+        recentInsights={recentInsights}
+      />
+    );
   }
 
-  return <AgencyLandingV2 copy={copy} projects={projects} featuredProjectSlugs={featuredProjectSlugs} />;
+  return (
+    <AgencyLandingV2
+      copy={copy}
+      projects={projects}
+      featuredProjectSlugs={featuredProjectSlugs}
+      recentInsights={recentInsights}
+    />
+  );
 }
 

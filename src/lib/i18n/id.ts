@@ -516,5 +516,15 @@ export const id = {
       buttonPrimary: "Konsultasi Gratis via WhatsApp",
       buttonSecondary: "Hitung Estimasi Proyek"
     }
+  },
+  homeInsights: {
+    badge: "INSIGHTS & REKAYASA",
+    title: "Catatan Arsitektur &",
+    titleHighlight: "Standar Rekayasa Software",
+    subtitle: "Ulasan teknis mendalam seputar arsitektur sistem, optimasi performa backend, hingga perancangan aplikasi siap scale.",
+    viewAll: "Lihat Semua Artikel",
+    readTime: "menit baca",
+    readArticle: "Baca Selengkapnya",
+    featuredBadge: "Pilihan Redaksi"
   }
 };

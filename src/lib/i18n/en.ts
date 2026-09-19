@@ -516,5 +516,15 @@ export const en = {
       buttonPrimary: "Free Consultation via WhatsApp",
       buttonSecondary: "Estimate Your Project"
     }
+  },
+  homeInsights: {
+    badge: "ENGINEERING INSIGHTS",
+    title: "System Architecture &",
+    titleHighlight: "Engineering Standards",
+    subtitle: "In-depth technical breakdowns covering system architecture, backend performance optimization, and scalable software design.",
+    viewAll: "View All Articles",
+    readTime: "min read",
+    readArticle: "Read Article",
+    featuredBadge: "Featured"
   }
 };

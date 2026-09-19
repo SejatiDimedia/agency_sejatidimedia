@@ -1,101 +1,17 @@
 import { prisma } from "@/lib/prisma";
 import { getGlobalAuthorProfile } from "@/lib/server-template";
 
-export interface InsightAuthor {
-  name: string;
-  role: string;
-  avatar: string;
-  bioId?: string;
-  bioEn?: string;
-}
-
-export interface SeriesCurriculumItem {
-  part: number;
-  slug: string;
-  titleId: string;
-  titleEn?: string | null;
-  readTimeMinutes: number;
-  isCurrent: boolean;
-}
-
-export interface SeriesAdjacentPart {
-  part: number;
-  slug: string;
-  titleId: string;
-  titleEn?: string | null;
-}
-
-export interface InsightSeriesInfo {
-  id: string;
-  slug: string;
-  titleId: string;
-  titleEn?: string | null;
-  descriptionId: string;
-  descriptionEn?: string | null;
-  badge?: string | null;
-  part: number;
-  totalParts: number;
-  curriculum: SeriesCurriculumItem[];
-  prevPart?: SeriesAdjacentPart | null;
-  nextPart?: SeriesAdjacentPart | null;
-}
-
-export interface InsightSeriesSummary {
-  id: string;
-  slug: string;
-  titleId: string;
-  titleEn?: string | null;
-  descriptionId: string;
-  descriptionEn?: string | null;
-  badge?: string | null;
-  category: string;
-  coverImage?: string | null;
-  totalArticles: number;
-  totalReadTimeMinutes: number;
-  updatedAt: string;
-}
-
-export interface InsightSeriesDetail extends InsightSeriesSummary {
-  articles: Array<{
-    slug: string;
-    titleId: string;
-    titleEn?: string | null;
-    excerptId: string;
-    excerptEn?: string | null;
-    readTimeMinutes: number;
-    seriesPart: number;
-    publishedAt: string;
-  }>;
-}
-
-export interface InsightArticle {
-  slug: string;
-  titleId: string;
-  titleEn: string;
-  excerptId: string;
-  excerptEn: string;
-  contentId: string;
-  contentEn: string;
-  category: 'Backend' | 'Frontend' | 'Architecture' | 'Best Practices' | 'Security';
-  tags: string[];
-  publishedAt: string;
-  readTimeMinutes: number;
-  author: InsightAuthor;
-  coverImage: string;
-  featured?: boolean;
-  seriesId?: string | null;
-  seriesPart?: number | null;
-  series?: InsightSeriesInfo | null;
-  isPublished?: boolean;
-}
-
-const DEFAULT_AUTHOR: InsightAuthor = {
-  name: "Timur Dian Radha Sejati",
-  role: "Lead Software Engineer · SejatiDimedia",
-  avatar: "/images/author_timur_dian.jpg",
-  bioId: "Software engineer dan konsultan sistem di SejatiDimedia. Berfokus pada perancangan arsitektur berkinerja tinggi, refactoring backend skala enterprise (Laravel / Node.js), hingga pengembangan aplikasi mobile & web modern.",
-  bioEn: "Software engineer and systems consultant at SejatiDimedia. Specializing in high-performance architecture design, enterprise-scale backend refactoring (Laravel / Node.js), and modern web & mobile engineering.",
-};
+export * from "./insights-types";
+import {
+  InsightAuthor,
+  SeriesCurriculumItem,
+  SeriesAdjacentPart,
+  InsightSeriesInfo,
+  InsightSeriesSummary,
+  InsightSeriesDetail,
+  InsightArticle,
+  DEFAULT_AUTHOR,
+} from "./insights-types";
 
 const DUMMY_AVATAR = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80";
 
@@ -906,7 +822,7 @@ export async function getAllCategories(): Promise<string[]> {
     });
     seriesList.forEach((s) => {
       if (s.category) {
-        s.category.split(',').forEach((c) => {
+        s.category.split(',').forEach((c: string) => {
           const trimmed = c.trim();
           if (trimmed) set.add(trimmed);
         });
@@ -920,7 +836,7 @@ export async function getAllCategories(): Promise<string[]> {
     });
     DEFAULT_SERIES_DATA.forEach((s) => {
       if (s.category) {
-        s.category.split(',').forEach((c) => {
+        s.category.split(',').forEach((c: string) => {
           const trimmed = c.trim();
           if (trimmed) set.add(trimmed);
         });

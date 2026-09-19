@@ -9,6 +9,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Project, MOCK_PROJECTS } from '../lib/api/glio-projects';
+import { InsightArticle, FALLBACK_INSIGHTS } from '../lib/api/insights-types';
 import { useLanguage } from '../lib/i18n/LanguageContext';
 import { TECH_ICONS } from '../lib/constants';
 import { motion, AnimatePresence } from 'motion/react';
@@ -113,13 +114,23 @@ export default function AgencyLanding({
   copy,
   projects,
   featuredProjectSlugs: initialFeaturedSlugs,
+  recentInsights,
 }: {
   copy?: any;
   projects?: Project[];
   featuredProjectSlugs?: string[];
+  recentInsights?: InsightArticle[];
 }) {
   const { t, language } = useLanguage();
   const [featuredProjectSlugs, setFeaturedProjectSlugs] = useState<string[]>(initialFeaturedSlugs || []);
+
+  const displayInsights = useMemo(() => {
+    const fromProps = recentInsights || [];
+    if (fromProps.length >= 3) return fromProps.slice(0, 3);
+    const slugs = new Set(fromProps.map((a) => a.slug));
+    const remaining = FALLBACK_INSIGHTS.filter((a) => !slugs.has(a.slug));
+    return [...fromProps, ...remaining].slice(0, 3);
+  }, [recentInsights]);
 
   useEffect(() => {
     fetch('/api/settings/nda')
@@ -1810,6 +1821,166 @@ export default function AgencyLanding({
             </AnimatePresence>
           </div>
 
+        </div>
+      </motion.section>
+
+      {/* SECTION 3.7: ENGINEERING INSIGHTS */}
+      <motion.section
+        id="insights-section"
+        className="space-y-10 sm:space-y-12 pt-8"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: false, amount: 0.15 }}
+        variants={sectionFadeIn}
+      >
+        {/* Section Header - Matching Halaman Insights */}
+        <div className="text-center max-w-3xl mx-auto space-y-3">
+          <div className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.3em] text-theme-accent font-bold">
+            <span>{language === 'en' ? 'ENGINEERING INSIGHTS' : 'INSIGHTS & TEKNOLOGI'}</span>
+          </div>
+
+          <h2 className="text-2xl sm:text-4xl font-display font-bold tracking-tight text-theme-fore leading-tight">
+            {language === 'en' ? 'System Architecture &' : 'Catatan Arsitektur &'}{' '}
+            <span className="text-theme-accent font-extrabold">
+              {language === 'en' ? 'Engineering Standards' : 'Standar Rekayasa Software'}
+            </span>
+          </h2>
+
+          <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed font-sans max-w-2xl mx-auto">
+            {language === 'en'
+              ? 'In-depth technical breakdowns covering system architecture, backend performance optimization, and scalable software design.'
+              : 'Ulasan teknis mendalam seputar arsitektur sistem, optimasi performa backend, hingga perancangan aplikasi siap scale.'}
+          </p>
+        </div>
+
+        {/* 3 Articles Grid - Matching Halaman Insights */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 text-left max-w-6xl mx-auto">
+          {displayInsights.map((article, idx) => {
+            const articleTitle = (language === 'en' ? article.titleEn : article.titleId) || article.titleId;
+            const articleExcerpt = (language === 'en' ? article.excerptEn : article.excerptId) || article.excerptId;
+            const formattedDate = (() => {
+              try {
+                return new Date(article.publishedAt).toLocaleDateString(
+                  language === 'en' ? 'en-US' : 'id-ID',
+                  { month: 'short', day: 'numeric', year: 'numeric' }
+                );
+              } catch {
+                return article.publishedAt;
+              }
+            })();
+
+            return (
+              <motion.article
+                key={article.slug}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.35, delay: idx * 0.05 }}
+                className="group relative flex flex-col h-full rounded-3xl bg-white dark:bg-theme-surface/60 backdrop-blur-xl border border-theme-border/80 hover:border-theme-accent/60 shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden"
+              >
+                <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-theme-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" />
+
+                <Link href={`/insights/${article.slug}`} className="flex flex-col h-full">
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-theme-surface border-b border-theme-border/40">
+                    <Image
+                      src={article.coverImage}
+                      alt={articleTitle}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+
+                    <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 flex-wrap max-w-[90%]">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 dark:bg-slate-900/90 text-theme-accent border border-theme-accent/20 shadow-xs backdrop-blur-md">
+                        <span className="w-1.5 h-1.5 rounded-full bg-theme-accent" />
+                        {article.category}
+                      </span>
+                      {article.series && (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-[#1E315B] text-white border border-white/20 shadow-xs">
+                          <Icon icon="ph:stack-fill" className="w-3 h-3 text-blue-200" />
+                          Part {article.seriesPart || article.series.part}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="absolute bottom-3 right-3 z-10">
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-medium bg-black/60 text-white/95 backdrop-blur-md border border-white/15">
+                        <Icon icon="ph:clock-bold" className="w-3 h-3 text-white/80" />
+                        {article.readTimeMinutes} {language === "en" ? "min read" : "menit baca"}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col flex-1 p-6 sm:p-7 justify-between space-y-4">
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between gap-2 pb-1">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <div className="relative w-6 h-6 rounded-full overflow-hidden border border-theme-border/60 shrink-0 bg-theme-surface">
+                            <Image
+                              src={article.author.avatar}
+                              alt={article.author.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <span className="text-xs font-bold text-theme-fore truncate">
+                            {article.author.name}
+                          </span>
+                        </div>
+
+                        <span className="text-[11px] font-sans text-theme-fore-muted shrink-0">
+                          {formattedDate}
+                        </span>
+                      </div>
+
+                      <h3 className="text-lg sm:text-xl font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors line-clamp-2 leading-snug tracking-tight">
+                        {articleTitle}
+                      </h3>
+
+                      <p className="text-xs sm:text-sm text-theme-fore-muted line-clamp-3 leading-relaxed font-sans">
+                        {articleExcerpt}
+                      </p>
+                    </div>
+
+                    {/* Footer: Tags & Read CTA - Matching /insights */}
+                    <div className="pt-4 border-t border-theme-border/40 flex items-center justify-between mt-auto gap-2">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {article.tags.slice(0, 2).map((tag) => (
+                          <span
+                            key={tag}
+                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-sans font-bold text-theme-accent bg-theme-accent/10 border border-theme-accent/20 transition-all shadow-2xs"
+                          >
+                            <span>{tag}</span>
+                          </span>
+                        ))}
+                      </div>
+
+                      <div className="inline-flex items-center gap-2 group/btn shrink-0">
+                        <span className="text-xs font-sans uppercase tracking-wider font-bold text-theme-accent">
+                          {language === "en" ? "Read" : "Baca"}
+                        </span>
+                        <div className="w-7 h-7 rounded-full bg-theme-surface group-hover:bg-theme-accent text-theme-fore group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-2xs group-hover:shadow-md group-hover:translate-x-0.5">
+                          <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              </motion.article>
+            );
+          })}
+        </div>
+
+        {/* Action Button: View All Articles */}
+        <div className="text-center pt-2">
+          <Link
+            href="/insights"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-theme-surface border border-theme-border hover:border-theme-accent shadow-xs hover:shadow-md text-xs font-sans font-bold text-theme-fore hover:text-theme-accent transition-all cursor-pointer group"
+          >
+            <span>{language === 'en' ? 'View All Articles' : 'Lihat Semua Artikel'}</span>
+            <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-theme-accent" />
+          </Link>
         </div>
       </motion.section>
 
