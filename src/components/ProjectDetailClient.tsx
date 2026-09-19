@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion, AnimatePresence } from "framer-motion";
 import { ArrowLeft, ExternalLink, Calendar, CheckCircle2, Clock, ShieldAlert, Briefcase, Lock, ShieldCheck, FileText, Code2 } from "lucide-react";
 import { Icon } from "@iconify/react";
 import ReactMarkdown from "react-markdown";
@@ -221,52 +222,127 @@ export default function ProjectDetailClient({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Left Column: Project Description */}
         <div className="lg:col-span-8 space-y-6">
-          <div className="p-6 sm:p-8 rounded-2xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border shadow-md text-left space-y-4">
+          <div className="p-6 sm:p-8 rounded-3xl bg-white dark:bg-theme-elevated border border-slate-200/90 dark:border-theme-border shadow-md hover:shadow-lg transition-shadow text-left space-y-6">
             {/* Header with Tab Switcher when Client Summary is available */}
             {hasClientSummary ? (
-              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 dark:border-theme-border/40 pb-3">
-                <div className="inline-flex items-center p-1 bg-slate-100/90 dark:bg-theme-surface/80 rounded-xl border border-slate-200/70 dark:border-theme-border/60 shadow-2xs">
+              <div className="pb-6 border-b border-slate-100 dark:border-theme-border/40">
+                {/* 2-Segment Responsive Tabs */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 p-1.5 rounded-2xl bg-slate-100/90 dark:bg-theme-surface/80 border border-slate-200/80 dark:border-theme-border/60 shadow-inner">
+                  {/* Tab 1: Ringkasan Project */}
                   <button
                     type="button"
                     onClick={() => setActiveTab('summary')}
-                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-sans font-semibold transition-all duration-200 cursor-pointer ${
+                    className={`relative flex items-center justify-between gap-3 p-3.5 sm:p-4 rounded-xl text-left transition-all duration-300 cursor-pointer select-none group ${
                       activeTab === 'summary'
-                        ? 'bg-white dark:bg-theme-elevated text-[#2C5098] dark:text-blue-400 shadow-sm border border-slate-200/80 dark:border-theme-border'
-                        : 'text-slate-600 dark:text-theme-fore-muted hover:text-slate-900 dark:hover:text-theme-fore'
+                        ? 'bg-gradient-to-r from-[#2C5098] to-[#1E315B] text-white shadow-md shadow-[#2C5098]/25 ring-1 ring-[#2C5098]/30'
+                        : 'bg-white/80 dark:bg-theme-elevated/70 text-slate-700 dark:text-theme-fore border border-slate-200/70 dark:border-theme-border/60 hover:bg-white dark:hover:bg-theme-elevated hover:border-[#2C5098]/40 hover:text-slate-900 dark:hover:text-white shadow-2xs'
                     }`}
                   >
-                    <FileText className="w-3.5 h-3.5" />
-                    <span>{t.projectDetail?.tabSummary || (language === 'en' ? 'Project Summary' : 'Ringkasan Project')}</span>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 ${
+                          activeTab === 'summary'
+                            ? 'bg-white/20 text-white shadow-xs'
+                            : 'bg-[#2C5098]/10 text-[#2C5098] dark:bg-[#2C5098]/20 dark:text-blue-300 group-hover:scale-105 group-hover:bg-[#2C5098] group-hover:text-white'
+                        }`}
+                      >
+                        <FileText className="w-5 h-5" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className={`text-sm sm:text-base font-sans font-bold tracking-tight truncate ${
+                            activeTab === 'summary' ? 'text-white' : 'text-slate-900 dark:text-theme-fore'
+                          }`}>
+                            {t.projectDetail?.tabSummary || (language === 'en' ? 'Project Summary' : 'Ringkasan Project')}
+                          </span>
+                        </div>
+                        <p className={`text-[11px] sm:text-xs font-sans transition-colors truncate ${
+                          activeTab === 'summary' ? 'text-blue-100/90' : 'text-slate-500 dark:text-theme-fore-muted'
+                        }`}>
+                          {t.projectDetail?.tabSummarySub || (language === 'en' ? 'Executive & Business Overview' : 'Tinjauan Eksekutif & Solusi Bisnis')}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="shrink-0 flex items-center">
+                      <span className={`text-[10px] font-mono font-semibold transition-colors ${
+                        activeTab === 'summary' ? 'text-white/60' : 'text-slate-400 group-hover:text-[#2C5098]'
+                      }`}>
+                        01
+                      </span>
+                    </div>
                   </button>
+
+                  {/* Tab 2: Detail Proyek */}
                   <button
                     type="button"
                     onClick={() => setActiveTab('detail')}
-                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-sans font-semibold transition-all duration-200 cursor-pointer ${
+                    className={`relative flex items-center justify-between gap-3 p-3.5 sm:p-4 rounded-xl text-left transition-all duration-300 cursor-pointer select-none group ${
                       activeTab === 'detail'
-                        ? 'bg-white dark:bg-theme-elevated text-[#2C5098] dark:text-blue-400 shadow-sm border border-slate-200/80 dark:border-theme-border'
-                        : 'text-slate-600 dark:text-theme-fore-muted hover:text-slate-900 dark:hover:text-theme-fore'
+                        ? 'bg-gradient-to-r from-[#2C5098] to-[#1E315B] text-white shadow-md shadow-[#2C5098]/25 ring-1 ring-[#2C5098]/30'
+                        : 'bg-white/80 dark:bg-theme-elevated/70 text-slate-700 dark:text-theme-fore border border-slate-200/70 dark:border-theme-border/60 hover:bg-white dark:hover:bg-theme-elevated hover:border-[#2C5098]/40 hover:text-slate-900 dark:hover:text-white shadow-2xs'
                     }`}
                   >
-                    <Code2 className="w-3.5 h-3.5" />
-                    <span>{t.projectDetail?.tabDetail || (language === 'en' ? 'Project Details' : 'Detail Proyek')}</span>
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 ${
+                          activeTab === 'detail'
+                            ? 'bg-white/20 text-white shadow-xs'
+                            : 'bg-[#2C5098]/10 text-[#2C5098] dark:bg-[#2C5098]/20 dark:text-blue-300 group-hover:scale-105 group-hover:bg-[#2C5098] group-hover:text-white'
+                        }`}
+                      >
+                        <Code2 className="w-5 h-5" />
+                      </div>
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className={`text-sm sm:text-base font-sans font-bold tracking-tight truncate ${
+                            activeTab === 'detail' ? 'text-white' : 'text-slate-900 dark:text-theme-fore'
+                          }`}>
+                            {t.projectDetail?.tabDetail || (language === 'en' ? 'Project Details' : 'Detail Proyek')}
+                          </span>
+                        </div>
+                        <p className={`text-[11px] sm:text-xs font-sans transition-colors truncate ${
+                          activeTab === 'detail' ? 'text-blue-100/90' : 'text-slate-500 dark:text-theme-fore-muted'
+                        }`}>
+                          {t.projectDetail?.tabDetailSub || (language === 'en' ? 'Technical Architecture & Specs' : 'Spesifikasi & Arsitektur Teknis')}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="shrink-0 flex items-center gap-2">
+                      {isNdaActive && (
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[9px] font-mono font-bold uppercase tracking-wider ${
+                          activeTab === 'detail'
+                            ? 'bg-amber-400/20 text-amber-200 border border-amber-300/30'
+                            : 'bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20'
+                        }`}>
+                          <ShieldAlert className="w-2.5 h-2.5" />
+                          <span>NDA</span>
+                        </span>
+                      )}
+
+                      <span className={`text-[10px] font-mono font-semibold transition-colors ${
+                        activeTab === 'detail' ? 'text-white/60' : 'text-slate-400 group-hover:text-[#2C5098]'
+                      }`}>
+                        02
+                      </span>
+                    </div>
                   </button>
                 </div>
-
-                {isNdaActive && activeTab === 'detail' && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
-                    <ShieldAlert className="w-3 h-3 text-amber-600" />
-                    <span>NDA Mode Active</span>
-                  </span>
-                )}
               </div>
             ) : (
-              <div className="flex items-center justify-between border-b border-slate-100 dark:border-theme-border/40 pb-2">
-                <h2 className="text-xl font-sans font-bold text-slate-900 dark:text-theme-fore">
-                  {t.projectDetail?.detail || (language === 'en' ? 'Project Details' : 'Detail Proyek')}
-                </h2>
+              <div className="flex items-center justify-between border-b border-slate-100 dark:border-theme-border/40 pb-4">
+                <div className="space-y-1">
+                  <div className="text-[10px] font-mono uppercase tracking-wider text-[#2C5098] font-bold">
+                    {language === 'en' ? 'TECHNICAL SPECIFICATIONS' : 'SPESIFIKASI TEKNIS'}
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-sans font-bold text-slate-900 dark:text-theme-fore tracking-tight">
+                    {t.projectDetail?.detail || (language === 'en' ? 'Project Details' : 'Detail Proyek')}
+                  </h2>
+                </div>
                 {isNdaActive && (
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20">
-                    <ShieldAlert className="w-3 h-3 text-amber-600" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500/10 text-amber-700 dark:text-amber-400 border border-amber-500/20 shadow-2xs">
+                    <ShieldAlert className="w-3.5 h-3.5 text-amber-600" />
                     <span>NDA Mode Active</span>
                   </span>
                 )}
@@ -274,18 +350,26 @@ export default function ProjectDetailClient({
             )}
 
             <div className="text-sm sm:text-base text-slate-600 dark:text-theme-fore-muted leading-relaxed text-left">
-              {activeTab === 'summary' ? (
-                <div className="space-y-4">
-                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                    {displayClientSummary}
-                  </ReactMarkdown>
-                </div>
-              ) : isNdaActive ? (
-                <>
-                  {/* Readable Intro Portion */}
-                  <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                    {intro}
-                  </ReactMarkdown>
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTab}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {activeTab === 'summary' ? (
+                    <div className="space-y-4">
+                      <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                        {displayClientSummary}
+                      </ReactMarkdown>
+                    </div>
+                  ) : isNdaActive ? (
+                    <>
+                      {/* Readable Intro Portion */}
+                      <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
+                        {intro}
+                      </ReactMarkdown>
 
                   {/* Blurred Confidential Portion with Overlay */}
                   {confidential && (
@@ -327,6 +411,8 @@ export default function ProjectDetailClient({
                   {displayDescription}
                 </ReactMarkdown>
               )}
+                </motion.div>
+              </AnimatePresence>
             </div>
           </div>
         </div>
