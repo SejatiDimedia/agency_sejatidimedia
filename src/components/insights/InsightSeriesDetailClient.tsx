@@ -38,7 +38,7 @@ export default function InsightSeriesDetailClient({ series }: InsightSeriesDetai
 
   return (
     <div className="min-h-screen pb-24 text-slate-900 font-sans selection:bg-[#2C5098]/15 selection:text-[#1E315B]">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-4 sm:pt-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-4 sm:pt-6">
         {/* 1. Breadcrumb Navigation */}
         <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs sm:text-sm font-sans text-slate-500 mb-8">
           <Link href="/" className="hover:text-[#2C5098] transition-colors">

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://sejatidimedia.web.id"),
   title: {
     template: "%s | SejatiDimedia",
-    default: "Jasa Pembuatan Aplikasi & Integrasi Sistem | SejatiDimedia",
+    default: "SejatiDimedia - Jasa Pembuatan Aplikasi & Integrasi Sistem",
   },
   description: "Jasa pembuatan aplikasi mobile (iOS & Android), pembuatan website profesional, hingga integrasi AI di Balikpapan. Bangun sistem digital yang membantu bisnis Anda bekerja lebih efisien bersama SejatiDimedia.",
   keywords: [

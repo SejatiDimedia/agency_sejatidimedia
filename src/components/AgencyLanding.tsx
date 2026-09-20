@@ -341,15 +341,6 @@ const cardSlideUp = {
   }
 };
 
-const TRUST_ICONS = [
-  "ph:chats-teardrop-duotone",
-  "ph:code-block-duotone",
-  "ph:lifebuoy-duotone",
-  "ph:arrows-clockwise-duotone",
-  "ph:wallet-duotone",
-  "ph:copyright-duotone"
-];
-
 const MILESTONE_ICONS = [
   "ph:magnifying-glass-duotone",
   "ph:pen-nib-duotone",
@@ -794,11 +785,11 @@ export default function AgencyLanding({
           className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[300px] bg-gradient-to-br from-[#2C5098]/16 via-[#2E54A2]/12 to-[#23385B]/10 rounded-full blur-[95px] pointer-events-none -z-0"
         />
 
-        <div className="relative z-10 min-h-[calc(100vh-14rem)] flex flex-col items-center justify-between text-center max-w-5xl lg:max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="relative z-10 min-h-[calc(100vh-14rem)] flex flex-col items-center justify-between text-center max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6">
           {/* Main Center Content Container - Frameless Seamless Layout (Option 1) */}
           <div className="flex-1 flex flex-col items-center justify-center space-y-6 sm:space-y-8 w-full pt-16 sm:pt-24 lg:pt-28 relative">
             {/* Smart Organic Contrast Shield - Seamless feathered radial halo focused behind text */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-3xl lg:max-w-4xl h-[440px] bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.96)_0%,_rgba(255,255,255,0.58)_35%,_transparent_68%)] pointer-events-none -z-0" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-4xl lg:max-w-5xl h-[440px] bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.96)_0%,_rgba(255,255,255,0.58)_35%,_transparent_68%)] pointer-events-none -z-0" />
 
             {/* Main Headline */}
             <motion.div
@@ -906,7 +897,7 @@ export default function AgencyLanding({
         viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-8 sm:space-y-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8 sm:space-y-12">
           {/* 1. Centered Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
@@ -926,7 +917,7 @@ export default function AgencyLanding({
           </div>
 
           {/* 2. Interactive Feature Switcher Tabs (01, 02, 03) */}
-          <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 max-w-4xl mx-auto pt-1">
+          <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 max-w-5xl mx-auto pt-1">
             {[
               {
                 idx: 0,
@@ -973,7 +964,7 @@ export default function AgencyLanding({
           </div>
 
           {/* 3. Main Interactive Live Showcase Window */}
-          <div className="relative flex justify-center items-center py-2 max-w-4xl mx-auto w-full">
+          <div className="relative flex justify-center items-center py-2 max-w-5xl mx-auto w-full">
             {/* Ambient Background Soft Radial Glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[340px] bg-gradient-to-tr from-[#2C5098]/12 via-indigo-50/40 to-[#23385B]/10 rounded-full blur-[90px] pointer-events-none -z-10" />
 
@@ -1407,7 +1398,7 @@ export default function AgencyLanding({
         viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
           {/* Standard Centered Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
@@ -1435,19 +1426,19 @@ export default function AgencyLanding({
                   {t.about?.phase1Label || (language === 'en' ? '01 / BACKGROUND' : '01 / LATAR BELAKANG')}
                 </span>
                 <h3 className="text-base sm:text-lg font-sans font-bold text-slate-900">
-                  {t.about?.phase1Title || (language === 'en' ? '6 Years in Operations & ERP Systems' : '6 Tahun di Sistem Operasional & ERP')}
+                  {t.about?.phase1Title || (language === 'en' ? '5+ Years in Operations & ERP Systems' : '5+ Tahun di Sistem Operasional & ERP')}
                 </h3>
               </div>
               <div className="md:col-span-8 space-y-3">
                 <p className="text-sm sm:text-base text-slate-700 font-sans leading-relaxed">
                   {t.about?.p1 || (language === 'en'
-                    ? 'During my 5+ years as a software developer in manufacturing, I regularly managed ERP, inventory, and production workflows used daily by operational teams.'
-                    : 'Selama 5+ tahun sebagai software developer di industri manufaktur, saya terbiasa mengelola sistem seperti ERP, inventori, dan alur produksi yang digunakan setiap hari oleh tim operasional.')}
+                    ? 'During my 5+ years as a software developer in manufacturing, I managed ERP, inventory, and logistics software used continuously by frontline operations teams.'
+                    : 'Selama 5+ tahun sebagai software developer di industri manufaktur, saya mengelola sistem ERP, inventori, dan logistik yang digunakan langsung oleh tim operasional setiap hari.')}
                 </p>
                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-mono text-slate-500 pt-1">
                   {(t.about?.phase1Tags || (language === 'en'
-                    ? ['Well-Organized Data', 'Stable & Minimal Errors', 'Familiar with Operations']
-                    : ['Data Tertata Rapi', 'Sistem Stabil & Minim Kendala', 'Terbiasa dengan Kebutuhan Operasional']
+                    ? ['Frontline Workflows', 'Structured Databases', 'Minimal Downtime']
+                    : ['Alur Kerja Lapangan', 'Database Terstruktur', 'Minim Downtime']
                   )).map((tag: string, idx: number) => (
                     <span key={idx}>• {tag}</span>
                   ))}
@@ -1455,26 +1446,26 @@ export default function AgencyLanding({
               </div>
             </div>
 
-            {/* Narrative Item 02: Core Philosophy */}
+            {/* Narrative Item 02: Field Reality */}
             <div className="py-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-baseline">
               <div className="md:col-span-4 space-y-1">
                 <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#2C5098]">
-                  {t.about?.phase2Label || (language === 'en' ? '02 / CORE PRINCIPLE' : '02 / PRINSIP UTAMA')}
+                  {t.about?.phase2Label || (language === 'en' ? '02 / FIELD REALITY' : '02 / REALITA LAPANGAN')}
                 </span>
                 <h3 className="text-base sm:text-lg font-sans font-bold text-slate-900">
-                  {t.about?.phase2Title || (language === 'en' ? 'Practical & Purpose-Built Systems' : 'Sistem yang Praktis & Tepat Guna')}
+                  {t.about?.phase2Title || (language === 'en' ? 'Most Systems Fail Due to Complexity' : 'Banyak Sistem Gagal Karena Terlalu Rumit')}
                 </h3>
               </div>
               <div className="md:col-span-8 space-y-3">
                 <p className="text-sm sm:text-base text-slate-700 font-sans leading-relaxed">
                   {t.about?.p2 || (language === 'en'
-                    ? 'From that experience I learned: the best systems aren\'t the most complex, but the ones that are easy to understand, pleasant to use, and truly helpful in daily work.'
-                    : 'Dari pengalaman itu saya belajar: sistem terbaik bukan yang paling rumit, tetapi yang mudah dipahami, nyaman digunakan, dan benar-benar membantu pekerjaan harian.')}
+                    ? 'In real operations, software failures rarely happen from missing features. The root cause is almost always confusing workflows, slow interfaces, and architectures that are costly to maintain.'
+                    : 'Di lapangan, kegagalan software jarang terjadi karena kurang fitur. Masalah utamanya hampir selalu sama: alur kerja yang membingungkan, antarmuka yang lambat, dan sistem yang sulit dirawat.')}
                 </p>
                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-mono text-slate-500 pt-1">
                   {(t.about?.phase2Tags || (language === 'en'
-                    ? ['Focus on Real Solutions', 'Easy Long-Term Maintenance', 'Pleasant for Your Team']
-                    : ['Fokus Solusi Nyata', 'Mudah Dirawat ke Depan', 'Nyaman Digunakan Tim']
+                    ? ['Over-Complexity', 'Convoluted Workflows', 'Difficult to Modify']
+                    : ['Beban Kompleksitas', 'Alur Kerja Berbelit', 'Sulit Dimodifikasi']
                   )).map((tag: string, idx: number) => (
                     <span key={idx}>• {tag}</span>
                   ))}
@@ -1482,26 +1473,26 @@ export default function AgencyLanding({
               </div>
             </div>
 
-            {/* Narrative Item 03: Modern Studio Delivery */}
+            {/* Narrative Item 03: Our Approach */}
             <div className="py-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-baseline">
               <div className="md:col-span-4 space-y-1">
                 <span className="text-xs font-mono font-bold uppercase tracking-widest text-slate-400">
-                  {t.about?.phase3Label || (language === 'en' ? '03 / HOW I WORK' : '03 / CARA KERJA')}
+                  {t.about?.phase3Label || (language === 'en' ? '03 / OUR APPROACH' : '03 / PENDEKATAN KAMI')}
                 </span>
                 <h3 className="text-base sm:text-lg font-sans font-bold text-slate-900">
-                  {t.about?.phase3Title || (language === 'en' ? 'Approach at SejatiDimedia' : 'Pendekatan di SejatiDimedia')}
+                  {t.about?.phase3Title || (language === 'en' ? 'Building Systems People Actually Use' : 'Membangun Sistem yang Benar-Benar Dipakai')}
                 </h3>
               </div>
               <div className="md:col-span-8 space-y-3">
                 <p className="text-sm sm:text-base text-slate-700 font-sans leading-relaxed">
                   {t.about?.p3 || (language === 'en'
-                    ? 'At SejatiDimedia, I apply the same principles: clean code, direct developer communication, and clear, transparent progress updates.'
-                    : 'Di SejatiDimedia, saya menerapkan prinsip yang sama: penulisan kode yang rapi, komunikasi langsung tanpa perantara, dan laporan progres yang jelas dan terbuka.')}
+                    ? 'SejatiDimedia was founded to solve that: delivering practical business software that is straightforward for teams to use, with clean code designed for long-term reliability.'
+                    : 'SejatiDimedia didirikan untuk menjawab masalah itu: membangun software bisnis yang praktis, cepat dipelajari tim kerja, dan didukung kode bersih yang siap untuk jangka panjang.')}
                 </p>
                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-mono text-slate-500 pt-1">
                   {(t.about?.phase3Tags || (language === 'en'
-                    ? ['100% Code Ownership', 'Direct Developer Discussion', 'Client Portal Tracking']
-                    : ['Kode Sepenuhnya Milik Anda', 'Diskusi Langsung dengan Developer', 'Pantau Progres di Portal Klien']
+                    ? ['Straightforward UX', 'Auditable Clean Code', 'Built for Longevity']
+                    : ['Antarmuka Mudah Dipahami', 'Kode Bersih & Rapi', 'Siap Jangka Panjang']
                   )).map((tag: string, idx: number) => (
                     <span key={idx}>• {tag}</span>
                   ))}
@@ -1510,20 +1501,20 @@ export default function AgencyLanding({
             </div>
           </div>
 
-          {/* Section: Nilai yang Kami Pegang (Core Values) */}
+          {/* Section: Standar Kerja di Setiap Proyek (Work Standards) */}
           <div className="pt-16 sm:pt-20 border-t border-slate-200/90 text-left">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-10">
               <div className="space-y-2 max-w-xl">
                 <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
-                  <span>{t.about?.valuesBadge || (language === 'en' ? 'CORE PRINCIPLES' : 'PRINSIP & NILAI')}</span>
+                  <span>{t.about?.valuesBadge || (language === 'en' ? 'WORK STANDARDS' : 'STANDAR PENGERJAAN')}</span>
                 </div>
                 <h3 className="text-2xl sm:text-3xl lg:text-3.5xl font-sora font-extrabold text-slate-900 tracking-tight leading-tight">
-                  {t.about?.valuesTitle || (language === 'en' ? 'Values We Uphold' : 'Nilai yang Kami Pegang')}
+                  {t.about?.valuesTitle || (language === 'en' ? 'Execution Standards on Every Project' : 'Standar Kerja di Setiap Proyek')}
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed pt-0.5">
                   {t.about?.valuesSubtitle || (language === 'en'
-                    ? 'Engineering disciplines and practical commitments applied to every project, from the first line of code to live operations.'
-                    : 'Prinsip kerja dan komitmen nyata yang diterapkan pada setiap pengerjaan, dari baris kode pertama hingga sistem beroperasi.')}
+                    ? 'Practical engineering standards and operational transparency applied from the first line of code to production deployment.'
+                    : 'Disiplin teknis dan keterbukaan alur kerja yang diterapkan sejak tahap perencanaan awal hingga sistem aktif beroperasi.')}
                 </p>
               </div>
             </div>
@@ -1531,35 +1522,35 @@ export default function AgencyLanding({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 text-left">
               {[
                 {
-                  title: t.about?.values?.[0]?.title || (language === 'en' ? 'Integrity' : 'Integritas'),
-                  tag: t.about?.values?.[0]?.tag || (language === 'en' ? 'Full Transparency' : 'Transparansi Penuh'),
+                  title: t.about?.values?.[0]?.title || (language === 'en' ? 'Progress Transparency' : 'Transparansi Progres'),
+                  tag: t.about?.values?.[0]?.tag || (language === 'en' ? '24/7 Portal Access' : 'Akses Portal 24/7'),
                   desc: t.about?.values?.[0]?.desc || (language === 'en'
-                    ? 'Track project progress live via your dedicated client portal. Scope and pricing are agreed upfront with zero hidden fees, and every change is discussed openly.'
-                    : 'Progres proyek bisa Anda pantau langsung lewat portal klien. Biaya disepakati di awal tanpa biaya tersembunyi, dan setiap perubahan dibahas secara terbuka.'),
+                    ? 'Track milestone progress live via your client portal. Scope and pricing are defined upfront with zero hidden charges.'
+                    : 'Progres proyek Anda pantau langsung lewat portal klien. Biaya dan scope disepakati tertulis di awal tanpa tagihan tersembunyi.'),
                   icon: 'ph:shield-check-duotone'
                 },
                 {
-                  title: t.about?.values?.[1]?.title || (language === 'en' ? 'Innovation' : 'Inovasi'),
-                  tag: t.about?.values?.[1]?.tag || (language === 'en' ? 'Modern & Proven' : 'Modern & Terbukti'),
+                  title: t.about?.values?.[1]?.title || (language === 'en' ? 'Proven Technology' : 'Teknologi Teruji'),
+                  tag: t.about?.values?.[1]?.tag || (language === 'en' ? 'Production-Ready Stack' : 'Bukan Eksperimen'),
                   desc: t.about?.values?.[1]?.desc || (language === 'en'
-                    ? 'We leverage proven modern technologies to deliver fresh solutions for your real operational challenges, without unnecessary complexity or bloated costs.'
-                    : 'Kami memanfaatkan teknologi modern yang sudah terbukti untuk menghadirkan solusi baru bagi masalah operasional nyata Anda, tanpa kerumitan berlebih yang membebani biaya.'),
-                  icon: 'ph:lightbulb-filament-duotone'
+                    ? 'We use battle-tested technologies like Next.js, Laravel, and PostgreSQL. Focused on stability, speed, and easy maintenance rather than passing trends.'
+                    : 'Menggunakan stack modern yang terbukti stabil di tingkat produksi (Next.js, Laravel, PostgreSQL). Fokus pada performa dan kemudahan perawatan jangka panjang.'),
+                  icon: 'ph:stack-duotone'
                 },
                 {
-                  title: t.about?.values?.[2]?.title || (language === 'en' ? 'Collaboration' : 'Kolaborasi'),
-                  tag: t.about?.values?.[2]?.tag || (language === 'en' ? 'Direct Discussion' : 'Diskusi Langsung'),
+                  title: t.about?.values?.[2]?.title || (language === 'en' ? 'Direct Communication' : 'Komunikasi Langsung'),
+                  tag: t.about?.values?.[2]?.tag || (language === 'en' ? 'No Sales Middlemen' : 'Tanpa Perantara'),
                   desc: t.about?.values?.[2]?.desc || (language === 'en'
-                    ? 'You discuss directly with the developer building your software. With zero sales intermediaries, technical decisions are made faster, precisely, and right on target.'
-                    : 'Anda berdiskusi langsung dengan developer yang menulis kode Anda. Tanpa perantara sales, keputusan teknis diambil lebih cepat, presisi, dan tepat sasaran.'),
-                  icon: 'ph:users-three-duotone'
+                    ? 'You discuss requirements directly with the engineer writing the code. Technical decisions are made quickly, accurately, and without sales miscommunication.'
+                    : 'Anda berdiskusi langsung dengan developer yang menulis kode sistem Anda. Keputusan teknis diambil cepat, presisi, dan bebas miskomunikasi tim sales.'),
+                  icon: 'ph:chats-circle-duotone'
                 },
                 {
-                  title: t.about?.values?.[3]?.title || (language === 'en' ? 'Reliability' : 'Keandalan'),
-                  tag: t.about?.values?.[3]?.tag || (language === 'en' ? 'Stable & Supported' : 'Stabil & Terdampingi'),
+                  title: t.about?.values?.[3]?.title || (language === 'en' ? 'Warranty & Full Handoff' : 'Jaminan & Serah Terima'),
+                  tag: t.about?.values?.[3]?.tag || (language === 'en' ? '100% Asset Ownership' : '100% Hak Milik'),
                   desc: t.about?.values?.[3]?.desc || (language === 'en'
-                    ? 'Systems are engineered on stable architectures, rigorously tested before release, and supported post-launch to keep your business operations running smoothly.'
-                    : 'Sistem dibangun di atas arsitektur yang stabil, diuji sebelum rilis, dan tetap kami dampingi setelah berjalan agar operasional bisnis Anda tidak terganggu.'),
+                    ? 'Systems are rigorously tested before release, backed by an official bug-fixing warranty, and delivered with full source code ownership as your digital asset.'
+                    : 'Sistem diuji sebelum peluncuran, dilindungi garansi resmi perbaikan bug, dan seluruh source code diserahkan penuh sebagai aset resmi bisnis Anda.'),
                   icon: 'ph:seal-check-duotone'
                 }
               ].map((val, idx) => (
@@ -1602,7 +1593,7 @@ export default function AgencyLanding({
         viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
               <span>{t.nav.services}</span>
@@ -1619,7 +1610,7 @@ export default function AgencyLanding({
           </div>
 
           {/* Interactive Accordion Services List */}
-          <div className="max-w-5xl mx-auto space-y-4 pt-2">
+          <div className="max-w-7xl mx-auto space-y-4 pt-2">
             {(t.services.items || []).map((item: any, idx: number) => {
               const isOpen = openServiceIndex === idx;
               const itemNum = `(${String(idx + 1).padStart(2, '0')})`;
@@ -1723,7 +1714,7 @@ export default function AgencyLanding({
         viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-8">
           {/* MOBILE & TABLET HEADER (Below MD) */}
           <div className="space-y-3 block md:hidden text-left">
             <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
@@ -1741,7 +1732,7 @@ export default function AgencyLanding({
           </div>
 
           {/* DESKTOP CIRCULAR RADIAL HUB LAYOUT (MD & UP) */}
-          <div className="hidden md:block relative max-w-6xl mx-auto py-8 px-2 sm:px-4">
+          <div className="hidden md:block relative max-w-7xl mx-auto py-8 px-2 sm:px-4">
             {/* Ambient Radial Background Glow */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none -z-10" />
 
@@ -2121,7 +2112,7 @@ export default function AgencyLanding({
         viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
           <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 text-left">
             <div className="space-y-3">
               <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
@@ -2260,7 +2251,7 @@ export default function AgencyLanding({
         viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
           {/* Centered Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold text-center">
@@ -2277,7 +2268,7 @@ export default function AgencyLanding({
           {/* Master Card Wrapper for Pricing */}
           <div className="rounded-3xl bg-[#F8FAFC] border border-slate-200/90 shadow-xl shadow-slate-900/5 p-6 sm:p-10 md:p-12 relative overflow-hidden">
             {/* 3 Pricing Cards */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch max-w-6xl mx-auto text-left">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch max-w-7xl mx-auto text-left">
               {/* Card 1: Starter */}
               <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-6">
                 <div className="space-y-4">
@@ -2464,16 +2455,17 @@ export default function AgencyLanding({
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 w-full">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3 w-full">
                 {(t.pricingCards.standards || [
                   "100% Hak Cipta & Source Code",
+                  "Pembayaran Bertahap (Milestone)",
                   "Garansi Bug Fixing Resmi",
                   "Deployment Server Cloud",
                   "Tanpa Perantara (Direct Dev)"
                 ]).map((std, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-white border border-slate-200/90 shadow-2xs text-[11px] font-sans font-medium text-slate-700 hover:border-[#2C5098]/40 transition-colors text-center"
+                    className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-white border border-slate-200/90 shadow-2xs text-[11px] font-sans font-medium text-slate-700 hover:border-[#2C5098]/40 transition-colors text-center last:col-span-2 sm:last:col-span-1"
                   >
                     <Icon icon="ph:check-circle-fill" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
                     <span>{std}</span>
@@ -2501,65 +2493,17 @@ export default function AgencyLanding({
       </motion.section>
 
       {/* =========================================================================
-          SECTION 8: TRUST & VALUE PROPS (#features-section) - SOFT GRAY (#F8FAFC)
-          ========================================================================= */}
-      <motion.section
-        id="features-section"
-        className="w-full bg-[#F8FAFC] border-y border-slate-200/70 py-20 sm:py-28 lg:py-32"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, margin: "-80px" }}
-        variants={sectionFadeIn}
-      >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
-          <div className="text-left space-y-3">
-            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
-              <span>{t.trust?.badge || "Kenapa Klien Percaya"}</span>
-            </div>
-            <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
-              {t.trust?.mainHeading || "Kenapa Klien Percaya"}{' '}
-              <span className="text-[#2C5098]">
-                {t.trust?.mainHeadingHighlight || "Bekerja Sama Dengan Saya"}
-              </span>
-            </h2>
-          </div>
-
-          {/* 2-Column Bento Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
-            {(t.trust?.items || []).map((item: any, idx: number) => (
-              <div
-                key={idx}
-                className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md hover:border-[#2C5098]/40 transition-all flex flex-col sm:flex-row gap-4 items-start"
-              >
-                <div className="flex-shrink-0 w-11 h-11 rounded-2xl bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 flex items-center justify-center">
-                  <Icon icon={TRUST_ICONS[idx]} className="w-5 h-5" />
-                </div>
-                <div className="space-y-1.5">
-                  <h3 className="text-sm sm:text-base font-sans font-bold text-slate-900">
-                    {item.title}
-                  </h3>
-                  <p className="text-xs text-slate-600 leading-relaxed font-sans">
-                    {item.desc}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </motion.section>
-
-      {/* =========================================================================
-          SECTION 9: THE PROCESSES / METHODOLOGY STEPPER (#methodology-section) - PURE WHITE (#FFFFFF)
+          SECTION 8: THE PROCESSES / METHODOLOGY STEPPER (#methodology-section) - PURE WHITE (#FFFFFF)
           ========================================================================= */}
       <motion.section
         id="methodology-section"
-        className="w-full bg-white py-20 sm:py-28 lg:py-32"
+        className="w-full bg-white border-t border-slate-200/70 py-20 sm:py-28 lg:py-32"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={sectionFadeIn}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
           <div className="space-y-4 text-left">
             <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
               <span>{t.process.badge}</span>
@@ -2648,7 +2592,7 @@ export default function AgencyLanding({
       </motion.section>
 
       {/* =========================================================================
-          SECTION 10: INSIGHTS & ENGINEERING SECTION (#insights-section) - SOFT GRAY (#F8FAFC)
+          SECTION 9: INSIGHTS & ENGINEERING SECTION (#insights-section) - SOFT GRAY (#F8FAFC)
           ========================================================================= */}
       <motion.section
         id="insights-section"
@@ -2658,7 +2602,7 @@ export default function AgencyLanding({
         viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
           {/* Section Header - Matching Halaman Insights */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
             {/* Eyebrow / Section Label */}
@@ -2823,7 +2767,7 @@ export default function AgencyLanding({
       </motion.section>
 
       {/* =========================================================================
-          SECTION 11: FAQ SECTION (#faq-section) - PURE WHITE (#FFFFFF)
+          SECTION 10: FAQ SECTION (#faq-section) - PURE WHITE (#FFFFFF)
           ========================================================================= */}
       <motion.section
         id="faq-section"
@@ -2833,8 +2777,8 @@ export default function AgencyLanding({
         viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-6xl mx-auto text-left">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-7xl mx-auto text-left">
             {/* Left Column: Ask Box */}
             <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
               <div className="space-y-3">
@@ -2968,7 +2912,7 @@ export default function AgencyLanding({
         viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
           {/* Standard Centered Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">

@@ -384,7 +384,7 @@ export default function LayoutWrapper({
 
           {/* 4. High-Fidelity Premium Footer */}
           <footer className="relative z-10 w-full bg-theme-base/30 backdrop-blur-2xl border-t border-theme-border/60 pt-16 pb-28 md:pb-12">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-16">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
                 <div className="md:col-span-7 space-y-6 text-left">
                   <div
@@ -472,10 +472,10 @@ export default function LayoutWrapper({
                       </li>
                       <li>
                         <button
-                          onClick={() => handleNavClick("features-section")}
+                          onClick={() => handleNavClick("pricing-section")}
                           className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left"
                         >
-                          {t.nav.advantages}
+                          {t.nav.pricing}
                         </button>
                       </li>
                       <li>
@@ -655,8 +655,8 @@ export default function LayoutWrapper({
             >
               <div
                 className={`pointer-events-auto transition-all duration-300 ease-out flex items-center justify-between gap-2 sm:gap-4 border ${scrolled
-                  ? 'w-[95%] sm:w-[92%] max-w-6xl mx-auto px-3 sm:px-6 py-2 sm:py-2.5 rounded-full bg-white/95 backdrop-blur-2xl border-slate-200 shadow-md shadow-slate-900/5'
-                  : 'w-full max-w-6xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-none bg-transparent border-transparent shadow-none'
+                  ? 'w-[95%] sm:w-[92%] max-w-7xl mx-auto px-3 sm:px-6 py-2 sm:py-2.5 rounded-full bg-white/95 backdrop-blur-2xl border-slate-200 shadow-md shadow-slate-900/5'
+                  : 'w-full max-w-7xl mx-auto px-4 sm:px-6 py-2.5 sm:py-3.5 rounded-none bg-transparent border-transparent shadow-none'
                   }`}
               >
                 {/* Brand Logo */}
@@ -781,7 +781,7 @@ export default function LayoutWrapper({
 
           {/* Clean Portal Footer */}
           <footer className="relative z-10 w-full bg-[#F8FAFC] border-t border-slate-200/80 pt-16 pb-28 md:pb-12 text-slate-800">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-16">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-10 items-start">
                 <div className="md:col-span-7 space-y-6 text-left">
                   <div
@@ -869,10 +869,10 @@ export default function LayoutWrapper({
                       </li>
                       <li>
                         <button
-                          onClick={() => handleNavClick("features-section")}
+                          onClick={() => handleNavClick("pricing-section")}
                           className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer block text-left"
                         >
-                          {t.nav.advantages}
+                          {t.nav.pricing}
                         </button>
                       </li>
                       <li>

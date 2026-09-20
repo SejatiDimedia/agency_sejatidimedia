@@ -93,7 +93,7 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
   };
 
   return (
-    <div className="min-h-screen max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
+    <div className="min-h-screen max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
       {/* 1. Standard Section Header - Matching Beranda Section Style */}
       <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-12 space-y-3">
         {/* Eyebrow / Section Label */}

@@ -48,47 +48,47 @@ export const id = {
   },
   about: {
     eyebrow: "TENTANG SAYA",
-    title: "Latar Belakang & Cara Kerja",
-    subtitle: "5 tahun menangani sistem operasional membuat saya terbiasa membangun software yang rapi, stabil, dan mudah digunakan untuk kebutuhan bisnis Anda.",
-    p1: "Selama 5+ tahun sebagai software developer di industri manufaktur, saya terbiasa mengelola sistem seperti ERP, inventori, dan alur produksi yang digunakan setiap hari oleh tim operasional.",
-    p2: "Dari pengalaman itu saya belajar: sistem terbaik bukan yang paling rumit, tetapi yang mudah dipahami, nyaman digunakan, dan benar-benar membantu pekerjaan harian.",
-    p3: "Di SejatiDimedia, saya menerapkan prinsip yang sama: penulisan kode yang rapi, komunikasi langsung tanpa perantara, dan laporan progres yang jelas dan terbuka.",
+    title: "Latar Belakang & Pendekatan Kerja",
+    subtitle: "5+ tahun mengelola sistem operasional membentuk cara saya membangun software yang rapi, stabil, dan tepat guna untuk bisnis Anda.",
+    p1: "Selama 5+ tahun sebagai software developer di industri manufaktur, saya mengelola sistem ERP, inventori, dan logistik yang digunakan langsung oleh tim operasional setiap hari.",
+    p2: "Di lapangan, kegagalan software jarang terjadi karena kurang fitur. Masalah utamanya hampir selalu sama: alur kerja yang membingungkan, antarmuka yang lambat, dan sistem yang sulit dirawat.",
+    p3: "SejatiDimedia didirikan untuk menjawab masalah itu: membangun software bisnis yang praktis, cepat dipelajari tim kerja, dan didukung kode bersih yang siap untuk jangka panjang.",
     phase1Label: "01 / LATAR BELAKANG",
     phase1Title: "5+ Tahun di Sistem Operasional & ERP",
-    phase1Tags: ["Data Tertata Rapi", "Sistem Stabil & Minim Kendala", "Terbiasa dengan Kebutuhan Operasional"],
-    phase2Label: "02 / PRINSIP UTAMA",
-    phase2Title: "Sistem yang Praktis & Tepat Guna",
-    phase2Tags: ["Fokus Solusi Nyata", "Mudah Dirawat ke Depan", "Nyaman Digunakan Tim"],
-    phase3Label: "03 / CARA KERJA",
-    phase3Title: "Pendekatan di SejatiDimedia",
-    phase3Tags: ["Kode Sepenuhnya Milik Anda", "Diskusi Langsung dengan Developer", "Pantau Progres di Portal Klien"],
+    phase1Tags: ["Alur Kerja Lapangan", "Database Terstruktur", "Minim Downtime"],
+    phase2Label: "02 / REALITA LAPANGAN",
+    phase2Title: "Banyak Sistem Gagal Karena Terlalu Rumit",
+    phase2Tags: ["Beban Kompleksitas", "Alur Kerja Berbelit", "Sulit Dimodifikasi"],
+    phase3Label: "03 / PENDEKATAN KAMI",
+    phase3Title: "Membangun Sistem yang Benar-Benar Dipakai",
+    phase3Tags: ["Antarmuka Mudah Dipahami", "Kode Bersih & Rapi", "Siap Jangka Panjang"],
     card1Title: "5+ Tahun Pengalaman Manufaktur",
     card1Desc: "ERP, Production, Inventory & Operational Workflow",
     card2Title: "Sistem Digital Terintegrasi",
     card2Desc: "Bukan sekadar website, tapi sistem operasional nyata",
-    valuesBadge: "PRINSIP & NILAI",
-    valuesTitle: "Nilai yang Kami Pegang",
-    valuesSubtitle: "Prinsip kerja dan komitmen nyata yang diterapkan pada setiap pengerjaan, dari baris kode pertama hingga sistem beroperasi.",
+    valuesBadge: "STANDAR PENGERJAAN",
+    valuesTitle: "Standar Kerja di Setiap Proyek",
+    valuesSubtitle: "Disiplin teknis dan keterbukaan alur kerja yang diterapkan sejak tahap perencanaan awal hingga sistem aktif beroperasi.",
     values: [
       {
-        title: "Integritas",
-        tag: "Transparansi Penuh",
-        desc: "Progres proyek bisa Anda pantau langsung lewat portal klien. Biaya disepakati di awal tanpa biaya tersembunyi, dan setiap perubahan dibahas secara terbuka."
+        title: "Transparansi Progres",
+        tag: "Akses Portal 24/7",
+        desc: "Progres proyek Anda pantau langsung lewat portal klien. Biaya dan scope disepakati tertulis di awal tanpa tagihan tersembunyi."
       },
       {
-        title: "Inovasi",
-        tag: "Modern & Terbukti",
-        desc: "Kami memanfaatkan teknologi modern yang sudah terbukti untuk menghadirkan solusi baru bagi masalah operasional nyata Anda, tanpa kerumitan berlebih yang membebani biaya."
+        title: "Teknologi Teruji",
+        tag: "Bukan Eksperimen",
+        desc: "Menggunakan stack modern yang terbukti stabil di tingkat produksi. Fokus pada performa dan kemudahan perawatan jangka panjang."
       },
       {
-        title: "Kolaborasi",
-        tag: "Diskusi Langsung",
-        desc: "Anda berdiskusi langsung dengan developer yang menulis kode Anda. Tanpa perantara sales, keputusan teknis diambil lebih cepat, presisi, dan tepat sasaran."
+        title: "Komunikasi Langsung",
+        tag: "Tanpa Perantara",
+        desc: "Anda berdiskusi langsung dengan developer yang menulis kode sistem Anda. Keputusan teknis diambil cepat, presisi, dan bebas miskomunikasi tim sales."
       },
       {
-        title: "Keandalan",
-        tag: "Stabil & Terdampingi",
-        desc: "Sistem dibangun di atas arsitektur yang stabil, diuji sebelum rilis, dan tetap kami dampingi setelah berjalan agar operasional bisnis Anda tidak terganggu."
+        title: "Jaminan & Serah Terima",
+        tag: "100% Hak Milik",
+        desc: "Sistem diuji sebelum peluncuran, dilindungi garansi resmi perbaikan bug, dan seluruh source code diserahkan penuh sebagai aset resmi bisnis Anda."
       }
     ]
   },
@@ -403,6 +403,7 @@ export const id = {
     standardTitle: "Standar di Setiap Proyek:",
     standards: [
       "100% Hak Cipta & Source Code",
+      "Pembayaran Bertahap (Milestone)",
       "Garansi Bug Fixing Resmi",
       "Deployment Server Cloud",
       "Tanpa Perantara (Direct Dev)"

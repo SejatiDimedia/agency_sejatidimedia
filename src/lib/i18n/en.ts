@@ -49,46 +49,46 @@ export const en = {
   about: {
     eyebrow: "ABOUT ME",
     title: "Background & Work Approach",
-    subtitle: "5 years of managing operational systems taught me to build neat, stable, and user-friendly software tailored to your business needs.",
-    p1: "During my 5+ years as a software developer in manufacturing, I regularly managed ERP, inventory, and production workflows used daily by operational teams.",
-    p2: "From that experience I learned: the best systems aren't the most complex, but the ones that are easy to understand, pleasant to use, and truly helpful in daily work.",
-    p3: "At SejatiDimedia, I apply the same principles: clean code, direct developer communication, and clear, transparent progress updates.",
+    subtitle: "5+ years managing operational systems shaped how I engineer clean, stable, and practical software for your business.",
+    p1: "During my 5+ years as a software developer in manufacturing, I managed ERP, inventory, and logistics software used continuously by frontline operations teams.",
+    p2: "In real operations, software failures rarely happen from missing features. The root cause is almost always confusing workflows, slow interfaces, and architectures that are costly to maintain.",
+    p3: "SejatiDimedia was founded to solve that: delivering practical business software that is straightforward for teams to use, with clean code designed for long-term reliability.",
     phase1Label: "01 / BACKGROUND",
     phase1Title: "5+ Years in Operations & ERP Systems",
-    phase1Tags: ["Well-Organized Data", "Stable & Minimal Errors", "Familiar with Operations"],
-    phase2Label: "02 / CORE PRINCIPLE",
-    phase2Title: "Practical & Purpose-Built Systems",
-    phase2Tags: ["Focus on Real Solutions", "Easy Long-Term Maintenance", "Pleasant for Your Team"],
-    phase3Label: "03 / HOW I WORK",
-    phase3Title: "Approach at SejatiDimedia",
-    phase3Tags: ["100% Code Ownership", "Direct Developer Discussion", "Client Portal Tracking"],
+    phase1Tags: ["Frontline Workflows", "Structured Databases", "Minimal Downtime"],
+    phase2Label: "02 / FIELD REALITY",
+    phase2Title: "Most Systems Fail Due to Complexity",
+    phase2Tags: ["Over-Complexity", "Convoluted Workflows", "Difficult to Modify"],
+    phase3Label: "03 / OUR APPROACH",
+    phase3Title: "Building Systems People Actually Use",
+    phase3Tags: ["Straightforward UX", "Auditable Clean Code", "Built for Longevity"],
     card1Title: "5+ Years Manufacturing Experience",
     card1Desc: "ERP, Production, Inventory & Operational Workflow",
     card2Title: "Integrated Digital Systems",
     card2Desc: "Not just a website, but a real operational system",
-    valuesBadge: "CORE PRINCIPLES",
-    valuesTitle: "Values We Uphold",
-    valuesSubtitle: "Engineering disciplines and practical commitments applied to every project, from the first line of code to live operations.",
+    valuesBadge: "ENGINEERING STANDARDS",
+    valuesTitle: "Execution Standards on Every Project",
+    valuesSubtitle: "Technical discipline and operational transparency applied from initial planning to production server deployment.",
     values: [
       {
-        title: "Integrity",
-        tag: "Full Transparency",
-        desc: "Track project progress live via your dedicated client portal. Scope and pricing are agreed upfront with zero hidden fees, and every change is discussed openly."
+        title: "Progress Transparency",
+        tag: "24/7 Portal Access",
+        desc: "Track milestone progress live via your client portal. Scope and pricing are defined upfront with zero hidden charges."
       },
       {
-        title: "Innovation",
-        tag: "Modern & Proven",
-        desc: "We leverage proven modern technologies to deliver fresh solutions for your real operational challenges, without unnecessary complexity or bloated costs."
+        title: "Proven Technology",
+        tag: "Production-Ready Stack",
+        desc: "We use battle-tested technologies. Focused on stability, speed, and easy maintenance rather than passing trends."
       },
       {
-        title: "Collaboration",
-        tag: "Direct Discussion",
-        desc: "You discuss directly with the developer building your software. With zero sales intermediaries, technical decisions are made faster, precisely, and right on target."
+        title: "Direct Developer Access",
+        tag: "No Sales Middlemen",
+        desc: "You discuss requirements directly with the engineer writing the code. Technical decisions are made quickly, accurately, and without sales miscommunication."
       },
       {
-        title: "Reliability",
-        tag: "Stable & Supported",
-        desc: "Systems are engineered on stable architectures, rigorously tested before release, and supported post-launch to keep your business operations running smoothly."
+        title: "Warranty & Full Handoff",
+        tag: "100% Asset Ownership",
+        desc: "Systems are rigorously tested before release, backed by an official bug-fixing warranty, with full source code ownership delivered to your company."
       }
     ]
   },
@@ -403,6 +403,7 @@ export const en = {
     standardTitle: "Standard on Every Project:",
     standards: [
       "100% Copyright & Source Code",
+      "Milestone-Based Payments",
       "Official Bug Fixing Warranty",
       "Cloud Server Deployment",
       "Direct Developer (No Middlemen)"
