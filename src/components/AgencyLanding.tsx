@@ -5,40 +5,15 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Project, MOCK_PROJECTS } from '../lib/api/glio-projects';
+import { Project, MOCK_PROJECTS, isProfessionalProject } from '../lib/api/glio-projects';
 import { InsightArticle, FALLBACK_INSIGHTS } from '../lib/api/insights-types';
 import { useLanguage } from '../lib/i18n/LanguageContext';
 import { TECH_ICONS } from '../lib/constants';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { Icon } from '@iconify/react';
-
-
-const GlintStar = ({ className, delay = 0 }: { className?: string; delay?: number }) => (
-  <motion.div
-    className={`absolute pointer-events-none select-none ${className}`}
-    animate={{
-      opacity: [0.2, 1, 0.2],
-      scale: [0.8, 1.3, 0.8],
-      rotate: [0, 15, 0]
-    }}
-    transition={{
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut",
-      delay: delay
-    }}
-  >
-    {/* Center core glow */}
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-theme-accent/30 blur-[4px]" />
-    {/* Horizontal ray */}
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-[1px] bg-gradient-to-r from-transparent via-theme-accent-bright/90 to-transparent" />
-    {/* Vertical ray */}
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-24 w-[1px] bg-gradient-to-b from-transparent via-theme-accent-bright/90 to-transparent" />
-  </motion.div>
-);
 
 const SERVICE_IMAGES = [
   '/service_web_app.webp',
@@ -47,20 +22,295 @@ const SERVICE_IMAGES = [
   '/service_ai_llm.webp',
 ];
 
+const CATEGORY_MAP: Record<string, string> = {
+  "68fd86b3efc68bfc3fd16532": "AI",
+  "68fd8688efc68bfc3fd16531": "Web",
+  "68fd85f1f86ba8de6fc21c1f": "Mobile"
+};
+
+const getCategoryName = (id: string) => CATEGORY_MAP[id] || id;
+
+const getCategoryIcon = (categoryName: string) => {
+  const lower = categoryName.toLowerCase();
+  if (lower === "all" || lower === "semua") return "ph:squares-four-bold";
+  if (lower.includes("ai")) return "ph:sparkle-bold";
+  if (lower.includes("web")) return "ph:globe-bold";
+  if (lower.includes("mobile")) return "ph:device-mobile-bold";
+  return "ph:stack-bold";
+};
+
+function ClientPortalMockup3D({ t }: { t: any }) {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x, { stiffness: 150, damping: 20 });
+  const mouseYSpring = useSpring(y, { stiffness: 150, damping: 20 });
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["8deg", "-8deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <div
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="relative flex justify-center items-center py-8 sm:py-10 select-none overflow-visible"
+      style={{ perspective: "1200px" }}
+    >
+      {/* 3D Floating Canvas Wrapper */}
+      <motion.div
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d",
+        }}
+        animate={{
+          y: [0, -8, 0],
+        }}
+        transition={{
+          duration: 6,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="relative w-full max-w-[680px]"
+      >
+        {/* Ambient 3D Dynamic Shadow Base */}
+        <div
+          className="absolute inset-0 bg-[#2C5098]/10 rounded-3xl blur-2xl transform translate-y-8 scale-95 pointer-events-none -z-10"
+        />
+
+        {/* Floating Badge #1 (Top Right) - High Z-Depth Layer */}
+        <div
+          style={{ transform: "translateZ(65px)", transformStyle: "preserve-3d" }}
+          className="absolute -top-6 right-2 sm:right-6 z-50 pointer-events-none"
+        >
+          <motion.div
+            animate={{ y: [0, -6, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="px-4 py-2 rounded-2xl bg-white border border-[#2C5098]/20 shadow-2xl flex items-center gap-2.5"
+          >
+            <div className="w-6 h-6 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center shrink-0 shadow-xs">
+              <Icon icon="ph:clock-clockwise-bold" className="w-3.5 h-3.5" />
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-slate-900 leading-none">24/7 Live Tracking</p>
+              <p className="text-[8px] font-medium text-[#2C5098] mt-0.5 hidden sm:block">Real-Time Development Status</p>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Floating Badge #2 (Bottom Left) - High Z-Depth Layer */}
+        <div
+          style={{ transform: "translateZ(55px)", transformStyle: "preserve-3d" }}
+          className="absolute -bottom-6 left-2 sm:left-6 z-50 pointer-events-none"
+        >
+          <motion.div
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="px-4 py-2 rounded-2xl bg-white border border-slate-200 shadow-2xl flex items-center gap-2.5"
+          >
+            <div className="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 shadow-xs">
+              <Icon icon="ph:shield-check-fill" className="w-3.5 h-3.5" />
+            </div>
+            <div>
+              <p className="text-[10px] font-bold text-slate-900 leading-none">Automated Milestone Sync</p>
+              <p className="text-[8px] font-medium text-emerald-600 mt-0.5 hidden sm:block">Verified Client Deliverables</p>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Clean Portal Window Container with Layered Z-Depth */}
+        <div
+          style={{
+            transform: "translateZ(20px)",
+            transformStyle: "preserve-3d",
+          }}
+          className="w-full p-4 sm:p-6 rounded-3xl bg-white border border-slate-200 shadow-2xl hover:border-[#2C5098]/40 transition-colors duration-300 space-y-3.5 relative overflow-hidden text-left"
+        >
+          {/* Moving Laser Shimmer Light Line along top border */}
+          <motion.div
+            className="absolute top-0 left-0 h-[2px] w-48 bg-gradient-to-r from-transparent via-[#2C5098] to-transparent z-30 pointer-events-none"
+            animate={{ x: ['-100%', '350%'] }}
+            transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
+          />
+
+          {/* Window Header Bar */}
+          <div className="space-y-2.5 border-b border-slate-100 pb-3">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block shadow-xs" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block shadow-xs" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-xs" />
+                </div>
+                <div className="flex items-center gap-1.5 bg-slate-50 px-3 py-1 rounded-lg border border-slate-200 ml-2">
+                  <img src="/logo.svg" alt="SejatiDimedia Logo" className="h-3.5 w-auto object-contain" />
+                  <span className="text-[10px] sm:text-xs font-mono text-slate-700 flex items-center gap-1 truncate max-w-[200px] sm:max-w-none">
+                    <Icon icon="ph:lock-key-duotone" className="w-3 h-3 text-[#2C5098] shrink-0" />
+                    sejatidimedia.web.id/portal/projects
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Multi-Tab Pills */}
+            <div className="flex items-center gap-2 pt-1">
+              <span className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 flex items-center gap-1">
+                <Icon icon="ph:squares-four-duotone" className="w-3 h-3 text-[#2C5098]" />
+                Dashboard
+              </span>
+              <span className="px-2.5 py-0.5 rounded-md text-[10px] font-medium text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1">
+                <Icon icon="ph:folder-duotone" className="w-3 h-3" />
+                Deliverables
+              </span>
+              <span className="px-2.5 py-0.5 rounded-md text-[10px] font-medium text-slate-500 hover:text-slate-900 transition-colors flex items-center gap-1">
+                <Icon icon="ph:receipt-duotone" className="w-3 h-3" />
+                Invoices
+              </span>
+            </div>
+          </div>
+
+          {/* Active Project Progress Box */}
+          <div
+            style={{ transform: "translateZ(10px)" }}
+            className="space-y-3 bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 text-left shadow-xs"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-[#2C5098]/10 border border-[#2C5098]/20 flex items-center justify-center text-[#2C5098] shrink-0">
+                  <Icon icon="ph:kanban-duotone" className="w-4 h-4" />
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-900 leading-tight">
+                    {t.clientPortal?.mockupTitle || "Dashboard Klien: Proyek Aktif"}
+                  </p>
+                  <div className="flex items-center gap-1.5 mt-0.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                    <p className="text-[9px] text-slate-500 font-medium">Client: Timur Dian • Live Status</p>
+                  </div>
+                </div>
+              </div>
+              <motion.span
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+                className="px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white border border-white/20 shrink-0 shadow-xs"
+              >
+                88% Completed
+              </motion.span>
+            </div>
+
+            {/* Milestone Checklist */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[9px] font-bold">
+              <div className="flex items-center gap-1.5 text-slate-700 bg-white p-2 rounded-xl border border-slate-200 shadow-2xs">
+                <Icon icon="ph:check-circle-fill" className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Phase 1-3: UI/UX & DB Architecture</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-[#23385B] bg-[#2C5098]/10 p-2 rounded-xl border border-[#2C5098]/20 shadow-2xs">
+                <span className="w-2 h-2 rounded-full bg-[#2C5098] animate-pulse shrink-0" />
+                <span>Phase 4: QA & Production Release</span>
+              </div>
+            </div>
+
+            {/* Animated Breathing Progress Bar */}
+            <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden p-0.5">
+              <motion.div
+                className="h-full bg-gradient-to-r from-[#2C5098] via-[#284478] to-[#23385B] rounded-full"
+                animate={{ width: ['78%', '88%', '78%'] }}
+                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              />
+            </div>
+          </div>
+
+          {/* Invoices Box */}
+          <div
+            style={{ transform: "translateZ(10px)" }}
+            className="bg-slate-50 p-3.5 sm:p-4 rounded-2xl border border-slate-200 space-y-2.5 text-left shadow-xs"
+          >
+            <div className="flex items-center justify-between border-b border-slate-200/80 pb-2">
+              <span className="text-[10px] sm:text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                <Icon icon="ph:receipt-duotone" className="w-3.5 h-3.5 text-[#2C5098]" />
+                Project Billing & Invoices
+              </span>
+              <motion.span
+                animate={{ opacity: [0.8, 1, 0.8] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1"
+              >
+                <Icon icon="ph:check-circle-fill" className="w-2.5 h-2.5 text-emerald-600" />
+                100% Settled
+              </motion.span>
+            </div>
+            <div className="grid grid-cols-3 gap-2 text-center">
+              <div className="bg-white p-2 sm:p-2.5 rounded-xl border border-slate-200 shadow-xs">
+                <p className="text-[8px] sm:text-[9px] font-bold text-slate-500 uppercase">Total Billed</p>
+                <p className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">Rp 37.2M</p>
+              </div>
+              <div className="bg-[#2C5098]/8 p-2 sm:p-2.5 rounded-xl border border-[#2C5098]/20 shadow-xs relative overflow-hidden">
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-transparent via-[#2C5098]/15 to-transparent pointer-events-none"
+                  animate={{ x: ['-100%', '150%'] }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <p className="text-[8px] sm:text-[9px] font-bold text-[#23385B] uppercase">Amount Paid</p>
+                <p className="text-xs sm:text-sm font-bold text-[#23385B] mt-0.5">Rp 37.2M</p>
+              </div>
+              <div className="bg-white p-2 sm:p-2.5 rounded-xl border border-slate-200 shadow-xs">
+                <p className="text-[8px] sm:text-[9px] font-bold text-slate-500 uppercase">Balance Due</p>
+                <p className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">Rp 0</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom bar */}
+          <div
+            style={{ transform: "translateZ(8px)" }}
+            className="bg-slate-100 p-2 sm:p-2.5 rounded-xl border border-slate-200 flex items-center justify-between text-[10px] text-slate-700"
+          >
+            <div className="flex items-center gap-1.5">
+              <Icon icon="ph:seal-check-duotone" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
+              <span>INV-202607-001: <strong className="text-slate-900">Paid & Verified</strong></span>
+            </div>
+            <span className="px-2 py-0.5 rounded-md bg-white border border-slate-200 text-[9px] font-bold text-slate-700 flex items-center gap-1 shadow-xs">
+              <Icon icon="ph:download-simple-bold" className="w-3 h-3 text-[#2C5098]" />
+              PDF Invoice
+            </span>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
 const sectionFadeIn = {
   hidden: {
     opacity: 0,
-    y: 45,
-    scale: 0.98,
-    filter: "blur(4px)"
+    y: 35,
+    filter: "blur(2px)"
   },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
     filter: "blur(0px)",
     transition: {
-      duration: 0.7,
+      duration: 0.6,
       ease: [0.16, 1, 0.3, 1] as const
     }
   }
@@ -71,23 +321,22 @@ const staggerContainer = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.12,
+      staggerChildren: 0.1,
       delayChildren: 0.05
     }
   }
 };
 
 const cardSlideUp = {
-  hidden: { opacity: 0, y: 35, scale: 0.96, filter: "blur(2px)" },
+  hidden: { opacity: 0, y: 25, scale: 0.98 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
-    filter: "blur(0px)",
     transition: {
       type: "spring" as const,
-      stiffness: 85,
-      damping: 16
+      stiffness: 90,
+      damping: 18
     }
   }
 };
@@ -122,6 +371,7 @@ export default function AgencyLanding({
   recentInsights?: InsightArticle[];
 }) {
   const { t, language } = useLanguage();
+  const [ndaProjectSlugs, setNdaProjectSlugs] = useState<string[]>([]);
   const [featuredProjectSlugs, setFeaturedProjectSlugs] = useState<string[]>(initialFeaturedSlugs || []);
 
   const displayInsights = useMemo(() => {
@@ -136,28 +386,17 @@ export default function AgencyLanding({
     fetch('/api/settings/nda')
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.featuredProjectSlugs)) {
-          setFeaturedProjectSlugs(data.featuredProjectSlugs);
+        if (data.success) {
+          if (Array.isArray(data.ndaProjectSlugs)) {
+            setNdaProjectSlugs(data.ndaProjectSlugs);
+          }
+          if (Array.isArray(data.featuredProjectSlugs)) {
+            setFeaturedProjectSlugs(data.featuredProjectSlugs);
+          }
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
-
-  const displayedProjects = useMemo(() => {
-    const list = (projects && projects.length > 0) ? projects : MOCK_PROJECTS;
-    const featured = list
-      .filter((p) => featuredProjectSlugs.includes(p.slug))
-      .sort((a, b) => featuredProjectSlugs.indexOf(a.slug) - featuredProjectSlugs.indexOf(b.slug));
-
-    if (featured.length < 3) {
-      const remaining = list.filter((p) => !featuredProjectSlugs.includes(p.slug));
-      return [...featured, ...remaining].slice(0, 3);
-    }
-
-    return featured.slice(0, 3);
-  }, [projects, featuredProjectSlugs]);
-
-  {/* FEATURE_ITEMS removed to eliminate redundancy */ }
 
   const scrollToId = (id: string) => {
     const el = document.getElementById(id);
@@ -166,20 +405,14 @@ export default function AgencyLanding({
     }
   };
 
-  // Spotlight tracking state for the featured service banner
-  const [coords, setCoords] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
-  const spotlightRef = useRef<HTMLDivElement>(null);
-
-  // Quick Estimate simple state
-  const [quickService, setQuickService] = useState<'web' | 'mobile' | 'api'>('web');
-  const [quickComplexity, setQuickComplexity] = useState<'standard' | 'complex'>('standard');
+  // Stepper & Accordion states
   const [activeMilestone, setActiveMilestone] = useState<number>(0);
-  const [activePortalStep, setActivePortalStep] = useState<number>(0);
   const [openServiceIndex, setOpenServiceIndex] = useState<number | null>(0);
+  const [portalActiveTab, setPortalActiveTab] = useState<number>(0);
+  const [testAlertSent, setTestAlertSent] = useState<boolean>(false);
 
   // FAQ interactive states
-  const [activeFaq, setActiveFaq] = useState<number | null>(0); // First item expanded by default
+  const [activeFaq, setActiveFaq] = useState<number | null>(0);
   const [customQuestion, setCustomQuestion] = useState('');
   const [questionSubmitted, setQuestionSubmitted] = useState(false);
 
@@ -197,50 +430,74 @@ export default function AgencyLanding({
     {
       step: '01',
       title: 'Discovery',
-      tag: 'Fase 1: Analisis & Kebutuhan',
-      description: 'Memahami kebutuhan bisnis, target pengguna, dan tujuan proyek Anda secara mendalam sebelum menulis satu baris kode pun.',
-      deliverables: ['Dokumen Spesifikasi Teknis', 'Skema Logika Bisnis', 'Estimasi Timeline & Biaya'],
-      codePreview: `{\n  "tahap": "DISCOVERY",\n  "status": "SELESAI",\n  "tujuan": ["KONSULTASI_BISNIS", "PEMETAAN_ALUR"],\n  "parameter": "DITETAPKAN"\n}`
+      tag: language === 'en' ? 'Phase 1: Analysis & Requirements' : 'Fase 1: Analisis & Kebutuhan',
+      description: language === 'en'
+        ? 'Deeply understanding your business goals, target audience, and system requirements before writing a single line of code.'
+        : 'Memahami kebutuhan bisnis, target pengguna, dan tujuan proyek Anda secara mendalam sebelum menulis satu baris kode pun.',
+      deliverables: language === 'en'
+        ? ['Technical Specs Document', 'Business Logic Schema', 'Timeline & Cost Estimate']
+        : ['Dokumen Spesifikasi Teknis', 'Skema Logika Bisnis', 'Estimasi Timeline & Biaya'],
+      codePreview: `{\n  "phase": "DISCOVERY",\n  "status": "COMPLETED",\n  "objectives": ["BUSINESS_AUDIT", "WORKFLOW_MAPPING"],\n  "parameters": "DEFINED"\n}`
     },
     {
       step: '02',
       title: 'Design',
-      tag: 'Fase 2: Arsitektur UI/UX',
-      description: 'Merancang rancangan UI/UX dan memetakan arsitektur sistem (database & API) agar alur navigasi produk terasa natural dan performa terjamin.',
-      deliverables: ['Desain Figma Interaktif', 'Skema Struktur Database', 'Peta Alur Kerja Data'],
-      codePreview: `{\n  "tahap": "DESIGN",\n  "arsitektur": {\n    "desain": "Figma Wireframes",\n    "database": "PostgreSQL relational",\n    "skema": "Drizzle Schema"\n  }\n}`
+      tag: language === 'en' ? 'Phase 2: UI/UX & Architecture' : 'Fase 2: Arsitektur UI/UX',
+      description: language === 'en'
+        ? 'Crafting high-fidelity UI/UX and database architectures to ensure intuitive user flows and peak system performance.'
+        : 'Merancang rancangan UI/UX dan memetakan arsitektur sistem (database & API) agar alur navigasi produk terasa natural dan performa terjamin.',
+      deliverables: language === 'en'
+        ? ['Interactive Figma Mockups', 'Database ERD Schema', 'API Route Flowchart']
+        : ['Desain Figma Interaktif', 'Skema Struktur Database', 'Peta Alur Kerja Data'],
+      codePreview: `{\n  "phase": "DESIGN",\n  "architecture": {\n    "ui": "Figma Prototypes",\n    "database": "PostgreSQL Relational",\n    "orm": "Drizzle / Prisma Schema"\n  }\n}`
     },
     {
       step: '03',
       title: 'Development',
-      tag: 'Fase 3: Pemrograman Kustom',
-      description: 'Membangun produk menggunakan kode yang bersih, terstruktur, aman, dan mudah dikembangkan lebih lanjut. Menghindari template drag-and-drop.',
-      deliverables: ['Kode Sumber Terstruktur', 'Sistem Autentikasi Keamanan', 'Integrasi Layanan Pihak Ketiga'],
+      tag: language === 'en' ? 'Phase 3: Custom Engineering' : 'Fase 3: Pemrograman Kustom',
+      description: language === 'en'
+        ? 'Writing clean, structured, modular code tailored to your exact operational workflows. No generic templates.'
+        : 'Membangun produk menggunakan kode yang bersih, terstruktur, aman, dan mudah dikembangkan lebih lanjut. Menghindari template drag-and-drop.',
+      deliverables: language === 'en'
+        ? ['Modular Clean Code', 'Secure Auth & RBAC', 'Third-Party API Integrations']
+        : ['Kode Sumber Terstruktur', 'Sistem Autentikasi Keamanan', 'Integrasi Layanan Pihak Ketiga'],
       codePreview: `const Project = () => {\n  return (\n    <ProductionApp cleanCode={true}>\n      <CustomLogic engine="NextJS_15" />\n    </ProductionApp>\n  );\n}`
     },
     {
       step: '04',
-      title: 'Testing & Iterasi',
-      tag: 'Fase 4: Uji Coba & Perbaikan',
-      description: 'Melakukan pengujian menyeluruh di berbagai perangkat dan skenario penggunaan sebelum produk dirilis, termasuk revisi berdasarkan feedback Anda.',
-      deliverables: ['Laporan Pengujian Bug', 'Optimasi Kecepatan (Lighthouse)', 'Revisi Sesuai Feedback'],
-      codePreview: `describe("Uji Performa", () => {\n  it("load time di bawah 1.5 detik", () => {\n    expect(pageLoadTime).toBeLessThan(1500);\n  });\n});`
+      title: language === 'en' ? 'Testing & QA' : 'Testing & Iterasi',
+      tag: language === 'en' ? 'Phase 4: QA & Optimization' : 'Fase 4: Uji Coba & Perbaikan',
+      description: language === 'en'
+        ? 'Rigorous testing across multiple devices, performance benchmarking (Lighthouse 95+), and iterative feedback refinements.'
+        : 'Melakukan pengujian menyeluruh di berbagai perangkat dan skenario penggunaan sebelum produk dirilis, termasuk revisi berdasarkan feedback Anda.',
+      deliverables: language === 'en'
+        ? ['Bug Audit Report', 'Lighthouse 95+ Optimization', 'Client Feedback Revisions']
+        : ['Laporan Pengujian Bug', 'Optimasi Kecepatan (Lighthouse)', 'Revisi Sesuai Feedback'],
+      codePreview: `describe("Performance Suite", () => {\n  it("ensures sub-1.5s load times", () => {\n    expect(pageLoadTime).toBeLessThan(1500);\n  });\n});`
     },
     {
       step: '05',
       title: 'Deployment',
-      tag: 'Fase 5: Peluncuran Sistem',
-      description: 'Meluncurkan produk digital Anda ke server produksi yang aman dan terkonfigurasi dengan baik (seperti Vercel, AWS, atau VPS Cloud).',
-      deliverables: ['Aplikasi Live di Produksi', 'Konfigurasi Domain & SSL', 'Backup Database Awal'],
-      codePreview: `npm run build\n# Server Produksi Terbuka...\n# Domain terhubung dengan sertifikat SSL aktif.\n# Aplikasi live dan siap diakses publik.`
+      tag: language === 'en' ? 'Phase 5: Production Launch' : 'Fase 5: Peluncuran Sistem',
+      description: language === 'en'
+        ? 'Zero-downtime deployment to secure cloud production servers (Vercel, AWS, Cloudflare, or VPS Cloud) with automated SSL.'
+        : 'Meluncurkan produk digital Anda ke server produksi yang aman dan terkonfigurasi dengan baik (seperti Vercel, AWS, atau VPS Cloud).',
+      deliverables: language === 'en'
+        ? ['Live Production Server', 'Domain & SSL Setup', 'Automated Backup Strategy']
+        : ['Aplikasi Live di Produksi', 'Konfigurasi Domain & SSL', 'Backup Database Awal'],
+      codePreview: `pnpm run build\n# Target: Production Cloud Cluster\n# SSL & Custom Domain Connected\n# Status: 100% Live & Available`
     },
     {
       step: '06',
-      title: 'Maintenance & Support',
-      tag: 'Fase 6: Pendampingan & Pemeliharaan',
-      description: 'Memberikan pendampingan berkelanjutan pasca-peluncuran berupa pemeliharaan server, perbaikan bug jika ada, dan pembaruan sistem berkala.',
-      deliverables: ['Pemantauan Server Rutin', 'Pembaruan Patch Keamanan', 'Bantuan Teknis Berkala'],
-      codePreview: `{\n  "tahap": "MAINTENANCE",\n  "status": "AKTIF",\n  "kondisiServer": "100%_AKTIF",\n  "keamanan": "TERBARU"\n}`
+      title: 'Maintenance',
+      tag: language === 'en' ? 'Phase 6: Support & Warranty' : 'Fase 6: Pendampingan & Pemeliharaan',
+      description: language === 'en'
+        ? 'Continuous support, server health monitoring, bug-fixing warranty, and periodic technical patches.'
+        : 'Memberikan pendampingan berkelanjutan pasca-peluncuran berupa pemeliharaan server, perbaikan bug jika ada, dan pembaruan sistem berkala.',
+      deliverables: language === 'en'
+        ? ['24/7 Uptime Monitoring', 'Security Patches', 'Dedicated Tech Support']
+        : ['Pemantauan Server Rutin', 'Pembaruan Patch Keamanan', 'Bantuan Teknis Berkala'],
+      codePreview: `{\n  "phase": "MAINTENANCE",\n  "status": "ACTIVE",\n  "uptime": "99.98%",\n  "security": "LATEST_PATCHES"\n}`
     }
   ];
 
@@ -248,6 +505,7 @@ export default function AgencyLanding({
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formSubmitting, setFormSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const [copiedEmail, setCopiedEmail] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -257,13 +515,12 @@ export default function AgencyLanding({
     honeypot: '',
   });
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!spotlightRef.current) return;
-    const rect = spotlightRef.current.getBoundingClientRect();
-    setCoords({
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top,
-    });
+  const handleCopyEmail = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText('timurdian.business@gmail.com');
+      setCopiedEmail(true);
+      setTimeout(() => setCopiedEmail(false), 2000);
+    }
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -308,459 +565,962 @@ export default function AgencyLanding({
     }
   };
 
-  const getQuickPrice = () => {
-    let base = quickService === 'web' ? 4500 : quickService === 'mobile' ? 6000 : 3200;
-    if (quickComplexity === 'complex') base *= 1.8;
-    return base.toLocaleString();
-  };
+  const projectList = (projects && projects.length > 0) ? projects : MOCK_PROJECTS;
 
-  function AnimatedCounter({ from = 0, to, duration = 2, suffix = '' }: { from?: number; to: number; duration?: number; suffix?: string }) {
-    const [count, setCount] = useState(from);
+  const displayedProjects = useMemo(() => {
+    if (!projectList || projectList.length === 0) return [];
+    // 1. Projects marked as featured
+    const featured = projectList
+      .filter((p) => featuredProjectSlugs.includes(p.slug))
+      .sort((a, b) => featuredProjectSlugs.indexOf(a.slug) - featuredProjectSlugs.indexOf(b.slug));
 
-    useEffect(() => {
-      let startTimestamp: number | null = null;
-      const step = (timestamp: number) => {
-        if (!startTimestamp) startTimestamp = timestamp;
-        const progress = Math.min((timestamp - startTimestamp) / (duration * 1000), 1);
-        const easedProgress = 1 - Math.pow(1 - progress, 3);
-        setCount(Math.floor(easedProgress * (to - from) + from));
-        if (progress < 1) {
-          window.requestAnimationFrame(step);
-        }
-      };
-      window.requestAnimationFrame(step);
-    }, [from, to, duration]);
+    // 2. Remaining projects backfill if fewer than 3
+    if (featured.length < 3) {
+      const remaining = projectList.filter((p) => !featuredProjectSlugs.includes(p.slug));
+      return [...featured, ...remaining].slice(0, 3);
+    }
 
-    return <span>{count}{suffix}</span>;
-  }
+    return featured.slice(0, 3);
+  }, [projectList, featuredProjectSlugs]);
 
   return (
-    <div className="space-y-24">
-      {/* SECTION 1: HERO (SIMPLE TEXT-CENTERED LAYOUT) */}
-      <section id="hero-section" className="relative py-8 md:py-16 min-h-[70vh] flex flex-col items-center justify-center text-center max-w-4xl mx-auto space-y-6 sm:space-y-8 overflow-visible z-0">
+    <div className="w-full text-slate-900 font-sans [&_h1]:font-sans [&_h2]:font-sans [&_h3]:font-sans [&_h4]:font-sans [&_h5]:font-sans [&_h6]:font-sans">
 
-        {/* Animated Background Orb */}
+      {/* =========================================================================
+          SECTION 1: HERO SECTION (#hero-section) - AMBIENT 3D CORE & PURE WHITE
+          ========================================================================= */}
+      <section
+        id="hero-section"
+        className="w-full relative overflow-hidden bg-white pt-10 sm:pt-14 pb-16 sm:pb-24 lg:pb-28"
+      >
+        {/* Hero Serene Horizon / Ambience Background - Enhanced Clarity & High Tech Visuals */}
+        <div className="absolute inset-0 h-full w-full overflow-hidden pointer-events-none -z-0">
+          <img
+            src="/hero_bg.webp"
+            alt="SejatiDimedia Hero Background"
+            className="w-full h-full object-cover object-[78%_center] sm:object-[80%_top] lg:object-[82%_top] opacity-95 sm:opacity-100 transition-opacity duration-700"
+            fetchPriority="high"
+            decoding="async"
+          />
+          {/* Living Data Sparks & Active Server Pulses (Concentrated on Right Server Farm) */}
+          <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+            {/* Spark 1: Upper Right Server Tower to Main Bus */}
+            <motion.div
+              animate={{
+                x: [0, -130],
+                y: [0, 75],
+                opacity: [0, 1, 0.85, 0],
+                scale: [0.7, 1.05, 1, 0.7],
+              }}
+              transition={{
+                duration: 3.2,
+                repeat: Infinity,
+                repeatDelay: 2.2,
+                ease: 'easeInOut',
+              }}
+              className="hidden sm:block absolute top-[14%] right-[16%] lg:right-[22%] pointer-events-none"
+            >
+              <div className="relative">
+                <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_12px_4px_#38BDF8]" />
+                <div className="absolute top-1/2 right-full -translate-y-1/2 w-11 h-[2px] bg-gradient-to-r from-transparent via-[#38BDF8] to-white -rotate-[30deg] origin-right" />
+              </div>
+            </motion.div>
+
+            {/* Spark 2: High Tower Fast Surge (Upper Right Pillar) */}
+            <motion.div
+              animate={{
+                x: [0, -65],
+                y: [0, 80],
+                opacity: [0, 0.95, 0.8, 0],
+                scale: [0.7, 1, 1, 0.7],
+              }}
+              transition={{
+                duration: 2.6,
+                repeat: Infinity,
+                repeatDelay: 2.8,
+                delay: 1.2,
+                ease: 'easeInOut',
+              }}
+              className="hidden sm:block absolute top-[18%] right-[8%] lg:right-[12%] pointer-events-none"
+            >
+              <div className="relative">
+                <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_3px_#60A5FA]" />
+                <div className="absolute top-1/2 right-full -translate-y-1/2 w-9 h-[1.5px] bg-gradient-to-r from-transparent via-[#60A5FA] to-white -rotate-[45deg] origin-right" />
+              </div>
+            </motion.div>
+
+            {/* Spark 3: Mid-Tower Central Bus into Core */}
+            <motion.div
+              animate={{
+                x: [0, -110],
+                y: [0, -60],
+                opacity: [0, 1, 0.85, 0],
+                scale: [0.7, 1, 1, 0.7],
+              }}
+              transition={{
+                duration: 3.5,
+                repeat: Infinity,
+                repeatDelay: 2.5,
+                delay: 2.0,
+                ease: 'easeInOut',
+              }}
+              className="hidden sm:block absolute top-[36%] right-[14%] lg:right-[18%] pointer-events-none"
+            >
+              <div className="relative">
+                <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_3px_#93C5FD]" />
+                <div className="absolute top-1/2 right-full -translate-y-1/2 w-10 h-[1.5px] bg-gradient-to-r from-transparent via-[#93C5FD] to-white rotate-[30deg] origin-right" />
+              </div>
+            </motion.div>
+
+            {/* Spark 4: Cross-Rack Interconnect (Mid-Low Server Cluster) */}
+            <motion.div
+              animate={{
+                x: [0, -85],
+                y: [0, 48],
+                opacity: [0, 0.9, 0.75, 0],
+                scale: [0.7, 1, 1, 0.7],
+              }}
+              transition={{
+                duration: 2.8,
+                repeat: Infinity,
+                repeatDelay: 2.4,
+                delay: 0.5,
+                ease: 'easeInOut',
+              }}
+              className="hidden sm:block absolute top-[46%] right-[22%] lg:right-[26%] pointer-events-none"
+            >
+              <div className="relative">
+                <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_3px_#38BDF8]" />
+                <div className="absolute top-1/2 right-full -translate-y-1/2 w-8 h-[1.5px] bg-gradient-to-r from-transparent via-[#38BDF8] to-white -rotate-[30deg] origin-right" />
+              </div>
+            </motion.div>
+
+            {/* Spark 5: Lower Server Bay Highway */}
+            <motion.div
+              animate={{
+                x: [0, -95],
+                y: [0, -42],
+                opacity: [0, 0.85, 0.7, 0],
+                scale: [0.7, 1, 1, 0.7],
+              }}
+              transition={{
+                duration: 3.6,
+                repeat: Infinity,
+                repeatDelay: 3.0,
+                delay: 1.6,
+                ease: 'easeInOut',
+              }}
+              className="hidden sm:block absolute top-[60%] right-[11%] lg:right-[15%] pointer-events-none"
+            >
+              <div className="relative">
+                <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_3px_#38BDF8]" />
+                <div className="absolute top-1/2 right-full -translate-y-1/2 w-9 h-[1.5px] bg-gradient-to-r from-transparent via-[#38BDF8] to-white rotate-[25deg] origin-right" />
+              </div>
+            </motion.div>
+
+            {/* Spark 6: Deep Processor Core Highway */}
+            <motion.div
+              animate={{
+                x: [0, -80],
+                y: [0, 44],
+                opacity: [0, 0.95, 0.8, 0],
+                scale: [0.7, 1, 1, 0.7],
+              }}
+              transition={{
+                duration: 3.0,
+                repeat: Infinity,
+                repeatDelay: 2.6,
+                delay: 3.1,
+                ease: 'easeInOut',
+              }}
+              className="hidden md:block absolute top-[28%] right-[28%] lg:right-[32%] pointer-events-none"
+            >
+              <div className="relative">
+                <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_3px_#60A5FA]" />
+                <div className="absolute top-1/2 right-full -translate-y-1/2 w-8 h-[1.5px] bg-gradient-to-r from-transparent via-[#60A5FA] to-white -rotate-[30deg] origin-right" />
+              </div>
+            </motion.div>
+
+            {/* Active Server Status Beacons (Right Server Rack Nodes) */}
+            {/* Beacon 1: High Tower Node */}
+            <div className="hidden sm:block absolute top-[15%] right-[25%] lg:right-[28%] pointer-events-none">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#38BDF8] opacity-75 duration-1000" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white shadow-[0_0_6px_#38BDF8]" />
+              </span>
+            </div>
+
+            {/* Beacon 2: Mid Server Rack Node */}
+            <div className="hidden md:block absolute top-[35%] right-[10%] lg:right-[14%] pointer-events-none">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#60A5FA] opacity-65 duration-1000" style={{ animationDelay: '0.9s' }} />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#93C5FD] shadow-[0_0_6px_#60A5FA]" />
+              </span>
+            </div>
+
+            {/* Beacon 3: Lower Cluster Node */}
+            <div className="hidden sm:block absolute top-[50%] right-[18%] lg:right-[22%] pointer-events-none">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#38BDF8] opacity-60 duration-1000" style={{ animationDelay: '1.7s' }} />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white shadow-[0_0_6px_#38BDF8]" />
+              </span>
+            </div>
+          </div>
+
+          {/* Subtle Top Navbar Blend - Fades out towards the right so it doesn't cloud the 3D servers */}
+          <div className="absolute inset-x-0 top-0 h-16 sm:h-24 bg-gradient-to-b from-white/80 via-white/20 to-transparent [mask-image:linear-gradient(to_right,black_0%,black_50%,transparent_85%)] pointer-events-none" />
+
+          {/* Seamless Bottom Transition to Next Section - Luxury Exponential Scrim into #F8FAFC */}
+          <div
+            className="absolute inset-x-0 bottom-0 h-32 sm:h-40 lg:h-48 pointer-events-none"
+            style={{
+              background:
+                'linear-gradient(to bottom, transparent 0%, rgba(248,250,252,0.02) 20%, rgba(248,250,252,0.1) 40%, rgba(248,250,252,0.32) 60%, rgba(248,250,252,0.68) 80%, rgba(248,250,252,0.92) 93%, #F8FAFC 100%)',
+            }}
+          />
+        </div>
+
+        {/* Ambient Brand Glow behind Headline - Breathing Ambient Glow */}
         <motion.div
-          className="absolute top-[20%] left-[20%] w-72 h-72 sm:w-96 sm:h-96 bg-theme-accent/20 rounded-full blur-[100px] -z-10 pointer-events-none"
           animate={{
-            x: [0, 50, 0, -50, 0],
-            y: [0, -30, 30, -30, 0],
-            scale: [1, 1.2, 0.9, 1.1, 1]
+            scale: [1, 1.1, 1],
+            opacity: [0.6, 0.9, 0.6],
           }}
           transition={{
-            duration: 10,
+            duration: 7,
             repeat: Infinity,
-            ease: "linear"
+            ease: 'easeInOut',
           }}
-        />
-        <motion.div
-          className="absolute bottom-[20%] right-[10%] w-64 h-64 sm:w-80 sm:h-80 bg-[#1D4ED8]/15 rounded-full blur-[100px] -z-10 pointer-events-none"
-          animate={{
-            x: [0, -50, 0, 50, 0],
-            y: [0, 40, -40, 40, 0],
-            scale: [1, 1.1, 0.8, 1.2, 1]
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "linear"
-          }}
+          className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[300px] bg-gradient-to-br from-[#2C5098]/16 via-[#2E54A2]/12 to-[#23385B]/10 rounded-full blur-[95px] pointer-events-none -z-0"
         />
 
-        {/* b) Headline (Large, bold, centered) */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <h1 className="text-[38px] sm:text-5xl md:text-6xl lg:text-6.5xl font-display font-bold tracking-tight leading-[1.08] text-theme-fore">
-            {t.hero.title}{' '}
-            <span className="text-theme-accent inline-block">
-              {t.hero.titleHighlight}
-            </span>.
-          </h1>
-        </motion.div>
+        <div className="relative z-10 min-h-[calc(100vh-14rem)] flex flex-col items-center justify-between text-center max-w-5xl lg:max-w-6xl mx-auto px-4 sm:px-6">
+          {/* Main Center Content Container - Frameless Seamless Layout (Option 1) */}
+          <div className="flex-1 flex flex-col items-center justify-center space-y-6 sm:space-y-8 w-full pt-16 sm:pt-24 lg:pt-28 relative">
+            {/* Smart Organic Contrast Shield - Seamless feathered radial halo focused behind text */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-3xl lg:max-w-4xl h-[440px] bg-[radial-gradient(ellipse_at_center,_rgba(255,255,255,0.96)_0%,_rgba(255,255,255,0.58)_35%,_transparent_68%)] pointer-events-none -z-0" />
 
-        {/* c) Subheadline (Centered, smaller, muted text) */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-2xl mx-auto"
-        >
-          <p className="text-sm sm:text-base text-theme-fore-muted leading-relaxed font-sans">
-            {t.hero.subtitle}
-          </p>
-        </motion.div>
+            {/* Main Headline */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              className="max-w-4xl mx-auto relative z-10"
+            >
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-sans font-bold tracking-tight leading-[1.12] text-slate-900 drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
+                {t.hero.title}{' '}
+                <motion.span
+                  animate={{
+                    backgroundPosition: ['200% center', '-200% center'],
+                  }}
+                  transition={{
+                    duration: 3.5,
+                    repeat: Infinity,
+                    ease: 'linear',
+                  }}
+                  style={{
+                    backgroundImage:
+                      'linear-gradient(110deg, #1E315B 0%, #2C5098 25%, #38BDF8 44%, #FFFFFF 50%, #38BDF8 56%, #2C5098 75%, #1E315B 100%)',
+                    backgroundSize: '250% auto',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                  }}
+                  className="inline-block font-extrabold pb-0.5 drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]"
+                >
+                  {t.hero.titleHighlight}
+                </motion.span>.
+              </h1>
+            </motion.div>
 
-        {/* d) CTA Row (Two buttons side-by-side, centered) */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2"
-        >
-          <button
-            onClick={() => scrollToId('contact-section')}
-            className="relative w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-theme-accent hover:bg-theme-accent-bright text-white shadow-xl shadow-theme-accent/25 hover:shadow-theme-accent/35 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
-            id="hero-btn-book-call"
+            {/* Subheadline */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.12, ease: [0.16, 1, 0.3, 1] }}
+              className="max-w-2xl mx-auto relative z-10"
+            >
+              <p className="text-sm sm:text-base md:text-lg text-slate-700 font-medium leading-relaxed font-sans drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)]">
+                {t.hero.subtitle}
+              </p>
+            </motion.div>
+
+            {/* Hero CTA Buttons - Executive High-Craft Precision */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2 w-full sm:w-auto relative z-10"
+            >
+              {/* Primary CTA - Clean Solid Executive Button (Borderless) */}
+              <button
+                onClick={() => scrollToId('contact-section')}
+                id="hero-btn-book-call"
+                className="inline-flex items-center justify-center gap-2.5 px-8 py-3.5 rounded-full font-bold text-xs sm:text-sm text-white bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] shadow-md shadow-[#2C5098]/20 hover:shadow-xl hover:shadow-[#2C5098]/35 hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] transition-all duration-200 cursor-pointer group w-full sm:w-auto"
+              >
+                <span>{t.hero.btnPrimary}</span>
+                <Icon
+                  icon="ph:arrow-right-bold"
+                  className="w-4 h-4 group-hover:translate-x-1.5 transition-transform duration-200 ease-out"
+                />
+              </button>
+              {/* Executive Secondary CTA */}
+              <button
+                onClick={() => scrollToId('projects-section')}
+                id="hero-btn-view-projects"
+                className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold bg-white/95 backdrop-blur-md hover:bg-white text-slate-700 hover:text-slate-900 border border-slate-200/90 hover:border-[#2C5098]/40 shadow-sm hover:shadow-md hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.99] transition-all duration-200 cursor-pointer w-full sm:w-auto"
+              >
+                <span>{t.hero.btnSecondary}</span>
+              </button>
+            </motion.div>
+          </div>
+
+          {/* Hero Bottom Anchor / Scroll Prompt */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.55 }}
+            className="pt-6 flex flex-col items-center gap-1.5 cursor-pointer text-slate-400 hover:text-[#2C5098] transition-colors select-none"
+            onClick={() => scrollToId('client-portal-section')}
           >
-            <span>{t.hero.btnPrimary}</span>
-            <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => scrollToId('projects-section')}
-            className="w-full sm:w-auto px-8 py-3.5 rounded-full text-xs sm:text-sm font-bold border border-theme-border hover:border-theme-accent text-theme-fore hover:bg-theme-surface/50 active:scale-[0.98] transition-all duration-200 cursor-pointer flex items-center justify-center gap-2"
-            id="hero-btn-view-projects"
-          >
-            <span>{t.hero.btnSecondary}</span>
-          </button>
-        </motion.div>
-
+            <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.25em] font-bold text-slate-400">
+              {language === 'en' ? 'Scroll to explore' : 'Scroll ke bawah'}
+            </span>
+            <motion.div
+              animate={{ y: [0, 4, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <Icon icon="ph:caret-down-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
+            </motion.div>
+          </motion.div>
+        </div>
       </section>
-      {/* SECTION 2: CLIENT PORTAL & TRANSPARANSI (CENTERED FEATURE SHOWCASE LAYOUT) */}
+
+      {/* =========================================================================
+          SECTION 2: CLIENT PORTAL SHOWCASE (#client-portal-section) - SOFT GRAY (#F8FAFC)
+          ========================================================================= */}
       <motion.section
         id="client-portal-section"
-        className="space-y-10 pt-4 pb-12 max-w-5xl mx-auto"
+        className="w-full bg-[#F8FAFC] border-b border-slate-200/70 py-20 sm:py-28 lg:py-32"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.15 }}
+        viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        {/* 1. Centered Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3.5">
-          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
-            <span>{t.clientPortal?.eyebrow || "FITUR UNGGULAN"}</span>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-8 sm:space-y-12">
+          {/* 1. Centered Section Header */}
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
+              <span>{t.clientPortal?.eyebrow || "FITUR UNGGULAN"}</span>
+            </div>
+
+            <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
+              {t.clientPortal?.title || (language === 'en' ? 'Every Project Includes a' : 'Setiap Proyek Dilengkapi')}{' '}
+              <span className="text-[#2C5098] font-extrabold">
+                {language === 'en' ? 'Dedicated Client Portal' : 'Portal Klien Khusus'}
+              </span>
+            </h2>
+
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans max-w-2xl mx-auto">
+              {t.clientPortal?.subtitle || (language === 'en' ? 'No need to constantly ask for updates. Monitor live progress anytime directly from your browser.' : 'Transparansi total dari hari pertama. Pantau sprint development, tagihan, dan notifikasi instan langsung dari browser Anda.')}
+            </p>
           </div>
 
-          <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore">
-            {t.clientPortal?.title || "Pantau Progress Proyek Anda, Kapan Saja"}
-          </h2>
-
-          <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed font-sans max-w-2xl mx-auto">
-            {t.clientPortal?.subtitle || "Setiap klien mendapat akses ke portal khusus untuk memantau progress pengerjaan, milestone, hingga invoice, tanpa perlu menunggu update manual atau bertanya 'sampai mana progressnya?'"}
-          </p>
-        </div>
-
-        {/* 2. Main Dashboard Mockup Showcase (Clean Level Showcase Window) */}
-        <div className="relative flex justify-center items-center py-4">
-          {/* Ambient Background Radial Glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-gradient-to-tr from-blue-600/20 via-cyan-500/15 to-indigo-600/20 rounded-full blur-[100px] pointer-events-none -z-10" />
-
-          {/* Floating Micro Badge #1 (Top Right Live Badge) */}
-          <motion.div
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute -top-3 right-2 sm:right-8 z-30 px-4 py-2 rounded-2xl bg-white/95 dark:bg-slate-900/95 border border-blue-500/40 shadow-xl backdrop-blur-2xl flex items-center gap-2.5 pointer-events-none"
-          >
-            <div className="w-6 h-6 rounded-lg bg-blue-500/15 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
-              <Icon icon="ph:clock-clockwise-bold" className="w-3.5 h-3.5" />
-            </div>
-            <div>
-              <p className="text-[10px] font-extrabold text-slate-900 dark:text-white leading-none">24/7 Live Tracking & Milestones</p>
-              <p className="text-[8px] font-medium text-blue-600 dark:text-blue-300 mt-0.5 hidden sm:block">Real-Time Development Status</p>
-            </div>
-          </motion.div>
-
-          {/* Clean Level Client Portal Window */}
-          <div className="w-full max-w-[640px] p-4 sm:p-6 rounded-3xl bg-white/90 dark:bg-slate-900/95 backdrop-blur-2xl border border-slate-200/90 dark:border-slate-700/80 shadow-2xl space-y-3 sm:space-y-4 relative group overflow-hidden z-20 hover:border-blue-500/60 transition-all duration-300">
-            {/* Laser Moving Shimmer Accent */}
-            <motion.div
-              className="absolute top-0 left-0 h-[2px] w-44 bg-gradient-to-r from-transparent via-blue-500 dark:via-cyan-400 to-transparent z-30"
-              animate={{ x: ['-100%', '350%'] }}
-              transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
-            />
-
-            {/* macOS Browser Header Bar */}
-            <div className="space-y-2.5 border-b border-slate-200/80 dark:border-slate-800/80 pb-2.5 sm:pb-3">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <div className="flex items-center gap-1 sm:gap-1.5">
-                    <span className="w-2.5 h-2.5 rounded-full bg-rose-500 inline-block shadow-sm" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block shadow-sm" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 inline-block shadow-sm" />
-                  </div>
-                  <Link
-                    href="/portal/demo"
-                    className="flex items-center gap-1 sm:gap-1.5 bg-slate-100 hover:bg-blue-50 dark:bg-slate-800/90 dark:hover:bg-slate-800 px-2.5 sm:px-3 py-1 rounded-lg border border-slate-200 hover:border-blue-400/50 dark:border-slate-700/60 ml-1 sm:ml-2 transition-all cursor-pointer group/bar"
-                    title="Klik untuk mencoba Demo Portal langsung"
-                  >
-                    <img src="/logo.svg" alt="SejatiDimedia Logo" className="h-3.5 sm:h-4 w-auto object-contain" />
-                    <span className="text-[9px] sm:text-[11px] font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1 truncate max-w-[180px] sm:max-w-none">
-                      <Icon icon="ph:lock-key-duotone" className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
-                      sejatidimedia.id/portal/demo
-                    </span>
-                    <span className="px-1.5 py-0.2 rounded text-[8px] bg-blue-500/20 text-blue-600 dark:text-blue-300 font-bold uppercase ml-1">
-                      Demo
-                    </span>
-                  </Link>
-                </div>
-              </div>
-
-              {/* Multi-Tab Pills */}
-              <div className="flex items-center justify-between gap-2 pt-0.5 sm:pt-1">
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <span className="px-2 sm:px-2.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-bold bg-blue-500/15 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300 border border-blue-400/30 dark:border-blue-400/40 flex items-center gap-1">
-                    <Icon icon="ph:squares-four-duotone" className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-blue-600 dark:text-blue-400" />
-                    Dashboard
-                  </span>
-                  <span className="px-2 sm:px-2.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-1">
-                    <Icon icon="ph:folder-duotone" className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                    Deliverables
-                  </span>
-                  <span className="px-2 sm:px-2.5 py-0.5 rounded-md text-[9px] sm:text-[10px] font-medium text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-1">
-                    <Icon icon="ph:receipt-duotone" className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-                    Invoices
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* 1. Active Project Progress & Milestone Tasks Section */}
-            <div className="space-y-2.5 sm:space-y-3 bg-slate-50/80 dark:bg-slate-800/60 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200/80 dark:border-slate-700/60 relative overflow-hidden text-left shadow-inner">
-              <div className="flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg sm:rounded-xl bg-blue-500/10 dark:bg-blue-500/20 border border-blue-500/20 dark:border-blue-500/30 flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
-                    <Icon icon="ph:kanban-duotone" className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                  </div>
-                  <div>
-                    <p className="text-[10px] sm:text-xs font-bold text-slate-900 dark:text-white leading-tight">
-                      {t.clientPortal?.mockupTitle || "Dashboard Klien: Proyek Aktif"}
-                    </p>
-                    <p className="text-[8px] sm:text-[9px] text-slate-500 dark:text-slate-400 font-medium">Client: Timur Dian • Live Status</p>
-                  </div>
-                </div>
-                <motion.span
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                  className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md text-[9px] sm:text-[10px] font-black uppercase tracking-wider bg-blue-500/15 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-400/30 shrink-0 shadow-sm"
+          {/* 2. Interactive Feature Switcher Tabs (01, 02, 03) */}
+          <div className="flex flex-wrap justify-center items-center gap-2 sm:gap-3 max-w-4xl mx-auto pt-1">
+            {[
+              {
+                idx: 0,
+                num: '01',
+                label: t.clientPortal?.point1Title || 'Milestone & Sprint Board',
+                shortLabel: 'Milestone Board',
+                icon: 'ph:kanban-duotone'
+              },
+              {
+                idx: 1,
+                num: '02',
+                label: t.clientPortal?.point2Title || 'Invoice & Billing Transparan',
+                shortLabel: 'Billing & Invoice',
+                icon: 'ph:receipt-duotone'
+              },
+              {
+                idx: 2,
+                num: '03',
+                label: language === 'en' ? 'Email & In-Portal Alerts' : 'Notifikasi Email & Portal',
+                shortLabel: 'Email & Portal',
+                icon: 'ph:bell-simple-ringing-duotone'
+              }
+            ].map((tab) => {
+              const isActive = portalActiveTab === tab.idx;
+              return (
+                <button
+                  key={tab.idx}
+                  onClick={() => setPortalActiveTab(tab.idx)}
+                  className={`px-4 sm:px-5 py-2.5 sm:py-3 rounded-2xl font-sans text-xs sm:text-sm font-bold transition-all duration-300 flex items-center gap-2 sm:gap-2.5 cursor-pointer relative ${isActive
+                    ? 'bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-md shadow-[#2C5098]/30 scale-[1.02]'
+                    : 'bg-white text-slate-700 hover:text-slate-900 border border-slate-200/80 hover:border-[#2C5098]/40 hover:bg-slate-50 shadow-2xs'
+                    }`}
                 >
-                  88% Completed
-                </motion.span>
-              </div>
+                  <span className={`w-5 h-5 rounded-md text-[10px] font-mono font-bold flex items-center justify-center ${isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
+                    }`}>
+                    {tab.num}
+                  </span>
+                  <Icon icon={tab.icon} className={`w-4 h-4 ${isActive ? 'text-white' : 'text-[#2C5098]'}`} />
+                  <span className="hidden sm:inline">{tab.label}</span>
+                  <span className="sm:hidden">{tab.shortLabel}</span>
+                </button>
+              );
+            })}
+          </div>
 
-              {/* Milestone Task Checklist Row */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[9px] font-extrabold pt-0.5">
-                <div className="flex items-center gap-1 text-slate-700 dark:text-slate-300 bg-white/90 dark:bg-slate-900/60 p-1.5 rounded-lg border border-slate-200 dark:border-slate-700/50">
-                  <Icon icon="ph:check-circle-fill" className="w-3 h-3 text-blue-600 dark:text-blue-400 shrink-0" />
-                  <span>Phase 1-3: UI/UX & DB Architecture</span>
+          {/* 3. Main Interactive Live Showcase Window */}
+          <div className="relative flex justify-center items-center py-2 max-w-4xl mx-auto w-full">
+            {/* Ambient Background Soft Radial Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[340px] bg-gradient-to-tr from-[#2C5098]/12 via-indigo-50/40 to-[#23385B]/10 rounded-full blur-[90px] pointer-events-none -z-10" />
+
+            {/* Clean macOS Client Portal Window */}
+            <div className="w-full rounded-3xl bg-white border border-slate-200/90 shadow-2xl shadow-slate-900/8 overflow-hidden relative group hover:border-[#2C5098]/50 transition-all duration-300">
+              {/* Laser Moving Shimmer Accent */}
+              <motion.div
+                className="absolute top-0 left-0 h-[2px] w-48 bg-gradient-to-r from-transparent via-[#2C5098] to-transparent z-30"
+                animate={{ x: ['-100%', '350%'] }}
+                transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
+              />
+
+              {/* macOS Browser Header Bar */}
+              <div className="px-4 sm:px-6 py-3 bg-slate-50/90 border-b border-slate-200/80 flex items-center justify-between gap-3 sm:gap-4">
+                {/* Traffic lights */}
+                <div className="flex items-center gap-1.5 shrink-0">
+                  <span className="w-2.5 h-2.5 rounded-full bg-rose-400 inline-block shadow-2xs" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-400 inline-block shadow-2xs" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block shadow-2xs" />
                 </div>
-                <div className="flex items-center gap-1 text-blue-700 dark:text-blue-300 bg-blue-50 dark:bg-blue-950/40 p-1.5 rounded-lg border border-blue-200 dark:border-blue-500/30">
-                  <span className="w-2 h-2 rounded-full bg-blue-500 dark:bg-blue-400 animate-pulse shrink-0" />
-                  <span>Phase 4: QA & Production Release</span>
-                </div>
-              </div>
 
-              {/* Animated Progress Bar */}
-              <div className="w-full bg-slate-200/80 dark:bg-slate-900 h-2 rounded-full overflow-hidden p-0.5 border border-slate-200 dark:border-slate-700/60">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-blue-600 via-indigo-500 to-cyan-400 rounded-full"
-                  animate={{ width: ['70%', '88%', '70%'] }}
-                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-                />
-              </div>
-            </div>
-
-            {/* 2. Invoice & Financial Settlement Row */}
-            <div className="bg-slate-50/80 dark:bg-slate-800/60 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-blue-500/30 dark:border-blue-500/40 space-y-2 sm:space-y-2.5 relative text-left shadow-inner">
-              <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800/80 pb-1.5 sm:pb-2">
-                <span className="text-[9px] sm:text-xs font-black text-slate-700 dark:text-slate-300 uppercase tracking-wider flex items-center gap-1 sm:gap-1.5">
-                  <Icon icon="ph:receipt-duotone" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400" />
-                  Project Billing & Invoices
-                </span>
-                <motion.span
-                  animate={{ opacity: [0.75, 1, 0.75] }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                  className="px-2 py-0.5 rounded-full text-[8px] sm:text-[9px] font-black bg-blue-500/15 text-blue-700 dark:bg-blue-500/20 dark:text-blue-400 border border-blue-400/30 flex items-center gap-1 shadow-sm"
+                {/* Full-width URL address bar */}
+                <Link
+                  href="/portal/demo"
+                  className="flex-1 flex items-center justify-between gap-2 bg-white hover:bg-slate-100/80 px-3 sm:px-3.5 py-1.5 rounded-xl border border-slate-200 hover:border-[#2C5098]/40 text-slate-700 text-[10px] sm:text-xs font-mono shadow-2xs min-w-0 transition-all cursor-pointer group/bar"
+                  title="Klik untuk mencoba Demo Portal langsung"
                 >
-                  <Icon icon="ph:check-circle-fill" className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-blue-600 dark:text-blue-400" />
-                  100% Settled
-                </motion.span>
-              </div>
-              <div className="grid grid-cols-3 gap-1.5 sm:gap-2 text-center">
-                <div className="bg-white dark:bg-slate-900/90 p-2 sm:p-2.5 rounded-lg sm:rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
-                  <p className="text-[7px] sm:text-[9px] font-extrabold text-slate-500 dark:text-slate-400 uppercase">Total Billed</p>
-                  <p className="text-[11px] sm:text-sm font-black text-slate-900 dark:text-white mt-0.5">Rp 37.2M</p>
+                  <div className="flex items-center gap-2 truncate">
+                    <Icon icon="ph:lock-key-duotone" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
+                    <span className="truncate text-slate-700 font-medium">sejatidimedia.web.id/portal/demo</span>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-md bg-[#2C5098]/10 text-[#2C5098] font-bold text-[9px] sm:text-[10px] uppercase tracking-wider shrink-0 group-hover/bar:bg-[#2C5098] group-hover/bar:text-white transition-all flex items-center gap-1">
+                    <span>Buka Demo</span>
+                    <Icon icon="ph:arrow-right-bold" className="w-2.5 h-2.5" />
+                  </span>
+                </Link>
+
+                {/* Live 24/7 status badge */}
+                <div className="flex items-center shrink-0">
+                  <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-700 border border-emerald-500/30 text-[10px] font-bold font-mono shadow-2xs">
+                    <span className="relative flex h-2 w-2 items-center justify-center">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                      <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                    </span>
+                    Live 24/7
+                  </span>
                 </div>
-                <div className="bg-blue-50 dark:bg-blue-950/50 p-2 sm:p-2.5 rounded-lg sm:rounded-xl border border-blue-200 dark:border-blue-500/40 relative overflow-hidden shadow-sm">
+              </div>
+
+              {/* Dynamic Viewport based on portalActiveTab (English Illustration Content) */}
+              <div className="p-5 sm:p-7 md:p-8 min-h-[380px] flex flex-col justify-between">
+                {/* TAB 0: Milestone & Sprint Board */}
+                {portalActiveTab === 0 && (
                   <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-blue-400/20 to-blue-500/10 pointer-events-none"
-                    animate={{ x: ['-100%', '100%'] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  />
-                  <p className="text-[7px] sm:text-[9px] font-extrabold text-blue-600 dark:text-blue-400 uppercase">Amount Paid</p>
-                  <p className="text-[11px] sm:text-sm font-black text-blue-700 dark:text-blue-300 mt-0.5">Rp 37.2M</p>
-                </div>
-                <div className="bg-white dark:bg-slate-900/90 p-2 sm:p-2.5 rounded-lg sm:rounded-xl border border-slate-200 dark:border-slate-700/60 shadow-sm">
-                  <p className="text-[7px] sm:text-[9px] font-extrabold text-slate-500 dark:text-slate-400 uppercase">Balance Due</p>
-                  <p className="text-[11px] sm:text-sm font-black text-slate-900 dark:text-white mt-0.5">Rp 0</p>
-                </div>
-              </div>
-            </div>
+                    key="tab-0"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="space-y-6 text-left"
+                  >
+                    {/* Progress Summary Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 flex items-center justify-center shrink-0 shadow-2xs">
+                          <Icon icon="ph:kanban-duotone" className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h4 className="text-sm sm:text-base font-bold text-slate-900 leading-tight">
+                            Active Sprint 2: Core Architecture & API Integration
+                          </h4>
+                          <p className="text-xs text-slate-500 font-medium mt-0.5">
+                            Client: Timur Dian • Target Release: August 24, 2026
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 self-start sm:self-auto">
+                        <span className="px-3.5 py-1 rounded-xl text-xs font-mono font-black tracking-wide bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white shadow-sm shadow-[#2C5098]/25 border border-white/20 flex items-center gap-1.5">
+                          88% Completed
+                        </span>
+                      </div>
+                    </div>
 
-            {/* 3. Real-Time Activity Feed & Digital Signature Download Bar */}
-            <div className="bg-slate-100/80 dark:bg-slate-800/40 p-2 sm:p-2.5 rounded-xl border border-slate-200 dark:border-slate-700/40 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5 sm:gap-0 text-[9px] sm:text-[10px] text-slate-700 dark:text-slate-300">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <Icon icon="ph:seal-check-duotone" className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600 dark:text-blue-400 shrink-0" />
-                <span>INV-202607-001: <strong className="text-slate-900 dark:text-white">Draft</strong></span>
-              </div>
-              <button className="px-2 sm:px-2.5 py-1 rounded-lg bg-blue-600/15 hover:bg-blue-600/30 text-blue-700 dark:bg-blue-600/30 dark:hover:bg-blue-600/50 dark:text-blue-300 border border-blue-400/30 dark:border-blue-400/40 text-[8px] sm:text-[9px] font-bold transition-all flex items-center gap-1 cursor-pointer">
-                <Icon icon="ph:download-simple-bold" className="w-3 h-3" />
-                PDF Invoice
-              </button>
-            </div>
-          </div>
-        </div>
+                    {/* Progress Bar */}
+                    <div className="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden p-0.5 border border-slate-200">
+                      <motion.div
+                        className="h-full bg-gradient-to-r from-[#2C5098] via-[#284478] to-[#23385B] rounded-full"
+                        initial={{ width: '0%' }}
+                        animate={{ width: '88%' }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                      />
+                    </div>
 
-        {/* 3. Unified Segmented Glass Stepper Track */}
-        <div className="pt-6 pb-2 text-left max-w-5xl mx-auto">
-          <div className="p-3 sm:p-4 rounded-3xl bg-theme-elevated/80 border border-theme-border/80 backdrop-blur-xl shadow-xl grid grid-cols-1 md:grid-cols-3 gap-3 relative">
+                    {/* 3 Live Kanban Columns */}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-1">
+                      {/* Column 1: Completed */}
+                      <div className="space-y-2 bg-slate-50/80 p-3 rounded-2xl border border-slate-200">
+                        <div className="flex items-center justify-between text-[10px] font-mono font-bold text-slate-500 uppercase px-1">
+                          <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 flex items-center gap-1 font-mono font-bold">
+                            COMPLETED (3)
+                          </span>
+                          <Icon icon="ph:check-circle-duotone" className="w-3.5 h-3.5 text-emerald-600" />
+                        </div>
+                        <div className="space-y-1.5 text-xs">
+                          <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs text-slate-800 font-medium flex items-center gap-2">
+                            <span className="w-4 h-4 rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-600 shrink-0">
+                              <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
+                            </span>
+                            <span>Database ERD & PostgreSQL Schema</span>
+                          </div>
+                          <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs text-slate-800 font-medium flex items-center gap-2">
+                            <span className="w-4 h-4 rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-600 shrink-0">
+                              <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
+                            </span>
+                            <span>Next.js 15 App Layout Setup</span>
+                          </div>
+                          <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs text-slate-800 font-medium flex items-center gap-2">
+                            <span className="w-4 h-4 rounded-full bg-emerald-100 border border-emerald-300 flex items-center justify-center text-emerald-600 shrink-0">
+                              <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
+                            </span>
+                            <span>Figma UI/UX Design Sign-off</span>
+                          </div>
+                        </div>
+                      </div>
 
-            {/* Step 1 Segment */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-theme-surface/40 hover:bg-theme-surface/70 border border-theme-border/50 hover:border-blue-500/40 transition-all duration-300 flex flex-col justify-between group">
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-7 h-7 rounded-lg text-xs font-mono font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0">
-                    01
-                  </span>
-                  <h4 className="text-xs sm:text-sm font-sans font-bold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {t.clientPortal?.point1Title || "Progress Real-Time"}
-                  </h4>
-                </div>
-                <Icon icon="ph:chart-line-up-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
-              </div>
-              <p className="text-[11px] text-theme-fore-muted leading-relaxed font-sans">
-                {t.clientPortal?.point1Desc || "Lihat status setiap fase pengerjaan: dari planning, development, hingga testing."}
-              </p>
-            </div>
+                      {/* Column 2: In Progress */}
+                      <div className="space-y-2 bg-[#2C5098]/5 p-3 rounded-2xl border border-[#2C5098]/20">
+                        <div className="flex items-center justify-between text-[10px] font-mono font-bold text-[#2C5098] uppercase px-1">
+                          <span className="px-2 py-0.5 rounded-md bg-[#2C5098]/10 border border-[#2C5098]/20 text-[#2C5098] flex items-center gap-1 font-mono font-bold">
+                            IN PROGRESS (2)
+                          </span>
+                          <span className="relative flex h-2 w-2 items-center justify-center">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2C5098] opacity-75" />
+                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-[#2C5098]" />
+                          </span>
+                        </div>
+                        <div className="space-y-1.5 text-xs">
+                          <div className="p-2.5 rounded-xl bg-white border border-[#2C5098]/20 shadow-2xs text-[#23385B] font-semibold flex items-center gap-2">
+                            <span className="relative flex h-3 w-3 items-center justify-center shrink-0 ml-0.5 mr-0.5">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2C5098] opacity-75" />
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2C5098]" />
+                            </span>
+                            <span>Payment Gateway & Webhook Setup</span>
+                          </div>
+                          <div className="p-2.5 rounded-xl bg-white border border-[#2C5098]/20 shadow-2xs text-[#23385B] font-semibold flex items-center gap-2">
+                            <span className="relative flex h-3 w-3 items-center justify-center shrink-0 ml-0.5 mr-0.5">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#2C5098] opacity-75" />
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#2C5098]" />
+                            </span>
+                            <span>REST API & Multi-Tenant Endpoints</span>
+                          </div>
+                        </div>
+                      </div>
 
-            {/* Step 2 Segment */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-theme-surface/40 hover:bg-theme-surface/70 border border-theme-border/50 hover:border-blue-500/40 transition-all duration-300 flex flex-col justify-between group">
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-7 h-7 rounded-lg text-xs font-mono font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0">
-                    02
-                  </span>
-                  <h4 className="text-xs sm:text-sm font-sans font-bold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {t.clientPortal?.point2Title || "Invoice & Pembayaran Transparan"}
-                  </h4>
-                </div>
-                <Icon icon="ph:receipt-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
-              </div>
-              <p className="text-[11px] text-theme-fore-muted leading-relaxed font-sans">
-                {t.clientPortal?.point2Desc || "Riwayat billing dan status pembayaran tercatat jelas, tidak ada biaya tersembunyi."}
-              </p>
-            </div>
+                      {/* Column 3: Up Next */}
+                      <div className="space-y-2 bg-slate-50/80 p-3 rounded-2xl border border-slate-200">
+                        <div className="flex items-center justify-between text-[10px] font-mono font-bold text-slate-500 uppercase px-1">
+                          <span className="px-2 py-0.5 rounded-md bg-slate-500/10 border border-slate-300 text-slate-700 flex items-center gap-1 font-mono font-bold">
+                            UP NEXT (2)
+                          </span>
+                          <Icon icon="ph:clock-duotone" className="w-3.5 h-3.5 text-slate-400" />
+                        </div>
+                        <div className="space-y-1.5 text-xs">
+                          <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs text-slate-600 font-medium flex items-center gap-2">
+                            <Icon icon="ph:circle-dashed" className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                            <span>QA Stress & Security Test</span>
+                          </div>
+                          <div className="p-2.5 rounded-xl bg-white border border-slate-200/90 shadow-2xs text-slate-600 font-medium flex items-center gap-2">
+                            <Icon icon="ph:circle-dashed" className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                            <span>Production Cutover & SSL</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
-            {/* Step 3 Segment */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-theme-surface/40 hover:bg-theme-surface/70 border border-theme-border/50 hover:border-blue-500/40 transition-all duration-300 flex flex-col justify-between group">
-              <div className="flex items-center justify-between gap-2 mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="w-7 h-7 rounded-lg text-xs font-mono font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20 flex items-center justify-center shrink-0">
-                    03
-                  </span>
-                  <h4 className="text-xs sm:text-sm font-sans font-bold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {t.clientPortal?.point3Title || "Update Tanpa Perlu Bertanya"}
-                  </h4>
-                </div>
-                <Icon icon="ph:bell-simple-ringing-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                    {/* Live Commit Status Footer */}
+                    <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-slate-500 font-mono">
+                      <span className="flex items-center gap-1.5">
+                        <Icon icon="ph:git-commit-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
+                        Latest: <strong className="text-slate-800">feat(auth): integrate multi-tenant JWT session</strong>
+                      </span>
+                      <span className="text-slate-400">12 mins ago</span>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* TAB 1: Billing & Invoices */}
+                {portalActiveTab === 1 && (
+                  <motion.div
+                    key="tab-1"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="space-y-6 text-left"
+                  >
+                    {/* Financial Summary Cards */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                        <p className="text-[10px] font-mono font-bold text-slate-400 uppercase">TOTAL CONTRACT</p>
+                        <p className="text-lg sm:text-xl font-sans font-extrabold text-slate-900 mt-1">Rp 37,200,000</p>
+                        <p className="text-[11px] text-slate-500 mt-0.5">Fixed Price • No Hidden Fees</p>
+                      </div>
+                      <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 relative overflow-hidden">
+                        <p className="text-[10px] font-mono font-bold text-emerald-700 uppercase">AMOUNT PAID</p>
+                        <p className="text-lg sm:text-xl font-sans font-extrabold text-emerald-800 mt-1">Rp 37,200,000</p>
+                        <p className="text-[11px] text-emerald-700 font-bold mt-0.5 flex items-center gap-1">
+                          <Icon icon="ph:check-circle-fill" className="w-3.5 h-3.5" />
+                          100% Settled & Verified
+                        </p>
+                      </div>
+                      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                        <p className="text-[10px] font-mono font-bold text-slate-400 uppercase">BALANCE DUE</p>
+                        <p className="text-lg sm:text-xl font-sans font-extrabold text-slate-900 mt-1">Rp 0</p>
+                        <p className="text-[11px] text-slate-500 mt-0.5">All Milestones Settled</p>
+                      </div>
+                    </div>
+
+                    {/* Invoices Breakdown Table */}
+                    <div className="space-y-2.5">
+                      <div className="text-[10px] font-mono font-bold text-slate-400 uppercase px-1">
+                        OFFICIAL INVOICES & DIGITAL RECEIPTS
+                      </div>
+                      <div className="space-y-2">
+                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-[#2C5098]/40 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center shrink-0">
+                              <Icon icon="ph:receipt-duotone" className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono text-xs font-bold text-slate-900">INV-202607-001</span>
+                                <span className="px-2.5 py-0.5 rounded-lg text-[10px] font-mono font-black tracking-wide bg-emerald-500/10 text-emerald-700 border border-emerald-500/30 flex items-center gap-1 shadow-2xs">
+                                  <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
+                                  PAID
+                                </span>
+                              </div>
+                              <p className="text-xs text-slate-500">Milestone 1: Down Payment (50%) • Rp 18,600,000</p>
+                            </div>
+                          </div>
+                          <button className="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-[#2C5098]/10 text-[#2C5098] border border-slate-200 hover:border-[#2C5098]/30 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer self-end sm:self-auto">
+                            <Icon icon="ph:download-simple-bold" className="w-3.5 h-3.5" />
+                            Download PDF
+                          </button>
+                        </div>
+
+                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200 hover:border-[#2C5098]/40 transition-all flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-200 flex items-center justify-center shrink-0">
+                              <Icon icon="ph:receipt-duotone" className="w-4 h-4" />
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono text-xs font-bold text-slate-900">INV-202608-002</span>
+                                <span className="px-2.5 py-0.5 rounded-lg text-[10px] font-mono font-black tracking-wide bg-emerald-500/10 text-emerald-700 border border-emerald-500/30 flex items-center gap-1 shadow-2xs">
+                                  <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
+                                  PAID
+                                </span>
+                              </div>
+                              <p className="text-xs text-slate-500">Milestone 2: Final Handover (50%) • Rp 18,600,000</p>
+                            </div>
+                          </div>
+                          <button className="px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-[#2C5098]/10 text-[#2C5098] border border-slate-200 hover:border-[#2C5098]/30 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer self-end sm:self-auto">
+                            <Icon icon="ph:download-simple-bold" className="w-3.5 h-3.5" />
+                            Download PDF
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Guarantee & Verification Seal */}
+                    <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-[11px] text-slate-500 font-sans">
+                      <span className="flex items-center gap-1.5 text-emerald-700 font-medium">
+                        <Icon icon="ph:shield-check-fill" className="w-4 h-4 text-emerald-600" />
+                        Protected by 30-Day Bug-Free Guarantee & Digital Encryption
+                      </span>
+                      <span className="font-mono text-slate-400">Escrow / Direct Transfer Verified</span>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* TAB 2: Real-Time Dispatch & Alerts (Email & In-Portal Feed) */}
+                {portalActiveTab === 2 && (
+                  <motion.div
+                    key="tab-2"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="space-y-6 text-left"
+                  >
+                    {/* Channel Header */}
+                    <div className="flex items-center justify-between bg-slate-50 p-4 rounded-2xl border border-slate-200">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-xl bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 flex items-center justify-center shrink-0">
+                          <Icon icon="ph:bell-simple-ringing-duotone" className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <h4 className="text-sm sm:text-base font-bold text-slate-900 leading-tight">
+                            Automated Email & In-Portal Updates
+                          </h4>
+                          <p className="text-xs text-slate-500 font-medium mt-0.5">
+                            Official email alerts & real-time in-app activity tracking
+                          </p>
+                        </div>
+                      </div>
+                      <span className="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500/10 text-emerald-700 border border-emerald-500/30 flex items-center gap-1.5 font-mono shadow-2xs">
+                        <span className="relative flex h-2 w-2 items-center justify-center">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                          <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                        </span>
+                        Live Sync Active
+                      </span>
+                    </div>
+
+                    {/* Live Previews */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                      {/* In-Portal Activity Feed Card */}
+                      <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-2.5">
+                        <div className="flex items-center justify-between pb-1.5 border-b border-slate-200">
+                          <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                            <Icon icon="ph:broadcast-duotone" className="w-4 h-4 text-[#2C5098]" />
+                            In-Portal Live Activity
+                          </span>
+                          <span className="px-2 py-0.5 rounded-md text-[9px] font-mono font-bold bg-emerald-500/10 text-emerald-700 border border-emerald-500/20">
+                            Real-Time
+                          </span>
+                        </div>
+                        <div className="space-y-2">
+                          <div className="bg-white p-2.5 rounded-xl border border-slate-200/90 shadow-2xs space-y-1">
+                            <div className="flex items-center justify-between">
+                              <span className="px-2 py-0.5 rounded text-[9px] font-mono font-black tracking-wider bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20">
+                                MILESTONE COMPLETED
+                              </span>
+                              <span className="text-[9px] text-slate-400 font-mono">10m ago</span>
+                            </div>
+                            <p className="text-xs font-bold text-slate-900">Sprint 2 Backend & Database Ready</p>
+                            <p className="text-[11px] text-slate-500">Staging URL deployed & ready for live preview testing.</p>
+                          </div>
+                          <div className="bg-white p-2.5 rounded-xl border border-slate-200/90 shadow-2xs space-y-1">
+                            <div className="flex items-center justify-between">
+                              <span className="px-2 py-0.5 rounded text-[9px] font-mono font-black tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200/80">
+                                INVOICE SETTLED
+                              </span>
+                              <span className="text-[9px] text-slate-400 font-mono">1h ago</span>
+                            </div>
+                            <p className="text-xs font-bold text-slate-900">INV-202607-001 Payment Verified</p>
+                            <p className="text-[11px] text-slate-500">Official digital receipt available in Invoices tab.</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Email Notification Card */}
+                      <div className="p-4 rounded-2xl bg-[#2C5098]/5 border border-[#2C5098]/20 space-y-2.5">
+                        <div className="flex items-center justify-between pb-1.5 border-b border-[#2C5098]/20">
+                          <span className="text-xs font-bold text-[#23385B] flex items-center gap-1.5">
+                            <Icon icon="ph:envelope-simple-duotone" className="w-4 h-4 text-[#2C5098]" />
+                            Email Notification Digest
+                          </span>
+                          <span className="px-2 py-0.5 rounded-md text-[9px] font-mono font-bold bg-[#2C5098]/10 text-[#23385B] border border-[#2C5098]/20">
+                            Auto-Dispatch
+                          </span>
+                        </div>
+                        <div className="bg-white p-3 rounded-xl border border-slate-200/80 shadow-2xs space-y-2 text-xs text-slate-800">
+                          <div>
+                            <p className="text-[10px] font-mono text-slate-400">To: timur@example.com</p>
+                            <p className="font-semibold text-slate-900 mt-0.5">[SejatiDimedia] Milestone 2 Completed: Preview Ready</p>
+                          </div>
+                          <p className="text-slate-600 leading-relaxed text-[11px]">
+                            Hello Timur, all Sprint 2 deliverables have passed QA testing. You can review the live staging build at:
+                          </p>
+                          <div className="p-2 rounded-lg bg-slate-50 border border-slate-200 font-mono text-[10px] text-[#2C5098] font-bold break-all">
+                            https://staging.sejatidimedia.web.id/demo
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
               </div>
-              <p className="text-[11px] text-theme-fore-muted leading-relaxed font-sans">
-                {t.clientPortal?.point3Desc || "Setiap milestone selesai, Anda mendapat notifikasi langsung sehingga tidak perlu mengejar update."}
-              </p>
             </div>
           </div>
 
           {/* Dedicated CTA Button to Live Demo Portal */}
-          <div className="pt-4 flex justify-center">
+          <div className="pt-2 flex justify-center">
             <Link
               href="/portal/demo"
-              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-sans font-bold text-xs sm:text-sm shadow-xl shadow-blue-500/20 hover:shadow-2xl hover:shadow-blue-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer group"
+              className="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-gradient-to-r from-[#2C5098] to-[#1E315B] text-white font-sans font-bold text-xs sm:text-sm shadow-xl shadow-[#2C5098]/20 hover:shadow-2xl hover:shadow-[#2C5098]/30 hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer group"
             >
               <Icon icon="ph:play-circle-duotone" className="w-5 h-5 text-blue-200 group-hover:scale-110 transition-transform" />
               <span>{language === 'en' ? 'Try Interactive Client Portal Demo (Guest Mode)' : 'Coba Demo Client Portal Interaktif (Mode Tamu)'}</span>
               <Icon icon="ph:arrow-right-bold" className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
+
+          {/* 4. Minimalist Inline Key Value Footnote (Bilingual Support) */}
+          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-slate-600 text-xs sm:text-sm font-sans pt-2">
+            <div className="flex items-center gap-2">
+              <Icon icon="ph:check-circle-fill" className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>
+                {language === 'en'
+                  ? 'Lifetime portal access with zero subscription fees'
+                  : 'Akses seumur hidup tanpa biaya langganan'}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Icon icon="ph:check-circle-fill" className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>
+                {language === 'en'
+                  ? 'Automated progress updates upon milestone completion'
+                  : 'Update otomatis setiap milestone selesai'}
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Icon icon="ph:check-circle-fill" className="w-4 h-4 text-emerald-600 shrink-0" />
+              <span>
+                {language === 'en'
+                  ? '100% transparent billing with no hidden costs'
+                  : 'Transparansi 100% tanpa biaya tersembunyi'}
+              </span>
+            </div>
+          </div>
         </div>
       </motion.section>
 
-      {/* SECTION: TENTANG SAYA (FROM FACTORY FLOOR TO LINES OF CODE) */}
+      {/* =========================================================================
+          SECTION 3: ABOUT / NARRATIVE SECTION (#about-section) - PURE WHITE (#FFFFFF)
+          ========================================================================= */}
       <motion.section
         id="about-section"
-        className="space-y-8 pt-4 pb-4"
+        className="w-full bg-white py-20 sm:py-28 lg:py-32"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.15 }}
+        viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="max-w-6xl mx-auto rounded-3xl bg-theme-elevated/70 border border-theme-border/80 p-6 sm:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden">
-          {/* Ambient Glow Background Accent */}
-          <div className="absolute top-0 right-0 w-80 h-80 bg-blue-500/10 dark:bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
+          {/* Standard Centered Section Header */}
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
+              <span>{t.about?.eyebrow || "TENTANG SAYA"}</span>
+            </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center relative z-10">
-            {/* Left Column: Copy & Story (7 Cols) */}
-            <div className="lg:col-span-7 space-y-4 text-left">
-              <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
-                <span>{t.about?.eyebrow || "TENTANG SAYA"}</span>
+            <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
+              {t.about?.title || (language === 'en' ? 'Background & Work Approach' : 'Latar Belakang & Cara Kerja')}
+            </h2>
+
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans max-w-2xl mx-auto">
+              {t.about?.subtitle ||
+                (language === 'en'
+                  ? '5 years of managing operational systems taught me to build neat, stable, and user-friendly software tailored to your business needs.'
+                  : '5 tahun menangani sistem operasional membuat saya terbiasa membangun software yang rapi, stabil, dan mudah digunakan untuk kebutuhan bisnis Anda.')}
+            </p>
+          </div>
+
+          {/* Cardless Narrative Flow (3 Editorial Rows separated by thin baseline rules) */}
+          <div className="space-y-0 divide-y divide-slate-200 text-left pt-2">
+            {/* Narrative Item 01: Manufacturing Heritage */}
+            <div className="py-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-baseline">
+              <div className="md:col-span-4 space-y-1">
+                <span className="text-xs font-mono font-bold uppercase tracking-widest text-slate-400">
+                  {t.about?.phase1Label || (language === 'en' ? '01 / BACKGROUND' : '01 / LATAR BELAKANG')}
+                </span>
+                <h3 className="text-base sm:text-lg font-sans font-bold text-slate-900">
+                  {t.about?.phase1Title || (language === 'en' ? '6 Years in Operations & ERP Systems' : '6 Tahun di Sistem Operasional & ERP')}
+                </h3>
               </div>
-
-              <h2 className="text-3xl sm:text-4xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore">
-                {t.about?.title || "Dari Lantai Produksi ke Baris Kode"}
-              </h2>
-
-              <div className="space-y-3 text-xs sm:text-sm text-theme-fore-muted leading-relaxed font-sans">
-                <p>{t.about?.p1}</p>
-                <p>{t.about?.p2}</p>
-                {t.about?.p3 && <p>{t.about?.p3}</p>}
+              <div className="md:col-span-8 space-y-3">
+                <p className="text-sm sm:text-base text-slate-700 font-sans leading-relaxed">
+                  {t.about?.p1 || (language === 'en'
+                    ? 'During my 5+ years as a software developer in manufacturing, I regularly managed ERP, inventory, and production workflows used daily by operational teams.'
+                    : 'Selama 5+ tahun sebagai software developer di industri manufaktur, saya terbiasa mengelola sistem seperti ERP, inventori, dan alur produksi yang digunakan setiap hari oleh tim operasional.')}
+                </p>
+                <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-mono text-slate-500 pt-1">
+                  {(t.about?.phase1Tags || (language === 'en'
+                    ? ['Well-Organized Data', 'Stable & Minimal Errors', 'Familiar with Operations']
+                    : ['Data Tertata Rapi', 'Sistem Stabil & Minim Kendala', 'Terbiasa dengan Kebutuhan Operasional']
+                  )).map((tag: string, idx: number) => (
+                    <span key={idx}>• {tag}</span>
+                  ))}
+                </div>
               </div>
             </div>
 
-            {/* Right Column: Visual Accent Card / Illustration (5 Cols) */}
-            <div className="lg:col-span-5 relative">
-              <div className="rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white/60 dark:bg-slate-900/80 p-6 shadow-xl space-y-4 backdrop-blur-md">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
-                    <Icon icon="ph:factory-duotone" className="w-5 h-5" />
-                  </div>
-                  <div className="text-left">
-                    <h3 className="text-xs sm:text-sm font-bold text-theme-fore">
-                      {t.about?.card1Title || "5+ Tahun Pengalaman Manufaktur"}
-                    </h3>
-                    <p className="text-[10px] sm:text-xs text-theme-fore-muted">
-                      {t.about?.card1Desc || "ERP, Production, Inventory & Operational Workflow"}
-                    </p>
-                  </div>
+            {/* Narrative Item 02: Core Philosophy */}
+            <div className="py-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-baseline">
+              <div className="md:col-span-4 space-y-1">
+                <span className="text-xs font-mono font-bold uppercase tracking-widest text-[#2C5098]">
+                  {t.about?.phase2Label || (language === 'en' ? '02 / CORE PRINCIPLE' : '02 / PRINSIP UTAMA')}
+                </span>
+                <h3 className="text-base sm:text-lg font-sans font-bold text-slate-900">
+                  {t.about?.phase2Title || (language === 'en' ? 'Practical & Purpose-Built Systems' : 'Sistem yang Praktis & Tepat Guna')}
+                </h3>
+              </div>
+              <div className="md:col-span-8 space-y-3">
+                <p className="text-sm sm:text-base text-slate-700 font-sans leading-relaxed">
+                  {t.about?.p2 || (language === 'en'
+                    ? 'From that experience I learned: the best systems aren\'t the most complex, but the ones that are easy to understand, pleasant to use, and truly helpful in daily work.'
+                    : 'Dari pengalaman itu saya belajar: sistem terbaik bukan yang paling rumit, tetapi yang mudah dipahami, nyaman digunakan, dan benar-benar membantu pekerjaan harian.')}
+                </p>
+                <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-mono text-slate-500 pt-1">
+                  {(t.about?.phase2Tags || (language === 'en'
+                    ? ['Focus on Real Solutions', 'Easy Long-Term Maintenance', 'Pleasant for Your Team']
+                    : ['Fokus Solusi Nyata', 'Mudah Dirawat ke Depan', 'Nyaman Digunakan Tim']
+                  )).map((tag: string, idx: number) => (
+                    <span key={idx}>• {tag}</span>
+                  ))}
                 </div>
-                <div className="h-[1px] bg-theme-border/60" />
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
-                    <Icon icon="ph:cpu-duotone" className="w-5 h-5" />
-                  </div>
-                  <div className="text-left">
-                    <h3 className="text-xs sm:text-sm font-bold text-theme-fore">
-                      {t.about?.card2Title || "Sistem Digital Terintegrasi"}
-                    </h3>
-                    <p className="text-[10px] sm:text-xs text-theme-fore-muted">
-                      {t.about?.card2Desc || "Bukan sekadar website, tapi sistem operasional nyata"}
-                    </p>
-                  </div>
+              </div>
+            </div>
+
+            {/* Narrative Item 03: Modern Studio Delivery */}
+            <div className="py-8 grid grid-cols-1 md:grid-cols-12 gap-6 items-baseline">
+              <div className="md:col-span-4 space-y-1">
+                <span className="text-xs font-mono font-bold uppercase tracking-widest text-slate-400">
+                  {t.about?.phase3Label || (language === 'en' ? '03 / HOW I WORK' : '03 / CARA KERJA')}
+                </span>
+                <h3 className="text-base sm:text-lg font-sans font-bold text-slate-900">
+                  {t.about?.phase3Title || (language === 'en' ? 'Approach at SejatiDimedia' : 'Pendekatan di SejatiDimedia')}
+                </h3>
+              </div>
+              <div className="md:col-span-8 space-y-3">
+                <p className="text-sm sm:text-base text-slate-700 font-sans leading-relaxed">
+                  {t.about?.p3 || (language === 'en'
+                    ? 'At SejatiDimedia, I apply the same principles: clean code, direct developer communication, and clear, transparent progress updates.'
+                    : 'Di SejatiDimedia, saya menerapkan prinsip yang sama: penulisan kode yang rapi, komunikasi langsung tanpa perantara, dan laporan progres yang jelas dan terbuka.')}
+                </p>
+                <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-mono text-slate-500 pt-1">
+                  {(t.about?.phase3Tags || (language === 'en'
+                    ? ['100% Code Ownership', 'Direct Developer Discussion', 'Client Portal Tracking']
+                    : ['Kode Sepenuhnya Milik Anda', 'Diskusi Langsung dengan Developer', 'Pantau Progres di Portal Klien']
+                  )).map((tag: string, idx: number) => (
+                    <span key={idx}>• {tag}</span>
+                  ))}
                 </div>
               </div>
             </div>
           </div>
 
           {/* Section: Nilai yang Kami Pegang (Core Values) */}
-          <div className="border-t border-theme-border/60 pt-16 sm:pt-20 mt-10 relative z-10 text-left">
+          <div className="pt-16 sm:pt-20 border-t border-slate-200/90 text-left">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-10">
               <div className="space-y-2 max-w-xl">
-                <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
+                <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
                   <span>{t.about?.valuesBadge || (language === 'en' ? 'CORE PRINCIPLES' : 'PRINSIP & NILAI')}</span>
                 </div>
-                <h3 className="text-2xl sm:text-3xl lg:text-3.5xl font-display font-bold text-theme-fore tracking-tight leading-tight">
+                <h3 className="text-2xl sm:text-3xl lg:text-3.5xl font-sora font-extrabold text-slate-900 tracking-tight leading-tight">
                   {t.about?.valuesTitle || (language === 'en' ? 'Values We Uphold' : 'Nilai yang Kami Pegang')}
                 </h3>
-                <p className="text-xs sm:text-sm text-theme-fore-muted font-sans leading-relaxed pt-0.5">
+                <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed pt-0.5">
                   {t.about?.valuesSubtitle || (language === 'en'
                     ? 'Engineering disciplines and practical commitments applied to every project, from the first line of code to live operations.'
                     : 'Prinsip kerja dan komitmen nyata yang diterapkan pada setiap pengerjaan, dari baris kode pertama hingga sistem beroperasi.')}
@@ -805,22 +1565,22 @@ export default function AgencyLanding({
               ].map((val, idx) => (
                 <div
                   key={idx}
-                  className="p-6 sm:p-7 rounded-3xl border border-theme-border/80 bg-white/60 dark:bg-slate-900/80 backdrop-blur-xl shadow-sm hover:border-theme-accent/50 hover:shadow-md transition-all flex flex-col sm:flex-row gap-5 items-start group"
+                  className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:border-[#2C5098]/40 hover:shadow-md transition-all flex flex-col sm:flex-row gap-5 items-start group"
                 >
-                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-theme-accent/10 text-theme-accent border border-theme-accent/20 shrink-0 group-hover:scale-105 transition-transform">
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 shrink-0 group-hover:scale-105 transition-transform">
                     <Icon icon={val.icon} className="w-6 h-6" />
                   </div>
                   <div className="flex-1 min-w-0 space-y-2">
                     <div className="flex items-center justify-between gap-3 flex-wrap">
-                      <h4 className="text-base sm:text-lg font-display font-bold text-theme-fore tracking-tight">
-                        <span className="text-theme-accent font-mono font-bold mr-2">0{idx + 1}</span>
+                      <h4 className="text-base sm:text-lg font-sora font-bold text-slate-900 tracking-tight">
+                        <span className="text-[#2C5098] font-mono font-bold mr-2">0{idx + 1}</span>
                         {val.title}
                       </h4>
-                      <span className="text-xs font-mono font-medium text-theme-fore-subtle">
+                      <span className="text-xs font-mono font-medium text-slate-400">
                         {val.tag}
                       </span>
                     </div>
-                    <p className="text-xs sm:text-sm text-theme-fore-muted font-sans leading-relaxed">
+                    <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed">
                       {val.desc}
                     </p>
                   </div>
@@ -831,1197 +1591,1272 @@ export default function AgencyLanding({
         </div>
       </motion.section>
 
-      {/* SECTION 2: THREE CORE PILOT SERVICES (MODERNIZED & PLACED IMMEDIATELY AFTER HERO) */}
+      {/* =========================================================================
+          SECTION 4: SERVICES GRID (#capabilities-section / #services-section) - SOFT GRAY (#F8FAFC)
+          ========================================================================= */}
       <motion.section
         id="capabilities-section"
-        className="space-y-12 pt-6"
+        className="w-full bg-[#F8FAFC] border-y border-slate-200/70 py-20 sm:py-28 lg:py-32"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.15 }}
+        viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
-            <span>{t.nav.services}</span>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
+              <span>{t.nav.services}</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
+              {t.nav.services}{' '}
+              <span className="text-[#2C5098]">
+                {t.services.mainHeadingHighlight}
+              </span>
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl mx-auto">
+              {t.services.desc}
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore">
-            {t.nav.services}{' '}
-            <span className="text-theme-accent">
-              {t.services.mainHeadingHighlight}
-            </span>
-          </h2>
-          <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-2xl mx-auto">
-            {t.services.desc}
-          </p>
-        </div>
 
-        {/* Reference Image Style Accordion Services List */}
-        <div className="max-w-5xl mx-auto space-y-4 pt-4">
-          {(t.services.items || []).map((item: any, idx: number) => {
-            const isOpen = openServiceIndex === idx;
-            const itemNum = `(${String(idx + 1).padStart(2, '0')})`;
-            const imageSrc = SERVICE_IMAGES[idx] || '/service_web_app.webp';
+          {/* Interactive Accordion Services List */}
+          <div className="max-w-5xl mx-auto space-y-4 pt-2">
+            {(t.services.items || []).map((item: any, idx: number) => {
+              const isOpen = openServiceIndex === idx;
+              const itemNum = `(${String(idx + 1).padStart(2, '0')})`;
+              const imageSrc = SERVICE_IMAGES[idx] || '/service_web_app.jpg';
 
-            return (
-              <motion.div
-                key={idx}
-                layout
-                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                onMouseEnter={() => setOpenServiceIndex(idx)}
-                className={`rounded-3xl transition-all duration-300 overflow-hidden ${isOpen
-                  ? 'bg-white/95 dark:bg-slate-900/95 border border-blue-500/30 dark:border-blue-500/40 shadow-[0_20px_50px_rgba(43,84,149,0.12)] dark:shadow-[0_25px_60px_rgba(0,0,0,0.5)] backdrop-blur-2xl p-6 sm:p-8 text-slate-900 dark:text-white relative'
-                  : 'bg-white/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800/80 hover:border-slate-300 dark:hover:border-slate-700 p-5 sm:p-6 hover:bg-white/80 dark:hover:bg-slate-900/80 backdrop-blur-md shadow-xs'
-                  }`}
-              >
-                {isOpen ? (
-                  <div className="space-y-6">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-                      {/* Left: Number & Title (4 cols) */}
-                      <div className="lg:col-span-4 space-y-2 text-left">
-                        <span className="font-mono text-xs sm:text-sm font-bold text-blue-600 dark:text-blue-400">
+              return (
+                <div
+                  key={idx}
+                  onClick={() => setOpenServiceIndex(isOpen ? null : idx)}
+                  className={`rounded-3xl transition-all duration-300 overflow-hidden cursor-pointer ${isOpen
+                    ? 'bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-xl shadow-[#2C5098]/25 border border-white/10 p-6 sm:p-8 relative'
+                    : 'bg-white border border-slate-200 hover:border-[#2C5098]/40 p-5 sm:p-6 hover:bg-slate-50/80 shadow-xs'
+                    }`}
+                >
+                  {isOpen ? (
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                        {/* Left: Number & Title (4 cols) */}
+                        <div className="lg:col-span-4 space-y-2 text-left">
+                          <span className="font-mono text-xs sm:text-sm font-bold text-white/80">
+                            {itemNum}
+                          </span>
+                          <h3 className="text-xl sm:text-2xl font-sans font-bold text-white leading-snug">
+                            {item.title}
+                          </h3>
+                        </div>
+
+                        {/* Center: Image Mockup (5 cols) */}
+                        <div className="lg:col-span-5 relative overflow-hidden rounded-2xl border border-white/20 shadow-md bg-white/10">
+                          <img
+                            src={imageSrc}
+                            alt={item.title}
+                            className="w-full h-44 sm:h-52 object-cover object-center"
+                            loading="lazy"
+                            decoding="async"
+                          />
+                        </div>
+
+                        {/* Right: Description & CTA (3 cols) */}
+                        <div className="lg:col-span-3 space-y-4 text-left flex flex-col justify-between h-full">
+                          <p className="text-xs text-white/90 leading-relaxed font-sans">
+                            {item.desc}
+                          </p>
+                          <div>
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                scrollToId('contact-section');
+                              }}
+                              className="px-5 py-2.5 rounded-full bg-white hover:bg-slate-100 text-[#23385B] font-bold text-xs sm:text-sm transition-all shadow-md active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto hover:text-[#2C5098]"
+                            >
+                              <span>{language === 'en' ? 'Contact Us' : 'Hubungi Kami'}</span>
+                              <Icon icon="ph:arrow-right-bold" className="w-4 h-4 text-[#2C5098]" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Collapse Button */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setOpenServiceIndex(null);
+                        }}
+                        className="absolute top-5 right-5 w-8 h-8 rounded-full border border-white/20 bg-white/10 text-white flex items-center justify-center hover:bg-white/25 transition-all cursor-pointer shadow-xs"
+                        title="Collapse"
+                      >
+                        <Icon icon="ph:minus-bold" className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-4 sm:gap-6 text-left">
+                        <span className="font-mono text-xs sm:text-sm font-bold text-slate-400">
                           {itemNum}
                         </span>
-                        <h3 className="text-2xl sm:text-3.5xl font-display font-bold text-slate-900 dark:text-white leading-tight">
+                        <h3 className="text-lg sm:text-xl font-sans font-bold text-slate-800">
                           {item.title}
                         </h3>
                       </div>
-
-                      {/* Center: High-End UI Mockup Image (5 cols) */}
-                      <div className="lg:col-span-5 relative group/img overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-700/80 shadow-xl bg-slate-950">
-                        <img
-                          src={imageSrc}
-                          alt={item.title}
-                          className="w-full h-44 sm:h-52 object-cover object-center group-hover/img:scale-105 transition-transform duration-500"
-                          loading="lazy"
-                          decoding="async"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 dark:from-slate-950/80 via-transparent to-transparent opacity-60 pointer-events-none" />
-                      </div>
-
-                      {/* Right: Description & CTA Button (3 cols) */}
-                      <div className="lg:col-span-3 space-y-4 text-left flex flex-col justify-between h-full">
-                        <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-sans">
-                          {item.desc}
-                        </p>
-                        <div>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              scrollToId('contact-section');
-                            }}
-                            className="px-5 py-2.5 rounded-full bg-theme-accent hover:bg-theme-accent-bright text-white font-bold text-xs sm:text-sm transition-all duration-300 shadow-lg shadow-theme-accent/25 hover:shadow-theme-accent/40 active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto"
-                          >
-                            <span>{language === 'en' ? 'Contact Us' : 'Hubungi Kami'}</span>
-                            <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
-                          </button>
-                        </div>
+                      <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center text-[#2C5098] bg-[#2C5098]/10 shrink-0 shadow-xs">
+                        <Icon icon="ph:plus-bold" className="w-3.5 h-3.5" />
                       </div>
                     </div>
-
-                    {/* Top Right Collapse Minus Button */}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setOpenServiceIndex(null);
-                      }}
-                      className="absolute top-6 right-6 w-8 h-8 rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-blue-400 flex items-center justify-center hover:bg-slate-200 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white transition-all cursor-pointer shadow-sm"
-                      title="Collapse"
-                    >
-                      <Icon icon="ph:minus-bold" className="w-4 h-4" />
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 sm:gap-6 text-left">
-                      <span className="font-mono text-xs sm:text-sm font-bold text-slate-400 dark:text-theme-fore-subtle">
-                        {itemNum}
-                      </span>
-                      <h3 className="text-xl sm:text-2.5xl font-display font-bold text-slate-800 dark:text-theme-fore group-hover:text-blue-600 dark:group-hover:text-theme-accent transition-colors">
-                        {item.title}
-                      </h3>
-                    </div>
-                    <div className="w-9 h-9 rounded-full border border-slate-200 dark:border-theme-border flex items-center justify-center text-blue-600 dark:text-theme-accent bg-blue-500/10 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all shrink-0 shadow-sm">
-                      <Icon icon="ph:plus-bold" className="w-4 h-4" />
-                    </div>
-                  </div>
-                )}
-              </motion.div>
-            );
-          })}
+                  )}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </motion.section>
 
-      {/* SECTION 9: TECHNOLOGY (CIRCULAR RADIAL HUB REDESIGN) */}
+      {/* =========================================================================
+          SECTION 5: TECH STACK RADIAL HUB (#technology-section) - PURE WHITE (#FFFFFF)
+          ========================================================================= */}
       <motion.section
         id="technology-section"
-        className="space-y-8 pt-6 relative overflow-hidden"
+        className="w-full bg-white py-20 sm:py-28 lg:py-32 relative overflow-hidden"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.15 }}
+        viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        {/* MOBILE & TABLET HEADER (Below MD) */}
-        <div className="space-y-3 block md:hidden text-left">
-          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
-            <span>{t.tech.badge || "Teknologi"}</span>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-8">
+          {/* MOBILE & TABLET HEADER (Below MD) */}
+          <div className="space-y-3 block md:hidden text-left">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
+              <span>{t.tech.badge || "Teknologi"}</span>
+            </div>
+            <h2 className="text-2xl sm:text-3.5xl font-sans font-bold tracking-tight leading-[1.12] text-slate-900">
+              {t.tech.mainHeading}{' '}
+              <span className="text-[#2C5098]">
+                {t.tech.mainHeadingHighlight}
+              </span>
+            </h2>
+            <p className="text-xs text-slate-600 leading-relaxed max-w-xl font-sans">
+              {t.tech.desc}
+            </p>
           </div>
-          <h2 className="text-2xl sm:text-3.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore">
-            {t.tech.mainHeading}{' '}
-            <span className="text-theme-accent">
-              {t.tech.mainHeadingHighlight}
-            </span>
-          </h2>
-          <p className="text-xs text-theme-fore-muted leading-relaxed max-w-xl">
-            {t.tech.desc}
-          </p>
+
+          {/* DESKTOP CIRCULAR RADIAL HUB LAYOUT (MD & UP) */}
+          <div className="hidden md:block relative max-w-6xl mx-auto py-8 px-2 sm:px-4">
+            {/* Ambient Radial Background Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none -z-10" />
+
+            {/* Hub Stage: 3 Columns Grid (Left 4 Cols - Center Spaced Hub 4 Cols - Right 4 Cols) */}
+            <div className="grid grid-cols-12 gap-8 lg:gap-10 items-center relative z-10">
+              {/* LEFT COLUMN: 3 Category Cards (col-span-4) */}
+              <div className="col-span-4 space-y-6 text-left">
+                {/* Card 1: Frontend */}
+                <motion.div
+                  variants={cardSlideUp}
+                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-[0_10px_40px_-10px_rgba(44,80,152,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+                >
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-[#2C5098] transition-colors">
+                      Frontend
+                    </h3>
+                    <div className="w-8 h-8 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center font-bold shrink-0">
+                      <Icon icon="ph:layout-duotone" className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-600 mb-4 font-sans leading-relaxed">{t.tech.frontendDesc}</p>
+                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
+                    {["React", "Vue", "Angular", "Next.js", "Vite", "TypeScript", "Tailwind CSS"].map((tech) => (
+                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-[#2C5098]/50 hover:bg-[#2C5098]/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
+                        <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
+                        <span>{tech}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Card 3: Database */}
+                <motion.div
+                  variants={cardSlideUp}
+                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-[0_10px_40px_-10px_rgba(44,80,152,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+                >
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-[#2C5098] transition-colors">
+                      {t.tech.database}
+                    </h3>
+                    <div className="w-8 h-8 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center font-bold shrink-0">
+                      <Icon icon="ph:database-duotone" className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-600 mb-4 font-sans leading-relaxed">{t.tech.databaseDesc}</p>
+                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
+                    {["MySQL", "PostgreSQL", "MongoDB", "Firestore", "Redis"].map((tech) => (
+                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-[#2C5098]/50 hover:bg-[#2C5098]/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
+                        <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
+                        <span>{tech}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Card 5: Infrastructure */}
+                <motion.div
+                  variants={cardSlideUp}
+                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-[0_10px_40px_-10px_rgba(44,80,152,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+                >
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-[#2C5098] transition-colors">
+                      {t.tech.infra}
+                    </h3>
+                    <div className="w-8 h-8 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center font-bold shrink-0">
+                      <Icon icon="ph:cloud-duotone" className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-600 mb-4 font-sans leading-relaxed">{t.tech.infraDesc}</p>
+                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
+                    {["Docker", "AWS", "Google Cloud", "Firebase"].map((tech) => (
+                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-[#2C5098]/50 hover:bg-[#2C5098]/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
+                        <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
+                        <span>{tech}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* CENTER HUB STAGE (col-span-4 with Generous Distance & SVG Connectors) */}
+              <div className="col-span-4 flex flex-col items-center justify-center relative py-6 px-4">
+                {/* SVG Connecting Spoke Lines linking Cards to Central Hub */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible" viewBox="0 0 200 400" preserveAspectRatio="none">
+                  <line x1="0" y1="60" x2="100" y2="200" stroke="rgba(44, 80, 152, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
+                  <line x1="0" y1="200" x2="100" y2="200" stroke="rgba(44, 80, 152, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
+                  <line x1="0" y1="340" x2="100" y2="200" stroke="rgba(44, 80, 152, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
+                  <line x1="200" y1="60" x2="100" y2="200" stroke="rgba(44, 80, 152, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
+                  <line x1="200" y1="200" x2="100" y2="200" stroke="rgba(44, 80, 152, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
+                  <line x1="200" y1="340" x2="100" y2="200" stroke="rgba(44, 80, 152, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
+                </svg>
+
+                {/* Spaced Central Hub Window with Rotating Orbital Rings (Light & Airy Style) */}
+                <div className="w-44 h-44 lg:w-48 lg:h-48 rounded-full bg-gradient-to-b from-white via-white to-[#2C5098]/5 border border-[#2C5098]/30 shadow-xl shadow-[#2C5098]/8 flex flex-col items-center justify-center text-center p-5 relative z-20 group hover:border-[#2C5098]/60 hover:scale-105 transition-all duration-500">
+
+                  {/* 1. OUTER ROTATING DASHED ORBITAL RING (CLOCKWISE SPIN 20s) */}
+                  <div className="absolute -inset-5 rounded-full border border-dashed border-[#2C5098]/20 animate-[spin_20s_linear_infinite] pointer-events-none flex items-center justify-center">
+                    {/* Orbiting Satellite Glowing Dot (Top) */}
+                    <div className="absolute -top-1 w-2.5 h-2.5 rounded-full bg-[#2C5098] shadow-[0_0_8px_rgba(44,80,152,0.6)]" />
+                    {/* Orbiting Satellite Glowing Dot (Bottom) */}
+                    <div className="absolute -bottom-1 w-2.5 h-2.5 rounded-full bg-[#2C5098]/60 shadow-[0_0_8px_rgba(44,80,152,0.4)]" />
+                  </div>
+
+                  {/* 2. INNER COUNTER-ROTATING RING (REVERSE SPIN 12s) */}
+                  <div className="absolute -inset-2 rounded-full border border-[#2C5098]/25 border-t-transparent border-b-transparent animate-[spin_12s_linear_infinite_reverse] pointer-events-none" />
+
+                  {/* 3. GLOWING PULSE RING */}
+                  <div className="absolute -inset-0.5 rounded-full border border-[#2C5098]/15 animate-pulse pointer-events-none" />
+
+                  {/* Center Content */}
+                  <div className="w-9 h-9 rounded-xl bg-[#2C5098]/8 text-[#2C5098] flex items-center justify-center font-bold mb-1.5 shadow-2xs group-hover:rotate-12 transition-transform duration-300">
+                    <Icon icon="ph:cpu-duotone" className="w-5 h-5 animate-pulse" />
+                  </div>
+                  <span className="text-[8px] font-mono font-bold uppercase tracking-widest text-[#2C5098] mb-0.5">
+                    Tech Stack
+                  </span>
+                  <h3 className="text-sm lg:text-base font-sans font-bold text-slate-800 leading-tight">
+                    Stack Of<br />Technology
+                  </h3>
+                </div>
+              </div>
+
+              {/* RIGHT COLUMN: 3 Category Cards (col-span-4) */}
+              <div className="col-span-4 space-y-6 text-left">
+                {/* Card 2: Backend & API */}
+                <motion.div
+                  variants={cardSlideUp}
+                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-[0_10px_40px_-10px_rgba(44,80,152,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+                >
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-[#2C5098] transition-colors">
+                      {t.tech.backend}
+                    </h3>
+                    <div className="w-8 h-8 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center font-bold shrink-0">
+                      <Icon icon="ph:hard-drives-duotone" className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-600 mb-4 font-sans leading-relaxed">{t.tech.backendDesc}</p>
+                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
+                    {["Laravel", "Node.js", "Golang", "Python", "Express", "GraphQL"].map((tech) => (
+                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-[#2C5098]/50 hover:bg-[#2C5098]/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
+                        <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
+                        <span>{tech}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Card 4: Mobile */}
+                <motion.div
+                  variants={cardSlideUp}
+                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-[0_10px_40px_-10px_rgba(44,80,152,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+                >
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-[#2C5098] transition-colors">
+                      {t.tech.mobile}
+                    </h3>
+                    <div className="w-8 h-8 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center font-bold shrink-0">
+                      <Icon icon="ph:device-mobile-speaker-duotone" className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-600 mb-4 font-sans leading-relaxed">{t.tech.mobileDesc}</p>
+                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
+                    {["React Native", "Flutter"].map((tech) => (
+                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-[#2C5098]/50 hover:bg-[#2C5098]/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
+                        <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
+                        <span>{tech}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+
+                {/* Card 6: AI & LLM Engineering */}
+                <motion.div
+                  variants={cardSlideUp}
+                  className="group p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-[0_10px_40px_-10px_rgba(44,80,152,0.15)] transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+                >
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <h3 className="text-base font-sans font-extrabold text-slate-900 group-hover:text-[#2C5098] transition-colors">
+                      {t.tech.integrationTitle}
+                    </h3>
+                    <div className="w-8 h-8 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center font-bold shrink-0">
+                      <Icon icon="ph:sparkle-duotone" className="w-4 h-4" />
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-600 mb-4 font-sans leading-relaxed">{t.tech.integrationDesc}</p>
+                  <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
+                    {[
+                      "Python",
+                      "N8N",
+                      "LangChain",
+                      "LlamaIndex",
+                      "RAG Architecture",
+                      "QLoRA / Fine-Tuning",
+                      "Autonomous Agents",
+                      "Vector DB",
+                      "OpenAI",
+                      "Claude",
+                      "Hugging Face",
+                      "Ollama"
+                    ].map((tech) => (
+                      <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-[#2C5098]/50 hover:bg-[#2C5098]/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
+                        <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
+                        <span>{tech}</span>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </div>
+
+          {/* MOBILE RESPONSIVE FALLBACK: STANDARD GRID (BELOW MD) */}
+          <motion.div
+            className="grid grid-cols-1 sm:grid-cols-2 gap-5 block md:hidden text-left pt-2"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: false, amount: 0.15 }}
+          >
+            {/* Card 1: Frontend */}
+            <motion.div
+              variants={cardSlideUp}
+              className="p-5 rounded-3xl bg-white border border-slate-200 space-y-3 shadow-xs"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-sans font-extrabold text-slate-900">
+                  Frontend
+                </h3>
+                <Icon icon="ph:layout-duotone" className="w-4 h-4 text-[#2C5098]" />
+              </div>
+              <p className="text-xs text-slate-600 font-sans leading-relaxed">{t.tech.frontendDesc}</p>
+              <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                {["React", "Vue", "Angular", "Next.js", "Vite", "TypeScript", "Tailwind CSS"].map((tech) => (
+                  <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-slate-50 border border-slate-200 text-slate-700 flex items-center gap-1">
+                    <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
+                    <span>{tech}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Card 2: Backend */}
+            <motion.div
+              variants={cardSlideUp}
+              className="p-5 rounded-3xl bg-white border border-slate-200 space-y-3 shadow-xs"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-sans font-extrabold text-slate-900">
+                  {t.tech.backend}
+                </h3>
+                <Icon icon="ph:hard-drives-duotone" className="w-4 h-4 text-[#2C5098]" />
+              </div>
+              <p className="text-xs text-slate-600 font-sans leading-relaxed">{t.tech.backendDesc}</p>
+              <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                {["Laravel", "Node.js", "Golang", "Python", "Express", "GraphQL"].map((tech) => (
+                  <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-slate-50 border border-slate-200 text-slate-700 flex items-center gap-1">
+                    <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
+                    <span>{tech}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Card 3: Database */}
+            <motion.div
+              variants={cardSlideUp}
+              className="p-5 rounded-3xl bg-white border border-slate-200 space-y-3 shadow-xs"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-sans font-extrabold text-slate-900">
+                  {t.tech.database}
+                </h3>
+                <Icon icon="ph:database-duotone" className="w-4 h-4 text-[#2C5098]" />
+              </div>
+              <p className="text-xs text-slate-600 font-sans leading-relaxed">{t.tech.databaseDesc}</p>
+              <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                {["MySQL", "PostgreSQL", "MongoDB", "Firestore", "Redis"].map((tech) => (
+                  <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-slate-50 border border-slate-200 text-slate-700 flex items-center gap-1">
+                    <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
+                    <span>{tech}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Card 4: Mobile */}
+            <motion.div
+              variants={cardSlideUp}
+              className="p-5 rounded-3xl bg-white border border-slate-200 space-y-3 shadow-xs"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-sans font-extrabold text-slate-900">
+                  {t.tech.mobile}
+                </h3>
+                <Icon icon="ph:device-mobile-speaker-duotone" className="w-4 h-4 text-[#2C5098]" />
+              </div>
+              <p className="text-xs text-slate-600 font-sans leading-relaxed">{t.tech.mobileDesc}</p>
+              <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                {["React Native", "Flutter"].map((tech) => (
+                  <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-slate-50 border border-slate-200 text-slate-700 flex items-center gap-1">
+                    <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
+                    <span>{tech}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Card 5: Infrastructure */}
+            <motion.div
+              variants={cardSlideUp}
+              className="p-5 rounded-3xl bg-white border border-slate-200 space-y-3 shadow-xs"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-sans font-extrabold text-slate-900">
+                  {t.tech.infra}
+                </h3>
+                <Icon icon="ph:cloud-duotone" className="w-4 h-4 text-[#2C5098]" />
+              </div>
+              <p className="text-xs text-slate-600 font-sans leading-relaxed">{t.tech.infraDesc}</p>
+              <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                {["Docker", "AWS", "Google Cloud", "Firebase"].map((tech) => (
+                  <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-slate-50 border border-slate-200 text-slate-700 flex items-center gap-1">
+                    <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
+                    <span>{tech}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Card 6: AI & LLM Engineering */}
+            <motion.div
+              variants={cardSlideUp}
+              className="p-5 rounded-3xl bg-white border border-slate-200 space-y-3 sm:col-span-2 shadow-xs"
+            >
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-sans font-extrabold text-slate-900">
+                  {t.tech.integrationTitle}
+                </h3>
+                <Icon icon="ph:sparkle-duotone" className="w-4 h-4 text-[#2C5098]" />
+              </div>
+              <p className="text-xs text-slate-600 font-sans leading-relaxed">{t.tech.integrationDesc}</p>
+              <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
+                {[
+                  "Python",
+                  "N8N",
+                  "LangChain",
+                  "LlamaIndex",
+                  "RAG Architecture",
+                  "QLoRA / Fine-Tuning",
+                  "Autonomous Agents",
+                  "Vector DB",
+                  "OpenAI",
+                  "Claude",
+                  "Hugging Face",
+                  "Ollama"
+                ].map((tech) => (
+                  <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-slate-50 border border-slate-200 text-slate-700 flex items-center gap-1">
+                    <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
+                    <span>{tech}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </motion.div>
         </div>
+      </motion.section>
 
-        {/* DESKTOP CIRCULAR RADIAL HUB LAYOUT (MD & UP) */}
-        <div className="hidden md:block relative max-w-6xl mx-auto py-8 px-2 sm:px-4">
-          {/* Ambient Radial Background Glow */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none -z-10" />
-
-          {/* Hub Stage: 3 Columns Grid (Left 4 Cols - Center Spaced Hub 4 Cols - Right 4 Cols) */}
-          <div className="grid grid-cols-12 gap-8 lg:gap-10 items-center relative z-10">
-            {/* LEFT COLUMN: 3 Category Cards (col-span-4) */}
-            <div className="col-span-4 space-y-6 text-left">
-              {/* Card 1: Frontend */}
-              <motion.div
-                variants={cardSlideUp}
-                className="group p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.25)] backdrop-blur-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
-              >
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <h3 className="text-base font-sans font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    Frontend
-                  </h3>
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
-                    <Icon icon="ph:layout-duotone" className="w-4 h-4" />
-                  </div>
-                </div>
-                <p className="text-xs text-theme-fore-muted mb-4 font-sans leading-relaxed">{t.tech.frontendDesc}</p>
-                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-theme-border/50">
-                  {["React", "Vue", "Angular", "Next.js", "Vite", "TypeScript", "Tailwind CSS"].map((tech) => (
-                    <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 text-slate-800 dark:text-slate-200 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-sm">
-                      <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
-                      <span>{tech}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-
-              {/* Card 3: Database */}
-              <motion.div
-                variants={cardSlideUp}
-                className="group p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.25)] backdrop-blur-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
-              >
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <h3 className="text-base font-sans font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {t.tech.database}
-                  </h3>
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
-                    <Icon icon="ph:database-duotone" className="w-4 h-4" />
-                  </div>
-                </div>
-                <p className="text-xs text-theme-fore-muted mb-4 font-sans leading-relaxed">{t.tech.databaseDesc}</p>
-                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-theme-border/50">
-                  {["MySQL", "PostgreSQL", "MongoDB", "Firestore", "Redis"].map((tech) => (
-                    <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 text-slate-800 dark:text-slate-200 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-sm">
-                      <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
-                      <span>{tech}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-
-              {/* Card 5: Infrastructure */}
-              <motion.div
-                variants={cardSlideUp}
-                className="group p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.25)] backdrop-blur-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
-              >
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <h3 className="text-base font-sans font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {t.tech.infra}
-                  </h3>
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
-                    <Icon icon="ph:cloud-duotone" className="w-4 h-4" />
-                  </div>
-                </div>
-                <p className="text-xs text-theme-fore-muted mb-4 font-sans leading-relaxed">{t.tech.infraDesc}</p>
-                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-theme-border/50">
-                  {["Docker", "AWS", "Google Cloud", "Firebase"].map((tech) => (
-                    <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 text-slate-800 dark:text-slate-200 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-sm">
-                      <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
-                      <span>{tech}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
+      {/* =========================================================================
+          SECTION 6: FEATURED PROJECTS / PORTFOLIO (#projects-section) - SOFT GRAY (#F8FAFC)
+          ========================================================================= */}
+      <motion.section
+        id="projects-section"
+        className="w-full bg-[#F8FAFC] border-y border-slate-200/70 py-20 sm:py-28 lg:py-32"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={sectionFadeIn}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 text-left">
+            <div className="space-y-3">
+              <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
+                <span>{t.nav.portfolio}</span>
+              </div>
+              <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
+                {t.portfolio.mainHeading}{' '}
+                <span className="text-[#2C5098]">
+                  {t.portfolio.mainHeadingHighlight}
+                </span>
+              </h2>
             </div>
 
-            {/* CENTER HUB STAGE (col-span-4 with Generous Distance & SVG Connectors) */}
-            <div className="col-span-4 flex flex-col items-center justify-center relative py-6 px-4">
-              {/* SVG Connecting Spoke Lines linking Cards to Central Hub */}
-              <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-visible" viewBox="0 0 200 400" preserveAspectRatio="none">
-                <line x1="0" y1="60" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1.5" strokeDasharray="4 4" />
-                <line x1="0" y1="200" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1.5" strokeDasharray="4 4" />
-                <line x1="0" y1="340" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1.5" strokeDasharray="4 4" />
-                <line x1="200" y1="60" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1.5" strokeDasharray="4 4" />
-                <line x1="200" y1="200" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1.5" strokeDasharray="4 4" />
-                <line x1="200" y1="340" x2="100" y2="200" stroke="rgba(59, 130, 246, 0.3)" strokeWidth="1.5" strokeDasharray="4 4" />
-              </svg>
+            <Link
+              href="/projects"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-200 hover:border-slate-300 text-xs font-sans font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition-all"
+            >
+              <span>{t.portfolio.viewAll} ({projectList.length})</span>
+              <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5" />
+            </Link>
+          </div>
 
-              {/* Spaced Central Hub Window with Rotating Orbital Rings */}
-              <div className="w-44 h-44 lg:w-48 lg:h-48 rounded-full bg-white/95 dark:bg-slate-900/95 border-2 border-blue-500/40 dark:border-blue-400/50 backdrop-blur-2xl shadow-[0_0_60px_rgba(59,130,246,0.3)] flex flex-col items-center justify-center text-center p-5 relative z-20 group hover:border-blue-500 hover:scale-105 transition-all duration-500">
+          {/* Projects Grid - 3 Featured Projects */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+            {displayedProjects && displayedProjects.length > 0 ? (
+              displayedProjects.map((project) => {
+                const isDummy = !project.thumbnail ||
+                  project.thumbnail.trim() === "" ||
+                  project.thumbnail === "/thumbnail.png" ||
+                  project.thumbnail === "/placeholder.png";
 
-                {/* 1. OUTER ROTATING DASHED ORBITAL RING (CLOCKWISE SPIN 20s) */}
-                <div className="absolute -inset-6 rounded-full border border-dashed border-blue-500/35 animate-[spin_20s_linear_infinite] pointer-events-none flex items-center justify-center">
-                  {/* Orbiting Satellite Glowing Dot (Top) */}
-                  <div className="absolute -top-1.5 w-3 h-3 rounded-full bg-blue-500 shadow-[0_0_12px_rgba(59,130,246,0.9)]" />
-                  {/* Orbiting Satellite Glowing Dot (Bottom) */}
-                  <div className="absolute -bottom-1.5 w-3 h-3 rounded-full bg-cyan-400 shadow-[0_0_12px_rgba(34,211,238,0.9)]" />
+                const displayThumbnail = (isDummy ? "/logo.svg" : project.thumbnail) as string;
+
+                return (
+                  <div
+                    key={project.slug}
+                    className="group flex flex-col justify-between p-5 rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-xl hover:shadow-[#2C5098]/10 transition-all duration-300 relative overflow-hidden"
+                  >
+                    <div className="space-y-4">
+                      {/* Thumbnail */}
+                      <div className="relative w-full h-48 rounded-2xl overflow-hidden bg-slate-50 border border-slate-200/80">
+                        <Image
+                          src={displayThumbnail}
+                          alt={project.name}
+                          fill
+                          className={
+                            isDummy
+                              ? "object-contain p-8 bg-slate-50"
+                              : "object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                          }
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                        />
+                      </div>
+
+                      {/* Title & Description */}
+                      <div className="space-y-2 text-left">
+                        {project.categories && project.categories.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 pb-1">
+                            {project.categories.map((cat) => {
+                              const catName = getCategoryName(cat);
+                              return (
+                                <span
+                                  key={cat}
+                                  className="inline-flex items-center gap-1.5 text-[10px] font-sans uppercase tracking-wider font-bold text-white bg-gradient-to-r from-[#2C5098] to-[#23385B] border border-white/10 px-2.5 py-0.5 rounded-full shadow-2xs"
+                                >
+                                  <Icon icon={getCategoryIcon(catName)} className="w-3 h-3 text-white" />
+                                  <span>{catName}</span>
+                                </span>
+                              );
+                            })}
+                          </div>
+                        )}
+                        <h3 className="text-base font-jakarta font-sans font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors">
+                          {project.name}
+                        </h3>
+                        <p className="text-xs text-slate-600 leading-relaxed line-clamp-3 font-sans">
+                          {language === 'en'
+                            ? (project.summaryEn || project.descriptionEn || project.summary || project.description)
+                            : (project.summaryId || project.descriptionId || project.summary || project.description)}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="space-y-4 pt-4 border-t border-slate-100 mt-4">
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.technologies.map((tech) => (
+                          <span
+                            key={tech}
+                            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono bg-slate-50 text-slate-600 border border-slate-200/60"
+                          >
+                            {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5 opacity-80" />}
+                            <span>{tech}</span>
+                          </span>
+                        ))}
+                      </div>
+
+                      <Link
+                        href={`/projects/${project.slug}`}
+                        className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl bg-slate-50 hover:bg-gradient-to-r hover:from-[#2C5098] hover:to-[#23385B] hover:text-white text-xs font-sans font-bold text-slate-700 transition-all duration-300 border border-slate-200 hover:border-transparent shadow-2xs hover:shadow-md hover:shadow-[#2C5098]/20 cursor-pointer"
+                      >
+                        <span>{language === 'en' ? 'View Details' : 'Lihat Detail'}</span>
+                        <Icon icon="ph:caret-right-bold" className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="col-span-1 md:col-span-3 p-12 text-center rounded-3xl bg-white border border-slate-200">
+                <span className="text-xs font-mono text-slate-500">No projects found.</span>
+              </div>
+            )}
+          </div>
+
+          {/* Action Button: Explore Full Portfolio */}
+          <div className="flex items-center justify-center pt-6">
+            <Link
+              href="/projects"
+              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white text-xs sm:text-sm font-sans font-bold shadow-md shadow-[#2C5098]/20 hover:scale-[1.02] transition-all duration-300 cursor-pointer"
+            >
+              <span>{language === 'en' ? `Explore All Portfolio (${projectList.length})` : `Jelajahi Semua Portofolio (${projectList.length})`}</span>
+              <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* =========================================================================
+          SECTION 7: PRICING & GUARANTEE (#pricing-section) - PURE WHITE WITH PROMINENT CARD WRAPPER
+          ========================================================================= */}
+      <motion.section
+        id="pricing-section"
+        className="w-full bg-white py-20 sm:py-28 lg:py-32"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={sectionFadeIn}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
+          {/* Centered Section Header */}
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold text-center">
+              <span>{t.pricing.label}</span>
+            </div>
+            <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
+              {t.pricing.badge}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl mx-auto">
+              {t.pricing.desc}
+            </p>
+          </div>
+
+          {/* Master Card Wrapper for Pricing */}
+          <div className="rounded-3xl bg-[#F8FAFC] border border-slate-200/90 shadow-xl shadow-slate-900/5 p-6 sm:p-10 md:p-12 relative overflow-hidden">
+            {/* 3 Pricing Cards */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch max-w-6xl mx-auto text-left">
+              {/* Card 1: Starter */}
+              <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#2C5098] font-bold">
+                      {t.pricingCards.starterTag}
+                    </span>
+                    <div className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600">
+                      <Icon icon="ph:trophy-duotone" className="w-4 h-4" />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <h3 className="text-lg font-sans font-bold text-slate-900">
+                      {t.pricingCards.starterTitle}
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {t.pricingCards.starterDesc}
+                    </p>
+                  </div>
+
+                  {/* Scheme & Timeline Module */}
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <div className="text-xs sm:text-[13px] font-sans font-bold text-slate-900 leading-snug">
+                      {t.pricingCards.starterPriceMain || "Fixed Scope & Timeline"}
+                    </div>
+                    <div className="text-[11px] font-mono text-slate-500 flex items-center gap-1.5">
+                      <Icon icon="ph:timer-bold" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
+                      <span>{language === 'en' ? 'Timeline: ' : 'Estimasi: '}<strong className="text-[#2C5098] font-bold">{t.pricingCards.starterTime || "2–4 Minggu"}</strong></span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => selectPlan('Full-Stack Web App', 'SaaS MVP (Fast Turnaround)')}
+                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 hover:bg-[#2C5098] hover:text-white hover:border-[#2C5098] text-slate-800 transition-all cursor-pointer text-center flex items-center justify-center gap-2 group/btn"
+                  >
+                    <span>{t.pricingCards.starterBtn || t.pricing.starterBtn || "Konsultasi Scope MVP"}</span>
+                    <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+                  </button>
                 </div>
 
-                {/* 2. INNER COUNTER-ROTATING RING (REVERSE SPIN 12s) */}
-                <div className="absolute -inset-2.5 rounded-full border-2 border-blue-500/40 border-t-transparent border-b-transparent animate-[spin_12s_linear_infinite_reverse] pointer-events-none" />
-
-                {/* 3. GLOWING PULSE RING */}
-                <div className="absolute -inset-1 rounded-full border border-blue-500/20 animate-pulse pointer-events-none" />
-
-                {/* Center Content */}
-                <div className="w-9 h-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold mb-1.5 shadow-inner group-hover:rotate-12 transition-transform duration-300">
-                  <Icon icon="ph:cpu-duotone" className="w-5 h-5 animate-pulse" />
+                <div className="space-y-3 pt-5 border-t border-slate-100">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block font-bold">Termasuk:</span>
+                  <ul className="space-y-2 text-xs text-slate-600">
+                    {t.pricingCards.starterIncludes.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5">
+                        <div className="mt-0.5 w-4 h-4 rounded-full bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center shrink-0">
+                          <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
+                        </div>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <span className="text-[8px] font-mono font-extrabold uppercase tracking-widest text-blue-600 dark:text-blue-400 mb-0.5">
-                  Tech Stack
-                </span>
-                <h3 className="text-sm lg:text-base font-display font-extrabold text-theme-fore leading-tight">
-                  Stack Of<br />Technology
-                </h3>
+              </div>
+
+              {/* Card 2: Growth (Featured) */}
+              <div className="p-6 sm:p-7 rounded-3xl bg-white border-2 border-[#2C5098] shadow-lg shadow-[#2C5098]/10 flex flex-col justify-between space-y-6 relative">
+                <div className="absolute -top-3 right-6 bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white text-[9px] font-mono font-bold px-3 py-0.5 rounded-full uppercase tracking-wider shadow-xs flex items-center gap-1">
+                  <Icon icon="ph:crown-duotone" className="w-3 h-3" />
+                  {language === 'en' ? 'Most Popular' : 'Paling Populer'}
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between pt-1">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#2C5098] font-bold">
+                      {t.pricingCards.growthTag}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1">
+                    <h3 className="text-lg font-sans font-bold text-slate-900">
+                      {t.pricingCards.growthTitle}
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {t.pricingCards.growthDesc}
+                    </p>
+                  </div>
+
+                  {/* Scheme & Timeline Module */}
+                  <div className="p-3.5 rounded-2xl bg-blue-50/70 border border-blue-200/70 space-y-1">
+                    <div className="text-xs sm:text-[13px] font-sans font-bold text-slate-900 leading-snug">
+                      {t.pricingCards.growthPriceMain || "Berdasarkan Fitur & Scope"}
+                    </div>
+                    <div className="text-[11px] font-mono text-slate-600 flex items-center gap-1.5">
+                      <Icon icon="ph:timer-bold" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
+                      <span>{language === 'en' ? 'Timeline: ' : 'Estimasi: '}<strong className="text-[#2C5098] font-bold">{t.pricingCards.growthTime || "1–2 Bulan"}</strong></span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => selectPlan('Full-Stack Web App', 'Medium Scale Production')}
+                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white transition-all shadow-md shadow-[#2C5098]/25 cursor-pointer text-center flex items-center justify-center gap-2 group/btn"
+                  >
+                    <span>{t.pricingCards.growthBtn || t.pricing.growthBtn || "Minta Estimasi Biaya"}</span>
+                    <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+                  </button>
+                </div>
+
+                <div className="space-y-3 pt-5 border-t border-slate-100">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block font-bold">Termasuk:</span>
+                  <ul className="space-y-2 text-xs text-slate-600">
+                    {t.pricingCards.growthIncludes.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5">
+                        <div className="mt-0.5 w-4 h-4 rounded-full bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white flex items-center justify-center shrink-0">
+                          <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
+                        </div>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              {/* Card 3: Custom */}
+              <div className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-md transition-all flex flex-col justify-between space-y-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono uppercase tracking-widest text-[#2C5098] font-bold">
+                      {t.pricingCards.customTag}
+                    </span>
+                    <div className="w-8 h-8 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-600">
+                      <Icon icon="hugeicons:customize" className="w-4 h-4" />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <h3 className="text-lg font-sans font-bold text-slate-900">
+                      {t.pricingCards.customTitle}
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      {t.pricingCards.customDesc}
+                    </p>
+                  </div>
+
+                  {/* Scheme & Timeline Module */}
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-1">
+                    <div className="text-xs sm:text-[13px] font-sans font-bold text-slate-900 leading-snug">
+                      {t.pricingCards.customPriceMain || "Custom Architecture & Retainer"}
+                    </div>
+                    <div className="text-[11px] font-mono text-slate-500 flex items-center gap-1.5">
+                      <Icon icon="ph:infinity-bold" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
+                      <span>{language === 'en' ? 'Timeline: ' : 'Estimasi: '}<strong className="text-[#2C5098] font-bold">{t.pricingCards.customTime || "Roadmap Fleksibel"}</strong></span>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => selectPlan('Comprehensive Hybrid Pipeline', 'High-Scale Custom Architecture')}
+                    className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-slate-200 bg-slate-50 hover:bg-[#2C5098] hover:text-white hover:border-[#2C5098] text-slate-800 transition-all cursor-pointer text-center flex items-center justify-center gap-2 group/btn"
+                  >
+                    <span>{t.pricingCards.customBtn || t.pricing.customBtn || "Diskusikan Solusi Enterprise"}</span>
+                    <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
+                  </button>
+                </div>
+
+                <div className="space-y-3 pt-5 border-t border-slate-100">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-slate-400 block font-bold">Termasuk:</span>
+                  <ul className="space-y-2 text-xs text-slate-600">
+                    {t.pricingCards.customIncludes.map((item, idx) => (
+                      <li key={idx} className="flex items-start gap-2.5">
+                        <div className="mt-0.5 w-4 h-4 rounded-full bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center shrink-0">
+                          <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
+                        </div>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
 
-            {/* RIGHT COLUMN: 3 Category Cards (col-span-4) */}
-            <div className="col-span-4 space-y-6 text-left">
-              {/* Card 2: Backend & API */}
-              <motion.div
-                variants={cardSlideUp}
-                className="group p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.25)] backdrop-blur-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
-              >
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <h3 className="text-base font-sans font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {t.tech.backend}
-                  </h3>
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
-                    <Icon icon="ph:hard-drives-duotone" className="w-4 h-4" />
-                  </div>
+            {/* Standards Across All Projects - Symmetrical Balanced Layout */}
+            <div className="mt-8 sm:mt-10 pt-7 sm:pt-8 border-t border-slate-200/80 space-y-4">
+              <div className="flex flex-wrap items-center justify-center gap-2 text-center">
+                <div className="w-5 h-5 rounded-md bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center">
+                  <Icon icon="ph:shield-check-bold" className="w-3.5 h-3.5" />
                 </div>
-                <p className="text-xs text-theme-fore-muted mb-4 font-sans leading-relaxed">{t.tech.backendDesc}</p>
-                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-theme-border/50">
-                  {["Laravel", "Node.js", "Golang", "Python", "Express", "GraphQL"].map((tech) => (
-                    <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 text-slate-800 dark:text-slate-200 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-sm">
-                      <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
-                      <span>{tech}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
+                <span className="text-xs sm:text-sm font-sans font-bold text-slate-900">
+                  {t.pricingCards.standardTitle || "Standar di Setiap Proyek"}
+                </span>
+                <span className="text-slate-300 hidden sm:inline">•</span>
+                <span className="text-[10px] sm:text-[11px] font-mono text-slate-500">
+                  {language === 'en' ? 'Included automatically in all tiers' : 'Otomatis berlaku untuk semua skema'}
+                </span>
+              </div>
 
-              {/* Card 4: Mobile */}
-              <motion.div
-                variants={cardSlideUp}
-                className="group p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.25)] backdrop-blur-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
-              >
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <h3 className="text-base font-sans font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {t.tech.mobile}
-                  </h3>
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
-                    <Icon icon="ph:device-mobile-speaker-duotone" className="w-4 h-4" />
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 w-full">
+                {(t.pricingCards.standards || [
+                  "100% Hak Cipta & Source Code",
+                  "Garansi Bug Fixing Resmi",
+                  "Deployment Server Cloud",
+                  "Tanpa Perantara (Direct Dev)"
+                ]).map((std, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-white border border-slate-200/90 shadow-2xs text-[11px] font-sans font-medium text-slate-700 hover:border-[#2C5098]/40 transition-colors text-center"
+                  >
+                    <Icon icon="ph:check-circle-fill" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
+                    <span>{std}</span>
                   </div>
-                </div>
-                <p className="text-xs text-theme-fore-muted mb-4 font-sans leading-relaxed">{t.tech.mobileDesc}</p>
-                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-theme-border/50">
-                  {["React Native", "Flutter"].map((tech) => (
-                    <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 text-slate-800 dark:text-slate-200 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-sm">
-                      <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
-                      <span>{tech}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
+                ))}
+              </div>
+            </div>
 
-              {/* Card 6: Third-Party Integration */}
-              <motion.div
-                variants={cardSlideUp}
-                className="group p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 hover:border-blue-500/50 hover:shadow-[0_10px_40px_-10px_rgba(59,130,246,0.25)] backdrop-blur-xl transition-all duration-300 relative overflow-hidden flex flex-col justify-between"
+            {/* Note text below pricing grid */}
+            <div className="pt-6 sm:pt-7 text-center">
+              <a
+                href="https://wa.me/6289508436275?text=Halo%20SejatiDimedia,%20saya%20ingin%20berdiskusi%20mengenai%20skema%20pengembangan%20proyek%20dan%20estimasi%20biaya."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 text-xs sm:text-sm text-slate-500 hover:text-[#2C5098] transition-colors group cursor-pointer max-w-xl mx-auto px-4 leading-relaxed"
               >
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <h3 className="text-base font-sans font-extrabold text-theme-fore group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                    {t.tech.integrationTitle}
-                  </h3>
-                  <div className="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold shrink-0">
-                    <Icon icon="ph:share-network-duotone" className="w-4 h-4" />
-                  </div>
-                </div>
-                <p className="text-xs text-theme-fore-muted mb-4 font-sans leading-relaxed">{t.tech.integrationDesc}</p>
-                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-theme-border/50">
-                  {["Rest API", "Payment Integration", "Cloud Storage", "OAuth Providers"].map((tech) => (
-                    <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 text-slate-800 dark:text-slate-200 hover:border-blue-500/50 hover:bg-blue-500/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-sm">
-                      <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
-                      <span>{tech}</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
+                <Icon icon="ph:chat-circle-dots-bold" className="w-4 h-4 text-[#2C5098] group-hover:scale-110 transition-transform shrink-0" />
+                <span className="underline underline-offset-4 decoration-slate-300 group-hover:decoration-[#2C5098]">
+                  {t.pricingCards.budgetNote || "Punya kebutuhan spesifik atau ingin estimasi langsung? Konsultasikan kebutuhan sistem Anda bersama tim kami via WhatsApp."}
+                </span>
+              </a>
             </div>
           </div>
         </div>
-
-        {/* MOBILE RESPONSIVE FALLBACK: STANDARD GRID (BELOW MD) */}
-        <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 gap-5 block md:hidden text-left pt-2"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.15 }}
-        >
-          {/* Card 1: Frontend */}
-          <motion.div
-            variants={cardSlideUp}
-            className="p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 space-y-3"
-          >
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-sans font-extrabold text-theme-fore">
-                Frontend
-              </h3>
-              <Icon icon="ph:layout-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            </div>
-            <p className="text-xs text-theme-fore-muted font-sans leading-relaxed">{t.tech.frontendDesc}</p>
-            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-theme-border/40">
-              {["React", "Vue", "Angular", "Next.js", "Vite", "TypeScript", "Tailwind CSS"].map((tech) => (
-                <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 flex items-center gap-1">
-                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
-                  <span>{tech}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Card 2: Backend */}
-          <motion.div
-            variants={cardSlideUp}
-            className="p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 space-y-3"
-          >
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-sans font-extrabold text-theme-fore">
-                {t.tech.backend}
-              </h3>
-              <Icon icon="ph:hard-drives-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            </div>
-            <p className="text-xs text-theme-fore-muted font-sans leading-relaxed">{t.tech.backendDesc}</p>
-            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-theme-border/40">
-              {["Laravel", "Node.js", "Golang", "Python", "Express", "GraphQL"].map((tech) => (
-                <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 flex items-center gap-1">
-                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
-                  <span>{tech}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Card 3: Database */}
-          <motion.div
-            variants={cardSlideUp}
-            className="p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 space-y-3"
-          >
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-sans font-extrabold text-theme-fore">
-                {t.tech.database}
-              </h3>
-              <Icon icon="ph:database-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            </div>
-            <p className="text-xs text-theme-fore-muted font-sans leading-relaxed">{t.tech.databaseDesc}</p>
-            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-theme-border/40">
-              {["MySQL", "PostgreSQL", "MongoDB", "Firestore", "Redis"].map((tech) => (
-                <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 flex items-center gap-1">
-                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
-                  <span>{tech}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Card 4: Mobile */}
-          <motion.div
-            variants={cardSlideUp}
-            className="p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 space-y-3"
-          >
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-sans font-extrabold text-theme-fore">
-                {t.tech.mobile}
-              </h3>
-              <Icon icon="ph:device-mobile-speaker-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            </div>
-            <p className="text-xs text-theme-fore-muted font-sans leading-relaxed">{t.tech.mobileDesc}</p>
-            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-theme-border/40">
-              {["React Native", "Flutter"].map((tech) => (
-                <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 flex items-center gap-1">
-                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
-                  <span>{tech}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Card 5: Infrastructure */}
-          <motion.div
-            variants={cardSlideUp}
-            className="p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 space-y-3"
-          >
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-sans font-extrabold text-theme-fore">
-                {t.tech.infra}
-              </h3>
-              <Icon icon="ph:cloud-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            </div>
-            <p className="text-xs text-theme-fore-muted font-sans leading-relaxed">{t.tech.infraDesc}</p>
-            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-theme-border/40">
-              {["Docker", "AWS", "Google Cloud", "Firebase"].map((tech) => (
-                <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 flex items-center gap-1">
-                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
-                  <span>{tech}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* Card 6: Third-Party Integration */}
-          <motion.div
-            variants={cardSlideUp}
-            className="p-5 rounded-3xl bg-theme-elevated/70 border border-theme-border/80 space-y-3 sm:col-span-2"
-          >
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-sans font-extrabold text-theme-fore">
-                {t.tech.integrationTitle}
-              </h3>
-              <Icon icon="ph:share-network-duotone" className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            </div>
-            <p className="text-xs text-theme-fore-muted font-sans leading-relaxed">{t.tech.integrationDesc}</p>
-            <div className="flex flex-wrap gap-1.5 pt-2 border-t border-theme-border/40">
-              {["Rest API", "Payment Integration", "Cloud Storage", "OAuth Providers"].map((tech) => (
-                <div key={tech} className="px-2 py-1 rounded-lg text-[9px] font-mono bg-white/70 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/60 flex items-center gap-1">
-                  <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 shrink-0" />
-                  <span>{tech}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </motion.div>
       </motion.section>
 
-
-
-      {/* SECTION 4.25: FEATURED PROJECTS SHOWCASE */}
+      {/* =========================================================================
+          SECTION 8: TRUST & VALUE PROPS (#features-section) - SOFT GRAY (#F8FAFC)
+          ========================================================================= */}
       <motion.section
-        id="projects-section"
-        className="space-y-12 pt-12"
+        id="features-section"
+        className="w-full bg-[#F8FAFC] border-y border-slate-200/70 py-20 sm:py-28 lg:py-32"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.15 }}
+        viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-          <div className="space-y-4">
-            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
-              <span>{t.nav.portfolio}</span>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
+          <div className="text-left space-y-3">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
+              <span>{t.trust?.badge || "Kenapa Klien Percaya"}</span>
             </div>
-            <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.15] text-theme-fore max-w-2xl text-left">
-              {t.portfolio.mainHeading}{' '}
-              <span className="text-theme-accent">
-                {t.portfolio.mainHeadingHighlight}
+            <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
+              {t.trust?.mainHeading || "Kenapa Klien Percaya"}{' '}
+              <span className="text-[#2C5098]">
+                {t.trust?.mainHeadingHighlight || "Bekerja Sama Dengan Saya"}
               </span>
             </h2>
           </div>
 
-          <Link
-            href="/projects"
-            className="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-theme-surface border border-theme-border/80 hover:border-theme-accent text-xs font-sans font-bold text-theme-fore cursor-pointer transition-all duration-300"
-          >
-            <span>{t.portfolio.viewAll} ({projects && projects.length > 0 ? projects.length : MOCK_PROJECTS.length})</span>
-            <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
-
-        {/* Projects Grid */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-3 gap-8"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.15 }}
-        >
-          {displayedProjects && displayedProjects.length > 0 ? (
-            displayedProjects.map((project) => {
-              const isDummy = !project.thumbnail ||
-                project.thumbnail.trim() === "" ||
-                project.thumbnail === "/thumbnail.png" ||
-                project.thumbnail === "/placeholder.png";
-              const displayThumbnail = (isDummy ? "/logo.svg" : project.thumbnail) as string;
-              const isFeatured = featuredProjectSlugs.includes(project.slug);
-
-              return (
-                <motion.div
-                  key={project.slug}
-                  className="group flex flex-col justify-between p-5 rounded-2xl bg-theme-elevated border border-theme-border hover:border-theme-border-accent hover:shadow-2xl transition-all duration-300 relative overflow-hidden"
-                  variants={cardSlideUp}
-                >
-                  <div className="space-y-4">
-                    {/* Thumbnail Container */}
-                    <div className="relative w-full h-48 rounded-xl overflow-hidden bg-theme-surface border border-theme-border/40">
-                      <Image
-                        src={displayThumbnail}
-                        alt={project.name}
-                        fill
-                        className={isDummy ? "object-contain p-8 bg-theme-surface/40" : "object-cover group-hover:scale-[1.03] transition-transform duration-500"}
-                        sizes="(max-w-768px) 100vw, 33vw"
-                      />
-                    </div>
-
-                    {/* Info Block */}
-                    <div className="space-y-2 text-left">
-                      <h3 className="text-sm sm:text-base font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors">
-                        {project.name}
-                      </h3>
-                      <p className="text-xs text-theme-fore-muted leading-relaxed line-clamp-3">
-                        {language === 'en'
-                          ? (project.summaryEn || project.descriptionEn || project.summary || project.description)
-                          : (project.summaryId || project.descriptionId || project.summary || project.description)}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-4 pt-4 border-t border-theme-border/30 mt-4">
-                    {/* Tech stack tags */}
-                    <div className="flex flex-wrap gap-1 text-left">
-                      {project.technologies.map((tech) => (
-                        <div key={tech} className="px-1.5 py-0.5 rounded-md text-[9px] font-mono bg-theme-surface text-black dark:text-theme-fore-muted border border-theme-border/40 flex items-center gap-1 group/tech shadow-sm">
-                          <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3 h-3 grayscale opacity-70 group-hover/tech:grayscale-0 group-hover/tech:opacity-100 transition-all duration-300" />
-                          <span>{tech}</span>
-                        </div>))}
-                    </div>
-
-                    {/* Explore button */}
-                    <Link
-                      href={`/projects/${project.slug}`}
-                      className="flex items-center justify-center gap-1.5 w-full py-2 rounded-xl bg-theme-surface hover:bg-theme-accent hover:text-white text-xs font-sans font-bold text-theme-fore transition-all duration-300 border border-theme-border/80 hover:border-theme-accent"
-                    >
-                      <span>{t.portfolio.viewProject}</span>
-                      <Icon icon="ph:caret-right-bold" className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                </motion.div>
-              );
-            })
-          ) : (
-            <div className="col-span-1 md:col-span-3 p-12 text-center rounded-2xl bg-theme-elevated border border-theme-border">
-              <span className="text-xs font-mono text-theme-fore-muted">No projects found.</span>
-            </div>
-          )}
-        </motion.div>
-      </motion.section>
-
-      {/* SECTION 3.5: FLEXIBLE PRICING PLANS */}
-      <motion.section
-        id="pricing-section"
-        className="space-y-16 pt-8"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, amount: 0.15 }}
-        variants={sectionFadeIn}
-      >
-        <div className="text-center max-w-3xl mx-auto space-y-4">
-          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold text-center">
-            <span>{t.pricing.label}</span>
-          </div>
-          <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore text-center">
-            {t.pricing.badge}
-          </h2>
-          <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-2xl mx-auto text-center">
-            {t.pricing.desc}
-          </p>
-        </div>
-
-        {/* 3-Column Beautiful Pricing Grid */}
-        <motion.div
-          className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch max-w-6xl mx-auto pt-4"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.15 }}
-        >
-
-          {/* Card 1: Starter - MVP Prototype */}
-          <motion.div
-            className="p-6 sm:p-7 rounded-[2rem] bg-white shadow-xl dark:shadow-none dark:bg-theme-surface/40 backdrop-blur-xl border border-theme-border/80 dark:border-white/15 hover:border-theme-accent/50 hover:bg-gray-50 dark:hover:bg-theme-surface/80 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between space-y-6 relative group text-left"
-            variants={cardSlideUp}
-          >
-            <div className="space-y-4 relative z-10">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold group-hover:text-theme-fore transition-colors">{t.pricingCards.starterTag}</span>
-                <div className="w-8 h-8 rounded-xl bg-theme-elevated border border-theme-border flex items-center justify-center text-theme-fore-muted group-hover:text-theme-accent group-hover:border-theme-accent/30 transition-all duration-300 shadow-sm">
-                  <Icon icon="ph:trophy-duotone" className="w-4 h-4" />
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <h3 className="text-xl font-sans font-extrabold text-theme-fore">{t.pricingCards.starterTitle}</h3>
-                <p className="text-[11px] text-theme-fore-muted leading-relaxed">
-                  {t.pricingCards.starterDesc}
-                </p>
-              </div>
-
-              {/* Scheme & Timeline Module */}
-              <div className="p-3.5 rounded-2xl bg-theme-surface border border-theme-border/80 space-y-1">
-                <div className="text-xs sm:text-[13px] font-sans font-bold text-theme-fore leading-snug">
-                  {t.pricingCards.starterPriceMain || "Fixed Scope & Timeline"}
-                </div>
-                <div className="text-[11px] font-mono text-theme-fore-muted flex items-center gap-1.5">
-                  <Icon icon="ph:timer-bold" className="w-3.5 h-3.5 text-theme-accent shrink-0" />
-                  <span>{language === 'en' ? 'Timeline: ' : 'Estimasi: '}<strong className="text-theme-accent font-bold">{t.pricingCards.starterTime || "2–4 Minggu"}</strong></span>
-                </div>
-              </div>
-
-              <button
-                onClick={() => selectPlan('Full-Stack Web App', 'SaaS MVP (Fast Turnaround)')}
-                className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-theme-border bg-theme-surface hover:border-theme-accent hover:bg-theme-accent hover:text-white text-theme-fore transition-all duration-300 cursor-pointer text-center select-none shadow-sm flex items-center justify-center gap-2 group/btn"
-              >
-                <span>{t.pricingCards.starterBtn || t.pricing.starterBtn || "Konsultasi Scope MVP"}</span>
-                <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
-              </button>
-            </div>
-            <div className="space-y-3 pt-5 border-t border-theme-border/50 relative z-10">
-              <span className="text-[9px] font-mono uppercase tracking-widest text-theme-fore-subtle block font-bold">Termasuk:</span>
-              <ul className="space-y-2 text-xs">
-                {t.pricingCards.starterIncludes.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2.5 text-theme-fore-muted group/item hover:text-theme-fore transition-colors">
-                    <div className="mt-0.5 w-4 h-4 rounded-full bg-theme-accent/10 flex items-center justify-center flex-shrink-0 group-hover/item:bg-theme-accent group-hover/item:text-white transition-colors text-theme-accent">
-                      <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
-                    </div>
-                    <span className="text-[11px] leading-relaxed">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-
-          {/* Card 2: Growth - Production Ready (Most Popular) */}
-          <motion.div
-            className="p-6 sm:p-7 md:p-8 rounded-[2.5rem] bg-gradient-to-b from-theme-surface to-theme-base text-theme-fore border-2 border-theme-accent/70 dark:border-theme-accent hover:border-theme-accent hover:shadow-[0_0_60px_-15px_rgba(74,133,217,0.4)] transition-all duration-500 flex flex-col justify-between space-y-6 relative lg:-mt-4 lg:mb-4 z-20 overflow-hidden text-left group shadow-2xl shadow-theme-accent/15 dark:shadow-theme-accent/20"
-            variants={cardSlideUp}
-          >
-            {/* Premium Glow Overlay (Dark Mode Only) */}
-            <div className="absolute inset-0 hidden dark:block bg-[radial-gradient(ellipse_at_top,rgba(74,133,217,0.25),transparent_70%)] pointer-events-none transition-opacity duration-700 group-hover:opacity-100 opacity-60" />
-            <div className="absolute top-0 left-[15%] right-[15%] h-[2px] bg-gradient-to-r from-transparent via-theme-accent to-transparent opacity-100 dark:opacity-80" />
-
-            <div className="absolute top-0 right-0 bg-gradient-to-r from-theme-accent via-theme-accent-bright to-theme-accent text-theme-base text-[9px] font-mono font-bold px-4 py-1.5 rounded-bl-2xl rounded-tr-[2.5rem] uppercase tracking-widest shadow-lg shadow-theme-accent/30 flex items-center gap-1.5">
-              <Icon icon="ph:crown-duotone" className="w-3 h-3" />
-              {language === 'en' ? 'Most Popular' : 'Paling Populer'}
-            </div>
-
-            <div className="space-y-4 relative z-10 pt-2">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-theme-accent font-bold">{t.pricingCards.growthTag}</span>
-              </div>
-
-              <div className="space-y-1">
-                <h3 className="text-xl font-sans font-extrabold text-theme-fore">{t.pricingCards.growthTitle}</h3>
-                <p className="text-[11px] text-theme-fore-muted dark:text-blue-100/80 leading-relaxed">
-                  {t.pricingCards.growthDesc}
-                </p>
-              </div>
-
-              {/* Scheme & Timeline Module */}
-              <div className="p-3.5 rounded-2xl bg-theme-accent/15 border border-theme-accent/30 space-y-1">
-                <div className="text-xs sm:text-[13px] font-sans font-bold text-theme-fore leading-snug">
-                  {t.pricingCards.growthPriceMain || "Berdasarkan Fitur & Scope"}
-                </div>
-                <div className="text-[11px] font-mono text-theme-fore-muted dark:text-blue-200 flex items-center gap-1.5">
-                  <Icon icon="ph:timer-bold" className="w-3.5 h-3.5 text-theme-accent shrink-0" />
-                  <span>{language === 'en' ? 'Timeline: ' : 'Estimasi: '}<strong className="text-theme-accent dark:text-white font-bold">{t.pricingCards.growthTime || "1–2 Bulan"}</strong></span>
-                </div>
-              </div>
-
-              <button
-                onClick={() => selectPlan('Comprehensive Hybrid Pipeline', 'High-Scale Custom Architecture')}
-                className="w-full py-2.5 px-4 rounded-xl text-xs font-bold bg-theme-accent text-theme-base hover:bg-theme-accent-bright dark:bg-white dark:text-[#0A0C10] dark:hover:bg-theme-accent dark:hover:text-white shadow-lg shadow-theme-accent/20 hover:shadow-[0_0_20px_rgba(74,133,217,0.4)] transition-all duration-300 cursor-pointer text-center select-none flex items-center justify-center gap-2 group/btn"
-              >
-                <span>{t.pricingCards.growthBtn || t.pricing.growthBtn || "Minta Estimasi Biaya"}</span>
-                <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
-              </button>
-            </div>
-            <div className="space-y-3 pt-5 border-t border-theme-border/50 dark:border-white/10 relative z-10">
-              <span className="text-[9px] font-mono uppercase tracking-widest text-theme-fore-subtle dark:text-blue-200/50 block font-bold">Termasuk:</span>
-              <ul className="space-y-2 text-xs">
-                {t.pricingCards.growthIncludes.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2.5 text-theme-fore-muted dark:text-blue-50/80 group/item hover:text-theme-fore dark:hover:text-white transition-colors">
-                    <div className="mt-0.5 w-4 h-4 rounded-full bg-theme-accent flex items-center justify-center flex-shrink-0 text-white shadow-sm shadow-theme-accent/50">
-                      <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
-                    </div>
-                    <span className="text-[11px] leading-relaxed">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-
-          {/* Card 3: Custom - Sistem Kompleks */}
-          <motion.div
-            className="p-6 sm:p-7 rounded-[2rem] bg-white shadow-xl dark:shadow-none dark:bg-theme-surface/40 backdrop-blur-xl border border-theme-border/80 dark:border-white/15 hover:border-theme-accent/50 hover:bg-gray-50 dark:hover:bg-theme-surface/80 hover:shadow-2xl hover:-translate-y-1 transition-all duration-500 flex flex-col justify-between space-y-6 relative group text-left"
-            variants={cardSlideUp}
-          >
-            <div className="space-y-4 relative z-10">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono uppercase tracking-widest text-theme-fore-subtle font-bold group-hover:text-theme-fore transition-colors">{t.pricingCards.customTag}</span>
-                <div className="w-8 h-8 rounded-xl bg-theme-elevated border border-theme-border flex items-center justify-center text-theme-fore-muted group-hover:text-theme-accent group-hover:border-theme-accent/30 transition-all duration-300 shadow-sm">
-                  <Icon icon="hugeicons:customize" className="w-4 h-4" />
-                </div>
-              </div>
-
-              <div className="space-y-1">
-                <h3 className="text-xl font-sans font-extrabold text-theme-fore">{t.pricingCards.customTitle}</h3>
-                <p className="text-[11px] text-theme-fore-muted leading-relaxed">
-                  {t.pricingCards.customDesc}
-                </p>
-              </div>
-
-              {/* Scheme & Timeline Module */}
-              <div className="p-3.5 rounded-2xl bg-theme-surface border border-theme-border/80 space-y-1">
-                <div className="text-xs sm:text-[13px] font-sans font-bold text-theme-fore leading-snug">
-                  {t.pricingCards.customPriceMain || "Custom Architecture & Retainer"}
-                </div>
-                <div className="text-[11px] font-mono text-theme-fore-muted flex items-center gap-1.5">
-                  <Icon icon="ph:infinity-bold" className="w-3.5 h-3.5 text-theme-accent shrink-0" />
-                  <span>{language === 'en' ? 'Timeline: ' : 'Estimasi: '}<strong className="text-theme-accent font-bold">{t.pricingCards.customTime || "Roadmap Fleksibel"}</strong></span>
-                </div>
-              </div>
-
-              <button
-                onClick={() => selectPlan('Comprehensive Hybrid Pipeline', 'High-Scale Custom Architecture')}
-                className="w-full py-2.5 px-4 rounded-xl text-xs font-bold border border-theme-border bg-theme-surface hover:border-theme-accent hover:bg-theme-accent hover:text-white text-theme-fore transition-all duration-300 cursor-pointer text-center select-none shadow-sm flex items-center justify-center gap-2 group/btn"
-              >
-                <span>{t.pricingCards.customBtn || t.pricing.customBtn || "Diskusikan Solusi Enterprise"}</span>
-                <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
-              </button>
-            </div>
-            <div className="space-y-3 pt-5 border-t border-theme-border/50 relative z-10">
-              <span className="text-[9px] font-mono uppercase tracking-widest text-theme-fore-subtle block font-bold">Termasuk:</span>
-              <ul className="space-y-2 text-xs">
-                {t.pricingCards.customIncludes.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2.5 text-theme-fore-muted group/item hover:text-theme-fore transition-colors">
-                    <div className="mt-0.5 w-4 h-4 rounded-full bg-theme-accent/10 flex items-center justify-center flex-shrink-0 group-hover/item:bg-theme-accent group-hover/item:text-white transition-colors text-theme-accent">
-                      <Icon icon="ph:check-bold" className="w-2.5 h-2.5" />
-                    </div>
-                    <span className="text-[11px] leading-relaxed">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </motion.div>
-
-        </motion.div>
-
-        {/* Standards Across All Projects - Symmetrical Balanced Layout */}
-        <div className="mt-8 sm:mt-10 pt-7 sm:pt-8 border-t border-theme-border/60 max-w-6xl mx-auto space-y-4">
-          <div className="flex flex-wrap items-center justify-center gap-2 text-center">
-            <div className="w-5 h-5 rounded-md bg-theme-accent/10 text-theme-accent flex items-center justify-center">
-              <Icon icon="ph:shield-check-bold" className="w-3.5 h-3.5" />
-            </div>
-            <span className="text-xs sm:text-sm font-sans font-bold text-theme-fore">
-              {t.pricingCards.standardTitle || "Standar di Setiap Proyek"}
-            </span>
-            <span className="text-theme-border hidden sm:inline">•</span>
-            <span className="text-[10px] sm:text-[11px] font-mono text-theme-fore-subtle">
-              {language === 'en' ? 'Included automatically in all tiers' : 'Otomatis berlaku untuk semua skema'}
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-3 w-full">
-            {(t.pricingCards.standards || [
-              "100% Hak Cipta & Source Code",
-              "Garansi Bug Fixing Resmi",
-              "Deployment Server Cloud",
-              "Tanpa Perantara (Direct Dev)"
-            ]).map((std, idx) => (
+          {/* 2-Column Bento Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+            {(t.trust?.items || []).map((item: any, idx: number) => (
               <div
                 key={idx}
-                className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-white dark:bg-theme-surface/70 border border-theme-border shadow-2xs text-[11px] font-sans font-medium text-theme-fore-muted hover:border-theme-accent/40 transition-colors text-center"
+                className="p-5 sm:p-6 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:shadow-md hover:border-[#2C5098]/40 transition-all flex flex-col sm:flex-row gap-4 items-start"
               >
-                <Icon icon="ph:check-circle-fill" className="w-3.5 h-3.5 text-theme-accent shrink-0" />
-                <span>{std}</span>
+                <div className="flex-shrink-0 w-11 h-11 rounded-2xl bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 flex items-center justify-center">
+                  <Icon icon={TRUST_ICONS[idx]} className="w-5 h-5" />
+                </div>
+                <div className="space-y-1.5">
+                  <h3 className="text-sm sm:text-base font-sans font-bold text-slate-900">
+                    {item.title}
+                  </h3>
+                  <p className="text-xs text-slate-600 leading-relaxed font-sans">
+                    {item.desc}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
         </div>
-
-        {/* Note text below pricing grid */}
-        <div className="pt-6 sm:pt-7 text-center">
-          <a
-            href="https://wa.me/6289508436275?text=Halo%20SejatiDimedia,%20saya%20ingin%20berdiskusi%20mengenai%20skema%20pengembangan%20proyek%20dan%20estimasi%20biaya."
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 text-xs sm:text-sm text-theme-fore-muted hover:text-theme-accent transition-colors group cursor-pointer max-w-xl mx-auto px-4 leading-relaxed"
-          >
-            <Icon icon="ph:chat-circle-dots-bold" className="w-4 h-4 text-theme-accent group-hover:scale-110 transition-transform shrink-0" />
-            <span className="underline underline-offset-4 decoration-theme-border group-hover:decoration-theme-accent">
-              {t.pricingCards.budgetNote || "Punya kebutuhan spesifik atau ingin estimasi langsung? Konsultasikan kebutuhan sistem Anda bersama tim kami via WhatsApp."}
-            </span>
-          </a>
-        </div>
       </motion.section>
 
-      {/* SECTION 4.5: KENAPA KLIEN PERCAYA BEKERJA SAMA DENGAN SAYA */}
-      <motion.section
-        id="features-section"
-        className="space-y-12 pt-12"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, amount: 0.15 }}
-        variants={sectionFadeIn}
-      >
-        <div className="space-y-4">
-          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
-            <span>{t.trust?.badge || "Kenapa Klien Percaya"}</span>
-          </div>
-          <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.15] text-theme-fore max-w-3xl text-left">
-            {t.trust?.mainHeading || "Kenapa Klien Percaya"}{' '}
-            <span className="text-theme-accent">
-              {t.trust?.mainHeadingHighlight || "Bekerja Sama Dengan Saya"}
-            </span>
-          </h2>
-        </div>
-
-        {/* 2-Column Bento Grid */}
-        <motion.div
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: false, amount: 0.15 }}
-        >
-          {(t.trust?.items || []).map((item: any, idx: number) => (
-            <motion.div
-              key={idx}
-              className="p-6 rounded-2xl bg-theme-elevated border border-theme-border flex flex-col sm:flex-row gap-5 items-start group hover:border-theme-border-accent hover:shadow-xl transition-all duration-300 text-left"
-              variants={cardSlideUp}
-            >
-              <div className="flex-shrink-0 w-12 sm:w-14 h-12 sm:h-14 rounded-2xl bg-theme-accent/5 flex items-center justify-center border border-theme-accent/20 group-hover:scale-110 group-hover:bg-theme-accent/10 transition-all duration-300">
-                <Icon icon={TRUST_ICONS[idx]} className="w-6 sm:w-7 h-6 sm:h-7 text-theme-accent" />
-              </div>
-              <div className="space-y-2">
-                <h3 className="text-sm sm:text-base font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-xs text-theme-fore-muted leading-relaxed">
-                  {item.desc}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </motion.section>
-      {/* SECTION 4: THE PROCESSES / METHODOLOGY STEPPER */}
+      {/* =========================================================================
+          SECTION 9: THE PROCESSES / METHODOLOGY STEPPER (#methodology-section) - PURE WHITE (#FFFFFF)
+          ========================================================================= */}
       <motion.section
         id="methodology-section"
-        className="space-y-12"
+        className="w-full bg-white py-20 sm:py-28 lg:py-32"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         variants={sectionFadeIn}
       >
-        <div className="space-y-4">
-          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
-            <span>{t.process.badge}</span>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
+          <div className="space-y-4 text-left">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
+              <span>{t.process.badge}</span>
+            </div>
+            <h2 className="text-3xl sm:text-4.5xl font-sans font-bold tracking-tight leading-[1.15] text-slate-900 max-w-2xl">
+              {t.process.mainHeading}
+            </h2>
           </div>
-          <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.15] text-theme-fore max-w-2xl">
-            {t.process.mainHeading}
-          </h2>
-        </div>
 
-        {/* Dynamic Split Layout matching reference block 2 */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+          {/* Dynamic Split Layout matching reference layout */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+            {/* Left Column: Clean vertical list with line delimiters (6 cols) */}
+            <div className="lg:col-span-6 flex flex-col">
+              {MILESTONES.map((milestone, idx) => {
+                const isActive = activeMilestone === idx;
+                return (
+                  <button
+                    key={milestone.step}
+                    onClick={() => setActiveMilestone(idx)}
+                    className={`w-full py-4 text-left cursor-pointer border-b transition-all duration-300 flex items-center justify-between group ${isActive ? 'border-[#2C5098]' : 'border-slate-200 hover:border-slate-300'
+                      }`}
+                    id={`processes-step-${milestone.step}`}
+                  >
+                    <span
+                      className={`text-base font-sans font-bold transition-all duration-300 ${isActive
+                        ? 'text-[#2C5098] translate-x-1.5'
+                        : 'text-slate-600 group-hover:text-slate-900 group-hover:translate-x-1'
+                        }`}
+                    >
+                      {t.milestones[idx].title}
+                    </span>
+                    <span
+                      className={`text-xs font-mono font-bold transition-colors flex items-center gap-2 ${isActive ? 'text-[#2C5098]' : 'text-slate-400 group-hover:text-slate-600'
+                        }`}
+                    >
+                      <Icon icon={MILESTONE_ICONS[idx]} className="w-4 h-4" />
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
 
-          {/* Left Column: Clean vertical list with line delimiters (5 cols) */}
-          <div className="lg:col-span-6 flex flex-col">
-            {MILESTONES.map((milestone, idx) => {
-              const isActive = activeMilestone === idx;
-              return (
-                <button
-                  key={milestone.step}
-                  onClick={() => setActiveMilestone(idx)}
-                  className={`w-full py-4 text-left cursor-pointer border-b border-theme-border/60 transition-all duration-300 flex items-center justify-between group ${isActive ? 'border-theme-accent' : 'hover:border-theme-border-hover'
-                    }`}
-                  id={`processes-step-${milestone.step}`}
+            {/* Right Column: Giant display digits details (6 cols) */}
+            <div className="lg:col-span-6 p-8 rounded-3xl bg-white border border-slate-200 shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[250px]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeMilestone}
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -15 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-8 flex-grow flex flex-col justify-between relative z-10 text-left"
                 >
-                  <span className={`text-base font-sans font-bold transition-all duration-300 ${isActive
-                    ? 'text-theme-accent translate-x-1.5'
-                    : 'text-theme-fore/60 group-hover:text-theme-fore group-hover:translate-x-1'
-                    }`}>
-                    {t.milestones[idx].title}
-                  </span>
-                  <span className={`text-xs font-mono font-bold transition-colors flex items-center gap-2 ${isActive ? 'text-theme-accent' : 'text-theme-fore-subtle group-hover:text-theme-fore'
-                    }`}>
-                    <Icon icon={MILESTONE_ICONS[idx]} className="w-4 h-4" />
-                  </span>
-                </button>
+                  <div className="space-y-6">
+                    {/* Giant floating number digits in primary color */}
+                    <div className="text-8xl sm:text-9xl font-sans font-bold tracking-tighter leading-none text-[#2C5098]/15 select-none">
+                      {MILESTONES[activeMilestone].step}
+                    </div>
+
+                    <div className="space-y-3">
+                      <h3 className="text-2xl font-sans font-bold text-slate-900">
+                        {t.milestones[activeMilestone].title}
+                      </h3>
+                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-lg font-sans">
+                        {t.milestones[activeMilestone].description}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Solid Rectangle Button 'GET STARTED' */}
+                  <div>
+                    <button
+                      onClick={() => scrollToId('contact-section')}
+                      className="px-6 py-3 bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white rounded-lg text-xs font-sans font-bold tracking-widest uppercase transition-all duration-300 shadow-md shadow-[#2C5098]/25 cursor-pointer flex items-center gap-2 group/btn"
+                      id={`processes-get-started-${MILESTONES[activeMilestone].step}`}
+                    >
+                      <span>Get Started</span>
+                      <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                    </button>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* =========================================================================
+          SECTION 10: INSIGHTS & ENGINEERING SECTION (#insights-section) - SOFT GRAY (#F8FAFC)
+          ========================================================================= */}
+      <motion.section
+        id="insights-section"
+        className="w-full bg-[#F8FAFC] border-y border-slate-200/70 py-20 sm:py-28 lg:py-32"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-80px" }}
+        variants={sectionFadeIn}
+      >
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
+          {/* Section Header - Matching Halaman Insights */}
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            {/* Eyebrow / Section Label */}
+            <div className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.3em] text-[#2C5098] font-bold">
+              <span>{language === 'en' ? 'ENGINEERING INSIGHTS' : 'INSIGHTS & TEKNOLOGI'}</span>
+            </div>
+
+            {/* Section Headline */}
+            <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
+              {language === 'en' ? 'System Architecture &' : 'Catatan Arsitektur &'}{' '}
+              <span className="text-[#2C5098] font-extrabold">
+                {language === 'en' ? 'Engineering Standards' : 'Standar Rekayasa Software'}
+              </span>
+            </h2>
+
+            {/* Section Subtitle */}
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans max-w-2xl mx-auto">
+              {language === 'en'
+                ? 'In-depth technical breakdowns covering system architecture, backend performance optimization, and scalable software design.'
+                : 'Ulasan teknis mendalam seputar arsitektur sistem, optimasi performa backend, hingga perancangan aplikasi siap scale.'}
+            </p>
+          </div>
+
+          {/* 3 Articles Grid - Identical Card Styling with Halaman Insights */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 text-left">
+            {displayInsights.map((article, idx) => {
+              const articleTitle = (language === 'en' ? article.titleEn : article.titleId) || article.titleId;
+              const articleExcerpt = (language === 'en' ? article.excerptEn : article.excerptId) || article.excerptId;
+              const formattedDate = (() => {
+                try {
+                  return new Date(article.publishedAt).toLocaleDateString(
+                    language === 'en' ? 'en-US' : 'id-ID',
+                    { month: 'short', day: 'numeric', year: 'numeric' }
+                  );
+                } catch {
+                  return article.publishedAt;
+                }
+              })();
+
+              return (
+                <motion.article
+                  key={article.slug}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.35, delay: idx * 0.05 }}
+                  className="group relative flex flex-col h-full rounded-3xl bg-white border border-slate-200/90 shadow-[0_2px_12px_rgba(0,0,0,0.04)] hover:shadow-[0_20px_40px_-12px_rgba(44,80,152,0.16)] hover:border-[#2C5098]/50 hover:-translate-y-1.5 transition-all duration-300 overflow-hidden"
+                >
+                  {/* Subtle top accent line on hover */}
+                  <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-[#2C5098] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" />
+
+                  <Link href={`/insights/${article.slug}`} className="flex flex-col h-full">
+                    {/* Cover Thumbnail Image */}
+                    <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100 border-b border-slate-100">
+                      <Image
+                        src={article.coverImage}
+                        alt={articleTitle}
+                        fill
+                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-50 group-hover:opacity-30 transition-opacity" />
+
+                      {/* Floating Category & Series Pill */}
+                      <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 flex-wrap max-w-[90%]">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+                          {article.category}
+                        </span>
+                        {article.series && (
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-[#1E315B] text-white border border-white/20 shadow-xs">
+                            <Icon icon="ph:stack-fill" className="w-3 h-3 text-blue-200" />
+                            Part {article.seriesPart || article.series.part}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Floating Read Time Pill */}
+                      <div className="absolute bottom-3 right-3 z-10">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-medium bg-black/60 text-white/95 backdrop-blur-md border border-white/15">
+                          <Icon icon="ph:clock-bold" className="w-3 h-3 text-white/80" />
+                          {article.readTimeMinutes} {language === "en" ? "min read" : "menit baca"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Card Content */}
+                    <div className="flex flex-col flex-1 p-6 sm:p-7 justify-between space-y-4">
+                      <div className="space-y-3">
+                        {/* Author Mini Byline & Date */}
+                        <div className="flex items-center justify-between gap-2 pb-1">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <div className="relative w-6 h-6 rounded-full overflow-hidden border border-slate-200 shrink-0 bg-slate-100">
+                              <Image
+                                src={article.author.avatar}
+                                alt={article.author.name}
+                                fill
+                                className="object-cover"
+                              />
+                            </div>
+                            <span className="text-xs font-bold text-slate-700 truncate">
+                              {article.author.name}
+                            </span>
+                          </div>
+
+                          <span className="text-[11px] font-sans text-slate-400 shrink-0">
+                            {formattedDate}
+                          </span>
+                        </div>
+
+                        {/* Title */}
+                        <h3 className="text-lg sm:text-xl font-sans font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors line-clamp-2 leading-snug tracking-tight">
+                          {articleTitle}
+                        </h3>
+
+                        {/* Excerpt */}
+                        <p className="text-xs sm:text-sm text-slate-600 line-clamp-3 leading-relaxed font-sans">
+                          {articleExcerpt}
+                        </p>
+                      </div>
+
+                      {/* Footer: Tags & Read CTA - Exactly matching /insights */}
+                      <div className="pt-4 border-t border-slate-100 flex items-center justify-between mt-auto gap-2">
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          {article.tags.slice(0, 2).map((tag) => (
+                            <span
+                              key={tag}
+                              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-sans font-bold text-[#2C5098] bg-blue-50/80 border border-blue-200/70 transition-all shadow-2xs"
+                            >
+                              <span>{tag}</span>
+                            </span>
+                          ))}
+                        </div>
+
+                        <div className="inline-flex items-center gap-2 group/btn shrink-0">
+                          <span className="text-xs font-sans uppercase tracking-wider font-bold text-[#2C5098]">
+                            {language === "en" ? "Read" : "Baca"}
+                          </span>
+                          <div className="w-7 h-7 rounded-full bg-slate-100 group-hover:bg-[#2C5098] text-slate-600 group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-2xs group-hover:shadow-md group-hover:shadow-[#2C5098]/20 group-hover:translate-x-0.5">
+                            <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </motion.article>
               );
             })}
           </div>
 
-          {/* Right Column: Giant display digits details (6 cols) */}
-          <div className="lg:col-span-6 p-8 rounded-3xl bg-theme-elevated border border-theme-border shadow-2xl relative overflow-hidden flex flex-col justify-between min-h-[250px]">
-            <div className="absolute -top-12 -right-12 w-48 h-48 bg-theme-accent-glow rounded-full blur-3xl pointer-events-none opacity-40" />
-
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeMilestone}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.3 }}
-                className="space-y-8 flex-grow flex flex-col justify-between relative z-10"
-              >
-                <div className="space-y-6">
-                  {/* Giant floating number digits */}
-                  <div className="text-8xl sm:text-9xl font-sans font-black tracking-tighter text-gradient leading-none bg-gradient-to-b from-theme-accent to-transparent bg-clip-text text-transparent select-none opacity-70">
-                    {MILESTONES[activeMilestone].step}
-                  </div>
-
-                  <div className="space-y-3">
-                    <h3 className="text-2xl font-sans font-bold text-theme-fore">
-                      {t.milestones[activeMilestone].title}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-lg">
-                      {t.milestones[activeMilestone].description}
-                    </p>
-                  </div>
-                </div>
-
-                {/* White/Dark Solid Rectangle Button 'GET STARTED' */}
-                <div>
-                  <button
-                    onClick={() => scrollToId('contact-section')}
-                    className="px-6 py-3 bg-theme-accent text-white hover:bg-theme-accent-bright rounded-lg text-xs font-sans font-extrabold tracking-widest uppercase transition-all duration-300 shadow-lg cursor-pointer flex items-center gap-2 group/btn"
-                    id={`processes-get-started-${MILESTONES[activeMilestone].step}`}
-                  >
-                    <span>Get Started</span>
-                    <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
-                  </button>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+          {/* Action Button: View All Articles */}
+          <div className="text-center pt-2">
+            <Link
+              href="/insights"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white hover:bg-slate-50 border border-slate-200 hover:border-[#2C5098]/40 shadow-xs hover:shadow-md text-xs font-sans font-bold text-slate-800 hover:text-[#2C5098] transition-all cursor-pointer group"
+            >
+              <span>{language === 'en' ? 'View All Articles' : 'Lihat Semua Artikel'}</span>
+              <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-[#2C5098]" />
+            </Link>
           </div>
-
         </div>
       </motion.section>
 
-      {/* SECTION 3.7: ENGINEERING INSIGHTS */}
-      <motion.section
-        id="insights-section"
-        className="space-y-10 sm:space-y-12 pt-8"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, amount: 0.15 }}
-        variants={sectionFadeIn}
-      >
-        {/* Section Header - Matching Halaman Insights */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
-          <div className="text-[10px] sm:text-xs font-sans uppercase tracking-[0.3em] text-theme-accent font-bold">
-            <span>{language === 'en' ? 'ENGINEERING INSIGHTS' : 'INSIGHTS & TEKNOLOGI'}</span>
-          </div>
-
-          <h2 className="text-2xl sm:text-4xl font-display font-bold tracking-tight text-theme-fore leading-tight">
-            {language === 'en' ? 'System Architecture &' : 'Catatan Arsitektur &'}{' '}
-            <span className="text-theme-accent font-extrabold">
-              {language === 'en' ? 'Engineering Standards' : 'Standar Rekayasa Software'}
-            </span>
-          </h2>
-
-          <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed font-sans max-w-2xl mx-auto">
-            {language === 'en'
-              ? 'In-depth technical breakdowns covering system architecture, backend performance optimization, and scalable software design.'
-              : 'Ulasan teknis mendalam seputar arsitektur sistem, optimasi performa backend, hingga perancangan aplikasi siap scale.'}
-          </p>
-        </div>
-
-        {/* 3 Articles Grid - Matching Halaman Insights */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 text-left max-w-6xl mx-auto">
-          {displayInsights.map((article, idx) => {
-            const articleTitle = (language === 'en' ? article.titleEn : article.titleId) || article.titleId;
-            const articleExcerpt = (language === 'en' ? article.excerptEn : article.excerptId) || article.excerptId;
-            const formattedDate = (() => {
-              try {
-                return new Date(article.publishedAt).toLocaleDateString(
-                  language === 'en' ? 'en-US' : 'id-ID',
-                  { month: 'short', day: 'numeric', year: 'numeric' }
-                );
-              } catch {
-                return article.publishedAt;
-              }
-            })();
-
-            return (
-              <motion.article
-                key={article.slug}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.35, delay: idx * 0.05 }}
-                className="group relative flex flex-col h-full rounded-3xl bg-white dark:bg-theme-surface/60 backdrop-blur-xl border border-theme-border/80 hover:border-theme-accent/60 shadow-lg hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden"
-              >
-                <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-transparent via-theme-accent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20" />
-
-                <Link href={`/insights/${article.slug}`} className="flex flex-col h-full">
-                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-theme-surface border-b border-theme-border/40">
-                    <Image
-                      src={article.coverImage}
-                      alt={articleTitle}
-                      fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      className="object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
-
-                    <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 flex-wrap max-w-[90%]">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 dark:bg-slate-900/90 text-theme-accent border border-theme-accent/20 shadow-xs backdrop-blur-md">
-                        <span className="w-1.5 h-1.5 rounded-full bg-theme-accent" />
-                        {article.category}
-                      </span>
-                      {article.series && (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-[#1E315B] text-white border border-white/20 shadow-xs">
-                          <Icon icon="ph:stack-fill" className="w-3 h-3 text-blue-200" />
-                          Part {article.seriesPart || article.series.part}
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="absolute bottom-3 right-3 z-10">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-medium bg-black/60 text-white/95 backdrop-blur-md border border-white/15">
-                        <Icon icon="ph:clock-bold" className="w-3 h-3 text-white/80" />
-                        {article.readTimeMinutes} {language === "en" ? "min read" : "menit baca"}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col flex-1 p-6 sm:p-7 justify-between space-y-4">
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between gap-2 pb-1">
-                        <div className="flex items-center gap-2 min-w-0">
-                          <div className="relative w-6 h-6 rounded-full overflow-hidden border border-theme-border/60 shrink-0 bg-theme-surface">
-                            <Image
-                              src={article.author.avatar}
-                              alt={article.author.name}
-                              fill
-                              className="object-cover"
-                            />
-                          </div>
-                          <span className="text-xs font-bold text-theme-fore truncate">
-                            {article.author.name}
-                          </span>
-                        </div>
-
-                        <span className="text-[11px] font-sans text-theme-fore-muted shrink-0">
-                          {formattedDate}
-                        </span>
-                      </div>
-
-                      <h3 className="text-lg sm:text-xl font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors line-clamp-2 leading-snug tracking-tight">
-                        {articleTitle}
-                      </h3>
-
-                      <p className="text-xs sm:text-sm text-theme-fore-muted line-clamp-3 leading-relaxed font-sans">
-                        {articleExcerpt}
-                      </p>
-                    </div>
-
-                    {/* Footer: Tags & Read CTA - Matching /insights */}
-                    <div className="pt-4 border-t border-theme-border/40 flex items-center justify-between mt-auto gap-2">
-                      <div className="flex items-center gap-1.5 flex-wrap">
-                        {article.tags.slice(0, 2).map((tag) => (
-                          <span
-                            key={tag}
-                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-sans font-bold text-theme-accent bg-theme-accent/10 border border-theme-accent/20 transition-all shadow-2xs"
-                          >
-                            <span>{tag}</span>
-                          </span>
-                        ))}
-                      </div>
-
-                      <div className="inline-flex items-center gap-2 group/btn shrink-0">
-                        <span className="text-xs font-sans uppercase tracking-wider font-bold text-theme-accent">
-                          {language === "en" ? "Read" : "Baca"}
-                        </span>
-                        <div className="w-7 h-7 rounded-full bg-theme-surface group-hover:bg-theme-accent text-theme-fore group-hover:text-white flex items-center justify-center transition-all duration-300 shadow-2xs group-hover:shadow-md group-hover:translate-x-0.5">
-                          <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5" />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              </motion.article>
-            );
-          })}
-        </div>
-
-        {/* Action Button: View All Articles */}
-        <div className="text-center pt-2">
-          <Link
-            href="/insights"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-theme-surface border border-theme-border hover:border-theme-accent shadow-xs hover:shadow-md text-xs font-sans font-bold text-theme-fore hover:text-theme-accent transition-all cursor-pointer group"
-          >
-            <span>{language === 'en' ? 'View All Articles' : 'Lihat Semua Artikel'}</span>
-            <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform text-theme-accent" />
-          </Link>
-        </div>
-      </motion.section>
-
-      {/* SECTION 3.8: FREQUENTLY ASKED QUESTIONS */}
+      {/* =========================================================================
+          SECTION 11: FAQ SECTION (#faq-section) - PURE WHITE (#FFFFFF)
+          ========================================================================= */}
       <motion.section
         id="faq-section"
-        className="space-y-16 pt-8"
+        className="w-full bg-white py-20 sm:py-28 lg:py-32"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.15 }}
+        viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start max-w-6xl mx-auto">
-
-          {/* Left Column: Any Question Box */}
-          <div className="lg:col-span-5 space-y-7 lg:sticky lg:top-24">
-            <div className="space-y-4">
-              <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-theme-accent font-bold">
-                <span>FAQ</span>
-              </div>
-              <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore text-left">
-                {t.faq.mainHeading}
-              </h2>
-            </div>
-
-            {/* Any Question Form widget */}
-            <div className="p-6 sm:p-7 rounded-3xl bg-theme-surface/75 backdrop-blur-md border border-theme-border space-y-5 shadow-xl relative overflow-hidden text-left">
-              <div className="space-y-1">
-                <h4 className="text-sm font-sans font-bold text-theme-fore">{t.faq.askTitle}</h4>
-                <p className="text-[11px] text-theme-fore-muted leading-relaxed">
-                  {t.faq.askDesc}
-                </p>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-6xl mx-auto text-left">
+            {/* Left Column: Ask Box */}
+            <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
+              <div className="space-y-3">
+                <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
+                  <span>FAQ</span>
+                </div>
+                <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
+                  {t.faq.mainHeading}
+                </h2>
               </div>
 
-              <AnimatePresence mode="wait">
+              {/* Any Question Form */}
+              <div className="p-6 rounded-3xl bg-[#F8FAFC] border border-slate-200/90 shadow-sm space-y-4">
+                <div className="space-y-1">
+                  <h4 className="text-sm font-sans font-bold text-slate-900">{t.faq.askTitle}</h4>
+                  <p className="text-xs text-slate-600 leading-relaxed">
+                    {t.faq.askDesc}
+                  </p>
+                </div>
+
                 {!questionSubmitted ? (
-                  <motion.form
-                    key="faq-input-form"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                  <form
                     onSubmit={(e) => {
                       e.preventDefault();
                       if (!customQuestion.trim()) return;
@@ -2029,7 +2864,7 @@ export default function AgencyLanding({
                     }}
                     className="space-y-3"
                   >
-                    <label htmlFor="custom-q-input" className="text-[9px] font-mono uppercase tracking-wider text-theme-fore-subtle font-bold">
+                    <label htmlFor="custom-q-input" className="text-[10px] font-mono uppercase tracking-wider text-slate-400 font-bold block">
                       {t.faq.askLabel}
                     </label>
                     <div className="relative flex items-center">
@@ -2040,30 +2875,24 @@ export default function AgencyLanding({
                         value={customQuestion}
                         onChange={(e) => setCustomQuestion(e.target.value)}
                         placeholder={t.faq.askPlaceholder}
-                        className="w-full pr-12 pl-4 py-3 text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 shadow-sm"
+                        className="w-full pr-10 pl-3.5 py-2.5 text-xs rounded-xl bg-white border border-slate-200 text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#2C5098] focus:ring-1 focus:ring-[#2C5098] transition-all"
                       />
                       <button
                         type="submit"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-lg bg-theme-accent hover:bg-theme-accent-bright text-theme-base transition-colors cursor-pointer"
+                        className="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-lg bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white transition-colors cursor-pointer shadow-xs"
                         aria-label="Submit question"
                       >
                         <Icon icon="ph:paper-plane-tilt-fill" className="w-3 h-3" />
                       </button>
                     </div>
-                  </motion.form>
+                  </form>
                 ) : (
-                  <motion.div
-                    key="faq-success-state"
-                    initial={{ scale: 0.95, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    exit={{ scale: 0.95, opacity: 0 }}
-                    className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-center space-y-3"
-                  >
-                    <Icon icon="ph:check-circle-fill" className="w-6 h-6 text-emerald-600 dark:text-emerald-500 mx-auto" />
+                  <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-center space-y-2">
+                    <Icon icon="ph:check-circle-fill" className="w-6 h-6 text-emerald-600 mx-auto" />
                     <div className="space-y-1">
-                      <h5 className="text-[11px] font-bold text-theme-fore">Pertanyaan Terkirim!</h5>
-                      <p className="text-[10px] text-theme-fore-muted leading-relaxed">
-                        Terima kasih. Saya akan mempelajari pertanyaan Anda dan merespons dalam waktu <span className="font-semibold text-theme-accent">12 jam</span>.
+                      <h5 className="text-xs font-bold text-slate-900">Pertanyaan Terkirim!</h5>
+                      <p className="text-[11px] text-slate-600 leading-relaxed">
+                        Terima kasih. Pertanyaan Anda akan direspons dalam waktu <span className="font-semibold text-[#2C5098]">12 jam</span>.
                       </p>
                     </div>
                     <button
@@ -2071,381 +2900,431 @@ export default function AgencyLanding({
                         setQuestionSubmitted(false);
                         setCustomQuestion('');
                       }}
-                      className="text-[9px] font-mono uppercase tracking-wider text-theme-accent hover:underline cursor-pointer"
+                      className="text-[10px] font-mono uppercase tracking-wider text-[#2C5098] hover:underline cursor-pointer"
                     >
                       Kirim pertanyaan lain
                     </button>
-                  </motion.div>
+                  </div>
                 )}
-              </AnimatePresence>
+              </div>
+            </div>
 
-              {/* Decorative floating help graphics */}
-              <div className="absolute -bottom-8 -right-8 w-24 h-24 bg-theme-accent-glow rounded-full blur-2xl pointer-events-none" />
+            {/* Right Column: Accordion Items */}
+            <div className="lg:col-span-7 space-y-3">
+              {t.faq.items.map((faq, idx) => {
+                const isExpanded = activeFaq === idx;
+                return (
+                  <div
+                    key={idx}
+                    className={`rounded-2xl border transition-all duration-200 overflow-hidden ${isExpanded
+                      ? 'bg-white border-[#2C5098]/60 shadow-sm ring-1 ring-[#2C5098]/10'
+                      : 'bg-[#F8FAFC]/70 hover:bg-white border-slate-200 hover:border-slate-300'
+                      }`}
+                  >
+                    <button
+                      onClick={() => setActiveFaq(isExpanded ? null : idx)}
+                      className="w-full px-5 py-4 text-left font-sans font-bold text-xs sm:text-sm text-slate-900 flex items-center justify-between gap-4 cursor-pointer select-none"
+                      aria-expanded={isExpanded}
+                    >
+                      <span>{faq.q}</span>
+                      <div className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 ${isExpanded ? 'bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white' : 'bg-slate-100 text-slate-600'
+                        }`}>
+                        {isExpanded ? <Icon icon="ph:minus-bold" className="w-3 h-3" /> : <Icon icon="ph:plus-bold" className="w-3 h-3" />}
+                      </div>
+                    </button>
+
+                    <AnimatePresence initial={false}>
+                      {isExpanded && (
+                        <motion.div
+                          key="content"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2, ease: 'easeInOut' }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-5 pb-4 pt-1 text-xs text-slate-600 leading-relaxed border-t border-slate-100">
+                            {faq.a}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
             </div>
           </div>
-
-          {/* Right Column: Custom Stateful Interactive Accordion */}
-          <div className="lg:col-span-7 space-y-4">
-            {t.faq.items.map((faq, idx) => {
-              const isExpanded = activeFaq === idx;
-              return (
-                <div
-                  key={idx}
-                  className={`rounded-2xl border transition-all duration-300 ${isExpanded
-                    ? 'bg-theme-elevated border-theme-border-accent shadow-lg shadow-theme-accent-glow/5'
-                    : 'bg-theme-elevated/40 border-theme-border hover:border-theme-border-hover hover:bg-theme-elevated/70'
-                    }`}
-                >
-                  <button
-                    onClick={() => setActiveFaq(isExpanded ? null : idx)}
-                    className="w-full px-5 py-4 text-left font-sans font-extrabold text-xs sm:text-sm text-theme-fore flex items-center justify-between gap-4 cursor-pointer select-none"
-                    aria-expanded={isExpanded}
-                  >
-                    <span className="text-theme-fore">{faq.q}</span>
-                    <div className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${isExpanded ? 'bg-theme-accent text-theme-base' : 'bg-theme-surface text-theme-fore-muted dark:text-white/70'
-                      }`}>
-                      {isExpanded ? <Icon icon="ph:minus-bold" className="w-3 h-3" /> : <Icon icon="ph:plus-bold" className="w-3 h-3" />}
-                    </div>
-                  </button>
-
-                  <AnimatePresence initial={false}>
-                    {isExpanded && (
-                      <motion.div
-                        key="content"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25, ease: 'easeInOut' }}
-                        className="overflow-hidden"
-                      >
-                        <div className="px-5 pb-5 pt-1 text-[11px] sm:text-xs text-theme-fore-muted leading-relaxed border-t border-theme-border/50 text-left">
-                          {faq.a}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              );
-            })}
-          </div>
-
         </div>
       </motion.section>
 
-      {/* SECTION 5: FORMULIR KONTAK */}
+      {/* =========================================================================
+          SECTION 11: CONSULTATION / CONTACT FORM (#contact-section) - PURE WHITE WITH PROMINENT CARD WRAPPER
+          ========================================================================= */}
       <motion.section
         id="contact-section"
-        className="p-4 sm:p-8 md:p-14 rounded-3xl bg-theme-elevated border border-theme-border shadow-2xl space-y-8 relative overflow-hidden"
+        className="w-full bg-white py-20 sm:py-28 lg:py-32"
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: false, amount: 0.15 }}
+        viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        {/* Supporting decorative premium ambient background spotlight */}
-        <div className="absolute top-0 right-0 w-[450px] h-[450px] bg-theme-accent-glow/50 rounded-full blur-[130px] pointer-events-none opacity-40 dark:opacity-60" />
-        <div className="absolute -bottom-20 -left-20 w-[300px] h-[300px] bg-theme-accent-glow/25 rounded-full blur-[100px] pointer-events-none opacity-30" />
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 relative z-10">
-
-          {/* Left Block: Information, Value Prop, Active Slots Indicator */}
-          <div className="lg:col-span-5 space-y-8 flex flex-col justify-between text-left">
-            <div className="space-y-6">
-              <div className="flex flex-wrap items-center gap-2.5">
-                &nbsp;
-              </div>
-
-              <h2 className="text-3xl sm:text-4.5xl font-display font-bold tracking-tight leading-[1.12] text-theme-fore">
-                {t.contact.mainHeading}{' '}
-                <span className="text-theme-accent">
-                  {t.contact.mainHeadingHighlight}
-                </span>
-              </h2>
-
-              <p className="text-xs sm:text-sm text-theme-fore-muted leading-relaxed max-w-md">
-                {t.contact.desc}
-              </p>
-
-              {/* Duplicate value props and platform badges removed for brevity */}
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
+          {/* Standard Centered Section Header */}
+          <div className="text-center max-w-3xl mx-auto space-y-3">
+            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
+              <span>{t.contact.badge || "KONTAK & KONSULTASI"}</span>
             </div>
 
-            {/* Computer SVG Illustration */}
-            <div className="hidden lg:block relative w-full max-w-[400px] mt-8 opacity-90 drop-shadow-2xl">
-              <img src="/computer.svg" alt="Computer Tech Setup" className="w-full h-auto object-contain" />
-            </div>
+            <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
+              {t.contact.mainHeading}{' '}
+              <span className="text-[#2C5098]">
+                {t.contact.mainHeadingHighlight}
+              </span>
+            </h2>
+
+            <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans max-w-2xl mx-auto">
+              {t.contact.desc}
+            </p>
           </div>
 
-          {/* Right Block: High-Fidelity Interactive Form Widget */}
-          <div className="lg:col-span-7 p-3 sm:p-8 rounded-3xl bg-theme-surface/75 backdrop-blur-md border border-theme-border/80 shadow-2xl relative">
-            <AnimatePresence mode="wait">
-              {!formSubmitted ? (
-                <motion.form
-                  key="contact-form"
-                  initial={{ opacity: 0, y: 15 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -15 }}
-                  onSubmit={handleFormSubmit}
-                  className="space-y-6"
-                  id="contact-form-element"
-                >
-                  {/* Honeypot field for bot spam detection */}
-                  <div style={{ position: 'absolute', left: '-9999px' }} aria-hidden="true">
-                    <input
-                      type="text"
-                      name="website_url_check"
-                      tabIndex={-1}
-                      value={formData.honeypot || ''}
-                      onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
-                      autoComplete="off"
-                    />
-                  </div>
+          {/* Master Card Wrapper with elevated container styling */}
+          <div className="rounded-3xl bg-[#F8FAFC] border border-slate-200/90 shadow-xl shadow-slate-900/5 p-6 sm:p-10 md:p-12 relative overflow-hidden">
+            {/* 2-Column Luxury Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 text-left items-start">
+              {/* Left Column: Direct Communication Channels & Value Commitments (4.5 cols) */}
+              <div className="lg:col-span-5 space-y-6">
+                <div className="space-y-2 mt-4 lg:mt-18">
+                  <h3 className="text-lg sm:text-xl font-sans font-bold text-slate-900 leading-snug">
+                    {language === 'en' ? 'Need a quick answer or consultation?' : 'Perlu konsultasi atau respons lebih cepat?'}
+                  </h3>
+                </div>
 
-                  {formError && (
-                    <div className="p-3.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs font-semibold">
-                      ⚠️ {formError}
-                    </div>
-                  )}
-
-                  {/* Name and {t.contact.formEmail} Input Fields */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider" htmlFor="form-name">
-                        {t.contact.formNameLabel}
-                      </label>
-                      <input
-                        id="form-name"
-                        type="text"
-                        required
-                        placeholder={t.contact.formNamePlaceholder}
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className="w-full px-4 py-4 sm:py-3 text-sm sm:text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 shadow-sm"
-                      />
-                    </div>
-
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider" htmlFor="form-email">
-                        {t.contact.formEmailLabel}
-                      </label>
-                      <input
-                        id="form-email"
-                        type="email"
-                        required
-                        placeholder={t.contact.formEmailPlaceholder}
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className="w-full px-4 py-4 sm:py-3 text-sm sm:text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 shadow-sm"
-                      />
-                    </div>
-                  </div>
-
-                  {/* HIGH-FIDELITY: INTERACTIVE SERVICE SELECTOR CARDS */}
-                  <div className="space-y-2.5">
-                    <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider block">
-                      {t.contact.formServiceLabel}
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {[
-                        { id: 'Full-Stack Web App', label: t.contact.formService1Title, desc: t.contact.formService1Desc },
-                        { id: 'Native iOS/Android App', label: t.contact.formService2Title, desc: t.contact.formService2Desc },
-                        { id: 'API Gateway & Cloud Integration', label: t.contact.formService3Title, desc: t.contact.formService3Desc },
-                        { id: 'Comprehensive Hybrid Pipeline', label: t.contact.formService4Title, desc: t.contact.formService4Desc }
-                      ].map((svc) => {
-                        const isSelected = formData.service === svc.id;
-                        return (
-                          <button
-                            type="button"
-                            key={svc.id}
-                            onClick={() => setFormData({ ...formData, service: svc.id })}
-                            className={`p-3 text-left rounded-xl border text-xs transition-all duration-300 cursor-pointer flex flex-col justify-between h-[85px] relative overflow-hidden group select-none ${isSelected
-                              ? 'bg-theme-accent-glow/55 border-theme-border-accent shadow-md shadow-theme-accent/5'
-                              : 'bg-theme-elevated/60 border-theme-border hover:border-theme-border-hover hover:bg-theme-elevated'
-                              }`}
-                          >
-                            <span className={`font-sans font-bold transition-colors duration-200 block ${isSelected ? 'text-theme-accent' : 'text-theme-fore'
-                              }`}>
-                              {svc.label}
-                            </span>
-                            <span className="text-[10px] text-theme-fore-muted block truncate">
-                              {svc.desc}
-                            </span>
-
-                            {/* Selected Active Indicator Dot */}
-                            {isSelected && (
-                              <div className="absolute top-2 right-2.5 w-1.5 h-1.5 rounded-full bg-theme-accent animate-pulse" />
-                            )}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* HIGH-FIDELITY: INTERACTIVE SCOPE SELECTOR TABS */}
-                  <div className="space-y-2.5">
-                    <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider block">
-                      {t.contact.formScopeLabel}
-                    </label>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                      {[
-                        { id: 'SaaS MVP (Fast Turnaround)', label: t.contact.formScope1Title, desc: t.contact.formScope1Desc },
-                        { id: 'Medium Scale Production', label: t.contact.formScope2Title, desc: t.contact.formScope2Desc },
-                        { id: 'High-Scale Custom Architecture', label: t.contact.formScope3Title, desc: t.contact.formScope3Desc }
-                      ].map((sc) => {
-                        const isSelected = formData.scope === sc.id;
-                        return (
-                          <button
-                            type="button"
-                            key={sc.id}
-                            onClick={() => setFormData({ ...formData, scope: sc.id })}
-                            className={`p-3 text-left rounded-xl border text-xs transition-all duration-300 cursor-pointer flex flex-col justify-between h-[75px] select-none ${isSelected
-                              ? 'bg-theme-accent-glow/55 border-theme-border-accent shadow-md shadow-theme-accent/5'
-                              : 'bg-theme-elevated/60 border-theme-border hover:border-theme-border-hover hover:bg-theme-elevated'
-                              }`}
-                          >
-                            <span className={`font-sans font-bold transition-colors duration-200 block ${isSelected ? 'text-theme-accent' : 'text-theme-fore'
-                              }`}>
-                              {sc.label}
-                            </span>
-                            <span className="text-[9px] text-theme-fore-muted block truncate">
-                              {sc.desc}
-                            </span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  {/* Project Details */}
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-mono text-theme-fore-muted uppercase font-bold tracking-wider" htmlFor="form-details">
-                      {t.contact.formDetailsLabel}
-                    </label>
-                    <textarea
-                      id="form-details"
-                      rows={3}
-                      placeholder={t.contact.formDetailsPlaceholder}
-                      value={formData.details}
-                      onChange={(e) => setFormData({ ...formData, details: e.target.value })}
-                      className="w-full px-4 py-4 sm:py-3 text-sm sm:text-xs rounded-xl bg-theme-elevated border border-theme-border text-theme-fore placeholder-theme-fore-subtle focus:outline-none focus:border-theme-border-accent focus:ring-1 focus:ring-theme-border-accent hover:border-theme-border-hover transition-all duration-300 resize-none shadow-sm"
-                    />
-                  </div>
-
-                  {/* Dispatch CTA Button */}
-                  <button
-                    type="submit"
-                    disabled={formSubmitting}
-                    className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-3.5 rounded-xl bg-theme-accent hover:bg-theme-accent-bright text-white text-[11px] sm:text-xs font-sans font-extrabold tracking-widest uppercase shadow-lg shadow-theme-accent/10 active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2 group/submit mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
-                    id="btn-submit-contact"
+                {/* Direct Channel Tiles */}
+                <div className="space-y-3.5">
+                  {/* WhatsApp Fast-Track */}
+                  <a
+                    href="https://wa.me/6289508436275?text=Halo%20SejatiDimedia,%20saya%20ingin%20berkonsultasi%20mengenai%20proyek%20aplikasi."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-200 hover:border-emerald-500/80 hover:bg-emerald-50/20 hover:shadow-sm transition-all"
                   >
-                    {formSubmitting ? (
-                      <span className="flex items-center gap-2">
-                        <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                        <span>Mengirim Pesan...</span>
-                      </span>
-                    ) : (
-                      <>
-                        <Icon icon="ph:paper-plane-tilt-fill" className="w-3.5 h-3.5 sm:w-4 sm:h-4 group-hover/submit:translate-x-1 group-hover/submit:-translate-y-0.5 transition-transform" />
-                        <span>{t.contact.formSubmit}</span>
-                      </>
-                    )}
-                  </button>
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-11 h-11 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold shrink-0 group-hover:scale-105 transition-transform">
+                        <Icon icon="ic:baseline-whatsapp" className="w-6 h-6" />
+                      </div>
+                      <div className="text-left">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">WhatsApp Direct</span>
+                          <span className="px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-mono text-[9px] font-bold">Fast Response</span>
+                        </div>
+                        <div className="text-sm font-sans font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">+62 895-0843-6275</div>
+                      </div>
+                    </div>
+                    <Icon icon="ph:arrow-up-right-bold" className="w-4 h-4 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                  </a>
 
-                </motion.form>
-              ) : (
-                <motion.div
-                  key="form-success"
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  className="py-16 flex flex-col items-center justify-center text-center space-y-5"
-                >
-                  <div className="w-14 h-14 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-600 dark:text-emerald-500 shadow-lg shadow-emerald-500/5">
-                    <Icon icon="ph:check-circle-fill" className="w-7 h-7" />
-                  </div>
-                  <div className="space-y-2.5">
-                    <h4 className="text-lg font-sans font-bold text-theme-fore">{t.contact.formSubmitSuccess}</h4>
-                    <p className="text-xs text-theme-fore-muted max-w-sm leading-relaxed mx-auto">
-                      {t.contact.formSubmitSuccessDesc}
-                    </p>
-                    <p className="text-[11px] text-emerald-600 dark:text-emerald-400 font-medium">
-                      📬 Kami juga telah mengirimkan ringkasan detail pengajuan ke email Anda.
-                    </p>
-                  </div>
-
-                  <div className="pt-2 flex flex-col items-center gap-3">
-                    <a
-                      href={`https://wa.me/6289508436275?text=Halo%20SejatiDimedia,%20saya%20${encodeURIComponent(formData.name || 'Klien')}%20ingin%20berdiskusi%20tentang%20project%20${encodeURIComponent(formData.service || 'Web App')}%20yang%20baru%20saya%20ajukan.`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] text-white text-xs font-sans font-extrabold tracking-wider uppercase shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30 transition-all cursor-pointer"
-                    >
-                      <Icon icon="ic:baseline-whatsapp" className="w-4.5 h-4.5" />
-                      <span>Hubungi via WhatsApp (Negosiasi Cepat)</span>
-                    </a>
-
+                  {/* Email Direct with 1-Click Copy */}
+                  <div className="group flex items-center justify-between p-4 rounded-2xl bg-white border border-slate-200 hover:border-[#2C5098]/80 hover:bg-[#2C5098]/10 hover:shadow-sm transition-all">
+                    <div className="flex items-center gap-3.5 min-w-0">
+                      <div className="w-11 h-11 rounded-xl bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center font-bold shrink-0">
+                        <Icon icon="ph:envelope-simple-fill" className="w-6 h-6" />
+                      </div>
+                      <div className="text-left min-w-0">
+                        <div className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">Email Kontak</div>
+                        <div className="text-xs sm:text-sm font-sans font-bold text-slate-900 truncate">
+                          sejatidimedia@gmail.com
+                        </div>
+                      </div>
+                    </div>
                     <button
                       type="button"
-                      onClick={() => setFormSubmitted(false)}
-                      className="text-[10px] font-mono text-theme-fore-muted hover:text-theme-accent transition-colors underline decoration-dotted underline-offset-4 cursor-pointer mt-1"
+                      onClick={handleCopyEmail}
+                      className="shrink-0 px-2.5 py-1.5 rounded-lg bg-slate-50 hover:bg-[#2C5098]/10 hover:text-[#2C5098] text-slate-600 text-[10px] font-mono font-bold transition-all cursor-pointer flex items-center gap-1 border border-slate-200"
+                      title="Copy email to clipboard"
                     >
-                      Kirim Pesan Lain / Reset Form
+                      {copiedEmail ? (
+                        <>
+                          <Icon icon="ph:check-bold" className="w-3.5 h-3.5 text-emerald-600" />
+                          <span className="text-emerald-600">Tersalin!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Icon icon="ph:copy-bold" className="w-3.5 h-3.5" />
+                          <span>Salin</span>
+                        </>
+                      )}
                     </button>
                   </div>
+                </div>
 
-                  <div className="text-[10px] font-mono text-theme-fore-subtle bg-theme-elevated/80 border border-theme-border px-3.5 py-2 rounded-lg">
-                    REF: {Math.random().toString(36).substring(2, 9).toUpperCase()} • STATUS: PRIORITAS_TINGGI
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+                {/* Freelance Platform Direct Badges */}
 
-        </div>
-      </motion.section>
-
-      {/* SECTION: FREELANCE PLATFORMS TRUST BADGE (PROPORTIONED & CLEAN) */}
-      <motion.section
-        className="w-full max-w-4xl mx-auto pt-6 pb-6 px-4 sm:px-6"
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: false, amount: 0.15 }}
-        variants={sectionFadeIn}
-      >
-        <div className="relative group overflow-hidden rounded-2xl bg-theme-elevated/80 backdrop-blur-xl border border-theme-border/80 p-4.5 sm:p-5.5 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4 hover:border-theme-border-accent/40 transition-all duration-300">
-          {/* Subtle glow background */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-theme-accent/5 rounded-full blur-3xl pointer-events-none" />
-
-          <div className="space-y-1 text-center md:text-left z-10">
-            <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.25em] text-theme-accent font-bold">
-              {t.platforms?.secure || "TRANSAKSI AMAN & TERJAMIN"}
-            </span>
-            <h3 className="text-xs sm:text-base font-semibold text-theme-fore leading-snug">
-              {t.platforms?.availableOn || "Rekam jejak proyek saya juga dapat dilihat di Upwork & Fastwork"}
-            </h3>
-          </div>
-
-          <div className="flex flex-wrap sm:flex-nowrap items-center justify-center gap-2.5 sm:gap-3 shrink-0 z-10 w-full sm:w-auto">
-            <a
-              href="https://www.upwork.com/freelancers/~017698b392e21b4b6c"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#14A800]/10 dark:bg-[#14A800]/15 border border-[#14A800]/30 hover:bg-[#14A800]/20 hover:border-[#14A800]/50 transition-all text-xs sm:text-sm font-bold text-theme-fore shadow-sm group/upwork"
-            >
-              <div className="w-5.5 h-5.5 rounded-lg bg-[#14A800] text-white flex items-center justify-center group-hover/upwork:scale-110 transition-transform shadow-sm">
-                <Icon icon="simple-icons:upwork" className="w-3.5 h-3.5" />
               </div>
-              <span>Upwork</span>
-            </a>
-            <a
-              href="https://fastwork.id/en/user/timurradhadian?source=web_marketplace_profile-menu_profile"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl bg-[#1D4ED8]/10 dark:bg-[#1D4ED8]/15 border border-[#1D4ED8]/30 hover:bg-[#1D4ED8]/20 hover:border-[#1D4ED8]/50 transition-all text-xs sm:text-sm font-bold text-theme-fore shadow-sm group/fastwork"
-            >
-              <div className="w-5.5 h-5.5 rounded-lg bg-[#1D4ED8] text-white flex items-center justify-center group-hover/fastwork:scale-110 transition-transform shadow-sm">
-                <Icon icon="ph:lightning-fill" className="w-3.5 h-3.5" />
+
+              {/* Right Column: Premium Form (7.5 cols) */}
+              <div className="lg:col-span-7">
+                <AnimatePresence mode="wait">
+                  {!formSubmitted ? (
+                    <form
+                      onSubmit={handleFormSubmit}
+                      className="space-y-6"
+                      id="contact-form-element"
+                    >
+                      {/* Honeypot */}
+                      <div style={{ position: 'absolute', left: '-9999px' }} aria-hidden="true">
+                        <input
+                          type="text"
+                          name="website_url_check"
+                          tabIndex={-1}
+                          value={formData.honeypot || ''}
+                          onChange={(e) => setFormData({ ...formData, honeypot: e.target.value })}
+                          autoComplete="off"
+                        />
+                      </div>
+
+                      {formError && (
+                        <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-semibold flex items-center gap-2.5">
+                          <Icon icon="ph:warning-circle-fill" className="w-4 h-4 text-rose-600 shrink-0" />
+                          <span>{formError}</span>
+                        </div>
+                      )}
+
+                      {/* Section 01: Name and Email in Luxury Modular Surfaces */}
+                      <div className="space-y-2 text-left">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+                          01 // IDENTITAS & KONTAK
+                        </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          {/* Name Field */}
+                          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 hover:border-slate-300 focus-within:bg-white focus-within:border-[#2C5098] focus-within:ring-4 focus-within:ring-[#2C5098]/15 transition-all shadow-2xs space-y-1">
+                            <label className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider block" htmlFor="form-name">
+                              {t.contact.formNameLabel} <span className="text-[#2C5098]">*</span>
+                            </label>
+                            <div className="flex items-center gap-2.5">
+                              <Icon icon="ph:user-bold" className="w-4 h-4 text-slate-400 shrink-0" />
+                              <input
+                                id="form-name"
+                                type="text"
+                                required
+                                placeholder={t.contact.formNamePlaceholder}
+                                value={formData.name}
+                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                                className="w-full bg-transparent text-xs sm:text-sm font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-normal focus:outline-none"
+                              />
+                            </div>
+                          </div>
+
+                          {/* Email Field */}
+                          <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 hover:border-slate-300 focus-within:bg-white focus-within:border-[#2C5098] focus-within:ring-4 focus-within:ring-[#2C5098]/15 transition-all shadow-2xs space-y-1">
+                            <label className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider block" htmlFor="form-email">
+                              {t.contact.formEmailLabel} <span className="text-[#2C5098]">*</span>
+                            </label>
+                            <div className="flex items-center gap-2.5">
+                              <Icon icon="ph:envelope-simple-bold" className="w-4 h-4 text-slate-400 shrink-0" />
+                              <input
+                                id="form-email"
+                                type="email"
+                                required
+                                placeholder={t.contact.formEmailPlaceholder}
+                                value={formData.email}
+                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                className="w-full bg-transparent text-xs sm:text-sm font-semibold text-slate-900 placeholder:text-slate-400 placeholder:font-normal focus:outline-none"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Section 02: Service Selection (Rich Interactive Vector Chips) */}
+                      <div className="space-y-2 text-left">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+                          02 // PILIH JENIS LAYANAN
+                        </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                          {[
+                            {
+                              id: 'Full-Stack Web App',
+                              label: t.contact.formService1Title || 'Web Application',
+                              desc: t.contact.formService1Desc || 'SaaS & Dashboard',
+                              icon: 'ph:browsers-duotone'
+                            },
+                            {
+                              id: 'Native iOS/Android App',
+                              label: t.contact.formService2Title || 'Mobile App',
+                              desc: t.contact.formService2Desc || 'iOS & Android',
+                              icon: 'ph:device-mobile-camera-duotone'
+                            },
+                            {
+                              id: 'API Gateway & Cloud Integration',
+                              label: t.contact.formService3Title || 'REST API & Cloud',
+                              desc: t.contact.formService3Desc || 'Backend & Database',
+                              icon: 'ph:cloud-arrow-up-duotone'
+                            },
+                            {
+                              id: 'AI & LLM Integration',
+                              label: t.contact.formService4Title || 'Integrasi AI / LLM',
+                              desc: t.contact.formService4Desc || 'Custom AI Agent & Automasi',
+                              icon: 'ph:sparkle-duotone'
+                            }
+                          ].map((svc) => {
+                            const isSelected = formData.service === svc.id;
+                            return (
+                              <button
+                                type="button"
+                                key={svc.id}
+                                onClick={() => setFormData({ ...formData, service: svc.id })}
+                                className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex items-center justify-between gap-3 ${isSelected
+                                  ? 'bg-[#2C5098]/10 border-2 border-[#2C5098] text-slate-900 shadow-2xs'
+                                  : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800'
+                                  }`}
+                              >
+                                <div className="flex items-center gap-3 min-w-0">
+                                  <div className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${isSelected ? 'bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white' : 'bg-slate-50 border border-slate-200 text-slate-600'
+                                    }`}>
+                                    <Icon icon={svc.icon} className="w-5 h-5" />
+                                  </div>
+                                  <div className="min-w-0">
+                                    <div className="text-xs font-sans font-bold truncate">{svc.label}</div>
+                                    <div className="text-[10px] text-slate-500 truncate">{svc.desc}</div>
+                                  </div>
+                                </div>
+                                {isSelected && (
+                                  <div className="w-5 h-5 rounded-full bg-[#2C5098] text-white flex items-center justify-center shrink-0">
+                                    <Icon icon="ph:check-bold" className="w-3 h-3" />
+                                  </div>
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Section 03: Project Scale (Interactive 3-Pill Switcher) */}
+                      <div className="space-y-2 text-left">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+                          03 // ESTIMASI SKALA PROYEK
+                        </span>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                          {[
+                            {
+                              id: 'MVP / Starter',
+                              label: t.contact.formScope1Title || 'MVP / Starter',
+                              desc: t.contact.formScope1Desc || 'Validasi Cepat',
+                              icon: 'ph:rocket-launch-duotone'
+                            },
+                            {
+                              id: 'Medium Scale Production',
+                              label: t.contact.formScope2Title || 'Skala Menengah',
+                              desc: t.contact.formScope2Desc || 'Sistem Bisnis',
+                              icon: 'ph:chart-line-up-duotone'
+                            },
+                            {
+                              id: 'High-Scale Custom Architecture',
+                              label: t.contact.formScope3Title || 'Custom / Enterprise',
+                              desc: t.contact.formScope3Desc || 'Arsitektur Besar',
+                              icon: 'ph:buildings-duotone'
+                            }
+                          ].map((sc) => {
+                            const isSelected = formData.scope === sc.id;
+                            return (
+                              <button
+                                type="button"
+                                key={sc.id}
+                                onClick={() => setFormData({ ...formData, scope: sc.id })}
+                                className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between min-h-[64px] ${isSelected
+                                  ? 'bg-slate-900 border-2 border-slate-900 text-white shadow-2xs'
+                                  : 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800'
+                                  }`}
+                              >
+                                <div className="flex items-center justify-between gap-2">
+                                  <span className={`text-xs font-sans font-bold ${isSelected ? 'text-white' : 'text-slate-900'}`}>{sc.label}</span>
+                                  <Icon icon={sc.icon} className={`w-4 h-4 shrink-0 ${isSelected ? 'text-[#93B4ED]' : 'text-slate-400'}`} />
+                                </div>
+                                <span className={`text-[10px] truncate ${isSelected ? 'text-slate-300' : 'text-slate-500'}`}>{sc.desc}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Section 04: Project Details Textarea */}
+                      <div className="space-y-2 text-left">
+                        <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block">
+                          04 // DETAIL & KEBUTUHAN KHUSUS
+                        </span>
+                        <div className="p-3.5 rounded-2xl bg-white border border-slate-200/90 hover:border-slate-300 focus-within:bg-white focus-within:border-[#2C5098] focus-within:ring-4 focus-within:ring-[#2C5098]/15 transition-all shadow-2xs space-y-1">
+                          <label className="text-[10px] font-mono text-slate-400 uppercase font-bold tracking-wider block" htmlFor="form-details">
+                            {t.contact.formDetailsLabel}
+                          </label>
+                          <textarea
+                            id="form-details"
+                            rows={3}
+                            placeholder={t.contact.formDetailsPlaceholder}
+                            value={formData.details}
+                            onChange={(e) => setFormData({ ...formData, details: e.target.value })}
+                            className="w-full bg-transparent text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none resize-none leading-relaxed"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Submit Button & Guarantees */}
+                      <div className="pt-2 space-y-3">
+                        <button
+                          type="submit"
+                          disabled={formSubmitting}
+                          className="w-full py-4 rounded-full bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white text-xs sm:text-sm font-sans font-bold tracking-wider shadow-lg shadow-[#2C5098]/25 active:scale-[0.99] transition-all cursor-pointer flex items-center justify-center gap-3 disabled:opacity-50"
+                          id="btn-submit-contact"
+                        >
+                          {formSubmitting ? (
+                            <span className="flex items-center gap-2">
+                              <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                              <span>Mengirim Pesan...</span>
+                            </span>
+                          ) : (
+                            <>
+                              <span>{t.contact.formSubmit}</span>
+                              <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </form>
+                  ) : (
+                    <div className="py-14 px-6 rounded-3xl bg-white border border-slate-200 shadow-2xs flex flex-col items-center justify-center text-center space-y-4">
+                      <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-600 shadow-xs">
+                        <Icon icon="ph:check-circle-fill" className="w-7 h-7" />
+                      </div>
+                      <div className="space-y-1.5">
+                        <h4 className="text-lg font-sans font-bold text-slate-900">{t.contact.formSubmitSuccess}</h4>
+                        <p className="text-xs text-slate-600 max-w-sm leading-relaxed mx-auto">
+                          {t.contact.formSubmitSuccessDesc}
+                        </p>
+                      </div>
+
+                      <div className="pt-3 flex flex-col items-center gap-3">
+                        <a
+                          href={`https://wa.me/6289508436275?text=Halo%20SejatiDimedia,%20saya%20${encodeURIComponent(formData.name || 'Klien')}%20ingin%20berdiskusi%20tentang%20project%20${encodeURIComponent(formData.service || 'Web App')}%20yang%20baru%20saya%20ajukan.`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-md shadow-emerald-600/20 transition-all"
+                        >
+                          <Icon icon="ic:baseline-whatsapp" className="w-4 h-4" />
+                          <span>Hubungi Langsung via WhatsApp</span>
+                        </a>
+
+                        <button
+                          type="button"
+                          onClick={() => setFormSubmitted(false)}
+                          className="text-[10px] font-mono text-slate-500 hover:text-[#2C5098] underline cursor-pointer"
+                        >
+                          Kirim Pesan Lain / Reset Form
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </AnimatePresence>
               </div>
-              <span>Fastwork</span>
-            </a>
+            </div>
           </div>
         </div>
       </motion.section>
@@ -2453,3 +3332,5 @@ export default function AgencyLanding({
     </div>
   );
 }
+
+export { AgencyLanding as AgencyLandingV2 };

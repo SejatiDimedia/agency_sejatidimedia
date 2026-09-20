@@ -1,17 +1,15 @@
-import LandingPageSelector from "../components/LandingPageSelector";
+import AgencyLanding from "../components/AgencyLanding";
 import { getHomePageCopy } from "../lib/sanity/client";
 import { getProjects } from "../lib/api/glio-projects";
 import { getInsights } from "../lib/api/insights";
-import { getGlobalActiveTemplate, getGlobalFeaturedProjectSlugs } from "../lib/server-template";
+import { getGlobalFeaturedProjectSlugs } from "../lib/server-template";
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  // Parallel fetch from data sources and server template setting
-  const [copy, projects, activeTemplate, featuredProjectSlugs, allInsights] = await Promise.all([
+  const [copy, projects, featuredProjectSlugs, allInsights] = await Promise.all([
     getHomePageCopy(),
     getProjects(),
-    getGlobalActiveTemplate(),
     getGlobalFeaturedProjectSlugs(),
     getInsights().catch(() => []),
   ]);
@@ -19,8 +17,7 @@ export default async function HomePage() {
   const recentInsights = (allInsights || []).slice(0, 3);
 
   return (
-    <LandingPageSelector
-      initialTemplate={activeTemplate}
+    <AgencyLanding
       copy={copy}
       projects={projects}
       featuredProjectSlugs={featuredProjectSlugs}
