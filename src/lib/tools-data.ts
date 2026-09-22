@@ -52,7 +52,7 @@ export const PRODUCT_TOOLS: ProductTool[] = [
       id: "Studio klip video vertikal otomatis untuk TikTok, Reels, dan Shorts dengan pelacakan pembicara cerdas serta subtitle karaoke.",
       en: "Automated vertical video clip generator for TikTok, Reels, and Shorts featuring smart speaker tracking and dynamic karaoke subtitles.",
     },
-    url: "https://seclip.vercel.app/app",
+    url: "https://seclip.vercel.app",
     logo: "/product-images/seclip.png",
     badge: {
       id: "Live App",
