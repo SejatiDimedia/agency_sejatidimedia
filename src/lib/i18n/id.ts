@@ -7,6 +7,7 @@ export const id = {
     projects: "Proyek",
     services: "Layanan",
     portfolio: "Portofolio",
+    tools: "Tools",
     insights: "Insights",
     capabilities: "Kompetensi",
     pricing: "Harga",

@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { flushSync } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { Home, Layers, FolderOpen, BookOpen, MessageCircle } from "lucide-react";
+import { Home, Layers, FolderOpen, BookOpen, MessageCircle, Wrench, X } from "lucide-react";
 import dynamic from "next/dynamic";
 import ThemeToggle from "./ThemeToggle";
 const AiChatWidget = dynamic(() => import("./AiChatWidget"), { ssr: false });
@@ -16,6 +16,7 @@ import { useLanguage, Language } from "@/lib/i18n/LanguageContext";
 import { TemplateId, getActiveTemplate } from "@/lib/templates";
 import { Icon } from "@iconify/react";
 import "@/lib/icons-bundle";
+import { PRODUCT_TOOLS } from "@/lib/tools-data";
 
 export default function LayoutWrapper({
   children,
@@ -38,6 +39,54 @@ export default function LayoutWrapper({
   const pathname = usePathname();
   const router = useRouter();
   const { language, setLanguage, t } = useLanguage();
+
+  const [isToolsOpen, setIsToolsOpen] = useState(false);
+  const [isClassicToolsOpen, setIsClassicToolsOpen] = useState(false);
+  const [isMobileToolsOpen, setIsMobileToolsOpen] = useState(false);
+  const toolsDropdownRef = useRef<HTMLDivElement>(null);
+  const classicToolsDropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close tools dropdowns on outside click or escape
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        toolsDropdownRef.current &&
+        !toolsDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsToolsOpen(false);
+      }
+      if (
+        classicToolsDropdownRef.current &&
+        !classicToolsDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsClassicToolsOpen(false);
+      }
+    };
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsToolsOpen(false);
+        setIsClassicToolsOpen(false);
+        setIsMobileToolsOpen(false);
+      }
+    };
+
+    if (isToolsOpen || isClassicToolsOpen || isMobileToolsOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isToolsOpen, isClassicToolsOpen, isMobileToolsOpen]);
+
+  // Close dropdowns on route changes
+  useEffect(() => {
+    setIsToolsOpen(false);
+    setIsClassicToolsOpen(false);
+    setIsMobileToolsOpen(false);
+  }, [pathname]);
 
   // Template state synchronization
   useEffect(() => {
@@ -331,6 +380,105 @@ export default function LayoutWrapper({
                 >
                   {t.nav.portfolio}
                 </button>
+
+                {/* Tools Dropdown (Classic) */}
+                <div className="relative" ref={classicToolsDropdownRef}>
+                  <button
+                    type="button"
+                    onClick={() => setIsClassicToolsOpen((prev) => !prev)}
+                    aria-expanded={isClassicToolsOpen}
+                    aria-haspopup="true"
+                    className={`px-4 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors flex items-center gap-1.5 ${isClassicToolsOpen
+                      ? "text-theme-fore bg-theme-surface"
+                      : "text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface"
+                      }`}
+                  >
+                    <span>{t.nav.tools || "Tools"}</span>
+                    <Icon
+                      icon="ph:caret-down-bold"
+                      className={`w-3 h-3 transition-transform duration-200 ${isClassicToolsOpen ? "rotate-180 text-theme-accent" : "opacity-60"
+                        }`}
+                    />
+                  </button>
+
+                  <AnimatePresence>
+                    {isClassicToolsOpen && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                        transition={{ duration: 0.16, ease: "easeOut" }}
+                        className="absolute top-full mt-2.5 left-1/2 -translate-x-1/2 w-80 sm:w-96 rounded-2xl bg-theme-surface/98 backdrop-blur-2xl border border-theme-border shadow-2xl p-2 z-50 overflow-hidden text-left"
+                      >
+                        <div className="px-3 py-2 border-b border-theme-border/60 flex items-center justify-between">
+                          <div className="flex items-center gap-1.5">
+                            <Icon icon="ph:squares-four-bold" className="w-3.5 h-3.5 text-theme-accent" />
+                            <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-theme-fore-subtle">
+                              {language === "en" ? "Products & Tools" : "Produk & Tools"}
+                            </span>
+                          </div>
+                          <span className="text-[10px] font-sans font-semibold text-theme-accent bg-theme-accent/10 px-2 py-0.5 rounded-full border border-theme-accent/20">
+                            {PRODUCT_TOOLS.length} {language === "en" ? "App" : "Produk"}
+                          </span>
+                        </div>
+
+                        <div className="p-1 space-y-1 max-h-[360px] overflow-y-auto">
+                          {PRODUCT_TOOLS.map((tool) => (
+                            <a
+                              key={tool.id}
+                              href={tool.url}
+                              target={tool.isExternal ? "_blank" : undefined}
+                              rel={tool.isExternal ? "noopener noreferrer" : undefined}
+                              onClick={() => setIsClassicToolsOpen(false)}
+                              className="group p-3 rounded-xl hover:bg-theme-base/40 transition-all flex items-start gap-3 border border-transparent hover:border-theme-border/80 cursor-pointer block"
+                            >
+                              <div className="w-9 h-9 rounded-xl bg-white/10 border border-theme-border/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-all duration-200 overflow-hidden relative p-1">
+                                {tool.logo ? (
+                                  <Image
+                                    src={tool.logo}
+                                    alt={tool.name}
+                                    width={36}
+                                    height={36}
+                                    className="w-full h-full object-contain rounded-lg"
+                                  />
+                                ) : (
+                                  <Icon icon={tool.icon || "ph:app-window-duotone"} className="w-4 h-4 text-theme-accent" />
+                                )}
+                              </div>
+                              <div className="flex-1 min-w-0 space-y-1">
+                                <div className="flex items-center justify-between gap-2">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-xs font-sans font-bold text-theme-fore group-hover:text-theme-accent transition-colors">
+                                      {tool.name}
+                                    </span>
+                                    {tool.badge && (
+                                      <span className="inline-flex items-center gap-1 text-[9px] font-sans font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded-full">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                        {tool.badge[language]}
+                                      </span>
+                                    )}
+                                  </div>
+                                  <Icon
+                                    icon="ph:arrow-up-right-bold"
+                                    className="w-3.5 h-3.5 text-theme-fore-subtle group-hover:text-theme-accent group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0"
+                                  />
+                                </div>
+                                <p className="text-[11px] font-sans text-theme-fore-muted leading-snug line-clamp-2">
+                                  {tool.description[language]}
+                                </p>
+                              </div>
+                            </a>
+                          ))}
+                        </div>
+
+                        <div className="px-3 py-2 border-t border-theme-border/60 bg-theme-base/20 rounded-b-xl flex items-center justify-between text-[10px] font-sans text-theme-fore-muted">
+                          <span>{language === "en" ? "Built by SejatiDimedia" : "Karya mandiri SejatiDimedia"}</span>
+                          <span className="text-[9px] font-mono text-theme-fore-subtle">{language === "en" ? "Free to use" : "Akses bebas"}</span>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
                 <button
                   onClick={() => router.push("/insights")}
                   className={`px-4 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors ${pathname.startsWith("/insights")
@@ -445,6 +593,28 @@ export default function LayoutWrapper({
                         >
                           {t.nav.portfolio}
                         </button>
+                      </li>
+                      <li>
+                        <a
+                          href="https://secoret.vercel.app"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-theme-accent transition-colors duration-200 cursor-pointer flex items-center gap-1 text-left"
+                        >
+                          <span>Secoret (Tool)</span>
+                          <Icon icon="ph:arrow-up-right-bold" className="w-3 h-3 text-theme-fore-subtle" />
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://seclip.vercel.app/app"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-theme-accent transition-colors duration-200 cursor-pointer flex items-center gap-1 text-left"
+                        >
+                          <span>SeClip (Tool)</span>
+                          <Icon icon="ph:arrow-up-right-bold" className="w-3 h-3 text-theme-fore-subtle" />
+                        </a>
                       </li>
                       <li>
                         <button
@@ -578,45 +748,151 @@ export default function LayoutWrapper({
           </footer>
 
           {/* 5. Mobile Bottom Navigation Bar */}
-          <nav className="md:hidden fixed bottom-4 left-4 right-4 z-50">
-            <div className="bg-theme-surface/80 backdrop-blur-xl border border-theme-border/60 shadow-2xl rounded-2xl p-1.5 flex items-center justify-between">
+          <nav className="md:hidden fixed bottom-4 left-3 right-3 sm:left-4 sm:right-4 z-50">
+            <div className="bg-theme-surface/80 backdrop-blur-xl border border-theme-border/60 shadow-2xl rounded-2xl p-1.5 flex items-center justify-between gap-1">
               <button
                 onClick={() => handleNavClick("home")}
-                className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname === "/" ? "text-theme-accent bg-theme-accent/10" : "text-theme-fore-muted hover:text-theme-fore"}`}
+                className={`flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl transition-all duration-300 ${pathname === "/" ? "text-theme-accent bg-theme-accent/10 font-bold" : "text-theme-fore-muted hover:text-theme-fore"}`}
               >
-                <Home className="w-5 h-5 mb-1" />
-                <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.home}</span>
+                <Home className="w-4.5 h-4.5 mb-1" />
+                <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.home}</span>
               </button>
               <button
                 onClick={() => handleNavClick("capabilities-section")}
-                className="flex flex-col items-center justify-center w-[60px] h-12 rounded-xl text-theme-fore-muted hover:text-theme-fore transition-all duration-300"
+                className="flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl text-theme-fore-muted hover:text-theme-fore transition-all duration-300"
               >
-                <Layers className="w-5 h-5 mb-1" />
-                <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.services}</span>
+                <Layers className="w-4.5 h-4.5 mb-1" />
+                <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.services}</span>
               </button>
               <button
                 onClick={() => router.push("/projects")}
-                className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/projects") ? "text-theme-accent bg-theme-accent/10" : "text-theme-fore-muted hover:text-theme-fore"}`}
+                className={`flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/projects") ? "text-theme-accent bg-theme-accent/10 font-bold" : "text-theme-fore-muted hover:text-theme-fore"}`}
               >
-                <FolderOpen className="w-5 h-5 mb-1" />
-                <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.portfolio}</span>
+                <FolderOpen className="w-4.5 h-4.5 mb-1" />
+                <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.portfolio}</span>
+              </button>
+              <button
+                onClick={() => setIsMobileToolsOpen(true)}
+                className={`flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl transition-all duration-300 ${isMobileToolsOpen ? "text-theme-accent bg-theme-accent/10 font-bold" : "text-theme-fore-muted hover:text-theme-fore"}`}
+              >
+                <Wrench className="w-4.5 h-4.5 mb-1" />
+                <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.tools || "Tools"}</span>
               </button>
               <button
                 onClick={() => router.push("/insights")}
-                className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/insights") ? "text-theme-accent bg-theme-accent/10" : "text-theme-fore-muted hover:text-theme-fore"}`}
+                className={`flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/insights") ? "text-theme-accent bg-theme-accent/10 font-bold" : "text-theme-fore-muted hover:text-theme-fore"}`}
               >
-                <BookOpen className="w-5 h-5 mb-1" />
-                <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.insights || "Insights"}</span>
+                <BookOpen className="w-4.5 h-4.5 mb-1" />
+                <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.insights || "Insights"}</span>
               </button>
               <button
                 onClick={() => handleNavClick("contact-section")}
-                className="flex flex-col items-center justify-center w-[60px] h-12 rounded-xl text-theme-fore-muted hover:text-theme-fore transition-all duration-300"
+                className="flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl text-theme-fore-muted hover:text-theme-fore transition-all duration-300"
               >
-                <MessageCircle className="w-5 h-5 mb-1" />
-                <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.contact}</span>
+                <MessageCircle className="w-4.5 h-4.5 mb-1" />
+                <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.contact}</span>
               </button>
             </div>
           </nav>
+
+          {/* Mobile Tools Bottom Sheet (Classic) */}
+          <AnimatePresence>
+            {isMobileToolsOpen && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setIsMobileToolsOpen(false)}
+                  className="fixed inset-0 bg-black/60 backdrop-blur-xs z-[60] md:hidden"
+                />
+                <motion.div
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "100%" }}
+                  transition={{ type: "spring", damping: 28, stiffness: 300 }}
+                  className="fixed bottom-0 left-0 right-0 z-[70] bg-theme-surface rounded-t-3xl border-t border-theme-border shadow-2xl p-5 pb-8 space-y-4 md:hidden max-h-[85vh] overflow-y-auto text-theme-fore"
+                >
+                  <div className="w-12 h-1.5 bg-theme-border rounded-full mx-auto -mt-1 mb-2" />
+                  <div className="flex items-center justify-between pb-3 border-b border-theme-border/60">
+                    <div>
+                      <h3 className="text-sm font-sans font-bold text-theme-fore">
+                        {language === "en" ? "Products & Tools" : "Produk & Tools"}
+                      </h3>
+                      <p className="text-[11px] font-sans text-theme-fore-muted">
+                        {language === "en" ? "Software products built by SejatiDimedia" : "Produk software karya SejatiDimedia"}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setIsMobileToolsOpen(false)}
+                      className="p-2 rounded-full text-theme-fore-muted hover:text-theme-fore bg-theme-base hover:bg-theme-surface cursor-pointer transition-colors"
+                      aria-label="Tutup"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    {PRODUCT_TOOLS.map((tool) => (
+                      <a
+                        key={tool.id}
+                        href={tool.url}
+                        target={tool.isExternal ? "_blank" : undefined}
+                        rel={tool.isExternal ? "noopener noreferrer" : undefined}
+                        onClick={() => setIsMobileToolsOpen(false)}
+                        className="p-3.5 rounded-2xl bg-theme-base/60 hover:bg-theme-base border border-theme-border/80 flex items-start gap-3.5 transition-all block"
+                      >
+                        <div className="w-10 h-10 rounded-xl bg-white/10 border border-theme-border/80 flex items-center justify-center shrink-0 overflow-hidden relative p-1">
+                          {tool.logo ? (
+                            <Image
+                              src={tool.logo}
+                              alt={tool.name}
+                              width={40}
+                              height={40}
+                              className="w-full h-full object-contain rounded-lg"
+                            />
+                          ) : (
+                            <Icon icon={tool.icon || "ph:app-window-duotone"} className="w-5 h-5 text-theme-accent" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <div className="flex items-center justify-between gap-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-sans font-bold text-theme-fore">
+                                {tool.name}
+                              </span>
+                              {tool.badge && (
+                                <span className="inline-flex items-center gap-1 text-[9px] font-sans font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded-full">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                  {tool.badge[language]}
+                                </span>
+                              )}
+                            </div>
+                            <Icon icon="ph:arrow-up-right-bold" className="w-4 h-4 text-theme-fore-subtle" />
+                          </div>
+                          <p className="text-xs font-sans text-theme-fore-muted leading-relaxed">
+                            {tool.description[language]}
+                          </p>
+                          <div className="pt-1.5 flex items-center gap-1 text-[11px] font-sans font-bold text-theme-accent">
+                            <span>{language === "en" ? "Launch Application" : "Buka Aplikasi"}</span>
+                            <Icon icon="ph:caret-right-bold" className="w-3 h-3" />
+                          </div>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-theme-accent/10 border border-theme-accent/20 text-center">
+                    <p className="text-[11px] font-sans text-theme-accent">
+                      {language === "en"
+                        ? "More digital tools and SaaS products coming soon."
+                        : "Produk dan tools digital baru lainnya akan segera hadir."}
+                    </p>
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
 
           <AiChatWidget />
         </AuroraBackground>
@@ -709,6 +985,105 @@ export default function LayoutWrapper({
                   >
                     {t.nav.portfolio}
                   </button>
+
+                  {/* Tools Dropdown */}
+                  <div className="relative" ref={toolsDropdownRef}>
+                    <button
+                      type="button"
+                      onClick={() => setIsToolsOpen((prev) => !prev)}
+                      aria-expanded={isToolsOpen}
+                      aria-haspopup="true"
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 flex items-center gap-1.5 ${isToolsOpen
+                        ? "text-[#2C5098] bg-[#2C5098]/10 font-bold"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
+                        }`}
+                    >
+                      <span>{t.nav.tools || "Tools"}</span>
+                      <Icon
+                        icon="ph:caret-down-bold"
+                        className={`w-3 h-3 transition-transform duration-200 ${isToolsOpen ? "rotate-180 text-[#2C5098]" : "opacity-60"
+                          }`}
+                      />
+                    </button>
+
+                    <AnimatePresence>
+                      {isToolsOpen && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                          transition={{ duration: 0.16, ease: "easeOut" }}
+                          className="absolute top-full mt-2.5 left-1/2 -translate-x-1/2 w-80 sm:w-96 rounded-2xl bg-white/95 backdrop-blur-2xl border border-slate-200 shadow-2xl shadow-slate-900/10 p-2 z-50 overflow-hidden text-left"
+                        >
+                          <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
+                            <div className="flex items-center gap-1.5">
+                              <Icon icon="ph:squares-four-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
+                              <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-slate-400">
+                                {language === "en" ? "Products & Tools" : "Produk & Tools"}
+                              </span>
+                            </div>
+                            <span className="text-[10px] font-sans font-semibold text-[#2C5098] bg-[#2C5098]/8 px-2 py-0.5 rounded-full border border-[#2C5098]/20">
+                              {PRODUCT_TOOLS.length} {language === "en" ? "App" : "Produk"}
+                            </span>
+                          </div>
+
+                          <div className="p-1 space-y-1 max-h-[360px] overflow-y-auto">
+                            {PRODUCT_TOOLS.map((tool) => (
+                              <a
+                                key={tool.id}
+                                href={tool.url}
+                                target={tool.isExternal ? "_blank" : undefined}
+                                rel={tool.isExternal ? "noopener noreferrer" : undefined}
+                                onClick={() => setIsToolsOpen(false)}
+                                className="group p-3 rounded-xl hover:bg-slate-50 transition-all flex items-start gap-3 border border-transparent hover:border-slate-200/80 cursor-pointer block"
+                              >
+                                <div className="w-9 h-9 rounded-xl bg-white border border-slate-200/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-all duration-200 shadow-2xs overflow-hidden relative p-1">
+                                  {tool.logo ? (
+                                    <Image
+                                      src={tool.logo}
+                                      alt={tool.name}
+                                      width={36}
+                                      height={36}
+                                      className="w-full h-full object-contain rounded-lg"
+                                    />
+                                  ) : (
+                                    <Icon icon={tool.icon || "ph:app-window-duotone"} className="w-4 h-4 text-[#2C5098]" />
+                                  )}
+                                </div>
+                                <div className="flex-1 min-w-0 space-y-1">
+                                  <div className="flex items-center justify-between gap-2">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-xs font-sans font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors">
+                                        {tool.name}
+                                      </span>
+                                      {tool.badge && (
+                                        <span className="inline-flex items-center gap-1 text-[9px] font-sans font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-1.5 py-0.5 rounded-full">
+                                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                          {tool.badge[language]}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <Icon
+                                      icon="ph:arrow-up-right-bold"
+                                      className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#2C5098] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0"
+                                    />
+                                  </div>
+                                  <p className="text-[11px] font-sans text-slate-500 leading-snug line-clamp-2">
+                                    {tool.description[language]}
+                                  </p>
+                                </div>
+                              </a>
+                            ))}
+                          </div>
+
+                          <div className="px-3 py-2 border-t border-slate-100 bg-slate-50/60 rounded-b-xl flex items-center justify-between text-[10px] font-sans text-slate-500">
+                            <span>{language === "en" ? "Built by SejatiDimedia" : "Karya mandiri SejatiDimedia"}</span>
+                            <span className="text-[9px] font-mono text-slate-400">{language === "en" ? "Free to use" : "Akses bebas"}</span>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                   <button
                     onClick={() => router.push("/insights")}
                     className={`px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${pathname.startsWith("/insights")
@@ -844,6 +1219,28 @@ export default function LayoutWrapper({
                         </button>
                       </li>
                       <li>
+                        <a
+                          href="https://secoret.vercel.app"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer flex items-center gap-1 text-left"
+                        >
+                          <span>Secoret (Tool)</span>
+                          <Icon icon="ph:arrow-up-right-bold" className="w-3 h-3 text-slate-400" />
+                        </a>
+                      </li>
+                      <li>
+                        <a
+                          href="https://seclip.vercel.app/app"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer flex items-center gap-1 text-left"
+                        >
+                          <span>SeClip (Tool)</span>
+                          <Icon icon="ph:arrow-up-right-bold" className="w-3 h-3 text-slate-400" />
+                        </a>
+                      </li>
+                      <li>
                         <button
                           onClick={() => router.push("/insights")}
                           className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer block text-left"
@@ -975,45 +1372,151 @@ export default function LayoutWrapper({
           </footer>
 
           {/* Mobile Bottom Navigation Bar for V2 */}
-          <nav className="md:hidden fixed bottom-4 left-4 right-4 z-50">
-            <div className="bg-white/90 backdrop-blur-xl border border-slate-200 shadow-xl rounded-2xl p-1.5 flex items-center justify-between">
+          <nav className="md:hidden fixed bottom-4 left-3 right-3 sm:left-4 sm:right-4 z-50">
+            <div className="bg-white/90 backdrop-blur-xl border border-slate-200 shadow-xl rounded-2xl p-1.5 flex items-center justify-between gap-1">
               <button
                 onClick={() => handleNavClick("home")}
-                className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname === "/" ? "text-[#2C5098] bg-[#2C5098]/10 font-bold" : "text-slate-600 hover:text-slate-900"}`}
+                className={`flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl transition-all duration-300 ${pathname === "/" ? "text-[#2C5098] bg-[#2C5098]/10 font-bold" : "text-slate-600 hover:text-slate-900"}`}
               >
-                <Home className="w-5 h-5 mb-1" />
-                <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.home}</span>
+                <Home className="w-4.5 h-4.5 mb-1" />
+                <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.home}</span>
               </button>
               <button
                 onClick={() => handleNavClick("capabilities-section")}
-                className="flex flex-col items-center justify-center w-[60px] h-12 rounded-xl text-slate-600 hover:text-slate-900 transition-all duration-300"
+                className="flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl text-slate-600 hover:text-slate-900 transition-all duration-300"
               >
-                <Layers className="w-5 h-5 mb-1" />
-                <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.services}</span>
+                <Layers className="w-4.5 h-4.5 mb-1" />
+                <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.services}</span>
               </button>
               <button
                 onClick={() => router.push("/projects")}
-                className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/projects") ? "text-[#2C5098] bg-[#2C5098]/10 font-bold" : "text-slate-600 hover:text-slate-900"}`}
+                className={`flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/projects") ? "text-[#2C5098] bg-[#2C5098]/10 font-bold" : "text-slate-600 hover:text-slate-900"}`}
               >
-                <FolderOpen className="w-5 h-5 mb-1" />
-                <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.portfolio}</span>
+                <FolderOpen className="w-4.5 h-4.5 mb-1" />
+                <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.portfolio}</span>
+              </button>
+              <button
+                onClick={() => setIsMobileToolsOpen(true)}
+                className={`flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl transition-all duration-300 ${isMobileToolsOpen ? "text-[#2C5098] bg-[#2C5098]/10 font-bold" : "text-slate-600 hover:text-slate-900"}`}
+              >
+                <Wrench className="w-4.5 h-4.5 mb-1" />
+                <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.tools || "Tools"}</span>
               </button>
               <button
                 onClick={() => router.push("/insights")}
-                className={`flex flex-col items-center justify-center w-[60px] h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/insights") ? "text-[#2C5098] bg-[#2C5098]/10 font-bold" : "text-slate-600 hover:text-slate-900"}`}
+                className={`flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/insights") ? "text-[#2C5098] bg-[#2C5098]/10 font-bold" : "text-slate-600 hover:text-slate-900"}`}
               >
-                <BookOpen className="w-5 h-5 mb-1" />
-                <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.insights || "Insights"}</span>
+                <BookOpen className="w-4.5 h-4.5 mb-1" />
+                <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.insights || "Insights"}</span>
               </button>
               <button
                 onClick={() => handleNavClick("contact-section")}
-                className="flex flex-col items-center justify-center w-[60px] h-12 rounded-xl text-slate-600 hover:text-slate-900 transition-all duration-300"
+                className="flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl text-slate-600 hover:text-slate-900 transition-all duration-300"
               >
-                <MessageCircle className="w-5 h-5 mb-1" />
-                <span className="text-[9px] font-bold tracking-wider leading-none">{t.nav.contact}</span>
+                <MessageCircle className="w-4.5 h-4.5 mb-1" />
+                <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.contact}</span>
               </button>
             </div>
           </nav>
+
+          {/* Mobile Tools Bottom Sheet */}
+          <AnimatePresence>
+            {isMobileToolsOpen && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setIsMobileToolsOpen(false)}
+                  className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-[60] md:hidden"
+                />
+                <motion.div
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "100%" }}
+                  transition={{ type: "spring", damping: 28, stiffness: 300 }}
+                  className="fixed bottom-0 left-0 right-0 z-[70] bg-white rounded-t-3xl border-t border-slate-200 shadow-2xl p-5 pb-8 space-y-4 md:hidden max-h-[85vh] overflow-y-auto"
+                >
+                  <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto -mt-1 mb-2" />
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                    <div>
+                      <h3 className="text-sm font-sans font-bold text-slate-900">
+                        {language === "en" ? "Products & Tools" : "Produk & Tools"}
+                      </h3>
+                      <p className="text-[11px] font-sans text-slate-500">
+                        {language === "en" ? "Software products built by SejatiDimedia" : "Produk software karya SejatiDimedia"}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setIsMobileToolsOpen(false)}
+                      className="p-2 rounded-full text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 cursor-pointer transition-colors"
+                      aria-label="Tutup"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    {PRODUCT_TOOLS.map((tool) => (
+                      <a
+                        key={tool.id}
+                        href={tool.url}
+                        target={tool.isExternal ? "_blank" : undefined}
+                        rel={tool.isExternal ? "noopener noreferrer" : undefined}
+                        onClick={() => setIsMobileToolsOpen(false)}
+                        className="p-3.5 rounded-2xl bg-slate-50 hover:bg-slate-100/80 border border-slate-200/80 flex items-start gap-3.5 transition-all block"
+                      >
+                        <div className="w-10 h-10 rounded-xl bg-white border border-slate-200/80 flex items-center justify-center shrink-0 shadow-2xs overflow-hidden relative p-1">
+                          {tool.logo ? (
+                            <Image
+                              src={tool.logo}
+                              alt={tool.name}
+                              width={40}
+                              height={40}
+                              className="w-full h-full object-contain rounded-lg"
+                            />
+                          ) : (
+                            <Icon icon={tool.icon || "ph:app-window-duotone"} className="w-5 h-5 text-[#2C5098]" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0 space-y-1">
+                          <div className="flex items-center justify-between gap-1">
+                            <div className="flex items-center gap-2">
+                              <span className="text-sm font-sans font-bold text-slate-900">
+                                {tool.name}
+                              </span>
+                              {tool.badge && (
+                                <span className="inline-flex items-center gap-1 text-[9px] font-sans font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                  {tool.badge[language]}
+                                </span>
+                              )}
+                            </div>
+                            <Icon icon="ph:arrow-up-right-bold" className="w-4 h-4 text-slate-400" />
+                          </div>
+                          <p className="text-xs font-sans text-slate-600 leading-relaxed">
+                            {tool.description[language]}
+                          </p>
+                          <div className="pt-1.5 flex items-center gap-1 text-[11px] font-sans font-bold text-[#2C5098]">
+                            <span>{language === "en" ? "Launch Application" : "Buka Aplikasi"}</span>
+                            <Icon icon="ph:caret-right-bold" className="w-3 h-3" />
+                          </div>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+
+                  <div className="p-3 rounded-xl bg-blue-50/50 border border-blue-100/80 text-center">
+                    <p className="text-[11px] font-sans text-[#2C5098]">
+                      {language === "en"
+                        ? "More digital tools and SaaS products coming soon."
+                        : "Produk dan tools digital baru lainnya akan segera hadir."}
+                    </p>
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
 
           <AiChatWidget />
         </div>

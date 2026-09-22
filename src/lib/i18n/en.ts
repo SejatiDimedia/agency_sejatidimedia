@@ -7,6 +7,7 @@ export const en = {
     projects: "Projects",
     services: "Services",
     portfolio: "Portfolio",
+    tools: "Tools",
     insights: "Insights",
     capabilities: "Capabilities",
     pricing: "Pricing",
