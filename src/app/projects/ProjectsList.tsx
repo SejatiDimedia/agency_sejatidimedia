@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ChevronRight, ArrowLeft, Briefcase, CheckCircle2, Loader2 } from "lucide-react";
+import { ChevronRight, ArrowLeft, Briefcase } from "lucide-react";
 import { Icon } from "@iconify/react";
 import { Project, isProfessionalProject } from "../../lib/api/glio-projects";
 import { motion, AnimatePresence } from "motion/react";
@@ -61,113 +61,7 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
     return projectCategoryNames.includes(activeCategory);
   });
 
-  // Standard display count: 6 items for clean 3-column grid alignment
-  const INITIAL_PROJECTS_COUNT = 6;
-  const PROJECTS_PAGE_INCREMENT = 6;
-  const [visibleCount, setVisibleCount] = useState<number>(INITIAL_PROJECTS_COUNT);
-  const [isLoadingMore, setIsLoadingMore] = useState<boolean>(false);
-  const isFetchingRef = useRef<boolean>(false);
-  const sentinelRef = useRef<HTMLDivElement>(null);
-
-  const visibleCountRef = useRef(visibleCount);
-  visibleCountRef.current = visibleCount;
-
-  const filteredProjectsRef = useRef(filteredProjects);
-  filteredProjectsRef.current = filteredProjects;
-
-  const loadMore = useCallback(() => {
-    if (isFetchingRef.current) return;
-    if (visibleCountRef.current >= filteredProjectsRef.current.length) return;
-
-    isFetchingRef.current = true;
-    setIsLoadingMore(true);
-
-    setTimeout(() => {
-      setVisibleCount((prev) => {
-        const next = Math.min(prev + PROJECTS_PAGE_INCREMENT, filteredProjectsRef.current.length);
-        visibleCountRef.current = next;
-        return next;
-      });
-      setIsLoadingMore(false);
-      isFetchingRef.current = false;
-
-      // Check if sentinel is still in viewport (e.g. fast scrolling, large monitors, or bottom rested)
-      requestAnimationFrame(() => {
-        if (sentinelRef.current) {
-          const rect = sentinelRef.current.getBoundingClientRect();
-          if (rect.top <= window.innerHeight + 350 && visibleCountRef.current < filteredProjectsRef.current.length) {
-            loadMore();
-          }
-        }
-      });
-    }, 100);
-  }, []);
-
-  // Reset pagination when active category changes
-  useEffect(() => {
-    setVisibleCount(INITIAL_PROJECTS_COUNT);
-    visibleCountRef.current = INITIAL_PROJECTS_COUNT;
-    setIsLoadingMore(false);
-    isFetchingRef.current = false;
-  }, [activeCategory]);
-
-  const displayedProjects = filteredProjects.slice(0, visibleCount);
-  const hasMoreProjects = visibleCount < filteredProjects.length;
-  const totalProjectsCount = filteredProjects.length;
-  const currentVisibleCount = Math.min(visibleCount, totalProjectsCount);
-
-  // Automatic Infinite Scroll with dual trigger:
-  // 1. IntersectionObserver with generous rootMargin
-  // 2. Window scroll event listener fallback (guarantees fetch even if boundary transition is missed)
-  useEffect(() => {
-    const sentinel = sentinelRef.current;
-    if (!sentinel) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        if (entry.isIntersecting) {
-          loadMore();
-        }
-      },
-      {
-        root: null,
-        rootMargin: "0px 0px 450px 0px",
-        threshold: 0,
-      }
-    );
-
-    observer.observe(sentinel);
-
-    const handleScroll = () => {
-      if (isFetchingRef.current) return;
-      if (visibleCountRef.current >= filteredProjectsRef.current.length) return;
-
-      const scrollBottom = window.innerHeight + window.scrollY;
-      const docHeight = document.documentElement.scrollHeight;
-      // Trigger when within 550px of page bottom
-      if (scrollBottom >= docHeight - 550) {
-        loadMore();
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    // Initial check in case content doesn't fill initial viewport
-    requestAnimationFrame(() => {
-      if (sentinelRef.current) {
-        const rect = sentinelRef.current.getBoundingClientRect();
-        if (rect.top <= window.innerHeight + 300) {
-          loadMore();
-        }
-      }
-    });
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [loadMore, activeCategory]);
+  const displayedProjects = filteredProjects;
 
   return (
     <div className="space-y-12 py-6 sm:py-10">
@@ -346,40 +240,6 @@ export default function ProjectsList({ projects }: { projects: Project[] }) {
         </AnimatePresence>
       </div>
 
-      {/* Infinite Scroll Sentinel & Automatic Fetch Indicator */}
-      {hasMoreProjects && (
-        <div
-          ref={sentinelRef}
-          className="w-full flex flex-col items-center justify-center py-8 min-h-[72px]"
-        >
-          {isLoadingMore ? (
-            <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border shadow-xs text-xs font-sans font-medium text-slate-600 dark:text-theme-fore-muted animate-pulse">
-              <Loader2 className="w-4 h-4 text-[#2C5098] animate-spin" />
-              <span>
-                {language === "en"
-                  ? `Loading more projects (${currentVisibleCount} of ${totalProjectsCount})...`
-                  : `Memuat proyek berikutnya (${currentVisibleCount} dari ${totalProjectsCount})...`}
-              </span>
-            </div>
-          ) : (
-            <div className="h-4 w-full" />
-          )}
-        </div>
-      )}
-
-      {/* Finished State Indicator - Styled like the Explore All Portfolio button on Beranda */}
-      {!hasMoreProjects && filteredProjects.length > 0 && (
-        <div className="flex items-center justify-center pt-8 pb-4">
-          <div className="inline-flex items-center justify-center gap-2.5 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white text-xs sm:text-sm font-sans font-bold shadow-md shadow-[#2C5098]/20 border border-white/10 select-none">
-            <CheckCircle2 className="w-4 h-4 text-white shrink-0" />
-            <span>
-              {language === "en"
-                ? `All ${totalProjectsCount} projects loaded`
-                : `Semua ${totalProjectsCount} proyek telah ditampilkan`}
-            </span>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
