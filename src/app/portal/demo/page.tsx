@@ -56,8 +56,8 @@ const INITIAL_DEMO_PROJECT: Project = {
   },
   assignees: [
     {
-      name: 'Timur Dian Radha Sejati',
-      avatar: '/images/author_timur_dian.jpg',
+      name: 'Dimas Daniswara',
+      avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80',
       role: 'Lead Full-Stack & AI Engineer',
     },
     {
@@ -99,7 +99,7 @@ const INITIAL_DEMO_PROJECT: Project = {
       comments: [
         {
           id: 'c-1',
-          authorName: 'Timur Dian Radha Sejati',
+          authorName: 'Dimas Daniswara',
           authorRole: 'Admin',
           timestamp: '22 Mei 2026, 16:30',
           content: 'Sprint 1 selesai 100%. Struktur database dan environment staging cloud sudah siap digunakan untuk integrasi payment engine.'
@@ -109,7 +109,7 @@ const INITIAL_DEMO_PROJECT: Project = {
           authorName: 'Ir. Hendra Pratama (Client)',
           authorRole: 'Client',
           timestamp: '22 Mei 2026, 17:15',
-          content: 'Terima kasih Mas Timur, dokumentasi arsitekturnya sangat rapi dan komprehensif. Siap lanjut ke Sprint 2.'
+          content: 'Terima kasih Mas Dimas, dokumentasi arsitekturnya sangat rapi dan komprehensif. Siap lanjut ke Sprint 2.'
         }
       ]
     },
@@ -146,7 +146,7 @@ const INITIAL_DEMO_PROJECT: Project = {
       comments: [
         {
           id: 'c-3',
-          authorName: 'Timur Dian Radha Sejati',
+          authorName: 'Dimas Daniswara',
           authorRole: 'Admin',
           timestamp: '02 Juni 2026, 11:20',
           content: 'Progres QRIS dan dashboard analitik sudah aktif di staging. Saat ini kami sedang menyempurnakan webhook struk WhatsApp.'
@@ -183,16 +183,16 @@ const INITIAL_DEMO_INVOICES: Invoice[] = [
     taxAmount: 0,
     total: 14250000,
     notes: 'Pembayaran Uang Muka (Down Payment 50%) untuk Kickoff Proyek Fintech Pay.',
-    bankInfo: 'Bank Central Asia (BCA) — 037-xxxx-xxx a/n Timur Dian Radha Sejati',
+    bankInfo: 'Bank Central Asia (BCA) - 037-xxxx-xxx a/n SejatiDimedia Agency',
     paidAt: '14 Mei 2026, 10:15 WIB',
     projectId: 'demo-proj-001',
-    projectName: 'Fintech Pay — Modern E-Wallet & QRIS SaaS',
+    projectName: 'Fintech Pay - Modern E-Wallet & QRIS SaaS',
     clientName: 'Ir. Hendra Pratama',
     clientEmail: 'hendra@karyadigital.id',
     items: [
       {
         id: 'item-1',
-        description: 'Termin 1: Down Payment (50%) — System Architecture, DB Schema & Project Kickoff',
+        description: 'Termin 1: Down Payment (50%) - System Architecture, DB Schema & Project Kickoff',
         quantity: 1,
         unitPrice: 14250000,
         amount: 14250000,
@@ -209,17 +209,17 @@ const INITIAL_DEMO_INVOICES: Invoice[] = [
     taxPercent: 0,
     taxAmount: 0,
     total: 8550000,
-    notes: 'Pembayaran Termin 2 (30%) — Penyelesaian Core Payment Engine & Admin Dashboard.',
-    bankInfo: 'Bank Central Asia (BCA) — 037-xxxx-xxx a/n Timur Dian Radha Sejati',
+    notes: 'Pembayaran Termin 2 (30%) - Penyelesaian Core Payment Engine & Admin Dashboard.',
+    bankInfo: 'Bank Central Asia (BCA) - 037-xxxx-xxx a/n SejatiDimedia Agency',
     paidAt: null,
     projectId: 'demo-proj-001',
-    projectName: 'Fintech Pay — Modern E-Wallet & QRIS SaaS',
+    projectName: 'Fintech Pay - Modern E-Wallet & QRIS SaaS',
     clientName: 'Ir. Hendra Pratama',
     clientEmail: 'hendra@karyadigital.id',
     items: [
       {
         id: 'item-2',
-        description: 'Termin 2: Milestone Progress (30%) — Core Payment Engine & Admin Dashboard',
+        description: 'Termin 2: Milestone Progress (30%) - Core Payment Engine & Admin Dashboard',
         quantity: 1,
         unitPrice: 8550000,
         amount: 8550000,
@@ -236,17 +236,17 @@ const INITIAL_DEMO_INVOICES: Invoice[] = [
     taxPercent: 0,
     taxAmount: 0,
     total: 5700000,
-    notes: 'Pembayaran Pelunasan Akhir (20%) — Serah Terima Source Code, Deployment & Garansi.',
-    bankInfo: 'Bank Central Asia (BCA) — 037-xxxx-xxx a/n Timur Dian Radha Sejati',
+    notes: 'Pembayaran Pelunasan Akhir (20%) - Serah Terima Source Code, Deployment & Garansi.',
+    bankInfo: 'Bank Central Asia (BCA) - 037-xxxx-xxx a/n SejatiDimedia Agency',
     paidAt: null,
     projectId: 'demo-proj-001',
-    projectName: 'Fintech Pay — Modern E-Wallet & QRIS SaaS',
+    projectName: 'Fintech Pay - Modern E-Wallet & QRIS SaaS',
     clientName: 'Ir. Hendra Pratama',
     clientEmail: 'hendra@karyadigital.id',
     items: [
       {
         id: 'item-3',
-        description: 'Termin 3: Final Handover (20%) — Production Deployment, 100% Source Code & Warranty',
+        description: 'Termin 3: Final Handover (20%) - Production Deployment, 100% Source Code & Warranty',
         quantity: 1,
         unitPrice: 5700000,
         amount: 5700000,
@@ -258,7 +258,7 @@ const INITIAL_DEMO_INVOICES: Invoice[] = [
 const INITIAL_DEMO_COMMENTS: MilestoneComment[] = [
   {
     id: 'c-1',
-    authorName: 'Timur Dian Radha Sejati',
+    authorName: 'Dimas Daniswara',
     authorRole: 'Admin',
     timestamp: '22 Mei 2026, 16:30',
     content: 'Sprint 1 selesai 100%. Struktur database dan environment staging cloud sudah siap digunakan untuk integrasi payment engine.'
@@ -268,11 +268,11 @@ const INITIAL_DEMO_COMMENTS: MilestoneComment[] = [
     authorName: 'Ir. Hendra Pratama (Client)',
     authorRole: 'Client',
     timestamp: '22 Mei 2026, 17:15',
-    content: 'Terima kasih Mas Timur, dokumentasi arsitekturnya sangat rapi dan komprehensif. Siap lanjut ke Sprint 2.'
+    content: 'Terima kasih Mas Dimas, dokumentasi arsitekturnya sangat rapi dan komprehensif. Siap lanjut ke Sprint 2.'
   },
   {
     id: 'c-3',
-    authorName: 'Timur Dian Radha Sejati',
+    authorName: 'Dimas Daniswara',
     authorRole: 'Admin',
     timestamp: '02 Juni 2026, 11:20',
     content: 'Progres QRIS dan dashboard analitik sudah aktif di staging. Saat ini kami sedang menyempurnakan webhook struk WhatsApp.'
@@ -362,7 +362,7 @@ export default function GuestDemoClientPortal() {
 
     const newComment: MilestoneComment = {
       id: `c-guest-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-      authorName: currentRole === 'Client' ? 'Anda (Demo Client)' : 'Timur Dian Radha Sejati',
+      authorName: currentRole === 'Client' ? 'Anda (Demo Client)' : 'Dimas Daniswara',
       authorRole: currentRole,
       timestamp: 'Baru saja',
       content: text
@@ -451,8 +451,9 @@ export default function GuestDemoClientPortal() {
             openStyleGuideModal={() => setIsStyleGuideModalOpen(true)}
             currentRole={currentRole}
             setCurrentRole={setCurrentRole}
-            userName="Ir. Hendra Pratama (Demo Client)"
-            userEmail="hendra@karyadigital.id"
+            userName={currentRole === 'Admin' ? 'Dimas Daniswara (Demo Admin)' : 'Ir. Hendra Pratama (Demo Client)'}
+            userEmail={currentRole === 'Admin' ? 'dimas@sejatidimedia.com' : 'hendra@karyadigital.id'}
+            userAvatar={currentRole === 'Admin' ? 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80' : undefined}
             onMenuClick={() => setMobileSidebarOpen(true)}
           />
 
@@ -974,6 +975,7 @@ export default function GuestDemoClientPortal() {
         onClose={() => setIsInvoiceModalOpen(false)}
         invoice={selectedInvoice}
         userRole="CLIENT"
+        issuedByName="Dimas Daniswara (Lead Engineer)"
       />
 
       {/* Style Guide Modal */}

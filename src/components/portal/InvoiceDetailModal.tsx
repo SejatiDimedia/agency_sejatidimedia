@@ -11,6 +11,7 @@ interface InvoiceDetailModalProps {
   invoice: Invoice | null;
   userRole?: 'ADMIN' | 'CLIENT';
   onInvoiceUpdated?: () => void;
+  issuedByName?: string;
 }
 
 export function InvoiceDetailModal({
@@ -19,6 +20,7 @@ export function InvoiceDetailModal({
   invoice,
   userRole = 'CLIENT',
   onInvoiceUpdated,
+  issuedByName,
 }: InvoiceDetailModalProps) {
   const [file, setFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -375,7 +377,7 @@ export function InvoiceDetailModal({
               <div className="print-text-right sm:text-right">
                 <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">DITERBITKAN OLEH / ISSUED BY:</span>
                 <h4 className="font-bold text-slate-900 text-sm mt-1">Sejati Dimedia Agency</h4>
-                <p className="text-slate-600">Timur Dian Radha Sejati (Founder & Lead)</p>
+                <p className="text-slate-600">{issuedByName || 'SejatiDimedia Engineering & Operations'}</p>
                 <p className="text-slate-600 mt-1">Status Pembayaran / Payment: <strong className="uppercase">{invoice.status}</strong></p>
               </div>
             </div>
