@@ -566,6 +566,7 @@ export default function AgencyLanding({
         <div className="absolute inset-0 h-full w-full overflow-hidden pointer-events-none -z-0">
           <picture>
             <source media="(max-width: 768px)" srcSet="/hero_bg_mobile.webp" type="image/webp" />
+            <source media="(max-width: 1600px)" srcSet="/hero_bg_desktop.webp" type="image/webp" />
             <img
               src="/hero_bg.webp"
               alt="SejatiDimedia Hero Background"
@@ -915,11 +916,11 @@ export default function AgencyLanding({
                           <Icon icon="ph:kanban-duotone" className="w-5 h-5" />
                         </div>
                         <div>
-                          <h4 className="text-sm sm:text-base font-bold text-slate-900 leading-tight">
+                          <p className="text-sm sm:text-base font-bold text-slate-900 leading-tight">
                             Active Sprint 2: Core Architecture & API Integration
-                          </h4>
+                          </p>
                           <p className="text-xs text-slate-500 font-medium mt-0.5">
-                            Client: Timur Dian • Target Release: August 24, 2026
+                            Client: Dimas Daniswara • Target Release: August 24, 2026
                           </p>
                         </div>
                       </div>
@@ -2951,7 +2952,7 @@ export default function AgencyLanding({
               {/* Any Question Form */}
               <div className="p-6 rounded-3xl bg-[#F8FAFC] border border-slate-200/90 shadow-sm space-y-4">
                 <div className="space-y-1">
-                  <h4 className="text-sm font-sans font-bold text-slate-900">{t.faq.askTitle}</h4>
+                  <h3 className="text-sm font-sans font-bold text-slate-900">{t.faq.askTitle}</h3>
                   <p className="text-xs text-slate-600 leading-relaxed">
                     {t.faq.askDesc}
                   </p>

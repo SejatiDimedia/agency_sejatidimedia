@@ -21,16 +21,12 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setMounted(true);
-    const storedLang = localStorage.getItem('app_lang') as Language;
-    if (storedLang && (storedLang === 'en' || storedLang === 'id')) {
-      setLanguage(storedLang);
-    } else {
-      // detect browser language
-      const browserLang = navigator.language.toLowerCase();
-      if (browserLang.startsWith('en')) {
-        setLanguage('en');
+    try {
+      const storedLang = localStorage.getItem('app_lang') as Language;
+      if (storedLang && (storedLang === 'en' || storedLang === 'id')) {
+        setLanguage(storedLang);
       }
-    }
+    } catch (e) {}
   }, []);
 
   const handleSetLanguage = (lang: Language) => {

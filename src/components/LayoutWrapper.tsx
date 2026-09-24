@@ -699,7 +699,7 @@ export default function LayoutWrapper({
               </div>
 
               <div className="flex items-center justify-center pt-4 text-[10px] font-mono tracking-wider text-theme-fore-subtle uppercase text-center">
-                <span>© {new Date().getFullYear()} SEJATIDIMEDIA. {t.footer.rights}</span>
+                <span suppressHydrationWarning>© {new Date().getFullYear()} SEJATIDIMEDIA. {t.footer.rights}</span>
               </div>
             </div>
           </footer>
@@ -1147,7 +1147,7 @@ export default function LayoutWrapper({
 
                 <div className="md:col-span-5 grid grid-cols-2 gap-4">
                   <div className="space-y-3.5 text-left">
-                    <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">
+                    <span className="text-[10px] font-mono text-slate-600 uppercase tracking-wider block font-bold">
                       {t.footer.contact}
                     </span>
                     <ul className="space-y-2.5 text-xs font-sans font-semibold text-slate-600">
@@ -1199,7 +1199,7 @@ export default function LayoutWrapper({
                   </div>
 
                   <div className="space-y-3.5 text-left">
-                    <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block font-bold">
+                    <span className="text-[10px] font-mono text-slate-600 uppercase tracking-wider block font-bold">
                       {t.footer.connect}
                     </span>
                     <ul className="space-y-2.5 text-xs font-sans font-semibold text-slate-600">
@@ -1285,8 +1285,8 @@ export default function LayoutWrapper({
                 </div>
               </div>
 
-              <div className="flex items-center justify-center pt-4 text-[10px] font-mono tracking-wider text-slate-400 uppercase text-center">
-                <span>© {new Date().getFullYear()} SEJATIDIMEDIA. {t.footer.rights}</span>
+              <div className="flex items-center justify-center pt-4 text-[10px] font-mono tracking-wider text-slate-600 uppercase text-center">
+                <span suppressHydrationWarning>© {new Date().getFullYear()} SEJATIDIMEDIA. {t.footer.rights}</span>
               </div>
             </div>
           </footer>

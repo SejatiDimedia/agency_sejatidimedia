@@ -120,10 +120,18 @@ export default function RootLayout({
         />
         <link
           rel="preload"
+          href="/hero_bg_desktop.webp"
+          as="image"
+          type="image/webp"
+          media="(min-width: 769px) and (max-width: 1600px)"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
           href="/hero_bg.webp"
           as="image"
           type="image/webp"
-          media="(min-width: 769px)"
+          media="(min-width: 1601px)"
           fetchPriority="high"
         />
         <script
