@@ -59,7 +59,7 @@ interface InsightItem {
   updatedAt: string;
 }
 
-const CATEGORIES = ['Backend', 'Frontend', 'Architecture', 'Best Practices', 'Security'];
+const CATEGORIES = ['Backend', 'Frontend', 'Architecture', 'Best Practices', 'Security', 'AI', 'Backend, AI'];
 
 export function InsightsManagementView() {
   const [insights, setInsights] = useState<InsightItem[]>([]);

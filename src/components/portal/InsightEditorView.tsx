@@ -20,7 +20,7 @@ interface InsightEditorViewProps {
   insightId?: string;
 }
 
-const CATEGORIES = ['Backend', 'Frontend', 'Architecture', 'Best Practices', 'Security'];
+const CATEGORIES = ['Backend', 'Frontend', 'Architecture', 'Best Practices', 'Security', 'AI', 'Backend, AI'];
 
 export function InsightEditorView({ mode, initialData, insightId }: InsightEditorViewProps) {
   const router = useRouter();

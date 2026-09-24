@@ -30,7 +30,7 @@ export const id = {
     btnSecondary: "Lihat Studi Kasus Proyek",
     stat1Title: "Pengalaman Operasional di Industri Manufaktur",
     stat2Title: "Sistem & Aplikasi Diselesaikan End-to-End",
-    stat3Title: "Akses Progress via Client Portal Real-Time",
+    stat3Title: "Akses Progres via Client Portal Real-Time",
   },
   clientPortal: {
     badge: "Fitur Unggulan",
@@ -38,7 +38,7 @@ export const id = {
     title: "Pantau Proyek Secara Real-Time",
     mainHeading: "Pantau Proyek Secara Real-Time",
     mainHeadingHighlight: "Lewat Client Portal Khusus",
-    subtitle: "Setiap klien mendapat akses ke portal khusus untuk memantau progress pengerjaan, milestone, hingga invoice tanpa perlu menunggu update manual atau bertanya 'sampai mana progressnya?'",
+    subtitle: "Setiap klien mendapat akses ke portal khusus untuk memantau progres pengerjaan, milestone, hingga invoice tanpa perlu menunggu update manual atau bertanya 'sampai mana progresnya?'",
     mockupTitle: "Dashboard Klien: Proyek Aktif",
     point1Title: "Status Pengerjaan Real-Time",
     point1Desc: "Lihat status setiap fase pengerjaan, mulai dari planning, development, hingga testing.",
@@ -48,10 +48,10 @@ export const id = {
     point3Desc: "Setiap milestone selesai, Anda mendapat notifikasi langsung sehingga tidak perlu mengejar update."
   },
   about: {
-    eyebrow: "TENTANG SAYA",
+    eyebrow: "TENTANG KAMI",
     title: "Latar Belakang & Pendekatan Kerja",
-    subtitle: "5+ tahun mengelola sistem operasional membentuk cara saya membangun software yang rapi, stabil, dan tepat guna untuk bisnis Anda.",
-    p1: "Selama 5+ tahun sebagai software developer di industri manufaktur, saya mengelola sistem ERP, inventori, dan logistik yang digunakan langsung oleh tim operasional setiap hari.",
+    subtitle: "5+ tahun mengelola sistem operasional membentuk cara kami membangun software yang rapi, stabil, dan tepat guna untuk bisnis Anda.",
+    p1: "Berangkat dari pengalaman 5+ tahun di industri manufaktur, kami terbiasa mengelola sistem ERP, inventori, dan logistik yang digunakan langsung oleh tim operasional setiap hari.",
     p2: "Di lapangan, kegagalan software jarang terjadi karena kurang fitur. Masalah utamanya hampir selalu sama: alur kerja yang membingungkan, antarmuka yang lambat, dan sistem yang sulit dirawat.",
     p3: "SejatiDimedia didirikan untuk menjawab masalah itu: membangun software bisnis yang praktis, cepat dipelajari tim kerja, dan didukung kode bersih yang siap untuk jangka panjang.",
     phase1Label: "01 / LATAR BELAKANG",
@@ -67,38 +67,72 @@ export const id = {
     card1Desc: "ERP, Production, Inventory & Operational Workflow",
     card2Title: "Sistem Digital Terintegrasi",
     card2Desc: "Bukan sekadar website, tapi sistem operasional nyata",
+    metricsBadge: "REKAM JEJAK TERUJI",
+    metricsTitle: "Dibangun dari Pengalaman Nyata Mengembangkan Sistem",
+    metricsSubtitle: "Setiap baris kode didasari pengalaman bertahun-tahun merancang software di lingkungan operasional yang menuntut keandalan tinggi.",
+    metrics: [
+      {
+        number: "5+",
+        label: "Tahun Pengalaman",
+        title: "Sistem Operasional Manufaktur",
+        desc: "Berpengalaman mengelola ERP, inventori, dan logistik di lingkungan industri dengan downtime minimum.",
+        icon: "ph:factory-duotone"
+      },
+      {
+        number: "30+",
+        label: "Proyek Selesai",
+        title: "Aplikasi Web, Mobile & SaaS",
+        desc: "Mulai dari MVP validasi pasar hingga aplikasi produksi multi-user dengan arsitektur modern.",
+        icon: "ph:rocket-launch-duotone"
+      },
+      {
+        number: "7+",
+        label: "Sistem Enterprise",
+        title: "Teruji Skala Produksi",
+        desc: "Sistem skala enterprise yang menangani transaksi kompleks, otomasi alur kerja, dan data terenkripsi.",
+        icon: "ph:buildings-duotone"
+      }
+    ],
     valuesBadge: "STANDAR PENGERJAAN",
-    valuesTitle: "Standar Kerja di Setiap Proyek",
-    valuesSubtitle: "Disiplin teknis dan keterbukaan alur kerja yang diterapkan sejak tahap perencanaan awal hingga sistem aktif beroperasi.",
+    valuesTitle: "Standar Disiplin Teknis di Setiap Proyek",
+    valuesSubtitle: "Komitmen pada kualitas kode, keamanan data, dan kemudahan perawatan sistem untuk jangka panjang.",
     values: [
       {
-        title: "Transparansi Progres",
-        tag: "Akses Portal 24/7",
-        desc: "Progres proyek Anda pantau langsung lewat portal klien. Biaya dan scope disepakati tertulis di awal tanpa tagihan tersembunyi."
+        title: "Arsitektur Bersih & Modular",
+        tag: "Mudah Dirawat",
+        desc: "Kode ditulis dengan pola terstruktur dan modular, sehingga mudah dipahami, diaudit, atau dikembangkan oleh tim developer mana pun di masa depan.",
+        icon: "ph:tree-structure-duotone",
+        chips: ["Pola Modular", "Mudah Diaudit", "Struktur Rapi"]
       },
       {
-        title: "Teknologi Teruji",
-        tag: "Bukan Eksperimen",
-        desc: "Menggunakan stack modern yang terbukti stabil di tingkat produksi. Fokus pada performa dan kemudahan perawatan jangka panjang."
+        title: "Kualitas Kode & Type Safety",
+        tag: "Minim Bug Runtime",
+        desc: "Menerapkan validasi tipe ketat dan pengecekan otomatis sejak awal, meminimalisir potensi error tak terduga di lingkungan produksi.",
+        icon: "ph:seal-check-duotone",
+        chips: ["TypeScript Strict", "Validasi Input", "Linting Otomatis"]
       },
       {
-        title: "Komunikasi Langsung",
-        tag: "Tanpa Perantara",
-        desc: "Anda berdiskusi langsung dengan developer yang menulis kode sistem Anda. Keputusan teknis diambil cepat, presisi, dan bebas miskomunikasi tim sales."
+        title: "Keamanan & Proteksi Data",
+        tag: "Standar Keamanan",
+        desc: "Pencegahan celah umum, perlindungan injeksi data, pemisahan kredensial server, serta enkripsi informasi sensitif.",
+        icon: "ph:shield-check-duotone",
+        chips: ["Sanitasi Input", "Isolasi Kredensial", "Enkripsi Data"]
       },
       {
-        title: "Jaminan & Serah Terima",
-        tag: "100% Hak Milik",
-        desc: "Sistem diuji sebelum peluncuran, dilindungi garansi resmi perbaikan bug, dan seluruh source code diserahkan penuh sebagai aset resmi bisnis Anda."
+        title: "Dokumentasi & Panduan Rilis",
+        tag: "Bebas Keterikatan",
+        desc: "Dilengkapi dokumentasi struktur database, panduan instalasi server, dan petunjuk konfigurasi agar Anda memiliki kontrol mandiri penuh.",
+        icon: "ph:book-bookmark-duotone",
+        chips: ["Setup Server", "Skema Database", "Dokumentasi API"]
       }
     ]
   },
   services: {
     sectionTitle: "Layanan",
     portfolio: "Portofolio",
-    mainHeading: "Dari ide hingga production. Saya menangani seluruh siklus pengembangan.",
+    mainHeading: "Dari ide hingga production. Kami menangani seluruh siklus pengembangan.",
     mainHeadingHighlight: "Pengembangan Perangkat Lunak",
-    desc: "Setiap sistem saya bangun dari kebutuhan operasional nyata, bukan template generik. Arsitektur bersih, keamanan terjaga, dan performa yang dirancang untuk tumbuh bersama bisnis Anda.",
+    desc: "Setiap sistem kami rancang berdasarkan kebutuhan operasional nyata bisnis Anda. Fokus pada efisiensi alur kerja, stabilitas performa, dan kemudahan skalabilitas saat bisnis berkembang.",
     items: [
       {
         title: "Web Application Development",
@@ -122,7 +156,7 @@ export const id = {
     badge: "Teknologi",
     mainHeading: "Teknologi yang ",
     mainHeadingHighlight: "Digunakan",
-    desc: "Tools dipilih berdasarkan kebutuhan proyek, bukan sekadar tren, guna memastikan performa, keamanan, dan kemudahan maintenance jangka panjang.",
+    desc: "Pemilihan stack teknologi disesuaikan dengan kebutuhan spesifik sistem dan beban data Anda, mengutamakan ekosistem yang matang, keamanan teruji, dan efisiensi infrastruktur.",
     frontend: "Frontend",
     frontendDesc: "Untuk antarmuka yang cepat, responsif, dan interaktif.",
     backend: "Backend & API",
@@ -140,7 +174,7 @@ export const id = {
   credibility: {
     badge: "Kredibilitas",
     mainHeading: "Latar Belakang & Kemampuan",
-    desc: "Sebelum menekuni proyek independen, saya bekerja sebagai Software Developer di industri manufaktur untuk menangani sistem yang harus akurat dan diandalkan dalam operasional sehari-hari. Pengalaman itu saya bawa ke setiap proyek: kode yang bukan sekadar jalan, tapi juga stabil dan mudah dirawat jangka panjang.",
+    desc: "Berakar dari pengalaman rekayasa di industri manufaktur, kami terbiasa menangani sistem yang dituntut akurat dan tangguh dalam operasional harian. Disiplin tersebut kami terapkan di setiap proyek: arsitektur yang stabil, performa tinggi, dan mudah dirawat jangka panjang.",
     card1Title: "Pengalaman Manufaktur",
     card1Desc: "Berpengalaman mengembangkan & memelihara sistem internal (seperti ERP, inventori, dan HCM) di perusahaan manufaktur nyata yang menuntut keandalan tinggi.",
     card1Btn: "Lihat Kompetensi",
@@ -161,13 +195,13 @@ export const id = {
     starterTitle: "Starter: MVP Prototype",
     starterDesc: "Sempurna untuk startup atau bisnis yang ingin memvalidasi ide dengan cepat ke pasar menggunakan aplikasi fungsional.",
     starterPrice: "Fixed Scope & Timeline",
-    starterTime: "Estimasi: 2–4 Minggu",
+    starterTime: "Estimasi: 2-4 Minggu",
     starterBtn: "Konsultasi Scope MVP",
     growthLabel: "Untuk Rilis ke Publik",
     growthTitle: "Growth: Production Ready",
     growthDesc: "Aplikasi skala penuh dengan arsitektur tangguh, keamanan tingkat lanjut, dan performa optimal untuk operasional bisnis harian.",
     growthPrice: "Berdasarkan Fitur & Scope",
-    growthTime: "Estimasi: 1–2 Bulan",
+    growthTime: "Estimasi: 1-2 Bulan",
     growthBtn: "Minta Estimasi Biaya",
     customLabel: "Enterprise & AI Automation",
     customTitle: "Enterprise & Custom Architecture",
@@ -181,7 +215,7 @@ export const id = {
       "Desain UI/UX responsif & berorientasi konversi",
       "Optimasi SEO & performa sistem dasar",
       "Deployment ke server produksi & cloud",
-      "Garansi bug fixing pasca-rilis",
+      "Garansi bug fixing resmi 30 hari",
       "100% kepemilikan source code & hak cipta"
     ]
   },
@@ -215,8 +249,8 @@ export const id = {
   },
   process: {
     badge: "Alur Kerja",
-    mainHeading: "Tanpa Drama, Tanpa Delay.",
-    desc: "Proses yang terstruktur dan transparan untuk memastikan proyek berjalan sesuai ekspektasi.",
+    mainHeading: "Alur Kerja Terstruktur, Rilis Tepat Waktu.",
+    desc: "Setiap fase pengembangan dijalankan dengan lingkup kerja yang terukur agar produk selesai sesuai jadwal tanpa kompromi kualitas.",
     steps: [
       {
         title: "1. Discovery & Blueprint",
@@ -224,7 +258,7 @@ export const id = {
       },
       {
         title: "2. Development Iteratif",
-        desc: "Saya membangun sistem secara bertahap. Anda akan menerima update rutin setiap minggu untuk melihat progress nyata."
+        desc: "Kami membangun sistem secara bertahap. Anda akan menerima update rutin setiap minggu untuk melihat progres nyata."
       },
       {
         title: "3. Testing & QA",
@@ -239,7 +273,7 @@ export const id = {
   differences: {
     badge: "Keunggulan",
     mainHeading: "Yang Membedakan",
-    mainHeadingHighlight: "Cara Saya Bekerja",
+    mainHeadingHighlight: "Cara Kami Bekerja",
     items: [
       {
         title: "Langsung ke Eksekutor",
@@ -264,7 +298,7 @@ export const id = {
     item2Title: "100% Hak Cipta Anda",
     item2Desc: "Source code, desain, dan seluruh aset digital sepenuhnya milik Anda setelah proyek lunas, tanpa lisensi berulang.",
     item3Title: "Pembayaran Bertahap",
-    item3Desc: "Pembayaran dilakukan per milestone, sehingga Anda bisa mengevaluasi progress sebelum melanjutkan ke tahap berikutnya secara aman."
+    item3Desc: "Pembayaran dilakukan per milestone, sehingga Anda bisa mengevaluasi progres sebelum melanjutkan ke tahap berikutnya secara aman."
   },
   contact: {
     badge: "KONTAK & KONSULTASI",
@@ -306,7 +340,7 @@ export const id = {
     formDetailsPlaceholder: "Jelaskan tujuan sistem, fitur utama yang dibutuhkan, atau target waktu peluncuran...",
     formSubmit: "Kirim Konsultasi Proyek",
     formSubmitSuccess: "Pesan Berhasil Terkirim!",
-    formSubmitSuccessDesc: "Terima kasih telah menghubungi SejatiDimedia. Saya akan mempelajari kebutuhan Anda dan segera membalas dalam waktu 1x24 jam."
+    formSubmitSuccessDesc: "Terima kasih telah menghubungi SejatiDimedia. Tim kami akan mempelajari kebutuhan Anda dan segera membalas dalam waktu 1x24 jam."
   },
   portfolio: {
     badge: "Portofolio",
@@ -367,20 +401,20 @@ export const id = {
     starterDesc: "Validasi ide bisnis atau produk baru ke pasar secara cepat dan fungsional sebelum komitmen anggaran besar.",
     starterPrice: "Fixed Scope",
     starterPriceMain: "Fixed Scope & Timeline",
-    starterTime: "2–4 Minggu",
+    starterTime: "2-4 Minggu",
     starterBtn: "Konsultasi Scope MVP",
     starterIncludes: [
       'Pilihan: Web App ATAU Mobile App MVP',
       'Fitur Inti & Core Business Logic',
       'UI/UX Responsif & Siap Rilis',
-      'Waktu Pengerjaan Cepat 2–4 Minggu'
+      'Arsitektur MVP Modular & Skalabel'
     ],
     growthTag: "Operasional & Scale-Up",
     growthTitle: "Growth: Production Ready",
     growthDesc: "Aplikasi skala penuh dengan multi-user, backend tangguh, dan integrasi lengkap untuk operasional bisnis harian.",
     growthPrice: "Berdasarkan Fitur",
     growthPriceMain: "Berdasarkan Fitur & Scope",
-    growthTime: "1–2 Bulan",
+    growthTime: "1-2 Bulan",
     growthBtn: "Minta Estimasi Biaya",
     growthIncludes: [
       'Web App ATAU Mobile App (Android & iOS)',
@@ -405,11 +439,11 @@ export const id = {
     standards: [
       "100% Hak Cipta & Source Code",
       "Pembayaran Bertahap (Milestone)",
-      "Garansi Bug Fixing Resmi",
+      "Garansi Bug Fixing Resmi 30 Hari",
       "Deployment Server Cloud",
       "Tanpa Perantara (Direct Dev)"
     ],
-    budgetNote: "Punya spesifikasi kebutuhan unik atau ingin estimasi langsung? Konsultasikan arsitektur sistem Anda bersama tim ahli kami via WhatsApp."
+    budgetNote: "Punya spesifikasi kebutuhan unik atau ingin estimasi langsung? Konsultasikan arsitektur sistem Anda bersama tim kami via WhatsApp."
   },
 
   features: {
@@ -426,17 +460,17 @@ export const id = {
     askLabel: "Tulis pertanyaan Anda.",
     askPlaceholder: "Tulis di sini...",
     askSuccess: "Konsultasi Berhasil Dikirim!",
-    askSuccessDesc: "Saya akan membalas pertanyaan Anda ke email yang Anda daftarkan maksimal dalam 24 jam kerja.",
+    askSuccessDesc: "Tim kami akan membalas pertanyaan Anda ke email yang Anda daftarkan maksimal dalam 24 jam kerja.",
     otherQuestions: "Ada pertanyaan lain?",
-    otherQuestionsSub: "Hubungi saya secara langsung melalui email resmi SejatiDimedia.",
+    otherQuestionsSub: "Hubungi kami secara langsung melalui email resmi SejatiDimedia.",
     items: [
       {
         q: "Berapa lama estimasi pengerjaan sebuah proyek?",
-        a: "Bergantung pada kompleksitas. Untuk paket Starter biasanya memakan waktu 3-4 minggu. Untuk paket Growth (aplikasi full-stack) sekitar 1-2 bulan. Proyek Custom menyesuaikan dengan scope pekerjaan yang disepakati di awal."
+        a: "Bergantung pada kompleksitas. Untuk paket Starter biasanya memakan waktu 2-4 minggu. Untuk paket Growth (aplikasi full-stack) sekitar 1-2 bulan. Proyek Custom menyesuaikan dengan scope pekerjaan yang disepakati di awal."
       },
       {
         q: "Apakah saya mendapatkan akses ke seluruh source code?",
-        a: "Ya, 100%. Setelah proyek selesai dan pembayaran dilunasi, seluruh source code, hak cipta, dan aset digital sepenuhnya menjadi milik Anda. Saya juga menyertakan dokumentasi cara menjalankannya."
+        a: "Ya, 100%. Setelah proyek selesai dan pembayaran dilunasi, seluruh source code, hak cipta, dan aset digital sepenuhnya menjadi milik Anda. Kami juga menyertakan dokumentasi cara menjalankannya."
       },
       {
         q: "Bagaimana sistem pembayarannya?",
@@ -448,7 +482,7 @@ export const id = {
       },
       {
         q: "Saya butuh NDA (Non-Disclosure Agreement), apakah bisa?",
-        a: "Tentu. Privasi ide dan data perusahaan Anda adalah prioritas. Saya sangat terbuka untuk menandatangani NDA sebelum kita mendiskusikan detail proyek lebih dalam."
+        a: "Tentu. Privasi ide dan data perusahaan Anda adalah prioritas. Kami siap menandatangani NDA sebelum kita mendiskusikan detail proyek lebih dalam."
       }
     ]
   },
@@ -457,7 +491,7 @@ export const id = {
     terms: "SYARAT & KETENTUAN"
   },
   platforms: {
-    availableOn: "Rekam jejak proyek saya juga dapat dilihat di Upwork & Fastwork",
+    availableOn: "Rekam jejak proyek kami juga dapat dilihat di Upwork & Fastwork",
     secure: "Transaksi aman & terjamin"
   },
   footer: {
@@ -476,14 +510,14 @@ export const id = {
   trust: {
     badge: "Kenapa Klien Percaya",
     mainHeading: "Kenapa Klien Percaya",
-    mainHeadingHighlight: "Bekerja Sama Dengan Saya",
+    mainHeadingHighlight: "Bekerja Sama Dengan SejatiDimedia",
     items: [
       { title: "Komunikasi Langsung Tanpa Perantara", desc: "Anda bicara langsung dengan yang mengerjakan sistem Anda, bukan lewat account manager atau tim support berlapis." },
       { title: "Kode Bersih & Terstruktur", desc: "Arsitektur dibangun dengan standar industri terbaik, rapi, dan terdokumentasi, sehingga mudah diskalakan atau diserahkan ke tim lain di masa depan." },
       { title: "Pendampingan Pasca-Launch", desc: "Mendampingi Anda selama fase kritis pasca-peluncuran untuk memastikan sistem berjalan stabil, memperbaiki bug, dan menjaga performa." },
       { title: "Revisi Terstruktur", desc: "Proses feedback yang terstruktur di setiap milestone (tahapan), mencegah rombak total di akhir dan menjaga proyek tetap on-track." },
       { title: "Pembayaran Bertahap", desc: "Skema pembayaran termin berbasis milestone (berkala). Anda hanya membayar saat fitur yang disepakati benar-benar selesai dan lulus uji coba." },
-      { title: "100% Hak Cipta Anda", desc: "Seluruh source code dan hak cipta sepenuhnya milik Anda setelah proyek selesai, bukan disewakan atau dikunci ke platform saya." }
+      { title: "100% Hak Cipta Anda", desc: "Seluruh source code dan hak cipta sepenuhnya milik Anda setelah proyek selesai, bukan disewakan atau dikunci ke pihak mana pun." }
     ]
   },
   templateSettings: {

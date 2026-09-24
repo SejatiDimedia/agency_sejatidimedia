@@ -450,10 +450,21 @@ export default function InsightDetailClient({
                 </span>
               </Link>
             ) : (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 text-[10px] font-sans font-bold uppercase tracking-wider shadow-2xs">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
-                {article.category}
-              </span>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                {(article.category || "")
+                  .split(",")
+                  .map((c) => c.trim())
+                  .filter(Boolean)
+                  .map((cat) => (
+                    <span
+                      key={cat}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 text-[10px] font-sans font-bold uppercase tracking-wider shadow-2xs"
+                    >
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+                      {cat}
+                    </span>
+                  ))}
+              </div>
             )}
           </div>
 

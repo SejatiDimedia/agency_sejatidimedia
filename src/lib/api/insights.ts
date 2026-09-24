@@ -72,6 +72,34 @@ export const DEFAULT_SERIES_DATA: InsightSeriesSummary[] = [
     totalReadTimeMinutes: 8,
     updatedAt: "2026-09-14",
   },
+  {
+    id: "series-laravel-ai-integration",
+    slug: "laravel-ai-integration",
+    titleId: "Laravel & AI Integration",
+    titleEn: "Laravel & AI Integration",
+    descriptionId: "Panduan praktis mengintegrasikan model AI (OpenAI, Claude, Ollama, Vector Database) ke dalam ekosistem Laravel.",
+    descriptionEn: "Practical guide to integrating AI models (OpenAI, Claude, Ollama, Vector Database) into the Laravel ecosystem.",
+    badge: "ENGINEERING PLAYBOOK",
+    category: "Backend, AI",
+    coverImage: "/images/insights/laravel_architecture_cover.jpg",
+    totalArticles: 6,
+    totalReadTimeMinutes: 30,
+    updatedAt: "2026-09-14",
+  },
+  {
+    id: "series-cara-kerja-ai",
+    slug: "cara-kerja-ai-di-balik-layar",
+    titleId: "Cara Kerja AI di Balik Layar",
+    titleEn: "How AI Works Behind the Scenes",
+    descriptionId: "Memahami cara kerja AI, Large Language Models, tokenisasi, prompt chaining, dan ekosistem model dari sudut pandang rekayasa software.",
+    descriptionEn: "Understanding how AI, LLMs, tokenization, prompt chaining, and model ecosystems work under the hood.",
+    badge: "AI PLAYBOOK",
+    category: "AI",
+    coverImage: "/images/insights/laravel_architecture_cover.jpg",
+    totalArticles: 5,
+    totalReadTimeMinutes: 25,
+    updatedAt: "2026-09-14",
+  },
 ];
 
 export const INSIGHTS_DATA: InsightArticle[] = [
@@ -483,6 +511,7 @@ export function mapDbInsightToArticle(
       descriptionId: item.series.descriptionId || '',
       descriptionEn: item.series.descriptionEn || '',
       badge: item.series.badge || 'ENGINEERING SERIES',
+      category: item.series.category || null,
       part: item.seriesPart || 1,
       totalParts: 1,
       curriculum: [],
@@ -536,6 +565,7 @@ export async function getInsights(): Promise<InsightArticle[]> {
               descriptionId: true,
               descriptionEn: true,
               badge: true,
+              category: true,
             },
           },
         },
@@ -659,6 +689,7 @@ export async function getInsightBySlug(slug: string): Promise<InsightArticle | n
             descriptionId: item.series.descriptionId,
             descriptionEn: item.series.descriptionEn,
             badge: item.series.badge,
+            category: item.series.category || null,
             part: item.seriesPart || (currentIndex >= 0 ? currentIndex + 1 : 1),
             totalParts: curriculum.length,
             curriculum,
@@ -813,12 +844,30 @@ export async function getRelatedInsights(currentSlug: string, limit = 2): Promis
   }
 }
 
+const PREFERRED_CATEGORY_ORDER = ["All", "AI", "Backend", "Frontend", "Architecture", "Best Practices", "Security"];
+
+function sortCategories(categories: string[]): string[] {
+  return Array.from(new Set(categories)).sort((a, b) => {
+    const aIdx = PREFERRED_CATEGORY_ORDER.indexOf(a);
+    const bIdx = PREFERRED_CATEGORY_ORDER.indexOf(b);
+    if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+    if (aIdx !== -1) return -1;
+    if (bIdx !== -1) return 1;
+    return a.localeCompare(b);
+  });
+}
+
 export async function getAllCategories(): Promise<string[]> {
   try {
     const [articles, seriesList] = await Promise.all([getInsights(), getInsightSeriesList()]);
     const set = new Set<string>();
     articles.forEach((item) => {
-      if (item.category) set.add(item.category.trim());
+      if (item.category) {
+        item.category.split(',').forEach((c: string) => {
+          const trimmed = c.trim();
+          if (trimmed) set.add(trimmed);
+        });
+      }
     });
     seriesList.forEach((s) => {
       if (s.category) {
@@ -828,11 +877,16 @@ export async function getAllCategories(): Promise<string[]> {
         });
       }
     });
-    return ["All", ...Array.from(set)];
+    return sortCategories(["All", ...Array.from(set)]);
   } catch {
     const set = new Set<string>();
     INSIGHTS_DATA.forEach((item) => {
-      if (item.category) set.add(item.category.trim());
+      if (item.category) {
+        item.category.split(',').forEach((c: string) => {
+          const trimmed = c.trim();
+          if (trimmed) set.add(trimmed);
+        });
+      }
     });
     DEFAULT_SERIES_DATA.forEach((s) => {
       if (s.category) {
@@ -842,7 +896,7 @@ export async function getAllCategories(): Promise<string[]> {
         });
       }
     });
-    return ["All", ...Array.from(set)];
+    return sortCategories(["All", ...Array.from(set)]);
   }
 }
 

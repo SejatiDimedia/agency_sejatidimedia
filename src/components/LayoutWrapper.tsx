@@ -214,6 +214,15 @@ export default function LayoutWrapper({
     }
   };
 
+  const handleOpenTools = () => {
+    if (typeof window !== "undefined" && window.innerWidth < 768) {
+      setIsMobileToolsOpen(true);
+    } else {
+      setIsToolsOpen((prev) => !prev);
+      setIsClassicToolsOpen((prev) => !prev);
+    }
+  };
+
   return (
     <>
       <CustomCursor />
@@ -317,10 +326,10 @@ export default function LayoutWrapper({
             <div className={`w-full bg-theme-accent flex items-center justify-center transition-all duration-300 overflow-hidden ${scrolled ? 'h-0 opacity-0' : 'h-8 opacity-100'}`}>
               <div className="flex items-center gap-2 text-theme-base text-[9px] sm:text-[10px] font-sans font-bold tracking-widest uppercase">
                 <Icon icon="ph:sparkle-fill" className="w-3 h-3 text-amber-300 shrink-0" />
-                <span>{language === 'id' ? 'Tersedia Sesi Konsultasi Gratis Terbatas' : 'Limited Free Consultation Available'}</span>
+                <span>{language === 'id' ? 'Konsultasi Kebutuhan Sistem & Arsitektur Gratis' : 'Free System Architecture & Needs Consultation'}</span>
                 <span className="mx-1 opacity-50 hidden sm:inline">|</span>
                 <button onClick={() => handleNavClick('contact-section')} className="underline underline-offset-2 hover:text-theme-base/80 transition-colors cursor-pointer hidden sm:inline">
-                  {language === 'id' ? 'Pesan Sekarang' : 'Book Now'}
+                  {language === 'id' ? 'Konsultasi Sekarang' : 'Consult Now'}
                 </button>
               </div>
             </div>
@@ -591,26 +600,16 @@ export default function LayoutWrapper({
                         </button>
                       </li>
                       <li>
-                        <a
-                          href="https://secoret.vercel.app"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:text-theme-accent transition-colors duration-200 cursor-pointer flex items-center gap-1 text-left"
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenTools();
+                          }}
+                          className="hover:text-theme-accent transition-colors duration-200 cursor-pointer flex items-center gap-1.5 text-left group"
                         >
-                          <span>Secoret (Tool)</span>
-                          <Icon icon="ph:arrow-up-right-bold" className="w-3 h-3 text-theme-fore-subtle" />
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="https://seclip.vercel.app"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:text-theme-accent transition-colors duration-200 cursor-pointer flex items-center gap-1 text-left"
-                        >
-                          <span>SeClip (Tool)</span>
-                          <Icon icon="ph:arrow-up-right-bold" className="w-3 h-3 text-theme-fore-subtle" />
-                        </a>
+                          <span>{t.nav.tools || "Tools"}</span>
+                          <Icon icon="ph:squares-four-bold" className="w-3.5 h-3.5 text-theme-fore-subtle group-hover:text-theme-accent transition-colors" />
+                        </button>
                       </li>
                       <li>
                         <button
@@ -647,7 +646,7 @@ export default function LayoutWrapper({
                       <li>
                         <button
                           onClick={() => handleNavClick("contact-section")}
-                          className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left font-bold text-theme-fore"
+                          className="hover:text-theme-accent transition-colors duration-200 cursor-pointer block text-left"
                         >
                           {t.nav.contact}
                         </button>
@@ -1215,26 +1214,16 @@ export default function LayoutWrapper({
                         </button>
                       </li>
                       <li>
-                        <a
-                          href="https://secoret.vercel.app"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer flex items-center gap-1 text-left"
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleOpenTools();
+                          }}
+                          className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer flex items-center gap-1.5 text-left group"
                         >
-                          <span>Secoret (Tool)</span>
-                          <Icon icon="ph:arrow-up-right-bold" className="w-3 h-3 text-slate-400" />
-                        </a>
-                      </li>
-                      <li>
-                        <a
-                          href="https://seclip.vercel.app"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer flex items-center gap-1 text-left"
-                        >
-                          <span>SeClip (Tool)</span>
-                          <Icon icon="ph:arrow-up-right-bold" className="w-3 h-3 text-slate-400" />
-                        </a>
+                          <span>{t.nav.tools || "Tools"}</span>
+                          <Icon icon="ph:squares-four-bold" className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#2C5098] transition-colors" />
+                        </button>
                       </li>
                       <li>
                         <button
@@ -1271,7 +1260,7 @@ export default function LayoutWrapper({
                       <li>
                         <button
                           onClick={() => handleNavClick("contact-section")}
-                          className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer block text-left font-bold text-slate-900"
+                          className="hover:text-[#2C5098] transition-colors duration-200 cursor-pointer block text-left"
                         >
                           {t.nav.contact}
                         </button>

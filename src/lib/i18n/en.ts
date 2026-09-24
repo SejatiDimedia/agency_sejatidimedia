@@ -48,10 +48,10 @@ export const en = {
     point3Desc: "Get notified automatically when milestones complete, so there is no need to chase for progress."
   },
   about: {
-    eyebrow: "ABOUT ME",
+    eyebrow: "ABOUT US",
     title: "Background & Work Approach",
-    subtitle: "5+ years managing operational systems shaped how I engineer clean, stable, and practical software for your business.",
-    p1: "During my 5+ years as a software developer in manufacturing, I managed ERP, inventory, and logistics software used continuously by frontline operations teams.",
+    subtitle: "5+ years managing operational systems shaped how we engineer clean, stable, and practical software for your business.",
+    p1: "Drawing from 5+ years of experience in the manufacturing sector, we are accustomed to managing ERP, inventory, and logistics systems used directly by operational teams daily.",
     p2: "In real operations, software failures rarely happen from missing features. The root cause is almost always confusing workflows, slow interfaces, and architectures that are costly to maintain.",
     p3: "SejatiDimedia was founded to solve that: delivering practical business software that is straightforward for teams to use, with clean code designed for long-term reliability.",
     phase1Label: "01 / BACKGROUND",
@@ -67,38 +67,72 @@ export const en = {
     card1Desc: "ERP, Production, Inventory & Operational Workflow",
     card2Title: "Integrated Digital Systems",
     card2Desc: "Not just a website, but a real operational system",
+    metricsBadge: "PROVEN TRACK RECORD",
+    metricsTitle: "Built on Real Operational Experience",
+    metricsSubtitle: "Every line of code is backed by years of hands-on software engineering in mission-critical environments.",
+    metrics: [
+      {
+        number: "5+",
+        label: "Years Experience",
+        title: "Manufacturing Operations",
+        desc: "Managing ERP, inventory, and logistics in real industrial environments with near-zero downtime.",
+        icon: "ph:factory-duotone"
+      },
+      {
+        number: "30+",
+        label: "Projects Delivered",
+        title: "Web, Mobile & SaaS Apps",
+        desc: "From market validation MVPs to high-concurrency production systems built with modern stacks.",
+        icon: "ph:rocket-launch-duotone"
+      },
+      {
+        number: "7+",
+        label: "Enterprise Systems",
+        title: "Tested in Production",
+        desc: "Enterprise platforms handling complex business logic, workflow automation, and secured database schemas.",
+        icon: "ph:buildings-duotone"
+      }
+    ],
     valuesBadge: "ENGINEERING STANDARDS",
-    valuesTitle: "Execution Standards on Every Project",
-    valuesSubtitle: "Technical discipline and operational transparency applied from initial planning to production server deployment.",
+    valuesTitle: "Technical Standards in Every Project",
+    valuesSubtitle: "Commitment to code quality, data security, and long-term maintainability for your software.",
     values: [
       {
-        title: "Progress Transparency",
-        tag: "24/7 Portal Access",
-        desc: "Track milestone progress live via your client portal. Scope and pricing are defined upfront with zero hidden charges."
+        title: "Clean & Modular Architecture",
+        tag: "Maintainable Code",
+        desc: "Code is organized into modular patterns following industry best practices, making it easy to audit and scale by any engineering team.",
+        icon: "ph:tree-structure-duotone",
+        chips: ["Modular Patterns", "Auditable Code", "Structured Layout"]
       },
       {
-        title: "Proven Technology",
-        tag: "Production-Ready Stack",
-        desc: "We use battle-tested technologies. Focused on stability, speed, and easy maintenance rather than passing trends."
+        title: "Type Safety & Quality Assurance",
+        tag: "Fewer Runtime Bugs",
+        desc: "Strict type validation and automated checks from day one, minimizing unexpected crashes and regression bugs in production.",
+        icon: "ph:seal-check-duotone",
+        chips: ["Strict TypeScript", "Input Validation", "Automated Linting"]
       },
       {
-        title: "Direct Developer Access",
-        tag: "No Sales Middlemen",
-        desc: "You discuss requirements directly with the engineer writing the code. Technical decisions are made quickly, accurately, and without sales miscommunication."
+        title: "Security & Data Protection",
+        tag: "Hardened Security",
+        desc: "Protection against common web vulnerabilities, sanitized inputs, isolated environment secrets, and encrypted sensitive data.",
+        icon: "ph:shield-check-duotone",
+        chips: ["Input Sanitization", "Secret Isolation", "Data Encryption"]
       },
       {
-        title: "Warranty & Full Handoff",
-        tag: "100% Asset Ownership",
-        desc: "Systems are rigorously tested before release, backed by an official bug-fixing warranty, with full source code ownership delivered to your company."
+        title: "Documentation & Handoff Guides",
+        tag: "Zero Lock-in",
+        desc: "Complete database schema docs, server deployment instructions, and configuration guides so you have full independent control.",
+        icon: "ph:book-bookmark-duotone",
+        chips: ["Server Setup", "Database Schema", "API Documentation"]
       }
     ]
   },
   services: {
     sectionTitle: "Services",
     portfolio: "Portfolio",
-    mainHeading: "From idea to production. I handle the entire development cycle.",
+    mainHeading: "From idea to production. We handle the entire development cycle.",
     mainHeadingHighlight: "Software Development",
-    desc: "Every system I build starts from real operational needs, not generic templates. Clean architecture, ironclad security, and performance designed to grow with your business.",
+    desc: "Every system we build starts from real operational needs, not generic templates. Clean architecture, ironclad security, and performance designed to grow with your business.",
     items: [
       {
         title: "Web Application Development",
@@ -122,7 +156,7 @@ export const en = {
     badge: "Technology",
     mainHeading: "Technologies ",
     mainHeadingHighlight: "Used",
-    desc: "Tools are chosen based on project needs, not just trends, ensuring long-term performance, security, and ease of maintenance.",
+    desc: "Technology stacks are chosen to match your system's data load and specific workflows, prioritizing battle-tested ecosystems, rock-solid security, and long-term maintainability.",
     frontend: "Frontend",
     frontendDesc: "For fast, responsive, and interactive interfaces.",
     backend: "Backend & API",
@@ -140,7 +174,7 @@ export const en = {
   credibility: {
     badge: "Credibility",
     mainHeading: "Background & Capabilities",
-    desc: "Before taking on independent projects, I worked as a Software Developer in the manufacturing industry, handling systems that must be accurate and reliable for daily operations. I bring that experience to every project: code that doesn't just work, but is stable and easily maintainable in the long run.",
+    desc: "Drawing from years of software engineering in manufacturing operations, we build systems that must remain reliable and accurate in daily operations. We bring that operational rigor to every project: resilient architecture, high performance, and code that is maintainable for years.",
     card1Title: "Manufacturing Experience",
     card1Desc: "Experienced in developing & maintaining internal systems (like ERP, inventory, and HCM) in real manufacturing companies that demand high reliability.",
     card1Btn: "See Capabilities",
@@ -149,7 +183,7 @@ export const en = {
     card2Btn: "View Portfolio",
     card3Title: "Open Verification",
     card3Desc: "Code transparency through GitHub and professional history on LinkedIn, so potential clients can openly verify credibility before starting a project.",
-    card3Btn: "Contact Me",
+    card3Btn: "Contact Us",
   },
   pricing: {
     label: "Development Schemes",
@@ -181,7 +215,7 @@ export const en = {
       "Exclusive responsive & conversion-driven UI/UX",
       "Basic SEO & system performance optimization",
       "Deployment to production servers & cloud",
-      "Post-release bug fixing warranty",
+      "Official 30-day bug fixing warranty",
       "100% source code ownership & copyright"
     ]
   },
@@ -215,8 +249,8 @@ export const en = {
   },
   process: {
     badge: "Workflow",
-    mainHeading: "No Drama, No Delays.",
-    desc: "A structured and transparent process to ensure projects run according to expectations.",
+    mainHeading: "Structured Workflow, On-Time Delivery.",
+    desc: "Every development phase is executed with measurable scopes to ensure your product launches on schedule without compromising quality.",
     steps: [
       {
         title: "1. Discovery & Blueprint",
@@ -224,7 +258,7 @@ export const en = {
       },
       {
         title: "2. Iterative Development",
-        desc: "I build the system incrementally. You will receive routine weekly updates to see real progress."
+        desc: "We build the system iteratively. You receive weekly progress updates so you always have full visibility into live development."
       },
       {
         title: "3. Testing & QA",
@@ -239,7 +273,7 @@ export const en = {
   differences: {
     badge: "Advantages",
     mainHeading: "What Sets",
-    mainHeadingHighlight: "My Work Apart",
+    mainHeadingHighlight: "Our Work Apart",
     items: [
       {
         title: "Direct to Executor",
@@ -306,7 +340,7 @@ export const en = {
     formDetailsPlaceholder: "Explain system goals, key features needed, or target launch timeline...",
     formSubmit: "Send Project Consultation",
     formSubmitSuccess: "Message Sent Successfully!",
-    formSubmitSuccessDesc: "Thank you for reaching out to SejatiDimedia. I will review your requirements and reply within 24 hours."
+    formSubmitSuccessDesc: "Thank you for reaching out to SejatiDimedia. Our team will review your requirements and reply within 24 hours."
   },
   portfolio: {
     badge: "Portfolio",
@@ -373,7 +407,7 @@ export const en = {
       'Choice: Web App OR Mobile App MVP',
       'Core Business Logic & Features',
       'Responsive & Launch-Ready UI/UX',
-      'Fast Turnaround in 2–4 Weeks'
+      'Modular & Scalable MVP Architecture'
     ],
     growthTag: "Operations & Scale-Up",
     growthTitle: "Growth: Production Ready",
@@ -405,7 +439,7 @@ export const en = {
     standards: [
       "100% Copyright & Source Code",
       "Milestone-Based Payments",
-      "Official Bug Fixing Warranty",
+      "Official 30-Day Bug Fixing Warranty",
       "Cloud Server Deployment",
       "Direct Developer (No Middlemen)"
     ],
@@ -426,17 +460,17 @@ export const en = {
     askLabel: "Write your question.",
     askPlaceholder: "Type here...",
     askSuccess: "Consultation Sent Successfully!",
-    askSuccessDesc: "I will reply to your question to the email you registered within a maximum of 24 working hours.",
+    askSuccessDesc: "Our team will reply to your question to the email you registered within a maximum of 24 working hours.",
     otherQuestions: "Have another question?",
-    otherQuestionsSub: "Contact me directly via the official SejatiDimedia email.",
+    otherQuestionsSub: "Contact us directly via the official SejatiDimedia email.",
     items: [
       {
         q: "What is the estimated timeline for a project?",
-        a: "It depends on complexity. The Starter package usually takes 3-4 weeks. The Growth package (full-stack app) takes about 1-2 months. Custom projects adapt to the agreed scope of work."
+        a: "It depends on complexity. The Starter package usually takes 2–4 weeks. The Growth package (full-stack app) takes about 1–2 months. Custom projects adapt to the agreed scope of work."
       },
       {
         q: "Do I get access to the full source code?",
-        a: "Yes, 100%. After the project is completed and paid in full, all source code, copyrights, and digital assets become entirely yours. I also provide documentation on how to run it."
+        a: "Yes, 100%. After the project is completed and paid in full, all source code, copyrights, and digital assets become entirely yours. We also provide documentation on how to run it."
       },
       {
         q: "How does the payment system work?",
@@ -448,7 +482,7 @@ export const en = {
       },
       {
         q: "I need an NDA (Non-Disclosure Agreement), is that possible?",
-        a: "Absolutely. The privacy of your ideas and company data is a priority. I am very open to signing an NDA before we discuss the project details further."
+        a: "Absolutely. The privacy of your ideas and company data is a priority. We are ready to sign an NDA before we discuss the project details further."
       }
     ]
   },
@@ -457,7 +491,7 @@ export const en = {
     terms: "TERMS & CONDITIONS"
   },
   platforms: {
-    availableOn: "My project track record can also be viewed on Upwork & Fastwork",
+    availableOn: "Our project track record can also be viewed on Upwork & Fastwork",
     secure: "Secure & guaranteed transactions"
   },
   footer: {
@@ -476,14 +510,14 @@ export const en = {
   trust: {
     badge: "Why Clients Trust",
     mainHeading: "Why Clients Trust",
-    mainHeadingHighlight: "Working With Me",
+    mainHeadingHighlight: "Working With SejatiDimedia",
     items: [
       { title: "Direct Communication Without Intermediaries", desc: "You speak directly with the person building your system, not through account managers or layered support teams." },
       { title: "Clean & Structured Code", desc: "The architecture is built with the best industry standards, neat, and documented, making it easy to scale or hand over to another team in the future." },
       { title: "Post-Launch Support", desc: "Accompanying you during the critical post-launch phase to ensure the system runs stably, fixing bugs, and maintaining performance." },
       { title: "Structured Revisions", desc: "A structured feedback process at each milestone, preventing a total overhaul at the end and keeping the project on-track." },
       { title: "Gradual Payments", desc: "A milestone-based payment scheme. You only pay when the agreed features are fully completed and pass testing." },
-      { title: "100% Your Copyright", desc: "All source code and copyright belong entirely to you after project completion, not rented or locked to my platform." }
+      { title: "100% Your Copyright", desc: "All source code and copyright belong entirely to you after project completion, not rented or locked into our platform." }
     ]
   },
   templateSettings: {

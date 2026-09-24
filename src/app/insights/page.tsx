@@ -16,12 +16,25 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function InsightsPage() {
+export default async function InsightsPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ category?: string; search?: string }>;
+}) {
+  const resolvedParams = searchParams ? await searchParams : {};
   const [articles, categories, seriesList] = await Promise.all([
     getInsights(),
     getAllCategories(),
     getInsightSeriesList(),
   ]);
 
-  return <InsightsList articles={articles} categories={categories} seriesList={seriesList} />;
+  return (
+    <InsightsList
+      articles={articles}
+      categories={categories}
+      seriesList={seriesList}
+      initialCategory={resolvedParams?.category}
+      initialSearch={resolvedParams?.search}
+    />
+  );
 }

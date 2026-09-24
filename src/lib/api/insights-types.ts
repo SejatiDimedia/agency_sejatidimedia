@@ -30,6 +30,7 @@ export interface InsightSeriesInfo {
   descriptionId: string;
   descriptionEn?: string | null;
   badge?: string | null;
+  category?: string | null;
   part: number;
   totalParts: number;
   curriculum: SeriesCurriculumItem[];
@@ -73,7 +74,7 @@ export interface InsightArticle {
   excerptEn: string;
   contentId: string;
   contentEn: string;
-  category: 'Backend' | 'Frontend' | 'Architecture' | 'Best Practices' | 'Security';
+  category: string;
   tags: string[];
   publishedAt: string;
   readTimeMinutes: number;

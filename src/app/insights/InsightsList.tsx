@@ -12,12 +12,40 @@ interface InsightsListProps {
   articles: InsightArticle[];
   categories: string[];
   seriesList?: InsightSeriesSummary[];
+  initialCategory?: string;
+  initialSearch?: string;
 }
 
-export default function InsightsList({ articles, categories, seriesList = [] }: InsightsListProps) {
+export default function InsightsList({
+  articles,
+  categories,
+  seriesList = [],
+  initialCategory,
+  initialSearch,
+}: InsightsListProps) {
   const { language, t } = useLanguage();
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const matchedInitialCategory = useMemo(() => {
+    if (!initialCategory) return "All";
+    const found = categories.find((c) => c.toLowerCase() === initialCategory.toLowerCase());
+    return found || initialCategory;
+  }, [initialCategory, categories]);
+
+  const [selectedCategory, setSelectedCategory] = useState<string>(matchedInitialCategory);
+  const [searchQuery, setSearchQuery] = useState<string>(initialSearch || "");
+
+  useEffect(() => {
+    if (initialCategory) {
+      const found = categories.find((c) => c.toLowerCase() === initialCategory.toLowerCase());
+      setSelectedCategory(found || initialCategory);
+    }
+  }, [initialCategory, categories]);
+
+  useEffect(() => {
+    if (initialSearch !== undefined) {
+      setSearchQuery(initialSearch);
+    }
+  }, [initialSearch]);
 
   const pageT = t.insightsPage || {
     badge: "INSIGHTS & TEKNOLOGI",
@@ -30,15 +58,60 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
   };
 
   const filteredArticles = useMemo(() => {
+    const selectedCatLower = selectedCategory.trim().toLowerCase();
+    const isAll = selectedCategory === "All";
+
     return articles.filter((article) => {
       if (article.isPublished === false) return false;
 
-      const matchesCategory =
-        selectedCategory === "All" || article.category === selectedCategory;
+      let matchesCategory = isAll;
+
+      if (!matchesCategory) {
+        // 1. Direct article category check (including multi-category comma separated, e.g. "Backend, AI")
+        const articleCats = (article.category || "")
+          .split(",")
+          .map((c) => c.trim().toLowerCase())
+          .filter(Boolean);
+
+        if (articleCats.includes(selectedCatLower)) {
+          matchesCategory = true;
+        }
+
+        // 2. Series category check (if article belongs to a series with this category)
+        if (!matchesCategory && article.series?.category) {
+          const seriesCats = article.series.category
+            .split(",")
+            .map((c) => c.trim().toLowerCase())
+            .filter(Boolean);
+          if (seriesCats.includes(selectedCatLower)) {
+            matchesCategory = true;
+          }
+        }
+
+        // 3. Smart tag matching (e.g. tag 'Artificial Intelligence' or 'AI' matches 'AI' category)
+        if (!matchesCategory && Array.isArray(article.tags)) {
+          matchesCategory = article.tags.some((tag) => {
+            const tLow = tag.trim().toLowerCase();
+            if (tLow === selectedCatLower) return true;
+            if (
+              selectedCatLower === "ai" &&
+              (tLow === "artificial intelligence" ||
+                tLow === "artificial-intelligence" ||
+                tLow === "machine learning" ||
+                tLow === "llm" ||
+                tLow.includes("artificial intelligence") ||
+                tLow.includes("ai"))
+            ) {
+              return true;
+            }
+            return false;
+          });
+        }
+      }
 
       const title = language === "en" ? article.titleEn : article.titleId;
       const excerpt = language === "en" ? article.excerptEn : article.excerptId;
-      const searchTarget = `${title} ${excerpt} ${article.tags.join(" ")} ${article.category}`.toLowerCase();
+      const searchTarget = `${title} ${excerpt} ${(article.tags || []).join(" ")} ${article.category || ""}`.toLowerCase();
       const matchesSearch = searchQuery.trim() === "" || searchTarget.includes(searchQuery.toLowerCase());
 
       return matchesCategory && matchesSearch;
@@ -279,10 +352,19 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
 
                           {/* Top Badges */}
                           <div className="absolute top-4 left-4 flex items-center gap-2 z-10 flex-wrap">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md">
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
-                              {featured.category}
-                            </span>
+                            {(featured.category || "")
+                              .split(",")
+                              .map((c) => c.trim())
+                              .filter(Boolean)
+                              .map((cat) => (
+                                <span
+                                  key={cat}
+                                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md"
+                                >
+                                  <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+                                  {cat}
+                                </span>
+                              ))}
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-[#2C5098] text-white border border-[#2C5098] shadow-xs">
                               {language === "en" ? "FEATURED" : "UTAMA"}
                             </span>
@@ -540,10 +622,19 @@ export default function InsightsList({ articles, categories, seriesList = [] }: 
 
                         {/* Floating Category & Series Pill */}
                         <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 flex-wrap max-w-[90%]">
-                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md">
-                            <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
-                            {article.category}
-                          </span>
+                          {(article.category || "")
+                            .split(",")
+                            .map((c) => c.trim())
+                            .filter(Boolean)
+                            .map((cat) => (
+                              <span
+                                key={cat}
+                                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md"
+                              >
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+                                {cat}
+                              </span>
+                            ))}
                           {article.series && (
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-[#1E315B] text-white border border-white/20 shadow-xs">
                               <Layers className="w-3 h-3 text-blue-200" />

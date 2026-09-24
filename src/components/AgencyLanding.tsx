@@ -1002,14 +1002,14 @@ export default function AgencyLanding({
                   </span>
                 </Link>
 
-                {/* Live 24/7 status badge */}
+                {/* Monitoring status badge */}
                 <div className="flex items-center shrink-0">
                   <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-700 border border-emerald-500/30 text-[10px] font-bold font-mono shadow-2xs">
                     <span className="relative flex h-2 w-2 items-center justify-center">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                       <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
                     </span>
-                    Live 24/7
+                    {language === 'en' ? 'Active Monitoring' : 'Monitoring Aktif'}
                   </span>
                 </div>
               </div>
@@ -1363,8 +1363,8 @@ export default function AgencyLanding({
               <Icon icon="ph:check-circle-fill" className="w-4 h-4 text-emerald-600 shrink-0" />
               <span>
                 {language === 'en'
-                  ? 'Lifetime portal access with zero subscription fees'
-                  : 'Akses seumur hidup tanpa biaya langganan'}
+                  ? 'Integrated monitoring portal during project development'
+                  : 'Portal monitoring terpadu selama pengerjaan proyek'}
               </span>
             </div>
             <div className="flex items-center gap-2">
@@ -1379,8 +1379,8 @@ export default function AgencyLanding({
               <Icon icon="ph:check-circle-fill" className="w-4 h-4 text-emerald-600 shrink-0" />
               <span>
                 {language === 'en'
-                  ? '100% transparent billing with no hidden costs'
-                  : 'Transparansi 100% tanpa biaya tersembunyi'}
+                  ? 'Centralized contracts, invoices, and deliverables'
+                  : 'Kontrak, invoice, dan dokumen proyek tersimpan terpusat'}
               </span>
             </div>
           </div>
@@ -1402,7 +1402,7 @@ export default function AgencyLanding({
           {/* Standard Centered Section Header */}
           <div className="text-center max-w-3xl mx-auto space-y-3">
             <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
-              <span>{t.about?.eyebrow || "TENTANG SAYA"}</span>
+              <span>{t.about?.eyebrow || (language === 'en' ? 'ABOUT US' : 'TENTANG KAMI')}</span>
             </div>
 
             <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
@@ -1412,8 +1412,8 @@ export default function AgencyLanding({
             <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans max-w-2xl mx-auto">
               {t.about?.subtitle ||
                 (language === 'en'
-                  ? '5 years of managing operational systems taught me to build neat, stable, and user-friendly software tailored to your business needs.'
-                  : '5 tahun menangani sistem operasional membuat saya terbiasa membangun software yang rapi, stabil, dan mudah digunakan untuk kebutuhan bisnis Anda.')}
+                  ? '5+ years managing operational systems shaped how we engineer clean, stable, and practical software for your business.'
+                  : '5+ tahun mengelola sistem operasional membentuk cara kami membangun software yang rapi, stabil, dan tepat guna untuk bisnis Anda.')}
             </p>
           </div>
 
@@ -1432,8 +1432,8 @@ export default function AgencyLanding({
               <div className="md:col-span-8 space-y-3">
                 <p className="text-sm sm:text-base text-slate-700 font-sans leading-relaxed">
                   {t.about?.p1 || (language === 'en'
-                    ? 'During my 5+ years as a software developer in manufacturing, I managed ERP, inventory, and logistics software used continuously by frontline operations teams.'
-                    : 'Selama 5+ tahun sebagai software developer di industri manufaktur, saya mengelola sistem ERP, inventori, dan logistik yang digunakan langsung oleh tim operasional setiap hari.')}
+                    ? 'Drawing from 5+ years of experience in the manufacturing sector, we are accustomed to managing ERP, inventory, and logistics systems used directly by operational teams daily.'
+                    : 'Berangkat dari pengalaman 5+ tahun di industri manufaktur, kami terbiasa mengelola sistem ERP, inventori, dan logistik yang digunakan langsung oleh tim operasional setiap hari.')}
                 </p>
                 <div className="flex flex-wrap gap-x-6 gap-y-2 text-xs font-mono text-slate-500 pt-1">
                   {(t.about?.phase1Tags || (language === 'en'
@@ -1501,82 +1501,354 @@ export default function AgencyLanding({
             </div>
           </div>
 
-          {/* Section: Standar Kerja di Setiap Proyek (Work Standards) */}
+          {/* Section: Standar Pengerjaan / Technical Discipline & Quality Standards */}
           <div className="pt-16 sm:pt-20 border-t border-slate-200/90 text-left">
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 sm:mb-10">
               <div className="space-y-2 max-w-xl">
                 <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
-                  <span>{t.about?.valuesBadge || (language === 'en' ? 'WORK STANDARDS' : 'STANDAR PENGERJAAN')}</span>
+                  <span>{t.about?.valuesBadge || (language === 'en' ? 'ENGINEERING STANDARDS' : 'STANDAR PENGERJAAN')}</span>
                 </div>
                 <h3 className="text-2xl sm:text-3xl lg:text-3.5xl font-sora font-extrabold text-slate-900 tracking-tight leading-tight">
-                  {t.about?.valuesTitle || (language === 'en' ? 'Execution Standards on Every Project' : 'Standar Kerja di Setiap Proyek')}
+                  {t.about?.valuesTitle || (language === 'en' ? 'Technical Standards in Every Project' : 'Standar Disiplin Teknis di Setiap Proyek')}
                 </h3>
                 <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed pt-0.5">
                   {t.about?.valuesSubtitle || (language === 'en'
-                    ? 'Practical engineering standards and operational transparency applied from the first line of code to production deployment.'
-                    : 'Disiplin teknis dan keterbukaan alur kerja yang diterapkan sejak tahap perencanaan awal hingga sistem aktif beroperasi.')}
+                    ? 'Commitment to code quality, data security, and long-term maintainability for your software.'
+                    : 'Komitmen pada kualitas kode, keamanan data, dan kemudahan perawatan sistem untuk jangka panjang.')}
                 </p>
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 text-left">
-              {[
-                {
-                  title: t.about?.values?.[0]?.title || (language === 'en' ? 'Progress Transparency' : 'Transparansi Progres'),
-                  tag: t.about?.values?.[0]?.tag || (language === 'en' ? '24/7 Portal Access' : 'Akses Portal 24/7'),
-                  desc: t.about?.values?.[0]?.desc || (language === 'en'
-                    ? 'Track milestone progress live via your client portal. Scope and pricing are defined upfront with zero hidden charges.'
-                    : 'Progres proyek Anda pantau langsung lewat portal klien. Biaya dan scope disepakati tertulis di awal tanpa tagihan tersembunyi.'),
-                  icon: 'ph:shield-check-duotone'
-                },
-                {
-                  title: t.about?.values?.[1]?.title || (language === 'en' ? 'Proven Technology' : 'Teknologi Teruji'),
-                  tag: t.about?.values?.[1]?.tag || (language === 'en' ? 'Production-Ready Stack' : 'Bukan Eksperimen'),
-                  desc: t.about?.values?.[1]?.desc || (language === 'en'
-                    ? 'We use battle-tested technologies like Next.js, Laravel, and PostgreSQL. Focused on stability, speed, and easy maintenance rather than passing trends.'
-                    : 'Menggunakan stack modern yang terbukti stabil di tingkat produksi (Next.js, Laravel, PostgreSQL). Fokus pada performa dan kemudahan perawatan jangka panjang.'),
-                  icon: 'ph:stack-duotone'
-                },
-                {
-                  title: t.about?.values?.[2]?.title || (language === 'en' ? 'Direct Communication' : 'Komunikasi Langsung'),
-                  tag: t.about?.values?.[2]?.tag || (language === 'en' ? 'No Sales Middlemen' : 'Tanpa Perantara'),
-                  desc: t.about?.values?.[2]?.desc || (language === 'en'
-                    ? 'You discuss requirements directly with the engineer writing the code. Technical decisions are made quickly, accurately, and without sales miscommunication.'
-                    : 'Anda berdiskusi langsung dengan developer yang menulis kode sistem Anda. Keputusan teknis diambil cepat, presisi, dan bebas miskomunikasi tim sales.'),
-                  icon: 'ph:chats-circle-duotone'
-                },
-                {
-                  title: t.about?.values?.[3]?.title || (language === 'en' ? 'Warranty & Full Handoff' : 'Jaminan & Serah Terima'),
-                  tag: t.about?.values?.[3]?.tag || (language === 'en' ? '100% Asset Ownership' : '100% Hak Milik'),
-                  desc: t.about?.values?.[3]?.desc || (language === 'en'
-                    ? 'Systems are rigorously tested before release, backed by an official bug-fixing warranty, and delivered with full source code ownership as your digital asset.'
-                    : 'Sistem diuji sebelum peluncuran, dilindungi garansi resmi perbaikan bug, dan seluruh source code diserahkan penuh sebagai aset resmi bisnis Anda.'),
-                  icon: 'ph:seal-check-duotone'
-                }
-              ].map((val, idx) => (
-                <div
-                  key={idx}
-                  className="p-6 sm:p-7 rounded-3xl bg-white border border-slate-200/90 shadow-sm hover:border-[#2C5098]/40 hover:shadow-md transition-all flex flex-col sm:flex-row gap-5 items-start group"
-                >
-                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 shrink-0 group-hover:scale-105 transition-transform">
-                    <Icon icon={val.icon} className="w-6 h-6" />
-                  </div>
-                  <div className="flex-1 min-w-0 space-y-2">
-                    <div className="flex items-center justify-between gap-3 flex-wrap">
-                      <h4 className="text-base sm:text-lg font-sora font-bold text-slate-900 tracking-tight">
-                        <span className="text-[#2C5098] font-mono font-bold mr-2">0{idx + 1}</span>
-                        {val.title}
-                      </h4>
-                      <span className="text-xs font-mono font-medium text-slate-400">
-                        {val.tag}
-                      </span>
+            {/* 4 Interactive & Visually Rich Technical Standards Cards (2x2 Grid) */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 text-left items-stretch">
+              {/* CARD 1: Arsitektur Bersih & Modular */}
+              <div className="rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-8 shadow-xs hover:border-[#2C5098]/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between space-y-6 group">
+                <div className="space-y-4">
+                  {/* Top Bar: Icon + Title + Tag */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50/80 text-[#2C5098] border border-blue-200/60 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                      <Icon icon="ph:tree-structure-duotone" className="w-6 h-6" />
                     </div>
+                    <span className="text-xs font-sans font-semibold text-[#2C5098] px-3 py-1 rounded-full bg-[#2C5098]/8 border border-[#2C5098]/15 shrink-0">
+                      {language === 'en' ? 'Maintainable Code' : 'Mudah Dirawat'}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <h4 className="text-lg sm:text-xl font-sora font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors tracking-tight leading-snug">
+                      {language === 'en' ? 'Clean & Modular Architecture' : 'Arsitektur Bersih & Modular'}
+                    </h4>
                     <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed">
-                      {val.desc}
+                      {language === 'en'
+                        ? 'Code is structured into clean decoupled layers following standard industry practices, making it easy to audit, test, and expand by any development team.'
+                        : 'Kode ditulis dengan pemisahan lapisan yang jelas, memisahkan logika bisnis dari antarmuka agar mudah diaudit dan dikembangkan tim mana pun di masa depan.'}
                     </p>
                   </div>
+
+                  {/* Visual Artifact: Multi-Tier Architecture Diagram */}
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                    <div className="text-[11px] font-sans font-semibold text-slate-700 flex items-center justify-between pb-1.5 border-b border-slate-200/60">
+                      <span className="flex items-center gap-1.5">
+                        <Icon icon="ph:stack-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
+                        {language === 'en' ? 'Decoupled Layer Architecture' : 'Lapisan Arsitektur Terisolasi'}
+                      </span>
+                      <span className="text-emerald-700 text-[10px] font-medium flex items-center gap-1">
+                        <Icon icon="ph:check-circle-bold" className="w-3.5 h-3.5" />
+                        {language === 'en' ? 'Standardized' : 'Terstandarisasi'}
+                      </span>
+                    </div>
+
+                    <div className="space-y-1.5 text-xs font-sans">
+                      <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
+                        <div className="flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+                          <span className="font-semibold text-slate-800 text-[11px]">
+                            {language === 'en' ? 'Presentation Layer' : 'Lapisan Antarmuka (UI)'}
+                          </span>
+                        </div>
+                        <span className="text-[10px] font-mono text-slate-500">React • Next.js • Tailwind</span>
+                      </div>
+
+                      <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-white border border-blue-200/70 shadow-2xs bg-blue-50/20">
+                        <div className="flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                          <span className="font-semibold text-slate-800 text-[11px]">
+                            {language === 'en' ? 'Core Business Logic' : 'Logika Bisnis & Domain'}
+                          </span>
+                        </div>
+                        <span className="text-[10px] font-mono text-slate-500">Decoupled Services</span>
+                      </div>
+
+                      <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
+                        <div className="flex items-center gap-2">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                          <span className="font-semibold text-slate-800 text-[11px]">
+                            {language === 'en' ? 'Data & Storage Tier' : 'Akses Data & Database'}
+                          </span>
+                        </div>
+                        <span className="text-[10px] font-mono text-slate-500">PostgreSQL • Prisma • API</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              ))}
+
+                {/* Footer Chips */}
+                <div className="pt-3 border-t border-slate-100 flex flex-wrap gap-1.5">
+                  {[
+                    language === 'en' ? 'Modular Patterns' : 'Pola Modular',
+                    language === 'en' ? 'Auditable Codebase' : 'Mudah Diaudit',
+                    language === 'en' ? 'Structured Layout' : 'Struktur Direktori Rapi'
+                  ].map((chip, cIdx) => (
+                    <span
+                      key={cIdx}
+                      className="px-2.5 py-0.5 rounded-lg bg-slate-50 border border-slate-200/70 text-[11px] font-sans text-slate-600 font-medium"
+                    >
+                      {chip}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* CARD 2: Kualitas Kode & Type Safety */}
+              <div className="rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-8 shadow-xs hover:border-[#2C5098]/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between space-y-6 group">
+                <div className="space-y-4">
+                  {/* Top Bar: Icon + Title + Tag */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50/80 text-[#2C5098] border border-blue-200/60 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                      <Icon icon="ph:seal-check-duotone" className="w-6 h-6" />
+                    </div>
+                    <span className="text-xs font-sans font-semibold text-[#2C5098] px-3 py-1 rounded-full bg-[#2C5098]/8 border border-[#2C5098]/15 shrink-0">
+                      {language === 'en' ? 'Fewer Runtime Bugs' : 'Minim Bug Runtime'}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <h4 className="text-lg sm:text-xl font-sora font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors tracking-tight leading-snug">
+                      {language === 'en' ? 'Type Safety & Code Quality' : 'Kualitas Kode & Type Safety'}
+                    </h4>
+                    <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed">
+                      {language === 'en'
+                        ? 'Strict type contracts and automated linting catch logic bugs before release, ensuring predictable execution in production.'
+                        : 'Menerapkan validasi tipe ketat dan pengecekan otomatis sejak awal pengerjaan, meminimalisir potensi error tak terduga saat sistem aktif digunakan.'}
+                    </p>
+                  </div>
+
+                  {/* Visual Artifact: Simulated IDE / Code Quality Window */}
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                    <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60">
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                        <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
+                        <span className="text-[10px] font-mono text-slate-500 ml-1.5">types.ts</span>
+                      </div>
+                      <span className="text-[10px] font-sans font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60">
+                        {language === 'en' ? 'Strict Mode Passed' : 'TypeScript Strict Lulus'}
+                      </span>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-white border border-slate-200/80 font-mono text-[11px] leading-relaxed text-slate-700 space-y-0.5">
+                      <div className="text-slate-400">// {language === 'en' ? 'Contract-driven data modeling' : 'Model data dengan tipe valid'}</div>
+                      <div>
+                        <span className="text-blue-600 font-semibold">interface</span> <span className="text-[#2C5098] font-bold">BusinessRecord</span> {'{'}
+                      </div>
+                      <div className="pl-3">
+                        <span className="text-slate-800">id:</span> <span className="text-indigo-600">UUID</span>;
+                      </div>
+                      <div className="pl-3">
+                        <span className="text-slate-800">status:</span> <span className="text-emerald-700 font-medium">&#39;active&#39; | &#39;verified&#39;</span>;
+                      </div>
+                      <div>{'}'}</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Chips */}
+                <div className="pt-3 border-t border-slate-100 flex flex-wrap gap-1.5">
+                  {[
+                    language === 'en' ? 'Strict TypeScript' : 'TypeScript Strict',
+                    language === 'en' ? 'Input Validation' : 'Validasi Input Form',
+                    language === 'en' ? 'Automated Linting' : 'Pengecekan Otomatis'
+                  ].map((chip, cIdx) => (
+                    <span
+                      key={cIdx}
+                      className="px-2.5 py-0.5 rounded-lg bg-slate-50 border border-slate-200/70 text-[11px] font-sans text-slate-600 font-medium"
+                    >
+                      {chip}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* CARD 3: Keamanan & Proteksi Data */}
+              <div className="rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-8 shadow-xs hover:border-[#2C5098]/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between space-y-6 group">
+                <div className="space-y-4">
+                  {/* Top Bar: Icon + Title + Tag */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50/80 text-[#2C5098] border border-blue-200/60 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                      <Icon icon="ph:shield-check-duotone" className="w-6 h-6" />
+                    </div>
+                    <span className="text-xs font-sans font-semibold text-[#2C5098] px-3 py-1 rounded-full bg-[#2C5098]/8 border border-[#2C5098]/15 shrink-0">
+                      {language === 'en' ? 'Hardened Security' : 'Standar Keamanan'}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <h4 className="text-lg sm:text-xl font-sora font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors tracking-tight leading-snug">
+                      {language === 'en' ? 'Security & Data Protection' : 'Keamanan & Proteksi Data'}
+                    </h4>
+                    <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed">
+                      {language === 'en'
+                        ? 'Safeguarding systems against standard web vulnerabilities, isolating environment credentials, and encrypting sensitive user records.'
+                        : 'Mencegah celah keamanan umum seperti injeksi data, memisahkan kredensial server, serta mengamankan informasi penting dengan enkripsi standar industri.'}
+                    </p>
+                  </div>
+
+                  {/* Visual Artifact: Security Checklist Rows */}
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                    <div className="text-[11px] font-sans font-semibold text-slate-700 flex items-center justify-between pb-1.5 border-b border-slate-200/60">
+                      <span className="flex items-center gap-1.5">
+                        <Icon icon="ph:lock-key-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
+                        {language === 'en' ? 'Security Protection Checklist' : 'Lapisan Proteksi Keamanan'}
+                      </span>
+                      <span className="text-emerald-700 text-[10px] font-medium flex items-center gap-1">
+                        <Icon icon="ph:shield-check-fill" className="w-3.5 h-3.5" />
+                        {language === 'en' ? 'Protected' : 'Terlindungi'}
+                      </span>
+                    </div>
+
+                    <div className="space-y-1.5 text-xs font-sans">
+                      <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
+                        <Icon icon="ph:check-circle-fill" className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <div className="min-w-0 flex-1 text-[11px]">
+                          <span className="font-semibold text-slate-800">
+                            {language === 'en' ? 'Input Sanitization' : 'Sanitasi Input & SQL Injection'}
+                          </span>
+                          <span className="text-slate-500 block text-[10px]">
+                            {language === 'en' ? 'Prevents malicious code execution' : 'Mencegah manipulasi query dan skrip berbahaya'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2.5 p-2 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
+                        <Icon icon="ph:check-circle-fill" className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <div className="min-w-0 flex-1 text-[11px]">
+                          <span className="font-semibold text-slate-800">
+                            {language === 'en' ? 'Isolated Environment Secrets' : 'Isolasi Kredensial Server'}
+                          </span>
+                          <span className="text-slate-500 block text-[10px]">
+                            {language === 'en' ? 'Zero hardcoded API keys or passwords' : 'Kunci API dan password terenkripsi aman'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Chips */}
+                <div className="pt-3 border-t border-slate-100 flex flex-wrap gap-1.5">
+                  {[
+                    language === 'en' ? 'OWASP Protection' : 'Standar OWASP',
+                    language === 'en' ? 'Credential Secrets' : 'Isolasi Kredensial',
+                    language === 'en' ? 'Encrypted Data' : 'Enkripsi Data Sensitif'
+                  ].map((chip, cIdx) => (
+                    <span
+                      key={cIdx}
+                      className="px-2.5 py-0.5 rounded-lg bg-slate-50 border border-slate-200/70 text-[11px] font-sans text-slate-600 font-medium"
+                    >
+                      {chip}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* CARD 4: Dokumentasi & Panduan Rilis */}
+              <div className="rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-8 shadow-xs hover:border-[#2C5098]/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between space-y-6 group">
+                <div className="space-y-4">
+                  {/* Top Bar: Icon + Title + Tag */}
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50/80 text-[#2C5098] border border-blue-200/60 flex items-center justify-center shrink-0 shadow-2xs group-hover:scale-105 transition-transform">
+                      <Icon icon="ph:book-bookmark-duotone" className="w-6 h-6" />
+                    </div>
+                    <span className="text-xs font-sans font-semibold text-[#2C5098] px-3 py-1 rounded-full bg-[#2C5098]/8 border border-[#2C5098]/15 shrink-0">
+                      {language === 'en' ? 'Zero Lock-in' : 'Bebas Keterikatan'}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <h4 className="text-lg sm:text-xl font-sora font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors tracking-tight leading-snug">
+                      {language === 'en' ? 'Documentation & Deployment Guides' : 'Dokumentasi & Panduan Rilis'}
+                    </h4>
+                    <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed">
+                      {language === 'en'
+                        ? 'Every project comes with server setup guides, database relational schemas, and configuration manuals so you maintain full control.'
+                        : 'Dilengkapi panduan setup server, diagram relasi database, dan panduan konfigurasi agar Anda memiliki kontrol mandiri penuh atas sistem yang dibangun.'}
+                    </p>
+                  </div>
+
+                  {/* Visual Artifact: Deliverables Blueprint Checklist */}
+                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                    <div className="text-[11px] font-sans font-semibold text-slate-700 flex items-center justify-between pb-1.5 border-b border-slate-200/60">
+                      <span className="flex items-center gap-1.5">
+                        <Icon icon="ph:files-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
+                        {language === 'en' ? 'Deliverable Documentation Kit' : 'Paket Dokumentasi Serah Terima'}
+                      </span>
+                      <span className="text-[#2C5098] text-[10px] font-medium flex items-center gap-1">
+                        <Icon icon="ph:file-text-bold" className="w-3.5 h-3.5" />
+                        {language === 'en' ? 'Full Access' : 'Akses Penuh'}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs font-sans">
+                      <div className="p-2 rounded-xl bg-white border border-slate-200/80 shadow-2xs space-y-0.5">
+                        <div className="font-semibold text-slate-800 text-[11px] flex items-center gap-1">
+                          <Icon icon="ph:terminal-window-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
+                          <span>README.md</span>
+                        </div>
+                        <div className="text-[10px] text-slate-500">
+                          {language === 'en' ? 'Server setup guide' : 'Panduan instalasi server'}
+                        </div>
+                      </div>
+
+                      <div className="p-2 rounded-xl bg-white border border-slate-200/80 shadow-2xs space-y-0.5">
+                        <div className="font-semibold text-slate-800 text-[11px] flex items-center gap-1">
+                          <Icon icon="ph:database-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
+                          <span>Schema ERD</span>
+                        </div>
+                        <div className="text-[10px] text-slate-500">
+                          {language === 'en' ? 'Database relationships' : 'Struktur relasi data'}
+                        </div>
+                      </div>
+
+                      <div className="p-2 rounded-xl bg-white border border-slate-200/80 shadow-2xs space-y-0.5">
+                        <div className="font-semibold text-slate-800 text-[11px] flex items-center gap-1">
+                          <Icon icon="ph:code-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
+                          <span>API Specs</span>
+                        </div>
+                        <div className="text-[10px] text-slate-500">
+                          {language === 'en' ? 'Endpoint documentation' : 'Dokumentasi endpoint'}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Chips */}
+                <div className="pt-3 border-t border-slate-100 flex flex-wrap gap-1.5">
+                  {[
+                    language === 'en' ? 'Server Setup Guide' : 'Panduan Setup Server',
+                    language === 'en' ? 'Database Schema' : 'Skema Database',
+                    language === 'en' ? 'API Documentation' : 'Dokumentasi API'
+                  ].map((chip, cIdx) => (
+                    <span
+                      key={cIdx}
+                      className="px-2.5 py-0.5 rounded-lg bg-slate-50 border border-slate-200/70 text-[11px] font-sans text-slate-600 font-medium"
+                    >
+                      {chip}
+                    </span>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1847,10 +2119,10 @@ export default function AgencyLanding({
                     <Icon icon="ph:cpu-duotone" className="w-5 h-5 animate-pulse" />
                   </div>
                   <span className="text-[8px] font-mono font-bold uppercase tracking-widest text-[#2C5098] mb-0.5">
-                    Tech Stack
+                    {language === 'en' ? 'Tech Stack' : 'Stack Teknologi'}
                   </span>
                   <h3 className="text-sm lg:text-base font-sans font-bold text-slate-800 leading-tight">
-                    Stack Of<br />Technology
+                    {language === 'en' ? <>Stack Of<br />Technology</> : <>Stack<br />Teknologi</>}
                   </h3>
                 </div>
               </div>
@@ -2226,17 +2498,6 @@ export default function AgencyLanding({
               </div>
             )}
           </div>
-
-          {/* Action Button: Explore Full Portfolio */}
-          <div className="flex items-center justify-center pt-6">
-            <Link
-              href="/projects"
-              className="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-2xl bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white text-xs sm:text-sm font-sans font-bold shadow-md shadow-[#2C5098]/20 hover:scale-[1.02] transition-all duration-300 cursor-pointer"
-            >
-              <span>{language === 'en' ? `Explore All Portfolio (${projectList.length})` : `Jelajahi Semua Portofolio (${projectList.length})`}</span>
-              <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5" />
-            </Link>
-          </div>
         </div>
       </motion.section>
 
@@ -2457,11 +2718,11 @@ export default function AgencyLanding({
 
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3 w-full">
                 {(t.pricingCards.standards || [
-                  "100% Hak Cipta & Source Code",
-                  "Pembayaran Bertahap (Milestone)",
-                  "Garansi Bug Fixing Resmi",
-                  "Deployment Server Cloud",
-                  "Tanpa Perantara (Direct Dev)"
+                  language === 'en' ? "100% Copyright & Source Code" : "100% Hak Cipta & Source Code",
+                  language === 'en' ? "Milestone-Based Payments" : "Pembayaran Bertahap (Milestone)",
+                  language === 'en' ? "Official 30-Day Bug Fixing Warranty" : "Garansi Bug Fixing Resmi 30 Hari",
+                  language === 'en' ? "Cloud Server Deployment" : "Deployment Server Cloud",
+                  language === 'en' ? "Direct Developer (No Middlemen)" : "Tanpa Perantara (Direct Dev)"
                 ]).map((std, idx) => (
                   <div
                     key={idx}
@@ -2511,6 +2772,11 @@ export default function AgencyLanding({
             <h2 className="text-3xl sm:text-4.5xl font-sans font-bold tracking-tight leading-[1.15] text-slate-900 max-w-2xl">
               {t.process.mainHeading}
             </h2>
+            {t.process.desc && (
+              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-xl font-sans pt-0.5">
+                {t.process.desc}
+              </p>
+            )}
           </div>
 
           {/* Dynamic Split Layout matching reference layout */}
@@ -2580,7 +2846,7 @@ export default function AgencyLanding({
                       className="px-6 py-3 bg-gradient-to-br from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white rounded-lg text-xs font-sans font-bold tracking-widest uppercase transition-all duration-300 shadow-md shadow-[#2C5098]/25 cursor-pointer flex items-center gap-2 group/btn"
                       id={`processes-get-started-${MILESTONES[activeMilestone].step}`}
                     >
-                      <span>Get Started</span>
+                      <span>{language === 'en' ? 'Get Started' : 'Mulai Sekarang'}</span>
                       <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
                     </button>
                   </div>
@@ -2958,8 +3224,12 @@ export default function AgencyLanding({
                       </div>
                       <div className="text-left">
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">WhatsApp Direct</span>
-                          <span className="px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-mono text-[9px] font-bold">Fast Response</span>
+                          <span className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">
+                            {language === 'en' ? 'Direct WhatsApp' : 'WhatsApp Langsung'}
+                          </span>
+                          <span className="px-1.5 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-mono text-[9px] font-bold">
+                            {language === 'en' ? 'Fast Response' : 'Respon Cepat'}
+                          </span>
                         </div>
                         <div className="text-sm font-sans font-bold text-slate-900 group-hover:text-emerald-600 transition-colors">+62 895-0843-6275</div>
                       </div>
@@ -2974,7 +3244,9 @@ export default function AgencyLanding({
                         <Icon icon="ph:envelope-simple-fill" className="w-6 h-6" />
                       </div>
                       <div className="text-left min-w-0">
-                        <div className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">Email Kontak</div>
+                        <div className="text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">
+                          {language === 'en' ? 'Official Email' : 'Email Resmi'}
+                        </div>
                         <div className="text-xs sm:text-sm font-sans font-bold text-slate-900 truncate">
                           sejatidimedia@gmail.com
                         </div>
