@@ -23,13 +23,13 @@ export default function LayoutWrapper({
 }: {
   children: React.ReactNode;
 }) {
-  const [template, setTemplate] = useState<TemplateId>('classic');
+  const [template, setTemplate] = useState<TemplateId>('professional');
   const [theme, setTheme] = useState<ThemeMode>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("sejatidimedia-theme");
-      return (saved as ThemeMode) || "dark";
+      return (saved as ThemeMode) || "light";
     }
-    return "dark";
+    return "light";
   });
 
   const [scrolled, setScrolled] = useState(false);
@@ -106,23 +106,12 @@ export default function LayoutWrapper({
     };
   }, []);
 
-  // Smooth Branded Loading Screen Animation
+  // Smooth Minimalist Splash Screen Animation
   useEffect(() => {
-    // Check if running in automated test or bot to avoid blocking LCP benchmarks
-    const isBot =
-      typeof navigator !== 'undefined' &&
-      /Lighthouse|Chrome-Lighthouse|Googlebot|HeadlessChrome/i.test(navigator.userAgent);
-
-    if (isBot) {
-      setLoading(false);
-      return;
-    }
-
-    // Snappy, silky smooth branded reveal for real users
     const timer = setTimeout(() => {
       setProgress(100);
-      setTimeout(() => setLoading(false), 250);
-    }, 200);
+      setTimeout(() => setLoading(false), 200);
+    }, 150);
 
     return () => clearTimeout(timer);
   }, []);
@@ -234,7 +223,7 @@ export default function LayoutWrapper({
             initial={{ opacity: 1 }}
             exit={{
               opacity: 0,
-              transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+              transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
             }}
             className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center ${template === 'professional' || theme === 'light'
               ? 'bg-[#F4F4F6] text-slate-900'
@@ -252,7 +241,7 @@ export default function LayoutWrapper({
             <motion.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="z-10 flex flex-col items-center gap-8"
             >
               <Image
@@ -286,7 +275,7 @@ export default function LayoutWrapper({
                     <motion.div
                       initial={{ opacity: 0, y: -8, filter: "blur(4px)" }}
                       animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
                     >
                       <span
                         className={`font-sans font-extrabold text-[11px] tracking-[0.3em] uppercase ${template === 'professional' || theme === 'light'

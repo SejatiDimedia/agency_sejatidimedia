@@ -105,11 +105,11 @@ export const en = {
         chips: ["Modular Patterns", "Auditable Code", "Structured Layout"]
       },
       {
-        title: "Type Safety & Quality Assurance",
-        tag: "Fewer Runtime Bugs",
-        desc: "Strict type validation and automated checks from day one, minimizing unexpected crashes and regression bugs in production.",
+        title: "Code Quality & Verified Testing",
+        tag: "Tested & Low Bugs",
+        desc: "Strict type validation and multi-layer functional testing before release, preventing unexpected errors and ensuring reliable system workflows in production.",
         icon: "ph:seal-check-duotone",
-        chips: ["Strict TypeScript", "Input Validation", "Automated Linting"]
+        chips: ["Strict Validation", "Functional Testing", "Automated Checks"]
       },
       {
         title: "Security & Data Protection",

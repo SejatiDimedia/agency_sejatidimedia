@@ -105,11 +105,11 @@ export const id = {
         chips: ["Pola Modular", "Mudah Diaudit", "Struktur Rapi"]
       },
       {
-        title: "Kualitas Kode & Type Safety",
-        tag: "Minim Bug Runtime",
-        desc: "Menerapkan validasi tipe ketat dan pengecekan otomatis sejak awal, meminimalisir potensi error tak terduga di lingkungan produksi.",
+        title: "Kualitas Kode & Testing Terverifikasi",
+        tag: "Teruji & Minim Bug",
+        desc: "Menerapkan validasi tipe ketat serta tahapan testing fungsional sebelum rilis, meminimalisir potensi error dan memastikan fitur berjalan sesuai skenario bisnis Anda.",
         icon: "ph:seal-check-duotone",
-        chips: ["TypeScript Strict", "Validasi Input", "Linting Otomatis"]
+        chips: ["Validasi Ketat", "Testing Fungsional", "Pengecekan Otomatis"]
       },
       {
         title: "Keamanan & Proteksi Data",

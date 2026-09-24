@@ -204,7 +204,7 @@ function ClientPortalMockup3D({ t }: { t: any }) {
                   </p>
                   <div className="flex items-center gap-1.5 mt-0.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-                    <p className="text-[9px] text-slate-500 font-medium">Client: Timur Dian • Live Status</p>
+                    <p className="text-[9px] text-slate-500 font-medium">Client: Dimas Daniswara • Live Status</p>
                   </div>
                 </div>
               </div>
@@ -586,13 +586,18 @@ export default function AgencyLanding({
       >
         {/* Hero Serene Horizon / Ambience Background - Enhanced Clarity & High Tech Visuals */}
         <div className="absolute inset-0 h-full w-full overflow-hidden pointer-events-none -z-0">
-          <img
-            src="/hero_bg.webp"
-            alt="SejatiDimedia Hero Background"
-            className="w-full h-full object-cover object-[78%_center] sm:object-[80%_top] lg:object-[82%_top] opacity-95 sm:opacity-100 transition-opacity duration-700"
-            fetchPriority="high"
-            decoding="async"
-          />
+          <picture>
+            <source media="(max-width: 768px)" srcSet="/hero_bg_mobile.webp" type="image/webp" />
+            <img
+              src="/hero_bg.webp"
+              alt="SejatiDimedia Hero Background"
+              className="w-full h-full object-cover object-[78%_center] sm:object-[80%_top] lg:object-[82%_top] opacity-95 sm:opacity-100 transition-opacity duration-700"
+              fetchPriority="high"
+              decoding="async"
+              width={2752}
+              height={1536}
+            />
+          </picture>
           {/* Living Data Sparks & Active Server Pulses (Concentrated on Right Server Farm) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
             {/* Spark 1: Upper Right Server Tower to Main Bus */}
@@ -1609,7 +1614,7 @@ export default function AgencyLanding({
                 </div>
               </div>
 
-              {/* CARD 2: Kualitas Kode & Type Safety */}
+              {/* CARD 2: Kualitas Kode & Testing Terverifikasi */}
               <div className="rounded-3xl bg-white border border-slate-200/90 p-6 sm:p-8 shadow-xs hover:border-[#2C5098]/40 hover:shadow-xl transition-all duration-300 flex flex-col justify-between space-y-6 group">
                 <div className="space-y-4">
                   {/* Top Bar: Icon + Title + Tag */}
@@ -1618,47 +1623,56 @@ export default function AgencyLanding({
                       <Icon icon="ph:seal-check-duotone" className="w-6 h-6" />
                     </div>
                     <span className="text-xs font-sans font-semibold text-[#2C5098] px-3 py-1 rounded-full bg-[#2C5098]/8 border border-[#2C5098]/15 shrink-0">
-                      {language === 'en' ? 'Fewer Runtime Bugs' : 'Minim Bug Runtime'}
+                      {language === 'en' ? 'Tested & Low Bugs' : 'Teruji & Minim Bug'}
                     </span>
                   </div>
 
                   <div className="space-y-1.5">
                     <h4 className="text-lg sm:text-xl font-sora font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors tracking-tight leading-snug">
-                      {language === 'en' ? 'Type Safety & Code Quality' : 'Kualitas Kode & Type Safety'}
+                      {language === 'en' ? 'Code Quality & Verified Testing' : 'Kualitas Kode & Testing Terverifikasi'}
                     </h4>
                     <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed">
                       {language === 'en'
-                        ? 'Strict type contracts and automated linting catch logic bugs before release, ensuring predictable execution in production.'
-                        : 'Menerapkan validasi tipe ketat dan pengecekan otomatis sejak awal pengerjaan, meminimalisir potensi error tak terduga saat sistem aktif digunakan.'}
+                        ? 'Strict type contracts and multi-layer functional testing before release, preventing unexpected errors and ensuring reliable system workflows in production.'
+                        : 'Menerapkan validasi tipe ketat serta tahapan testing fungsional sebelum rilis, meminimalisir potensi error dan memastikan fitur berjalan sesuai skenario bisnis Anda.'}
                     </p>
                   </div>
 
-                  {/* Visual Artifact: Simulated IDE / Code Quality Window */}
+                  {/* Visual Artifact: Simulated IDE / Code Quality & Testing Window */}
                   <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
                     <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60">
                       <div className="flex items-center gap-1.5">
                         <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
                         <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
                         <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
-                        <span className="text-[10px] font-mono text-slate-500 ml-1.5">types.ts</span>
+                        <span className="text-[10px] font-mono text-slate-500 ml-1.5">system-test.ts</span>
                       </div>
-                      <span className="text-[10px] font-sans font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60">
-                        {language === 'en' ? 'Strict Mode Passed' : 'TypeScript Strict Lulus'}
+                      <span className="text-[10px] font-sans font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60 flex items-center gap-1">
+                        <Icon icon="ph:check-bold" className="w-2.5 h-2.5 text-emerald-600" />
+                        {language === 'en' ? 'Tests Passed (100%)' : 'Testing Lulus (100%)'}
                       </span>
                     </div>
 
-                    <div className="p-2.5 rounded-xl bg-white border border-slate-200/80 font-mono text-[11px] leading-relaxed text-slate-700 space-y-0.5">
-                      <div className="text-slate-400">// {language === 'en' ? 'Contract-driven data modeling' : 'Model data dengan tipe valid'}</div>
-                      <div>
-                        <span className="text-blue-600 font-semibold">interface</span> <span className="text-[#2C5098] font-bold">BusinessRecord</span> {'{'}
+                    <div className="p-2.5 rounded-xl bg-white border border-slate-200/80 font-mono text-[11px] leading-relaxed text-slate-700 space-y-1">
+                      <div className="text-slate-400">// {language === 'en' ? 'Multi-scenario functional verification' : 'Pengujian fungsional alur sistem'}</div>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                          <Icon icon="ph:check-circle-fill" className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                          <span className="text-slate-800 font-semibold">test(&#39;business_logic_flow&#39;)</span>
+                        </div>
+                        <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">PASSED</span>
                       </div>
-                      <div className="pl-3">
-                        <span className="text-slate-800">id:</span> <span className="text-indigo-600">UUID</span>;
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1.5">
+                          <Icon icon="ph:check-circle-fill" className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                          <span className="text-slate-800 font-semibold">test(&#39;strict_type_contracts&#39;)</span>
+                        </div>
+                        <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">PASSED</span>
                       </div>
-                      <div className="pl-3">
-                        <span className="text-slate-800">status:</span> <span className="text-emerald-700 font-medium">&#39;active&#39; | &#39;verified&#39;</span>;
+                      <div className="text-[10px] text-slate-500 pt-0.5 border-t border-slate-100 flex items-center gap-1">
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block" />
+                        <span>{language === 'en' ? 'Zero runtime exceptions in production' : 'Nol runtime error pada skenario uji'}</span>
                       </div>
-                      <div>{'}'}</div>
                     </div>
                   </div>
                 </div>
@@ -1666,9 +1680,9 @@ export default function AgencyLanding({
                 {/* Footer Chips */}
                 <div className="pt-3 border-t border-slate-100 flex flex-wrap gap-1.5">
                   {[
-                    language === 'en' ? 'Strict TypeScript' : 'TypeScript Strict',
-                    language === 'en' ? 'Input Validation' : 'Validasi Input Form',
-                    language === 'en' ? 'Automated Linting' : 'Pengecekan Otomatis'
+                    language === 'en' ? 'Strict Validation' : 'Validasi Ketat',
+                    language === 'en' ? 'Functional Testing' : 'Testing Fungsional',
+                    language === 'en' ? 'Automated Checks' : 'Pengecekan Otomatis'
                   ].map((chip, cIdx) => (
                     <span
                       key={cIdx}

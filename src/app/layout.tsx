@@ -110,10 +110,22 @@ export default function RootLayout({
     >
       <head>
         <meta name="google-site-verification" content="Wm-o9TjYVWYqL5cxsP8hRnHGlRbdCPbpsNv0pEQN_QY" />
-        <link rel="preload" href="/hero_bg.webp" as="image" type="image/webp" fetchPriority="high" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap" rel="stylesheet" />
+        <link
+          rel="preload"
+          href="/hero_bg_mobile.webp"
+          as="image"
+          type="image/webp"
+          media="(max-width: 768px)"
+          fetchPriority="high"
+        />
+        <link
+          rel="preload"
+          href="/hero_bg.webp"
+          as="image"
+          type="image/webp"
+          media="(min-width: 769px)"
+          fetchPriority="high"
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -150,9 +162,9 @@ export default function RootLayout({
         {/* Google tag (gtag.js) - Google Analytics 4 */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-003JB1NX1M"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="afterInteractive">
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
