@@ -279,11 +279,11 @@ samp {
 }
 
 .animate-footer-glow {
-  animation: footer-glow 7s ease-in-out infinite;
+  animation: footer-glow 10s ease-in-out infinite;
   will-change: transform, opacity;
 }
 
-/* Footer light flare sweep across full top border (8.5s synchronized loop) */
+/* Footer light flare sweep across full top border (14s slow cinematic loop) */
 @keyframes light-flare {
   0% {
     background-position: 250% 0;
@@ -292,14 +292,14 @@ samp {
   6% {
     opacity: 0.9;
   }
-  50% {
+  74% {
     opacity: 0.9;
   }
-  56% {
+  84% {
     background-position: -150% 0;
     opacity: 0;
   }
-  56.1%, 100% {
+  84.1%, 100% {
     background-position: 250% 0;
     opacity: 0;
   }
@@ -317,11 +317,11 @@ samp {
     transparent 100%
   );
   background-size: 300% 100%;
-  animation: light-flare 8.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: light-flare 14s cubic-bezier(0.37, 0, 0.63, 1) infinite;
   will-change: background-position, opacity;
 }
 
-/* Kinetic text sweep (footer SEJATIDIMEDIA text - 8.5s synchronized loop) */
+/* Kinetic text sweep (footer SEJATIDIMEDIA text - 14s slow cinematic loop) */
 @keyframes kinetic-text-sweep {
   0% {
     background-position: 250% center;
@@ -330,21 +330,21 @@ samp {
   6% {
     opacity: 1;
   }
-  50% {
+  74% {
     opacity: 1;
   }
-  56% {
+  84% {
     background-position: -250% center;
     opacity: 0;
   }
-  56.1%, 100% {
+  84.1%, 100% {
     background-position: 250% center;
     opacity: 0;
   }
 }
 
 .animate-kinetic-text-sweep {
-  animation: kinetic-text-sweep 8.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  animation: kinetic-text-sweep 14s cubic-bezier(0.37, 0, 0.63, 1) infinite;
   will-change: background-position, opacity;
 }
 
