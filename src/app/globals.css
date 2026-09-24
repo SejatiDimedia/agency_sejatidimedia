@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Zen+Dots&display=swap');
 @import "tailwindcss";
 
 /* View Transitions for Theme Toggle */
@@ -129,6 +128,191 @@ samp {
 
 .animate-float-slower {
   animation: float-slower 16s ease-in-out infinite;
+}
+
+/* GPU-accelerated CSS animations (Compositor Thread - 0% JS CPU) */
+@keyframes laser-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
+@keyframes text-shine {
+  0% { background-position: 250% center; }
+  100% { background-position: -250% center; }
+}
+
+@keyframes gentle-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.06); opacity: 1; }
+}
+
+@keyframes gentle-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+.animate-laser-shimmer {
+  animation: laser-shimmer 3.5s linear infinite;
+  will-change: transform;
+}
+
+.animate-text-shine {
+  animation: text-shine 5s linear infinite;
+  will-change: background-position;
+}
+
+.animate-gentle-pulse {
+  animation: gentle-pulse 6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-gentle-float {
+  animation: gentle-float 6s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes spark-glide-1 {
+  0% { transform: translate(0, 0) scale(0.7); opacity: 0; }
+  20% { opacity: 1; transform: translate(-30px, 18px) scale(1.05); }
+  80% { opacity: 0.85; transform: translate(-100px, 60px) scale(1); }
+  100% { transform: translate(-130px, 75px) scale(0.7); opacity: 0; }
+}
+
+@keyframes spark-glide-2 {
+  0% { transform: translate(0, 0) scale(0.7); opacity: 0; }
+  20% { opacity: 0.95; transform: translate(-15px, 20px) scale(1); }
+  80% { opacity: 0.8; transform: translate(-50px, 62px) scale(1); }
+  100% { transform: translate(-65px, 80px) scale(0.7); opacity: 0; }
+}
+
+@keyframes spark-glide-3 {
+  0% { transform: translate(0, 0) scale(0.7); opacity: 0; }
+  20% { opacity: 1; transform: translate(-25px, -15px) scale(1); }
+  80% { opacity: 0.85; transform: translate(-88px, -48px) scale(1); }
+  100% { transform: translate(-110px, -60px) scale(0.7); opacity: 0; }
+}
+
+.animate-spark-1 {
+  animation: spark-glide-1 3.5s ease-in-out infinite 0.5s;
+  will-change: transform, opacity;
+}
+
+.animate-spark-2 {
+  animation: spark-glide-2 3.2s ease-in-out infinite 1.8s;
+  will-change: transform, opacity;
+}
+
+.animate-spark-3 {
+  animation: spark-glide-3 3.8s ease-in-out infinite 2.6s;
+  will-change: transform, opacity;
+}
+
+/* Breathing ambient glow */
+@keyframes breathing-glow {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; }
+}
+
+.animate-breathing-glow {
+  animation: breathing-glow 7s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Opacity-only pulse (for badges/indicators) */
+@keyframes opacity-pulse {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+.animate-opacity-pulse {
+  animation: opacity-pulse 2s ease-in-out infinite;
+}
+
+/* Downward gentle float (inverse of gentle-float) */
+@keyframes gentle-float-down {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(7px); }
+}
+
+.animate-gentle-float-down {
+  animation: gentle-float-down 4.5s ease-in-out 1s infinite;
+  will-change: transform;
+}
+
+/* Scale pulse for badges */
+@keyframes badge-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.animate-badge-pulse {
+  animation: badge-pulse 2.5s ease-in-out infinite;
+}
+
+/* Shimmer sweep (for amount paid / laser lines) */
+@keyframes shimmer-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
+}
+
+.animate-shimmer-sweep {
+  animation: shimmer-sweep 3s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* Progress bar breathing width via clip-path */
+@keyframes progress-breathe {
+  0%, 100% { clip-path: inset(0 22% 0 0); }
+  50% { clip-path: inset(0 12% 0 0); }
+}
+
+.animate-progress-breathe {
+  width: 100%;
+  animation: progress-breathe 5s ease-in-out infinite;
+  will-change: clip-path;
+}
+
+/* Footer ambient glow */
+@keyframes footer-glow {
+  0%, 100% { transform: scaleX(0.96); opacity: 0.4; }
+  50% { transform: scaleX(1.04); opacity: 0.85; }
+}
+
+.animate-footer-glow {
+  animation: footer-glow 4s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+/* Footer light flare sweep */
+@keyframes light-flare {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+.animate-light-flare {
+  animation: light-flare 5s ease-in-out 0.5s infinite;
+  will-change: transform;
+}
+
+/* Kinetic text sweep (footer SEJATIDIMEDIA text) */
+@keyframes kinetic-text-sweep {
+  0% { background-position: 250% center; }
+  100% { background-position: -250% center; }
+}
+
+.animate-kinetic-text-sweep {
+  animation: kinetic-text-sweep 6s cubic-bezier(0.4, 0, 0.2, 1) 0.6s infinite;
+  will-change: background-position;
+}
+
+/* Scroll arrow bounce */
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(4px); }
+}
+
+.animate-scroll-bounce {
+  animation: scroll-bounce 1.5s ease-in-out infinite;
 }
 
 /* Smooth custom scrollbars matching SejatiDimedia brand colors */

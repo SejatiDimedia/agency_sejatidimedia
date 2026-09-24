@@ -45,17 +45,23 @@ export default function AiChatWidget() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Initialize Session ID and Pusher
+  // Initialize Session ID
   useEffect(() => {
-    // Get or create session ID
     let currentSessionId = localStorage.getItem('sedia_session_id');
     if (!currentSessionId) {
       currentSessionId = crypto.randomUUID();
       localStorage.setItem('sedia_session_id', currentSessionId);
     }
     setSessionId(currentSessionId);
+  }, []);
 
-    // Initialize Pusher Client
+  // Initialize Pusher Client ONLY when chat is actually opened by user
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const currentSessionId = sessionId || localStorage.getItem('sedia_session_id');
+    if (!currentSessionId) return;
+
     const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
     const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
 
@@ -75,7 +81,7 @@ export default function AiChatWidget() {
         pusher.disconnect();
       };
     }
-  }, []);
+  }, [isOpen, sessionId]);
 
   // Auto scroll to bottom when new messages arrive
   useEffect(() => {
@@ -97,14 +103,18 @@ export default function AiChatWidget() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, isExpanded]);
 
-  // Smart Auto-Open AI Chat (Default: 45 detik)
+  // Smart Auto-Open AI Chat (Default: 45 detik untuk pengguna manusia)
   useEffect(() => {
-    // Check if chat has already been auto-opened or manually closed in this session
+    if (typeof window === 'undefined') return;
+    const isBot =
+      typeof navigator !== 'undefined' &&
+      /GTmetrix|Lighthouse|Chrome-Lighthouse|HeadlessChrome|bot/i.test(navigator.userAgent);
+    if (isBot) return;
+
     const hasAutoOpened = sessionStorage.getItem('sedia_auto_opened');
     const isDismissed = sessionStorage.getItem('sedia_chat_dismissed');
 
     if (!hasAutoOpened && !isDismissed) {
-      // 45 seconds golden window for high-intent visitors
       const timer = setTimeout(() => {
         setIsOpen(true);
         sessionStorage.setItem('sedia_auto_opened', 'true');

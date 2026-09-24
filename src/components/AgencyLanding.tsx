@@ -82,14 +82,6 @@ function ClientPortalMockup3D({ t }: { t: any }) {
           rotateY,
           transformStyle: "preserve-3d",
         }}
-        animate={{
-          y: [0, -8, 0],
-        }}
-        transition={{
-          duration: 6,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
         className="relative w-full max-w-[680px]"
       >
         {/* Ambient 3D Dynamic Shadow Base */}
@@ -102,10 +94,8 @@ function ClientPortalMockup3D({ t }: { t: any }) {
           style={{ transform: "translateZ(65px)", transformStyle: "preserve-3d" }}
           className="absolute -top-6 right-2 sm:right-6 z-50 pointer-events-none"
         >
-          <motion.div
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-            className="px-4 py-2 rounded-2xl bg-white border border-[#2C5098]/20 shadow-2xl flex items-center gap-2.5"
+          <div
+            className="animate-gentle-float px-4 py-2 rounded-2xl bg-white border border-[#2C5098]/20 shadow-2xl flex items-center gap-2.5"
           >
             <div className="w-6 h-6 rounded-lg bg-[#2C5098]/10 text-[#2C5098] flex items-center justify-center shrink-0 shadow-xs">
               <Icon icon="ph:clock-clockwise-bold" className="w-3.5 h-3.5" />
@@ -114,7 +104,7 @@ function ClientPortalMockup3D({ t }: { t: any }) {
               <p className="text-[10px] font-bold text-slate-900 leading-none">24/7 Live Tracking</p>
               <p className="text-[8px] font-medium text-[#2C5098] mt-0.5 hidden sm:block">Real-Time Development Status</p>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Floating Badge #2 (Bottom Left) - High Z-Depth Layer */}
@@ -122,10 +112,8 @@ function ClientPortalMockup3D({ t }: { t: any }) {
           style={{ transform: "translateZ(55px)", transformStyle: "preserve-3d" }}
           className="absolute -bottom-6 left-2 sm:left-6 z-50 pointer-events-none"
         >
-          <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="px-4 py-2 rounded-2xl bg-white border border-slate-200 shadow-2xl flex items-center gap-2.5"
+          <div
+            className="animate-gentle-float-down px-4 py-2 rounded-2xl bg-white border border-slate-200 shadow-2xl flex items-center gap-2.5"
           >
             <div className="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 shadow-xs">
               <Icon icon="ph:shield-check-fill" className="w-3.5 h-3.5" />
@@ -134,7 +122,7 @@ function ClientPortalMockup3D({ t }: { t: any }) {
               <p className="text-[10px] font-bold text-slate-900 leading-none">Automated Milestone Sync</p>
               <p className="text-[8px] font-medium text-emerald-600 mt-0.5 hidden sm:block">Verified Client Deliverables</p>
             </div>
-          </motion.div>
+          </div>
         </div>
 
         {/* Clean Portal Window Container with Layered Z-Depth */}
@@ -146,10 +134,8 @@ function ClientPortalMockup3D({ t }: { t: any }) {
           className="w-full p-4 sm:p-6 rounded-3xl bg-white border border-slate-200 shadow-2xl hover:border-[#2C5098]/40 transition-colors duration-300 space-y-3.5 relative overflow-hidden text-left"
         >
           {/* Moving Laser Shimmer Light Line along top border */}
-          <motion.div
-            className="absolute top-0 left-0 h-[2px] w-48 bg-gradient-to-r from-transparent via-[#2C5098] to-transparent z-30 pointer-events-none"
-            animate={{ x: ['-100%', '350%'] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
+          <div
+            className="animate-laser-shimmer absolute top-0 left-0 h-[2px] w-48 bg-gradient-to-r from-transparent via-[#2C5098] to-transparent z-30 pointer-events-none"
           />
 
           {/* Window Header Bar */}
@@ -208,13 +194,11 @@ function ClientPortalMockup3D({ t }: { t: any }) {
                   </div>
                 </div>
               </div>
-              <motion.span
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                className="px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white border border-white/20 shrink-0 shadow-xs"
+              <span
+                className="animate-badge-pulse px-2.5 py-0.5 rounded-md text-[10px] font-bold uppercase tracking-wider bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white border border-white/20 shrink-0 shadow-xs"
               >
                 88% Completed
-              </motion.span>
+              </span>
             </div>
 
             {/* Milestone Checklist */}
@@ -231,10 +215,8 @@ function ClientPortalMockup3D({ t }: { t: any }) {
 
             {/* Animated Breathing Progress Bar */}
             <div className="w-full bg-slate-200 h-2 rounded-full overflow-hidden p-0.5">
-              <motion.div
-                className="h-full bg-gradient-to-r from-[#2C5098] via-[#284478] to-[#23385B] rounded-full"
-                animate={{ width: ['78%', '88%', '78%'] }}
-                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              <div
+                className="animate-progress-breathe h-full bg-gradient-to-r from-[#2C5098] via-[#284478] to-[#23385B] rounded-full"
               />
             </div>
           </div>
@@ -249,14 +231,12 @@ function ClientPortalMockup3D({ t }: { t: any }) {
                 <Icon icon="ph:receipt-duotone" className="w-3.5 h-3.5 text-[#2C5098]" />
                 Project Billing & Invoices
               </span>
-              <motion.span
-                animate={{ opacity: [0.8, 1, 0.8] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1"
+              <span
+                className="animate-opacity-pulse px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1"
               >
                 <Icon icon="ph:check-circle-fill" className="w-2.5 h-2.5 text-emerald-600" />
                 100% Settled
-              </motion.span>
+              </span>
             </div>
             <div className="grid grid-cols-3 gap-2 text-center">
               <div className="bg-white p-2 sm:p-2.5 rounded-xl border border-slate-200 shadow-xs">
@@ -264,10 +244,8 @@ function ClientPortalMockup3D({ t }: { t: any }) {
                 <p className="text-xs sm:text-sm font-bold text-slate-900 mt-0.5">Rp 37.2M</p>
               </div>
               <div className="bg-[#2C5098]/8 p-2 sm:p-2.5 rounded-xl border border-[#2C5098]/20 shadow-xs relative overflow-hidden">
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-[#2C5098]/15 to-transparent pointer-events-none"
-                  animate={{ x: ['-100%', '150%'] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                <div
+                  className="animate-shimmer-sweep absolute inset-0 bg-gradient-to-r from-transparent via-[#2C5098]/15 to-transparent pointer-events-none"
                 />
                 <p className="text-[8px] sm:text-[9px] font-bold text-[#23385B] uppercase">Amount Paid</p>
                 <p className="text-xs sm:text-sm font-bold text-[#23385B] mt-0.5">Rp 37.2M</p>
@@ -601,141 +579,64 @@ export default function AgencyLanding({
           {/* Living Data Sparks & Active Server Pulses (Concentrated on Right Server Farm) */}
           <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
             {/* Spark 1: Upper Right Server Tower to Main Bus */}
-            <motion.div
-              animate={{
-                x: [0, -130],
-                y: [0, 75],
-                opacity: [0, 1, 0.85, 0],
-                scale: [0.7, 1.05, 1, 0.7],
-              }}
-              transition={{
-                duration: 3.2,
-                repeat: Infinity,
-                repeatDelay: 2.2,
-                ease: 'easeInOut',
-              }}
-              className="hidden sm:block absolute top-[14%] right-[16%] lg:right-[22%] pointer-events-none"
+            <div
+              className="animate-spark-1 hidden sm:block absolute top-[14%] right-[16%] lg:right-[22%] pointer-events-none"
             >
               <div className="relative">
                 <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_12px_4px_#38BDF8]" />
                 <div className="absolute top-1/2 right-full -translate-y-1/2 w-11 h-[2px] bg-gradient-to-r from-transparent via-[#38BDF8] to-white -rotate-[30deg] origin-right" />
               </div>
-            </motion.div>
+            </div>
 
             {/* Spark 2: High Tower Fast Surge (Upper Right Pillar) */}
-            <motion.div
-              animate={{
-                x: [0, -65],
-                y: [0, 80],
-                opacity: [0, 0.95, 0.8, 0],
-                scale: [0.7, 1, 1, 0.7],
-              }}
-              transition={{
-                duration: 2.6,
-                repeat: Infinity,
-                repeatDelay: 2.8,
-                delay: 1.2,
-                ease: 'easeInOut',
-              }}
-              className="hidden sm:block absolute top-[18%] right-[8%] lg:right-[12%] pointer-events-none"
+            <div
+              className="animate-spark-2 hidden sm:block absolute top-[18%] right-[8%] lg:right-[12%] pointer-events-none"
             >
               <div className="relative">
                 <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_10px_3px_#60A5FA]" />
                 <div className="absolute top-1/2 right-full -translate-y-1/2 w-9 h-[1.5px] bg-gradient-to-r from-transparent via-[#60A5FA] to-white -rotate-[45deg] origin-right" />
               </div>
-            </motion.div>
+            </div>
 
             {/* Spark 3: Mid-Tower Central Bus into Core */}
-            <motion.div
-              animate={{
-                x: [0, -110],
-                y: [0, -60],
-                opacity: [0, 1, 0.85, 0],
-                scale: [0.7, 1, 1, 0.7],
-              }}
-              transition={{
-                duration: 3.5,
-                repeat: Infinity,
-                repeatDelay: 2.5,
-                delay: 2.0,
-                ease: 'easeInOut',
-              }}
-              className="hidden sm:block absolute top-[36%] right-[14%] lg:right-[18%] pointer-events-none"
+            <div
+              className="animate-spark-3 hidden sm:block absolute top-[36%] right-[14%] lg:right-[18%] pointer-events-none"
             >
               <div className="relative">
                 <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_3px_#93C5FD]" />
                 <div className="absolute top-1/2 right-full -translate-y-1/2 w-10 h-[1.5px] bg-gradient-to-r from-transparent via-[#93C5FD] to-white rotate-[30deg] origin-right" />
               </div>
-            </motion.div>
+            </div>
 
             {/* Spark 4: Cross-Rack Interconnect (Mid-Low Server Cluster) */}
-            <motion.div
-              animate={{
-                x: [0, -85],
-                y: [0, 48],
-                opacity: [0, 0.9, 0.75, 0],
-                scale: [0.7, 1, 1, 0.7],
-              }}
-              transition={{
-                duration: 2.8,
-                repeat: Infinity,
-                repeatDelay: 2.4,
-                delay: 0.5,
-                ease: 'easeInOut',
-              }}
-              className="hidden sm:block absolute top-[46%] right-[22%] lg:right-[26%] pointer-events-none"
+            <div
+              className="animate-spark-1 hidden sm:block absolute top-[46%] right-[22%] lg:right-[26%] pointer-events-none"
             >
               <div className="relative">
                 <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_3px_#38BDF8]" />
                 <div className="absolute top-1/2 right-full -translate-y-1/2 w-8 h-[1.5px] bg-gradient-to-r from-transparent via-[#38BDF8] to-white -rotate-[30deg] origin-right" />
               </div>
-            </motion.div>
+            </div>
 
             {/* Spark 5: Lower Server Bay Highway */}
-            <motion.div
-              animate={{
-                x: [0, -95],
-                y: [0, -42],
-                opacity: [0, 0.85, 0.7, 0],
-                scale: [0.7, 1, 1, 0.7],
-              }}
-              transition={{
-                duration: 3.6,
-                repeat: Infinity,
-                repeatDelay: 3.0,
-                delay: 1.6,
-                ease: 'easeInOut',
-              }}
-              className="hidden sm:block absolute top-[60%] right-[11%] lg:right-[15%] pointer-events-none"
+            <div
+              className="animate-spark-2 hidden sm:block absolute top-[60%] right-[11%] lg:right-[15%] pointer-events-none"
             >
               <div className="relative">
                 <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_3px_#38BDF8]" />
                 <div className="absolute top-1/2 right-full -translate-y-1/2 w-9 h-[1.5px] bg-gradient-to-r from-transparent via-[#38BDF8] to-white rotate-[25deg] origin-right" />
               </div>
-            </motion.div>
+            </div>
 
             {/* Spark 6: Deep Processor Core Highway */}
-            <motion.div
-              animate={{
-                x: [0, -80],
-                y: [0, 44],
-                opacity: [0, 0.95, 0.8, 0],
-                scale: [0.7, 1, 1, 0.7],
-              }}
-              transition={{
-                duration: 3.0,
-                repeat: Infinity,
-                repeatDelay: 2.6,
-                delay: 3.1,
-                ease: 'easeInOut',
-              }}
-              className="hidden md:block absolute top-[28%] right-[28%] lg:right-[32%] pointer-events-none"
+            <div
+              className="animate-spark-3 hidden md:block absolute top-[28%] right-[28%] lg:right-[32%] pointer-events-none"
             >
               <div className="relative">
                 <div className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_10px_3px_#60A5FA]" />
                 <div className="absolute top-1/2 right-full -translate-y-1/2 w-8 h-[1.5px] bg-gradient-to-r from-transparent via-[#60A5FA] to-white -rotate-[30deg] origin-right" />
               </div>
-            </motion.div>
+            </div>
 
             {/* Active Server Status Beacons (Right Server Rack Nodes) */}
             {/* Beacon 1: High Tower Node */}
@@ -776,18 +677,8 @@ export default function AgencyLanding({
           />
         </div>
 
-        {/* Ambient Brand Glow behind Headline - Breathing Ambient Glow */}
-        <motion.div
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.6, 0.9, 0.6],
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[300px] bg-gradient-to-br from-[#2C5098]/16 via-[#2E54A2]/12 to-[#23385B]/10 rounded-full blur-[95px] pointer-events-none -z-0"
+        <div
+          className="animate-breathing-glow absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[560px] h-[300px] bg-gradient-to-br from-[#2C5098]/16 via-[#2E54A2]/12 to-[#23385B]/10 rounded-full blur-[95px] pointer-events-none -z-0"
         />
 
         <div className="relative z-10 min-h-[calc(100vh-14rem)] flex flex-col items-center justify-between text-center max-w-5xl lg:max-w-7xl mx-auto px-4 sm:px-6">
@@ -805,15 +696,7 @@ export default function AgencyLanding({
             >
               <h1 className="text-3xl sm:text-5xl md:text-6xl font-sans font-bold tracking-tight leading-[1.12] text-slate-900 drop-shadow-[0_1px_2px_rgba(255,255,255,0.95)]">
                 {t.hero.title}{' '}
-                <motion.span
-                  animate={{
-                    backgroundPosition: ['200% center', '-200% center'],
-                  }}
-                  transition={{
-                    duration: 3.5,
-                    repeat: Infinity,
-                    ease: 'linear',
-                  }}
+                <span
                   style={{
                     backgroundImage:
                       'linear-gradient(110deg, #1E315B 0%, #2C5098 25%, #38BDF8 44%, #FFFFFF 50%, #38BDF8 56%, #2C5098 75%, #1E315B 100%)',
@@ -821,10 +704,10 @@ export default function AgencyLanding({
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                   }}
-                  className="inline-block font-extrabold pb-0.5 drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]"
+                  className="animate-text-shine inline-block font-extrabold pb-0.5 drop-shadow-[0_2px_12px_rgba(56,189,248,0.25)]"
                 >
                   {t.hero.titleHighlight}
-                </motion.span>.
+                </span>.
               </h1>
             </motion.div>
 
@@ -881,12 +764,9 @@ export default function AgencyLanding({
             <span className="text-[9px] sm:text-[10px] font-mono uppercase tracking-[0.25em] font-bold text-slate-400">
               {language === 'en' ? 'Scroll to explore' : 'Scroll ke bawah'}
             </span>
-            <motion.div
-              animate={{ y: [0, 4, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
-            >
+            <div className="animate-scroll-bounce">
               <Icon icon="ph:caret-down-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
-            </motion.div>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -976,10 +856,8 @@ export default function AgencyLanding({
             {/* Clean macOS Client Portal Window */}
             <div className="w-full rounded-3xl bg-white border border-slate-200/90 shadow-2xl shadow-slate-900/8 overflow-hidden relative group hover:border-[#2C5098]/50 transition-all duration-300">
               {/* Laser Moving Shimmer Accent */}
-              <motion.div
-                className="absolute top-0 left-0 h-[2px] w-48 bg-gradient-to-r from-transparent via-[#2C5098] to-transparent z-30"
-                animate={{ x: ['-100%', '350%'] }}
-                transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
+              <div
+                className="animate-laser-shimmer absolute top-0 left-0 h-[2px] w-48 bg-gradient-to-r from-transparent via-[#2C5098] to-transparent z-30 pointer-events-none"
               />
 
               {/* macOS Browser Header Bar */}

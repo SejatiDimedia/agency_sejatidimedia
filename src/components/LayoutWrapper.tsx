@@ -648,32 +648,14 @@ export default function LayoutWrapper({
               <div className="relative py-8 sm:py-10 select-none border-t border-b border-theme-border/20 overflow-hidden flex items-center justify-center group">
                 {/* Ambient Soft Glow Behind the Text */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <motion.div
-                    animate={{
-                      opacity: [0.4, 0.85, 0.4],
-                      scale: [0.96, 1.04, 0.96],
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    className="w-[75%] max-w-4xl h-24 bg-gradient-to-r from-transparent via-[#2E54A2]/25 to-transparent blur-3xl rounded-full"
+                  <div
+                    className="animate-footer-glow w-[75%] max-w-4xl h-24 bg-gradient-to-r from-transparent via-[#2E54A2]/25 to-transparent blur-3xl rounded-full"
                   />
                 </div>
 
                 {/* Subtle Electric Light Flare on Top Border */}
-                <motion.div
-                  animate={{
-                    x: ['-100%', '200%'],
-                  }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    repeatDelay: 0.5,
-                  }}
-                  className="absolute top-0 left-0 w-48 h-[1.5px] bg-gradient-to-r from-transparent via-[#38BDF8] to-transparent pointer-events-none opacity-80"
+                <div
+                  className="animate-light-flare absolute top-0 left-0 w-48 h-[1.5px] bg-gradient-to-r from-transparent via-[#38BDF8] to-transparent pointer-events-none opacity-80"
                 />
 
                 <div className="relative z-10 w-full flex items-center justify-center">
@@ -696,17 +678,8 @@ export default function LayoutWrapper({
                     </span>
 
                     {/* Animated Kinetic Light Sweep Overlay (Ultra Smooth & Feathered) */}
-                    <motion.span
+                    <span
                       aria-hidden="true"
-                      animate={{
-                        backgroundPosition: ['250% center', '-250% center'],
-                      }}
-                      transition={{
-                        duration: 6,
-                        repeat: Infinity,
-                        ease: [0.4, 0, 0.2, 1],
-                        repeatDelay: 0.6,
-                      }}
                       style={{
                         fontFamily: "'Zen Dots', cursive, sans-serif",
                         backgroundImage:
@@ -717,10 +690,10 @@ export default function LayoutWrapper({
                         willChange: 'background-position',
                         transform: 'translateZ(0)',
                       }}
-                      className="absolute inset-0 w-full text-center py-3 px-6 whitespace-nowrap pointer-events-none select-none drop-shadow-[0_0_18px_rgba(56,189,248,0.4)]"
+                      className="animate-kinetic-text-sweep absolute inset-0 w-full text-center py-3 px-6 whitespace-nowrap pointer-events-none select-none drop-shadow-[0_0_18px_rgba(56,189,248,0.4)]"
                     >
                       SEJATI DIMEDIA
-                    </motion.span>
+                    </span>
                   </h2>
                 </div>
               </div>
@@ -1262,32 +1235,14 @@ export default function LayoutWrapper({
               <div className="relative py-8 sm:py-10 select-none border-t border-b border-slate-200/80 overflow-hidden flex items-center justify-center group">
                 {/* Ambient Soft Glow Behind the Text */}
                 <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <motion.div
-                    animate={{
-                      opacity: [0.35, 0.7, 0.35],
-                      scale: [0.96, 1.04, 0.96],
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    className="w-[75%] max-w-4xl h-24 bg-gradient-to-r from-transparent via-[#2C5098]/12 to-transparent blur-3xl rounded-full"
+                  <div
+                    className="animate-footer-glow w-[75%] max-w-4xl h-24 bg-gradient-to-r from-transparent via-[#2C5098]/12 to-transparent blur-3xl rounded-full"
                   />
                 </div>
 
                 {/* Subtle Electric Light Flare on Top Border */}
-                <motion.div
-                  animate={{
-                    x: ['-100%', '200%'],
-                  }}
-                  transition={{
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    repeatDelay: 0.5,
-                  }}
-                  className="absolute top-0 left-0 w-48 h-[1.5px] bg-gradient-to-r from-transparent via-[#38BDF8] to-transparent pointer-events-none opacity-80"
+                <div
+                  className="animate-light-flare absolute top-0 left-0 w-48 h-[1.5px] bg-gradient-to-r from-transparent via-[#38BDF8] to-transparent pointer-events-none opacity-80"
                 />
 
                 <div className="relative z-10 w-full flex items-center justify-center">
@@ -1310,17 +1265,8 @@ export default function LayoutWrapper({
                     </span>
 
                     {/* Animated Kinetic Light Sweep Overlay (Ultra Smooth & Feathered) */}
-                    <motion.span
+                    <span
                       aria-hidden="true"
-                      animate={{
-                        backgroundPosition: ['250% center', '-250% center'],
-                      }}
-                      transition={{
-                        duration: 6,
-                        repeat: Infinity,
-                        ease: [0.4, 0, 0.2, 1],
-                        repeatDelay: 0.6,
-                      }}
                       style={{
                         fontFamily: "'Zen Dots', cursive, sans-serif",
                         backgroundImage:
@@ -1331,10 +1277,10 @@ export default function LayoutWrapper({
                         willChange: 'background-position',
                         transform: 'translateZ(0)',
                       }}
-                      className="absolute inset-0 w-full text-center py-3 px-6 whitespace-nowrap pointer-events-none select-none drop-shadow-[0_0_18px_rgba(56,189,248,0.4)]"
+                      className="animate-kinetic-text-sweep absolute inset-0 w-full text-center py-3 px-6 whitespace-nowrap pointer-events-none select-none drop-shadow-[0_0_18px_rgba(56,189,248,0.4)]"
                     >
                       SEJATI DIMEDIA
-                    </motion.span>
+                    </span>
                   </h2>
                 </div>
               </div>
