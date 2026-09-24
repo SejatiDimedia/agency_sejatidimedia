@@ -655,7 +655,7 @@ export default function LayoutWrapper({
 
                 {/* Subtle Electric Light Flare on Top Border */}
                 <div
-                  className="animate-light-flare absolute top-0 left-0 w-48 h-[1.5px] bg-gradient-to-r from-transparent via-[#38BDF8] to-transparent pointer-events-none opacity-80"
+                  className="animate-light-flare absolute top-0 inset-x-0 h-[1.5px] pointer-events-none"
                 />
 
                 <div className="relative z-10 w-full flex items-center justify-center">
@@ -1242,7 +1242,7 @@ export default function LayoutWrapper({
 
                 {/* Subtle Electric Light Flare on Top Border */}
                 <div
-                  className="animate-light-flare absolute top-0 left-0 w-48 h-[1.5px] bg-gradient-to-r from-transparent via-[#38BDF8] to-transparent pointer-events-none opacity-80"
+                  className="animate-light-flare absolute top-0 inset-x-0 h-[1.5px] pointer-events-none"
                 />
 
                 <div className="relative z-10 w-full flex items-center justify-center">

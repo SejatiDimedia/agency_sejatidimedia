@@ -272,37 +272,80 @@ samp {
   will-change: clip-path;
 }
 
-/* Footer ambient glow */
+/* Footer ambient glow - slow rhythmic atmospheric breath */
 @keyframes footer-glow {
-  0%, 100% { transform: scaleX(0.96); opacity: 0.4; }
-  50% { transform: scaleX(1.04); opacity: 0.85; }
+  0%, 100% { transform: scaleX(0.96); opacity: 0.35; }
+  50% { transform: scaleX(1.04); opacity: 0.75; }
 }
 
 .animate-footer-glow {
-  animation: footer-glow 4s ease-in-out infinite;
+  animation: footer-glow 7s ease-in-out infinite;
   will-change: transform, opacity;
 }
 
-/* Footer light flare sweep */
+/* Footer light flare sweep across full top border (8.5s synchronized loop) */
 @keyframes light-flare {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(300%); }
+  0% {
+    background-position: 250% 0;
+    opacity: 0;
+  }
+  6% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 0.9;
+  }
+  56% {
+    background-position: -150% 0;
+    opacity: 0;
+  }
+  56.1%, 100% {
+    background-position: 250% 0;
+    opacity: 0;
+  }
 }
 
 .animate-light-flare {
-  animation: light-flare 5s ease-in-out 0.5s infinite;
-  will-change: transform;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    transparent 35%,
+    rgba(56, 189, 248, 0.25) 45%,
+    rgba(56, 189, 248, 0.95) 50%,
+    rgba(56, 189, 248, 0.25) 55%,
+    transparent 65%,
+    transparent 100%
+  );
+  background-size: 300% 100%;
+  animation: light-flare 8.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: background-position, opacity;
 }
 
-/* Kinetic text sweep (footer SEJATIDIMEDIA text) */
+/* Kinetic text sweep (footer SEJATIDIMEDIA text - 8.5s synchronized loop) */
 @keyframes kinetic-text-sweep {
-  0% { background-position: 250% center; }
-  100% { background-position: -250% center; }
+  0% {
+    background-position: 250% center;
+    opacity: 0;
+  }
+  6% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  56% {
+    background-position: -250% center;
+    opacity: 0;
+  }
+  56.1%, 100% {
+    background-position: 250% center;
+    opacity: 0;
+  }
 }
 
 .animate-kinetic-text-sweep {
-  animation: kinetic-text-sweep 6s cubic-bezier(0.4, 0, 0.2, 1) 0.6s infinite;
-  will-change: background-position;
+  animation: kinetic-text-sweep 8.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  will-change: background-position, opacity;
 }
 
 /* Scroll arrow bounce */
