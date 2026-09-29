@@ -140,8 +140,8 @@ export default function ProjectsList({
         <section className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-slate-200/80 dark:border-theme-border/60 pb-4">
             <div className="space-y-1 text-left">
-              <div className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] text-amber-600 dark:text-amber-400 font-bold">
-                <Icon icon="ph:star-fill" className="w-3.5 h-3.5 text-amber-500" />
+              <div className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] text-[#2C5098] dark:text-theme-accent font-bold">
+                <Icon icon="ph:star-fill" className="w-3.5 h-3.5 text-[#2C5098] dark:text-theme-accent" />
                 <span>{language === 'en' ? 'FEATURED SHOWCASE' : 'PROYEK UNGGULAN'}</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-jakarta font-sans font-bold tracking-tight text-slate-900 dark:text-theme-fore">
@@ -191,15 +191,15 @@ export default function ProjectsList({
                       />
 
                       {/* Featured Star Badge on top-right */}
-                      <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-amber-500 text-white shadow-md shadow-amber-500/30">
+                      <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white shadow-md shadow-[#2C5098]/30 border border-white/20">
                         <Icon icon="ph:star-fill" className="w-3 h-3 text-white" />
                         <span>{language === 'en' ? 'Featured' : 'Unggulan'}</span>
                       </div>
 
                       {/* NDA indicator if applicable */}
                       {isProfessionalExp && (
-                        <div className="absolute top-2.5 left-2.5 z-10 flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-slate-900/85 backdrop-blur-md text-amber-300 border border-amber-400/40">
-                          <Icon icon="ph:shield-check-bold" className="w-2.5 h-2.5 text-amber-400" />
+                        <div className="absolute top-2.5 left-2.5 z-10 flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-slate-900/85 backdrop-blur-md text-slate-200 border border-slate-700/60">
+                          <Icon icon="ph:shield-check-bold" className="w-2.5 h-2.5 text-blue-400" />
                           <span>NDA</span>
                         </div>
                       )}
