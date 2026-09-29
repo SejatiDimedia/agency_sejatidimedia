@@ -11,12 +11,12 @@
     "wood-tracebility-system-industry-manufaktur"
   ],
   "featuredProjectSlugs": [
-    "bizinsight-ai",
     "erp-digitalisasi-produksi-industry-manufaktur",
     "absensi-hris-app-face-recognition--gps",
-    "nexus-erp-suite",
-    "warehouse-management-system-industry-manufaktur",
-    "antreey-reservation-system"
+    "supportsense-ai",
+    "routeforce",
+    "flash-sale--event-ticketing-platform",
+    "telemedhub---telemedicine--smart-pharmacy"
   ],
   "authorProfile": {
     "name": "Timur Dian Radha Sejati",
@@ -25,5 +25,5 @@
     "bioId": "Software engineer dan konsultan sistem di SejatiDimedia. Berfokus pada perancangan arsitektur berkinerja tinggi, refactoring backend skala enterprise, hingga pengembangan aplikasi mobile, web modern dan integrasi AI.",
     "bioEn": "Software engineer and systems consultant at SejatiDimedia. Specializing in high-performance architecture design, enterprise-scale backend refactoring , modern web, mobile engineering and AI integration."
   },
-  "updatedAt": "2026-09-14T02:22:53.242Z"
+  "updatedAt": "2026-09-29T09:35:07.118Z"
 }
