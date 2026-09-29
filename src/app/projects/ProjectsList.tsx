@@ -63,7 +63,7 @@ export default function ProjectsList({
     return "ph:stack-bold";
   };
 
-  // 1. Featured Projects computation (up to 6 curated flagship projects)
+  // 1. Featured Flagship Projects (Exactly 6 projects)
   const featuredProjects = useMemo(() => {
     if (!projects || projects.length === 0) return [];
     const featured = projects
@@ -78,7 +78,7 @@ export default function ProjectsList({
     return featured.slice(0, 6);
   }, [projects, featuredProjectSlugs]);
 
-  // 2. Dynamic categories from all projects
+  // 2. Categories for the catalog
   const allCategories = projects.flatMap((p) => p.categories?.map(getCategoryName) || []);
   const uniqueCategories = Array.from(new Set(allCategories)).filter(Boolean);
   const allCategoryLabel = language === 'en' ? "All" : "Semua";
@@ -92,74 +92,61 @@ export default function ProjectsList({
   });
 
   return (
-    <div className="space-y-16 py-6 sm:py-10">
-      {/* Page Header Section */}
-      <div className="space-y-6">
+    <div className="space-y-20 py-8 sm:py-12 max-w-7xl mx-auto">
+      {/* Editorial Header Section */}
+      <header className="space-y-6 max-w-3xl">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 text-xs font-mono text-slate-500 hover:text-[#2C5098] dark:text-theme-fore-muted dark:hover:text-theme-accent transition-colors"
+          className="inline-flex items-center gap-2 text-xs font-mono text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>{language === 'en' ? 'Back to Home' : 'Kembali ke Beranda'}</span>
+          <span>{language === 'en' ? 'Back to Overview' : 'Kembali ke Beranda'}</span>
         </Link>
 
-        <div className="space-y-3 text-left">
-          {/* Section Eyebrow matching the landing page theme */}
-          <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] dark:text-theme-accent font-bold">
-            <span>{language === 'en' ? 'PROJECT SHOWCASE' : 'PORTOFOLIO PROYEK'}</span>
-          </div>
+        <div className="space-y-3">
+          <span className="text-xs font-mono uppercase tracking-[0.25em] text-[#2C5098] dark:text-blue-400 font-bold block">
+            {language === 'en' ? 'Selected Work & Systems' : 'Portofolio Sistem & Rekayasa'}
+          </span>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-jakarta font-sans font-extrabold tracking-tight text-slate-900 dark:text-theme-fore leading-tight">
-            {language === 'en' ? (
-              <>
-                Software & System{' '}
-                <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent inline-block">Portfolio</span>
-              </>
-            ) : (
-              <>
-                Portofolio Sistem &{' '}
-                <span className="bg-gradient-to-r from-[#2C5098] to-[#23385B] bg-clip-text text-transparent inline-block">Aplikasi</span>
-              </>
-            )}
+          <h1 className="text-3xl sm:text-5xl font-jakarta font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.15]">
+            {language === 'en'
+              ? 'Production systems built with architectural rigor.'
+              : 'Sistem operasional dan aplikasi siap produksi dengan standar rekayasa teruji.'}
           </h1>
 
-          <p className="text-xs sm:text-sm text-slate-600 dark:text-theme-fore-muted max-w-2xl leading-relaxed font-sans">
+          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-300 leading-relaxed font-sans pt-1">
             {language === 'en'
-              ? 'Explore our production-grade systems, multi-tenant SaaS platforms, and enterprise web & mobile solutions built for real business impact.'
-              : 'Koleksi sistem operasional, aplikasi SaaS, dan produk digital siap produksi yang dibangun dengan standar keandalan tinggi dan arsitektur modern.'}
+              ? 'Explore our multi-tenant SaaS platforms, enterprise ERP & WMS integrations, and mobile solutions deployed for real business operations.'
+              : 'Koleksi platform SaaS multi-tenant, digitalisasi ERP & logistik pergudangan, hingga aplikasi mobile berkinerja tinggi yang kami rancang dan bangun langsung.'}
           </p>
         </div>
-      </div>
+      </header>
 
       {/* =========================================================================
-          SECTION 1: FEATURED PROJECTS / PROYEK UNGGULAN (NEW DISTINCT SHOWCASE)
+          SECTION 1: FEATURED PROJECTS (6 CARDS, 2 CARDS PER ROW)
+          Crafted with Impeccable Design: Editorial, High Contrast, Authentic
           ========================================================================= */}
       {featuredProjects.length > 0 && (
-        <section className="space-y-8">
-          {/* Section Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200/80 dark:border-theme-border/60 pb-5">
-            <div className="space-y-2 text-left">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono font-bold tracking-wider uppercase bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/30">
-                <Icon icon="ph:star-fill" className="w-3.5 h-3.5 text-amber-500" />
-                <span>{language === 'en' ? 'FEATURED SHOWCASE' : 'PROYEK UNGGULAN'}</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-jakarta font-sans font-bold tracking-tight text-slate-900 dark:text-theme-fore">
-                {language === 'en' ? 'Flagship Software & Systems' : 'Pilihan Sistem & Solusi Unggulan'}
+        <section className="space-y-10">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-5">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-jakarta font-bold tracking-tight text-slate-900 dark:text-white">
+                {language === 'en' ? 'Flagship Implementations' : 'Proyek Unggulan'}
               </h2>
-              <p className="text-xs sm:text-sm text-slate-600 dark:text-theme-fore-muted max-w-2xl">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
                 {language === 'en'
-                  ? 'High-impact solutions with proven engineering, scalable backend architecture, and real business outcomes.'
-                  : 'Sistem terkurasi dengan arsitektur tangguh, integrasi menyeluruh, dan hasil nyata di lingkungan produksi.'}
+                  ? 'Six highlighted systems demonstrating our core engineering principles and domain depth.'
+                  : 'Enam sistem terpilih yang merepresentasikan kapabilitas arsitektur dan keandalan sistem kami.'}
               </p>
             </div>
 
-            <div className="text-xs font-mono font-semibold text-slate-500 dark:text-theme-fore-muted bg-slate-100 dark:bg-theme-surface px-3 py-1.5 rounded-xl border border-slate-200 dark:border-theme-border/60 self-start sm:self-auto shrink-0">
-              <span className="text-[#2C5098] dark:text-blue-400 font-bold">{featuredProjects.length}</span> {language === 'en' ? 'Flagship Projects' : 'Proyek Terpilih'}
-            </div>
+            <span className="text-xs font-mono text-slate-500 dark:text-slate-400 shrink-0">
+              [ 06 {language === 'en' ? 'Featured Systems' : 'Sistem Pilihan'} ]
+            </span>
           </div>
 
-          {/* Featured Cards Grid: 2 Columns with Wide Spotlight Cards */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+          {/* Grid: Exactly 2 Cards Per Row on tablet/desktop */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
             {featuredProjects.map((project, idx) => {
               const isDummy =
                 !project.thumbnail ||
@@ -170,119 +157,113 @@ export default function ProjectsList({
               const isProfessionalExp = isProfessionalProject(project, ndaProjectSlugs);
 
               return (
-                <motion.article
+                <article
                   key={`featured-${project.slug}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: idx * 0.08 }}
-                  className="group relative flex flex-col justify-between rounded-3xl bg-gradient-to-b from-white to-slate-50/50 dark:from-theme-elevated dark:to-theme-surface border-2 border-slate-200/90 dark:border-theme-border hover:border-[#2C5098]/70 dark:hover:border-blue-500/70 shadow-md hover:shadow-2xl hover:shadow-[#2C5098]/12 transition-all duration-300 overflow-hidden"
+                  className="group relative flex flex-col justify-between rounded-3xl bg-white dark:bg-slate-900/90 border border-slate-200/90 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600 transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-slate-900/5 dark:hover:shadow-black/40 overflow-hidden"
                 >
-                  {/* Top Ambient Highlight Ribbon */}
-                  <div className="h-1.5 w-full bg-gradient-to-r from-[#2C5098] via-indigo-500 to-amber-500" />
+                  {/* Media Viewport with Framed Aspect Ratio */}
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100 dark:bg-slate-950 border-b border-slate-100 dark:border-slate-800">
+                    <Image
+                      src={displayThumbnail}
+                      alt={project.name}
+                      fill
+                      className={
+                        isDummy
+                          ? "object-contain p-12 bg-slate-50 dark:bg-slate-900"
+                          : "object-cover object-top group-hover:scale-[1.025] transition-transform duration-700 ease-out"
+                      }
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
 
-                  <div className="p-6 sm:p-7 space-y-5">
-                    {/* Featured Header Pill Bar */}
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-mono font-bold tracking-wider uppercase bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-300/80 dark:border-amber-700/60 shadow-2xs">
-                        <Icon icon="ph:star-fill" className="w-3 h-3 text-amber-500" />
-                        <span>{language === 'en' ? 'Flagship' : 'Unggulan'} #{idx + 1}</span>
+                    {/* Subtle top metadata pills overlay */}
+                    <div className="absolute top-4 inset-x-4 flex items-center justify-between pointer-events-none">
+                      <span className="font-mono text-[11px] font-bold tracking-widest text-slate-800 dark:text-slate-200 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md px-3 py-1 rounded-full border border-slate-200/80 dark:border-slate-700/80 shadow-xs">
+                        {String(idx + 1).padStart(2, "0")} / 06
                       </span>
 
                       {isProfessionalExp ? (
-                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase bg-amber-100/70 dark:bg-amber-950/60 text-amber-800 dark:text-amber-200 border border-amber-300 dark:border-amber-700">
-                          <Icon icon="ph:shield-check-bold" className="w-3 h-3 text-amber-600" />
-                          <span>NDA Protected</span>
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-semibold text-amber-800 dark:text-amber-200 bg-amber-50/95 dark:bg-amber-950/85 backdrop-blur-md border border-amber-300/80 dark:border-amber-700/60 shadow-xs">
+                          <Icon icon="ph:lock-key-bold" className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400" />
+                          <span>NDA Protocol</span>
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                          <span>{project.status === "COMPLETE" ? (language === 'en' ? 'Production Ready' : 'Siap Produksi') : 'Ongoing'}</span>
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-mono font-semibold text-emerald-800 dark:text-emerald-200 bg-emerald-50/95 dark:bg-emerald-950/85 backdrop-blur-md border border-emerald-200/80 dark:border-emerald-800/60 shadow-xs">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                          <span>{project.status === "COMPLETE" ? (language === 'en' ? 'Live System' : 'Sistem Aktif') : 'Development'}</span>
                         </span>
                       )}
                     </div>
+                  </div>
 
-                    {/* Cinematic Media Preview */}
-                    <div className="relative w-full h-56 sm:h-64 rounded-2xl overflow-hidden bg-slate-100 dark:bg-theme-surface border border-slate-200/80 dark:border-theme-border/60">
-                      <Image
-                        src={displayThumbnail}
-                        alt={project.name}
-                        fill
-                        className={
-                          isDummy
-                            ? "object-contain p-8 bg-slate-50 dark:bg-theme-surface/40"
-                            : "object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                        }
-                        sizes="(max-width: 1024px) 100vw, 50vw"
-                      />
-
-                      {/* Ambient bottom scrim overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-transparent to-transparent opacity-90 group-hover:opacity-80 transition-opacity" />
-
-                      {/* Floating Category Pills on Media */}
+                  {/* Card Content Area */}
+                  <div className="p-6 sm:p-8 flex flex-col justify-between flex-1 gap-6">
+                    <div className="space-y-3.5">
+                      {/* Categories */}
                       {project.categories && project.categories.length > 0 && (
-                        <div className="absolute bottom-3 left-3 right-3 flex flex-wrap items-center gap-1.5">
+                        <div className="flex flex-wrap gap-2">
                           {project.categories.map((cat) => {
                             const catName = getCategoryName(cat);
                             return (
                               <span
                                 key={cat}
-                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold uppercase tracking-wider bg-black/60 text-white backdrop-blur-md border border-white/20 shadow-xs"
+                                className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-[11px] font-mono font-semibold uppercase tracking-wider text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-800 border border-slate-200/60 dark:border-slate-700/60"
                               >
-                                <Icon icon={getCategoryIcon(catName)} className="w-3 h-3 text-amber-400" />
+                                <Icon icon={getCategoryIcon(catName)} className="w-3 h-3 text-slate-500 dark:text-slate-400" />
                                 <span>{catName}</span>
                               </span>
                             );
                           })}
                         </div>
                       )}
-                    </div>
 
-                    {/* Title & Rich Summary */}
-                    <div className="space-y-2.5 text-left">
-                      <h3 className="text-xl sm:text-2xl font-jakarta font-sans font-bold text-slate-900 dark:text-theme-fore group-hover:text-[#2C5098] dark:group-hover:text-blue-400 transition-colors leading-snug">
-                        {project.name}
+                      {/* Project Title */}
+                      <h3 className="text-xl sm:text-2xl font-bold font-jakarta text-slate-900 dark:text-white group-hover:text-[#2C5098] dark:group-hover:text-blue-400 transition-colors tracking-tight leading-snug">
+                        <Link href={`/projects/${project.slug}`} className="hover:underline decoration-1 underline-offset-4">
+                          {project.name}
+                        </Link>
                       </h3>
-                      <p className="text-xs sm:text-sm text-slate-600 dark:text-theme-fore-muted leading-relaxed line-clamp-3 font-sans">
+
+                      {/* Summary */}
+                      <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed line-clamp-3 font-sans">
                         {language === 'en'
                           ? (project.summaryEn || project.descriptionEn || project.summary || project.description)
                           : (project.summaryId || project.descriptionId || project.summary || project.description)}
                       </p>
                     </div>
 
-                    {/* Technology Stack Badges */}
-                    <div className="pt-2">
-                      <div className="flex flex-wrap gap-1.5">
+                    {/* Footer: Technologies & Direct CTA */}
+                    <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 space-y-4">
+                      {/* Technologies */}
+                      <div className="flex flex-wrap items-center gap-1.5">
                         {project.technologies.slice(0, 5).map((tech) => (
                           <span
                             key={tech}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-mono font-medium bg-slate-100 dark:bg-theme-surface text-slate-700 dark:text-theme-fore-muted border border-slate-200/80 dark:border-theme-border/60"
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono bg-slate-50 dark:bg-slate-800/60 text-slate-700 dark:text-slate-300 border border-slate-200/70 dark:border-slate-700/50"
                           >
-                            {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5 text-[#2C5098] dark:text-theme-accent" />}
+                            {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5 text-slate-500 dark:text-slate-400" />}
                             <span>{tech}</span>
                           </span>
                         ))}
                         {project.technologies.length > 5 && (
-                          <span className="inline-flex items-center px-2 py-1 rounded-lg text-[10px] font-mono text-slate-500 dark:text-theme-fore-muted bg-slate-50 dark:bg-theme-surface border border-slate-200/60 dark:border-theme-border/40">
+                          <span className="text-[11px] font-mono text-slate-400 px-1.5 py-1">
                             +{project.technologies.length - 5}
                           </span>
                         )}
                       </div>
+
+                      {/* Case Study Link */}
+                      <div className="pt-1">
+                        <Link
+                          href={`/projects/${project.slug}`}
+                          className="inline-flex items-center gap-2 text-sm font-sans font-bold text-slate-900 dark:text-white hover:text-[#2C5098] dark:hover:text-blue-400 transition-colors group/link"
+                        >
+                          <span>{language === 'en' ? 'Review Architecture & Case Study' : 'Pelajari Arsitektur & Studi Kasus'}</span>
+                          <Icon icon="ph:arrow-right-bold" className="w-4 h-4 group-hover/link:translate-x-1 transition-transform" />
+                        </Link>
+                      </div>
                     </div>
                   </div>
-
-                  {/* Primary Action Button Bar */}
-                  <div className="p-6 sm:p-7 pt-0">
-                    <Link
-                      href={`/projects/${project.slug}`}
-                      className="flex items-center justify-between w-full px-5 py-3.5 rounded-2xl bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white hover:from-[#23385B] hover:to-[#1a2c47] text-xs sm:text-sm font-sans font-bold shadow-md shadow-[#2C5098]/20 hover:shadow-xl hover:shadow-[#2C5098]/30 transition-all duration-300 group/cta cursor-pointer"
-                    >
-                      <span>{language === 'en' ? 'Explore Case Study & Architecture' : 'Pelajari Studi Kasus & Arsitektur'}</span>
-                      <span className="p-1 rounded-lg bg-white/15 group-hover/cta:bg-white/25 group-hover/cta:translate-x-1 transition-all">
-                        <Icon icon="ph:arrow-right-bold" className="w-4 h-4 text-white" />
-                      </span>
-                    </Link>
-                  </div>
-                </motion.article>
+                </article>
               );
             })}
           </div>
@@ -290,22 +271,19 @@ export default function ProjectsList({
       )}
 
       {/* =========================================================================
-          SECTION 2: ALL PROJECTS / SELURUH PORTOFOLIO (CATALOG & CATEGORY FILTER)
+          SECTION 2: ALL PROJECTS CATALOG
           ========================================================================= */}
-      <section className="space-y-8 pt-4">
-        {/* Section Header & Category Filter Controls */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 border-b border-slate-200/80 dark:border-theme-border/60 pb-6">
-          <div className="space-y-2 text-left">
-            <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] dark:text-theme-accent font-bold">
-              <span>{language === 'en' ? 'FULL CATALOG' : 'SEMUA PORTOFOLIO'}</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-jakarta font-sans font-bold tracking-tight text-slate-900 dark:text-theme-fore">
-              {language === 'en' ? 'Explore All Projects' : 'Eksplorasi Seluruh Karya & Proyek'}
+      <section className="space-y-10 pt-4">
+        {/* Section Header & Filter Controls */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-200 dark:border-slate-800 pb-6">
+          <div>
+            <h2 className="text-2xl sm:text-3xl font-jakarta font-bold tracking-tight text-slate-900 dark:text-white">
+              {language === 'en' ? 'All Portfolio Repositories' : 'Seluruh Repositori Portofolio'}
             </h2>
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-theme-fore-muted max-w-xl">
+            <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
               {language === 'en'
-                ? 'Filter through our complete repository by technical domain or specialized stack.'
-                : 'Saring seluruh repositori proyek berdasarkan kategori domain atau kebutuhan teknologi Anda.'}
+                ? 'Browse our complete catalog across technical specializations.'
+                : 'Telusuri seluruh katalog proyek berdasarkan spesialisasi teknologi dan domain aplikasi.'}
             </p>
           </div>
 
@@ -319,17 +297,13 @@ export default function ProjectsList({
                   onClick={() => setActiveCategory(cat)}
                   className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-sans font-bold transition-all duration-200 cursor-pointer ${
                     isActive
-                      ? "bg-gradient-to-br from-[#2C5098] to-[#23385B] text-white shadow-md shadow-[#2C5098]/25 border border-transparent"
-                      : "bg-white dark:bg-theme-surface text-slate-600 dark:text-theme-fore-muted hover:bg-slate-50 dark:hover:bg-theme-elevated hover:text-slate-900 dark:hover:text-theme-fore border border-slate-200 dark:border-theme-border shadow-2xs"
+                      ? "bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm"
+                      : "bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700"
                   }`}
                 >
                   <Icon
                     icon={getCategoryIcon(cat)}
-                    className={`w-3.5 h-3.5 ${
-                      isActive
-                        ? "text-white"
-                        : "text-[#2C5098] dark:text-theme-accent"
-                    }`}
+                    className="w-3.5 h-3.5"
                   />
                   <span>{cat}</span>
                 </button>
@@ -357,18 +331,18 @@ export default function ProjectsList({
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.35, ease: "easeOut" }}
                     key={project.slug}
-                    className="group flex flex-col justify-between p-5 rounded-3xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border hover:border-[#2C5098]/50 dark:hover:border-theme-border-accent hover:shadow-xl hover:shadow-[#2C5098]/10 transition-all duration-300 relative overflow-hidden"
+                    className="group flex flex-col justify-between p-5 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-600 hover:shadow-md transition-all duration-300"
                   >
                     <div className="space-y-4">
                       {/* Thumbnail */}
-                      <div className="relative w-full h-48 rounded-2xl overflow-hidden bg-slate-50 dark:bg-theme-surface border border-slate-200/80 dark:border-theme-border/40">
+                      <div className="relative w-full h-48 rounded-xl overflow-hidden bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800">
                         <Image
                           src={displayThumbnail}
                           alt={project.name}
                           fill
                           className={
                             isDummy
-                              ? "object-contain p-8 bg-slate-50 dark:bg-theme-surface/40"
+                              ? "object-contain p-8 bg-slate-50 dark:bg-slate-950"
                               : "object-cover group-hover:scale-[1.03] transition-transform duration-500"
                           }
                           sizes="(max-width: 768px) 100vw, 33vw"
@@ -384,19 +358,21 @@ export default function ProjectsList({
                               return (
                                 <span
                                   key={cat}
-                                  className="inline-flex items-center gap-1.5 text-[10px] font-sans uppercase tracking-wider font-bold text-white bg-gradient-to-r from-[#2C5098] to-[#23385B] border border-white/10 px-2.5 py-0.5 rounded-full shadow-2xs"
+                                  className="inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider font-semibold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md"
                                 >
-                                  <Icon icon={getCategoryIcon(catName)} className="w-3 h-3 text-white" />
+                                  <Icon icon={getCategoryIcon(catName)} className="w-3 h-3 text-slate-500" />
                                   <span>{catName}</span>
                                 </span>
                               );
                             })}
                           </div>
                         )}
-                        <h3 className="text-base font-jakarta font-sans font-bold text-slate-900 dark:text-theme-fore group-hover:text-[#2C5098] transition-colors">
-                          {project.name}
+                        <h3 className="text-base font-jakarta font-bold text-slate-900 dark:text-white group-hover:text-[#2C5098] dark:group-hover:text-blue-400 transition-colors">
+                          <Link href={`/projects/${project.slug}`}>
+                            {project.name}
+                          </Link>
                         </h3>
-                        <p className="text-xs text-slate-600 dark:text-theme-fore-muted leading-relaxed line-clamp-3 font-sans">
+                        <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-3 font-sans">
                           {language === 'en'
                             ? (project.summaryEn || project.descriptionEn || project.summary || project.description)
                             : (project.summaryId || project.descriptionId || project.summary || project.description)}
@@ -404,19 +380,19 @@ export default function ProjectsList({
                       </div>
                     </div>
 
-                    <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-theme-border/30 mt-4">
+                    <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800 mt-4">
                       <div className="flex flex-wrap gap-1.5">
                         {project.technologies.slice(0, 4).map((tech) => (
                           <span
                             key={tech}
-                            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono bg-slate-50 dark:bg-theme-surface text-slate-600 dark:text-theme-fore-muted border border-slate-200/60 dark:border-theme-border/40"
+                            className="flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono bg-slate-50 dark:bg-slate-800/50 text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/40"
                           >
-                            {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5 opacity-80" />}
+                            {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3 h-3 opacity-80" />}
                             <span>{tech}</span>
                           </span>
                         ))}
                         {project.technologies.length > 4 && (
-                          <span className="flex items-center px-2 py-1 rounded-lg text-[9px] font-mono text-slate-400 bg-slate-50 dark:bg-theme-surface border border-slate-200/50">
+                          <span className="flex items-center px-1.5 py-0.5 rounded-md text-[9px] font-mono text-slate-400">
                             +{project.technologies.length - 4}
                           </span>
                         )}
@@ -424,10 +400,10 @@ export default function ProjectsList({
 
                       <Link
                         href={`/projects/${project.slug}`}
-                        className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl bg-slate-50 dark:bg-theme-surface hover:bg-gradient-to-r hover:from-[#2C5098] hover:to-[#23385B] hover:text-white text-xs font-sans font-bold text-slate-700 dark:text-theme-fore transition-all duration-300 border border-slate-200 dark:border-theme-border/80 hover:border-transparent shadow-2xs hover:shadow-md hover:shadow-[#2C5098]/20 cursor-pointer"
+                        className="flex items-center justify-between w-full py-2.5 px-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-900 text-xs font-sans font-bold text-slate-700 dark:text-slate-200 transition-all duration-200 border border-slate-200 dark:border-slate-700 cursor-pointer group/btn"
                       >
                         <span>{language === 'en' ? 'View Details' : 'Lihat Detail'}</span>
-                        <Icon icon="ph:caret-right-bold" className="w-3.5 h-3.5" />
+                        <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 transition-transform" />
                       </Link>
                     </div>
                   </motion.div>
@@ -439,9 +415,9 @@ export default function ProjectsList({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="col-span-1 md:col-span-3 p-12 text-center rounded-3xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border shadow-xs"
+                className="col-span-1 md:col-span-3 p-12 text-center rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
               >
-                <span className="text-xs font-mono text-slate-500 dark:text-theme-fore-muted">
+                <span className="text-xs font-mono text-slate-500 dark:text-slate-400">
                   {language === 'en' ? 'No projects found in this category.' : 'Tidak ada proyek ditemukan dalam kategori ini.'}
                 </span>
               </motion.div>

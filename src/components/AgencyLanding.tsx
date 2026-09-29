@@ -543,13 +543,13 @@ export default function AgencyLanding({
       .filter((p) => featuredProjectSlugs.includes(p.slug))
       .sort((a, b) => featuredProjectSlugs.indexOf(a.slug) - featuredProjectSlugs.indexOf(b.slug));
 
-    // 2. Remaining projects backfill if fewer than 6
-    if (featured.length < 6) {
+    // 2. Remaining projects backfill if fewer than 3
+    if (featured.length < 3) {
       const remaining = projectList.filter((p) => !featuredProjectSlugs.includes(p.slug));
-      return [...featured, ...remaining].slice(0, 6);
+      return [...featured, ...remaining].slice(0, 3);
     }
 
-    return featured.slice(0, 6);
+    return featured.slice(0, 3);
   }, [projectList, featuredProjectSlugs]);
 
   return (
