@@ -238,7 +238,7 @@ export default function ProjectsList({
                   {/* Footer: Tech Stack & Featured Primary Action Button */}
                   <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-theme-border/30 mt-4">
                     <div className="flex flex-wrap gap-1.5">
-                      {project.technologies.slice(0, 4).map((tech) => (
+                      {project.technologies.map((tech) => (
                         <span
                           key={tech}
                           className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono bg-slate-50 dark:bg-theme-surface text-slate-600 dark:text-theme-fore-muted border border-slate-200/60 dark:border-theme-border/40"
@@ -247,11 +247,6 @@ export default function ProjectsList({
                           <span>{tech}</span>
                         </span>
                       ))}
-                      {project.technologies.length > 4 && (
-                        <span className="flex items-center px-1.5 py-1 rounded-lg text-[9px] font-mono text-slate-400 bg-slate-50 dark:bg-theme-surface border border-slate-200/50">
-                          +{project.technologies.length - 4}
-                        </span>
-                      )}
                     </div>
 
                     <Link
@@ -380,7 +375,7 @@ export default function ProjectsList({
 
                     <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-theme-border/30 mt-4">
                       <div className="flex flex-wrap gap-1.5">
-                        {project.technologies.slice(0, 4).map((tech) => (
+                        {project.technologies.map((tech) => (
                           <span
                             key={tech}
                             className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono bg-slate-50 dark:bg-theme-surface text-slate-600 dark:text-theme-fore-muted border border-slate-200/60 dark:border-theme-border/40"
@@ -389,11 +384,6 @@ export default function ProjectsList({
                             <span>{tech}</span>
                           </span>
                         ))}
-                        {project.technologies.length > 4 && (
-                          <span className="flex items-center px-1.5 py-1 rounded-lg text-[9px] font-mono text-slate-400 bg-slate-50 dark:bg-theme-surface border border-slate-200/50">
-                            +{project.technologies.length - 4}
-                          </span>
-                        )}
                       </div>
 
                       <Link
