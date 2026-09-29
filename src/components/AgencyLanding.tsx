@@ -543,13 +543,13 @@ export default function AgencyLanding({
       .filter((p) => featuredProjectSlugs.includes(p.slug))
       .sort((a, b) => featuredProjectSlugs.indexOf(a.slug) - featuredProjectSlugs.indexOf(b.slug));
 
-    // 2. Remaining projects backfill if fewer than 3
-    if (featured.length < 3) {
+    // 2. Remaining projects backfill if fewer than 6
+    if (featured.length < 6) {
       const remaining = projectList.filter((p) => !featuredProjectSlugs.includes(p.slug));
-      return [...featured, ...remaining].slice(0, 3);
+      return [...featured, ...remaining].slice(0, 6);
     }
 
-    return featured.slice(0, 3);
+    return featured.slice(0, 6);
   }, [projectList, featuredProjectSlugs]);
 
   return (
@@ -2300,7 +2300,7 @@ export default function AgencyLanding({
             </Link>
           </div>
 
-          {/* Projects Grid - 3 Featured Projects */}
+          {/* Projects Grid - Up to 6 Featured Projects */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
             {displayedProjects && displayedProjects.length > 0 ? (
               displayedProjects.map((project) => {

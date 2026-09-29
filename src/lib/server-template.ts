@@ -302,8 +302,8 @@ export async function getGlobalFeaturedProjectSlugs(): Promise<string[]> {
 }
 
 export async function setGlobalFeaturedProjectSlugs(slugs: string[]): Promise<boolean> {
-  // Ensure maximum 3 projects for featured section
-  const trimmedSlugs = slugs.slice(0, 3);
+  // Ensure maximum 6 projects for featured section
+  const trimmedSlugs = slugs.slice(0, 6);
   globalThis.__globalFeaturedProjects = trimmedSlugs;
 
   // 1. Save to Upstash Redis

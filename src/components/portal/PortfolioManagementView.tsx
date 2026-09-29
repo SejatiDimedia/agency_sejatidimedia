@@ -173,14 +173,14 @@ export const PortfolioManagementView: React.FC = () => {
       // Remove from featured
       nextFeatured = currentValidSlugs.filter((s) => s !== project.slug);
     } else {
-      // Check limit of 3 based ONLY on valid existing projects!
-      if (currentValidSlugs.length >= 3) {
+      // Check limit of 6 based ONLY on valid existing projects!
+      if (currentValidSlugs.length >= 6) {
         const activeNames = projects
           .filter((p) => currentValidSlugs.includes(p.slug))
           .map((p) => p.name)
-          .slice(0, 3);
+          .slice(0, 6);
         setToast({
-          message: `Maksimal 3 Proyek Unggulan! Proyek aktif saat ini: ${activeNames.join(', ')}. Nonaktifkan salah satu terlebih dahulu jika ingin menggantinya.`,
+          message: `Maksimal 6 Proyek Unggulan! Proyek aktif saat ini: ${activeNames.join(', ')}. Nonaktifkan salah satu terlebih dahulu jika ingin menggantinya.`,
           type: 'error',
         });
         setSavingFeaturedSlug(null);
@@ -201,8 +201,8 @@ export const PortfolioManagementView: React.FC = () => {
       if (data.success) {
         setToast({
           message: isCurrentlyFeatured
-            ? `${project.name} dihapus dari Proyek Unggulan Landing Page (${nextFeatured.length}/3 dipilih).`
-            : `⭐ ${project.name} ditandai sebagai Proyek Unggulan Landing Page (${nextFeatured.length}/3 dipilih)!`,
+            ? `${project.name} dihapus dari Proyek Unggulan (${nextFeatured.length}/6 dipilih).`
+            : `⭐ ${project.name} ditandai sebagai Proyek Unggulan (${nextFeatured.length}/6 dipilih)!`,
           type: 'success',
         });
       } else {
@@ -321,13 +321,13 @@ export const PortfolioManagementView: React.FC = () => {
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wider">Proyek Unggulan</span>
             <span className="text-[10px] font-mono font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-300">
-              Landing Page
+              Landing & Proyek
             </span>
           </div>
           <div className="flex items-baseline justify-between mt-2">
             <div className="flex items-baseline gap-1">
               <span className="text-2xl font-black text-amber-600">{featuredCount}</span>
-              <span className="text-xs font-bold text-amber-500">/ 3 Dipilih</span>
+              <span className="text-xs font-bold text-amber-500">/ 6 Dipilih</span>
             </div>
             <Star className="w-5 h-5 text-amber-500 fill-amber-500" />
           </div>
@@ -435,7 +435,7 @@ export const PortfolioManagementView: React.FC = () => {
               Daftar Portofolio & Pengaturan Tampilan
             </h3>
             <p className="text-xs text-slate-500">
-              Tandai hingga <strong>3 Proyek Unggulan</strong> untuk ditampilkan di Landing Page, dan tentukan status proteksi NDA masing-masing proyek.
+              Tandai hingga <strong>6 Proyek Unggulan</strong> untuk ditampilkan di Landing Page dan Halaman Proyek, serta tentukan status proteksi NDA masing-masing proyek.
             </p>
           </div>
 
@@ -469,7 +469,7 @@ export const PortfolioManagementView: React.FC = () => {
                 }`}
               >
                 <Star className={`w-3 h-3 ${filterTab === 'featured' ? 'fill-white text-white' : 'text-amber-500'}`} />
-                Unggulan ({featuredCount}/3)
+                Unggulan ({featuredCount}/6)
               </button>
               <button
                 onClick={() => setFilterTab('nda')}
