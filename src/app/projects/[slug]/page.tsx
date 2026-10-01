@@ -3,6 +3,7 @@ import { getProjects, getProjectBySlug, isProfessionalProject, sanitizeProjectFo
 import { getGlobalNdaBlur, getGlobalNdaProjectSlugs } from "../../../lib/server-template";
 import ProjectDetailClient from "../../../components/ProjectDetailClient";
 
+export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function ProjectDetailPage({

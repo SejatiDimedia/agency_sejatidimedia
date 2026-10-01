@@ -2,6 +2,7 @@ import { getProjects } from "../../lib/api/glio-projects";
 import { getGlobalFeaturedProjectSlugs } from "../../lib/server-template";
 import ProjectsList from "./ProjectsList";
 
+export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export default async function ProjectsPage() {
