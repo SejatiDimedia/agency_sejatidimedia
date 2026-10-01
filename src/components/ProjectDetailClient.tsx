@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
@@ -9,7 +9,7 @@ import { Icon } from "@iconify/react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import ShowcaseGallery from "./ShowcaseGallery";
-import { Project, isProfessionalProject } from "../lib/api/glio-projects";
+import { Project, isProfessionalProject, sortShowcaseImages } from "../lib/api/glio-projects";
 import { useLanguage } from "../lib/i18n/LanguageContext";
 import { TECH_ICONS } from "../lib/constants";
 
@@ -74,7 +74,10 @@ export default function ProjectDetailClient({
     project.thumbnail === "/placeholder.png";
   const displayThumbnail = (isDummy ? "/logo.svg" : project.thumbnail) as string;
 
-  const showcaseImages = project.documents?.filter((doc) => doc.type.startsWith("image/")) || [];
+  const showcaseImages = useMemo(() => {
+    const rawImages = project.documents?.filter((doc) => doc.type.startsWith("image/")) || [];
+    return sortShowcaseImages(rawImages, project.slug);
+  }, [project.documents, project.slug]);
 
   const displayClientSummary = language === 'en'
     ? (project.clientSummaryEn || project.clientSummaryId || "")
@@ -517,7 +520,7 @@ export default function ProjectDetailClient({
           </div>
 
           {/* Showcase Gallery */}
-          <ShowcaseGallery images={showcaseImages} isNdaBlurred={isNdaActive} />
+          <ShowcaseGallery images={showcaseImages} isNdaBlurred={isNdaActive} projectSlug={project.slug} />
         </div>
       </div>
 

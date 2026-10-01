@@ -10,6 +10,7 @@ export interface GlioProjectDocument {
   type: string;
   url: string;
   size: number;
+  order?: number;
 }
 
 export interface Project {
@@ -175,6 +176,162 @@ export function sanitizeProjectForNda(project: Project, isNdaActive: boolean): P
   };
 }
 
+/**
+ * Curated showcase sequences for specific projects (e.g. ticketing user journey flow).
+ */
+export const PROJECT_SHOWCASE_ORDER_MAP: Record<string, string[]> = {
+  "flash-sale--event-ticketing-platform": [
+    "Cover Flash Sale Ticket Event.webp",
+    "HomePage.webp",
+    "WaitingRoomPage.webp",
+    "TicketPage.webp",
+    "CheckoutPage.webp",
+    "MyTicketsPage.webp",
+    "ProfilePage.webp",
+    "AdminManagementPage.webp",
+    "architecture_diagram.webp",
+  ],
+  "absensi-hris-app-face-recognition--gps": [
+    "Cover Absensi GeoFace.webp",
+    "HomePage.jpeg",
+    "CheckInPage.jpeg",
+    "SuccessCheckIn.jpeg",
+    "RejectCheckOutPage.jpeg",
+    "HistoryAttendance.jpeg",
+    "LeaveRequestPage.jpeg",
+    "ApplyLeaveRequestPage.jpeg",
+    "EditProfilePage.jpeg",
+    "AdminAttendancePage.webp",
+    "AdminReportAbsensiPage.webp",
+    "AdminSettingCompanyPage.webp",
+    "Screenshot 2025-10-26 at 20.30.19.png",
+  ],
+  "self-order-resto-app": [
+    "Cover SelfOrder App.webp",
+    "KasirPage.png",
+    "TableAdminPage.png",
+    "ProductAdminPage.webp",
+    "OrderPage.webp",
+    "CheckoutPage.png",
+    "PaymentPage.png",
+    "QrisPaymentPage.png",
+    "CompleteOrderPage.png",
+    "CompleteOrderDetailPage.png",
+    "DashboardProcessPage.png",
+    "OrderAdminPage.webp",
+    "SettingPrinterPage.png",
+  ],
+  "ayosehat-app": [
+    "OnBoardingPage.png",
+    "TelemedisNewFiturePage.png",
+    "DocterListChatPage.png",
+    "ListChatPage.png",
+    "DoctorChatPage.webp",
+    "RoomChatPage.png",
+    "HistoryOrderChatPage.png",
+    "ProfilePage.png",
+    "EditProfilePage.png",
+    "ManagementDoktorPage.webp",
+    "ManagementSpesialisPage.webp",
+    "ManagementOrderPage.webp",
+  ],
+  "inventory-system-tablet-screen": [
+    "Cover Inventory System Tablet.webp",
+    "LoginPage.webp",
+    "DashboardPage.png",
+    "DashboardPage2.png",
+    "ProductsPage.png",
+    "WarehousePage.png",
+    "WarehouseStockPage.png",
+    "StockopnamePage.png",
+    "PurchasePage.png",
+    "SupplierPage.png",
+    "BrandPage.png",
+  ],
+};
+
+function normalizeDocName(name: string): string {
+  return name.toLowerCase().replace(/\.[^/.]+$/, "").replace(/[_\-\s]+/g, " ").trim();
+}
+
+function getScreenLifecycleWeight(name: string): number {
+  const n = name.toLowerCase();
+  if (n.includes("cover") || n.includes("hero") || n.includes("banner") || n.includes("mockup")) return 10;
+  if (n.includes("login") || n.includes("auth") || n.includes("signin") || n.includes("onboarding") || n.includes("welcome")) return 20;
+  if (n.includes("home") || n.includes("dashboard") || n.includes("main") || n.includes("overview")) return 30;
+  if (n.includes("waiting") || n.includes("queue") || n.includes("radar")) return 35;
+  if (n.includes("ticket") || n.includes("product") || n.includes("catalog") || n.includes("list") || n.includes("browse")) return 40;
+  if (n.includes("detail") || n.includes("view") || n.includes("room") || n.includes("chat")) return 50;
+  if (n.includes("checkin") || n.includes("entry") || n.includes("form") || n.includes("request") || n.includes("apply")) return 60;
+  if (n.includes("checkout") || n.includes("payment") || n.includes("qris") || n.includes("kasir") || n.includes("pay")) return 70;
+  if (n.includes("myticket") || n.includes("success") || n.includes("complete") || n.includes("slip") || n.includes("receipt")) return 80;
+  if (n.includes("history") || n.includes("report") || n.includes("rekap") || n.includes("monitoring") || n.includes("tracking")) return 90;
+  if (n.includes("profile") || n.includes("account") || n.includes("setting") || n.includes("printer")) return 100;
+  if (n.includes("admin") || n.includes("management") || n.includes("master") || n.includes("company")) return 110;
+  if (n.includes("architecture") || n.includes("diagram") || n.includes("schema") || n.includes("topology")) return 120;
+  return 65;
+}
+
+/**
+ * Sorts showcase images logically:
+ * 1. Honors explicit non-zero document order if set.
+ * 2. Checks explicit project-specific ordering maps.
+ * 3. Applies user-journey lifecycle heuristics with natural numeric ordering.
+ */
+export function sortShowcaseImages(images: GlioProjectDocument[], slug?: string): GlioProjectDocument[] {
+  if (!images || images.length <= 1) return images || [];
+
+  const hasExplicitOrders = images.some((img) => typeof img.order === "number" && img.order > 0);
+  if (hasExplicitOrders) {
+    return [...images].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  }
+
+  if (slug && PROJECT_SHOWCASE_ORDER_MAP[slug]) {
+    const targetMap = PROJECT_SHOWCASE_ORDER_MAP[slug];
+    const normalizedTargets = targetMap.map(normalizeDocName);
+
+    return [...images].sort((a, b) => {
+      const normA = normalizeDocName(a.name);
+      const normB = normalizeDocName(b.name);
+
+      const idxA = normalizedTargets.indexOf(normA);
+      const idxB = normalizedTargets.indexOf(normB);
+
+      if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+      if (idxA !== -1) return -1;
+      if (idxB !== -1) return 1;
+
+      return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" });
+    });
+  }
+
+  return [...images].sort((a, b) => {
+    const weightA = getScreenLifecycleWeight(a.name);
+    const weightB = getScreenLifecycleWeight(b.name);
+
+    if (weightA !== weightB) {
+      return weightA - weightB;
+    }
+
+    return a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" });
+  });
+}
+
+/**
+ * Cleans up raw file names into human-readable display titles:
+ * e.g., "WaitingRoomPage.webp" -> "Waiting Room Page"
+ * "architecture_diagram.webp" -> "Architecture Diagram"
+ */
+export function cleanImageTitle(rawName: string): string {
+  if (!rawName) return "";
+  let title = rawName.replace(/\.[a-zA-Z0-9]+$/, "");
+  title = title.replace(/[_-]+/g, " ");
+  title = title.replace(/([a-z])([A-Z])/g, "$1 $2");
+  title = title.replace(/\s+/g, " ").trim();
+  title = title.replace(/\b\w/g, (c) => c.toUpperCase());
+  return title;
+}
+
 const GLIO_API_URL = process.env.GLIO_API_URL || "";
 const GLIO_API_KEY = process.env.GLIO_API_KEY || "";
 
@@ -313,7 +470,11 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
       throw new Error(`Glio API: Failed to fetch project detail for slug "${slug}". Status code: ${res.status}`);
     }
 
-    return res.json();
+    const project = (await res.json()) as Project;
+    if (project && project.documents) {
+      project.documents = sortShowcaseImages(project.documents, slug);
+    }
+    return project;
   } catch (error) {
     console.warn(`Glio API detail request failed for "${slug}", trying fallback:`, error);
     const localProject = MOCK_PROJECTS.find((p) => p.slug === slug);

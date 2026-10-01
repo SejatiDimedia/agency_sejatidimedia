@@ -1,20 +1,22 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { X, ChevronLeft, ChevronRight, Maximize2, Layers, ShieldAlert } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { GlioProjectDocument, NDA_PLACEHOLDER_IMAGE } from "../lib/api/glio-projects";
+import { GlioProjectDocument, NDA_PLACEHOLDER_IMAGE, cleanImageTitle, sortShowcaseImages } from "../lib/api/glio-projects";
 import { useLanguage } from "../lib/i18n/LanguageContext";
 
 interface ShowcaseGalleryProps {
   images: GlioProjectDocument[];
   isNdaBlurred?: boolean;
+  projectSlug?: string;
 }
 
-export default function ShowcaseGallery({ images, isNdaBlurred = false }: ShowcaseGalleryProps) {
+export default function ShowcaseGallery({ images, isNdaBlurred = false, projectSlug }: ShowcaseGalleryProps) {
   const { t, language } = useLanguage();
+  const sortedImages = useMemo(() => sortShowcaseImages(images, projectSlug), [images, projectSlug]);
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
@@ -39,7 +41,7 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
       if (e.key === "Escape") {
         setActiveIdx(null);
       } else if (e.key === "ArrowRight") {
-        setActiveIdx((prev) => (prev !== null && prev < images.length - 1 ? prev + 1 : prev));
+        setActiveIdx((prev) => (prev !== null && prev < sortedImages.length - 1 ? prev + 1 : prev));
       } else if (e.key === "ArrowLeft") {
         setActiveIdx((prev) => (prev !== null && prev > 0 ? prev - 1 : prev));
       }
@@ -47,13 +49,13 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [activeIdx, images.length]);
+  }, [activeIdx, sortedImages.length]);
 
-  if (!images || images.length === 0) return null;
+  if (!sortedImages || sortedImages.length === 0) return null;
 
   const displayLimit = 5;
-  const visibleImages = images.slice(0, displayLimit);
-  const remainingCount = images.length - displayLimit + 1;
+  const visibleImages = sortedImages.slice(0, displayLimit);
+  const remainingCount = sortedImages.length - displayLimit + 1;
 
   const handlePrev = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -62,7 +64,7 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
 
   const handleNext = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setActiveIdx((prev) => (prev !== null && prev < images.length - 1 ? prev + 1 : prev));
+    setActiveIdx((prev) => (prev !== null && prev < sortedImages.length - 1 ? prev + 1 : prev));
   };
 
   return (
@@ -81,7 +83,7 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
             )}
           </div>
           <p className="text-[10px] text-slate-400 dark:text-theme-fore-subtle font-mono">
-            {images.length} {images.length === 1 ? (language === 'en' ? 'Screenshot' : 'Tangkapan Layar') : (language === 'en' ? 'Screenshots' : 'Tangkapan Layar')}
+            {sortedImages.length} {sortedImages.length === 1 ? (language === 'en' ? 'Screenshot' : 'Tangkapan Layar') : (language === 'en' ? 'Screenshots' : 'Tangkapan Layar')}
           </p>
         </div>
         {isNdaBlurred ? (
@@ -94,7 +96,7 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
       <div className="relative">
         <div className="grid grid-cols-3 gap-2.5">
           {visibleImages.map((img, idx) => {
-            const isLastVisibleWithMore = images.length > displayLimit && idx === displayLimit - 1;
+            const isLastVisibleWithMore = sortedImages.length > displayLimit && idx === displayLimit - 1;
 
             return (
               <motion.div
@@ -111,7 +113,7 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
               >
                 <Image
                   src={isNdaBlurred ? NDA_PLACEHOLDER_IMAGE : img.url}
-                  alt={isNdaBlurred ? "Redacted NDA Screenshot" : img.name}
+                  alt={isNdaBlurred ? "Redacted NDA Screenshot" : cleanImageTitle(img.name)}
                   fill
                   className={`object-cover transition-all duration-500 ${isNdaBlurred
                       ? 'filter blur-md scale-110 brightness-75 select-none pointer-events-none'
@@ -191,13 +193,13 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
                       Project Screenshot
                     </span>
                     <h3 className="text-sm sm:text-base font-sans font-bold text-slate-900 dark:text-theme-fore truncate max-w-[200px] sm:max-w-xl">
-                      {images[activeIdx].name}
+                      {cleanImageTitle(sortedImages[activeIdx].name)}
                     </h3>
                   </div>
 
                   <div className="flex items-center gap-3">
                     <span className="text-[10px] font-mono text-slate-500 dark:text-theme-fore-subtle bg-white dark:bg-theme-surface/60 border border-slate-200 dark:border-theme-border/40 px-2 py-0.5 rounded">
-                      {activeIdx + 1} / {images.length}
+                      {activeIdx + 1} / {sortedImages.length}
                     </span>
                     <motion.button
                       whileHover={{ rotate: 90, scale: 1.05 }}
@@ -227,8 +229,8 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
                   {/* Image Stage Container */}
                   <div className="relative w-full h-full p-2 flex items-center justify-center">
                     <Image
-                      src={images[activeIdx].url}
-                      alt={images[activeIdx].name}
+                      src={sortedImages[activeIdx].url}
+                      alt={cleanImageTitle(sortedImages[activeIdx].name)}
                       fill
                       className={`object-contain transition-all duration-300 ${imageLoading ? "opacity-30 scale-[0.98] blur-[2px]" : "opacity-100 scale-100 blur-0"
                         }`}
@@ -246,7 +248,7 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
                   </div>
 
                   {/* Next Button */}
-                  {activeIdx < images.length - 1 && (
+                  {activeIdx < sortedImages.length - 1 && (
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
@@ -259,10 +261,10 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
                 </div>
 
                 {/* Modal Footer / Thumbnails list */}
-                {images.length > 1 && (
+                {sortedImages.length > 1 && (
                   <div className="px-6 py-4 border-t border-slate-200 dark:border-theme-border/60 bg-slate-50 dark:bg-theme-surface/10">
                     <div className="flex gap-2 overflow-x-auto py-1 px-0.5 justify-center no-scrollbar">
-                      {images.map((img, idx) => (
+                      {sortedImages.map((img, idx) => (
                         <div
                           key={img.id}
                           onClick={() => setActiveIdx(idx)}
@@ -273,7 +275,7 @@ export default function ShowcaseGallery({ images, isNdaBlurred = false }: Showca
                         >
                           <Image
                             src={img.url}
-                            alt={img.name}
+                            alt={cleanImageTitle(img.name)}
                             fill
                             className="object-cover"
                             sizes="40px"
