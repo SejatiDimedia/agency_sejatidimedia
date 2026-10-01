@@ -3,7 +3,7 @@ import { getProjects, getProjectBySlug, isProfessionalProject, sanitizeProjectFo
 import { getGlobalNdaBlur, getGlobalNdaProjectSlugs } from "../../../lib/server-template";
 import ProjectDetailClient from "../../../components/ProjectDetailClient";
 
-export const revalidate = 60;
+export const revalidate = 0;
 
 export default async function ProjectDetailPage({
   params,

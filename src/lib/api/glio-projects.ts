@@ -455,7 +455,7 @@ export async function getProjects(): Promise<Project[]> {
         "x-api-key": GLIO_API_KEY,
         "Content-Type": "application/json",
       },
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
 
     if (!res.ok) {
@@ -490,7 +490,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
         "x-api-key": GLIO_API_KEY,
         "Content-Type": "application/json",
       },
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
 
     if (res.status === 404) {
