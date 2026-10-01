@@ -76,8 +76,8 @@ export default function ProjectDetailClient({
 
   const showcaseImages = useMemo(() => {
     const rawImages = project.documents?.filter((doc) => doc.type.startsWith("image/")) || [];
-    return sortShowcaseImages(rawImages, project.slug);
-  }, [project.documents, project.slug]);
+    return sortShowcaseImages(rawImages, project.slug, project.showcaseOrder);
+  }, [project.documents, project.slug, project.showcaseOrder]);
 
   const displayClientSummary = language === 'en'
     ? (project.clientSummaryEn || project.clientSummaryId || "")
@@ -520,7 +520,12 @@ export default function ProjectDetailClient({
           </div>
 
           {/* Showcase Gallery */}
-          <ShowcaseGallery images={showcaseImages} isNdaBlurred={isNdaActive} projectSlug={project.slug} />
+          <ShowcaseGallery
+            images={showcaseImages}
+            isNdaBlurred={isNdaActive}
+            projectSlug={project.slug}
+            showcaseOrder={project.showcaseOrder}
+          />
         </div>
       </div>
 

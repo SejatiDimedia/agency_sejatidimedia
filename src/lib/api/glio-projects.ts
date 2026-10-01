@@ -34,6 +34,7 @@ export interface Project {
   descriptionEn?: string | null;
   links?: GlioProjectLink[];
   documents?: GlioProjectDocument[];
+  showcaseOrder?: string[];
   isProfessional?: boolean;
   isNda?: boolean;
 }
@@ -274,18 +275,50 @@ function getScreenLifecycleWeight(name: string): number {
 
 /**
  * Sorts showcase images logically:
- * 1. Honors explicit non-zero document order if set.
- * 2. Checks explicit project-specific ordering maps.
- * 3. Applies user-journey lifecycle heuristics with natural numeric ordering.
+ * 1. Honors explicit showcaseOrder array (by document id, name, or url) if provided by CMS.
+ * 2. Honors explicit non-zero document order if set on documents.
+ * 3. Checks explicit project-specific ordering maps.
+ * 4. Applies user-journey lifecycle heuristics with natural numeric ordering.
  */
-export function sortShowcaseImages(images: GlioProjectDocument[], slug?: string): GlioProjectDocument[] {
+export function sortShowcaseImages(
+  images: GlioProjectDocument[],
+  slug?: string,
+  showcaseOrder?: string[]
+): GlioProjectDocument[] {
   if (!images || images.length <= 1) return images || [];
 
+  // 1. Check if CMS/Glio provided explicit showcaseOrder array
+  if (showcaseOrder && Array.isArray(showcaseOrder) && showcaseOrder.length > 0) {
+    const normalizedOrders = showcaseOrder.map(normalizeDocName);
+    return [...images].sort((a, b) => {
+      const getPos = (doc: GlioProjectDocument) => {
+        const idPos = showcaseOrder.indexOf(doc.id);
+        if (idPos !== -1) return idPos;
+        const normPos = normalizedOrders.indexOf(normalizeDocName(doc.name));
+        if (normPos !== -1) return normPos;
+        const urlPos = showcaseOrder.indexOf(doc.url);
+        if (urlPos !== -1) return urlPos;
+        return -1;
+      };
+
+      const posA = getPos(a);
+      const posB = getPos(b);
+
+      if (posA !== -1 && posB !== -1) return posA - posB;
+      if (posA !== -1) return -1;
+      if (posB !== -1) return 1;
+
+      return (a.order ?? 0) - (b.order ?? 0);
+    });
+  }
+
+  // 2. Honors explicit non-zero document order if set
   const hasExplicitOrders = images.some((img) => typeof img.order === "number" && img.order > 0);
   if (hasExplicitOrders) {
     return [...images].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
   }
 
+  // 3. Project-specific explicit order map
   if (slug && PROJECT_SHOWCASE_ORDER_MAP[slug]) {
     const targetMap = PROJECT_SHOWCASE_ORDER_MAP[slug];
     const normalizedTargets = targetMap.map(normalizeDocName);
@@ -472,7 +505,7 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
 
     const project = (await res.json()) as Project;
     if (project && project.documents) {
-      project.documents = sortShowcaseImages(project.documents, slug);
+      project.documents = sortShowcaseImages(project.documents, slug, project.showcaseOrder);
     }
     return project;
   } catch (error) {

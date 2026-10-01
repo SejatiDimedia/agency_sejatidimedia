@@ -12,11 +12,20 @@ interface ShowcaseGalleryProps {
   images: GlioProjectDocument[];
   isNdaBlurred?: boolean;
   projectSlug?: string;
+  showcaseOrder?: string[];
 }
 
-export default function ShowcaseGallery({ images, isNdaBlurred = false, projectSlug }: ShowcaseGalleryProps) {
+export default function ShowcaseGallery({
+  images,
+  isNdaBlurred = false,
+  projectSlug,
+  showcaseOrder,
+}: ShowcaseGalleryProps) {
   const { t, language } = useLanguage();
-  const sortedImages = useMemo(() => sortShowcaseImages(images, projectSlug), [images, projectSlug]);
+  const sortedImages = useMemo(
+    () => sortShowcaseImages(images, projectSlug, showcaseOrder),
+    [images, projectSlug, showcaseOrder]
+  );
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
   const [imageLoading, setImageLoading] = useState(false);
