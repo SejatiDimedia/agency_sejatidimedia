@@ -4,6 +4,7 @@
  * Eliminates runtime fetch requests to api.iconify.design, ensuring 100% reliable icon rendering.
  */
 import { addCollection } from "@iconify/react";
+import techIconsBundle from "./tech-icons-bundle.json";
 
 const BUNDLED_COLLECTIONS = [
   {
@@ -595,6 +596,13 @@ let isRegistered = false;
 export function registerBundledIcons() {
   if (isRegistered) return;
   for (const col of BUNDLED_COLLECTIONS) {
+    try {
+      addCollection(col as any);
+    } catch {
+      // ignore
+    }
+  }
+  for (const col of (techIconsBundle as any[])) {
     try {
       addCollection(col as any);
     } catch {

@@ -1,4 +1,6 @@
-export const TECH_ICONS: Record<string, string> = {
+import "./icons-bundle";
+
+const BASE_TECH_ICONS: Record<string, string> = {
   "React": "logos:react",
   "Vue": "logos:vue",
   "Angular": "logos:angular-icon",
@@ -53,6 +55,8 @@ export const TECH_ICONS: Record<string, string> = {
   "LangChain": "simple-icons:langchain",
   "LlamaIndex": "thesvg:llamaindex",
   "RAG Architecture": "ph:file-magnifying-glass-duotone",
+  "RAG": "ph:file-magnifying-glass-duotone",
+  "KAG": "ph:graph-duotone",
   "QLoRA / Fine-Tuning": "ph:sliders-horizontal-duotone",
   "Autonomous Agents": "ph:robot-duotone",
   "AI Agents": "ph:robot-duotone",
@@ -63,5 +67,59 @@ export const TECH_ICONS: Record<string, string> = {
   "Claude": "logos:claude-icon",
   "Ollama": "simple-icons:ollama",
   "DeepSeek": "simple-icons:deepseek",
-  "Prompt Engineering": "ph:terminal-window-duotone"
+  "Prompt Engineering": "ph:terminal-window-duotone",
+  "RabbitMQ": "logos:rabbitmq-icon",
+  "Tanstack": "logos:react-query-icon",
+  "TanStack": "logos:react-query-icon",
+  "TanStack Query": "logos:react-query-icon",
+  "React Query": "logos:react-query-icon",
+  "Zustand": "devicon:zustand",
+  "Midtrans": "custom:midtrans",
+  "Gradio": "logos:gradio-icon",
+  "Gradio 6": "logos:gradio-icon",
+  "Server Actions": "tabler:server-cog",
+  "Server Action": "tabler:server-cog"
 };
+
+/**
+ * Normalizes string for fuzzy/case-insensitive matching
+ */
+function normalizeKey(str: string): string {
+  return str.trim().toLowerCase().replace(/[\s\-_.]+/g, "");
+}
+
+/**
+ * Helper function to retrieve tech icon with exact, case-insensitive, or prefix fallback
+ */
+export function getTechIcon(tech: string): string | undefined {
+  if (!tech) return undefined;
+  if (BASE_TECH_ICONS[tech]) return BASE_TECH_ICONS[tech];
+
+  const clean = normalizeKey(tech);
+  for (const [key, val] of Object.entries(BASE_TECH_ICONS)) {
+    if (normalizeKey(key) === clean) {
+      return val;
+    }
+  }
+
+  for (const [key, val] of Object.entries(BASE_TECH_ICONS)) {
+    const cleanKey = normalizeKey(key);
+    if (clean.startsWith(cleanKey) || cleanKey.startsWith(clean)) {
+      return val;
+    }
+  }
+
+  return undefined;
+}
+
+/**
+ * Proxy-wrapped TECH_ICONS to support both direct object lookup and case-insensitive/variant matching.
+ */
+export const TECH_ICONS: Record<string, string> = new Proxy(BASE_TECH_ICONS, {
+  get(target, prop) {
+    if (typeof prop !== "string") {
+      return Reflect.get(target, prop);
+    }
+    return getTechIcon(prop) ?? target[prop];
+  }
+});
