@@ -1,6 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getGlobalFeaturedProjectSlugs } from '@/lib/server-template';
-import { getProjects } from '@/lib/api/glio-projects';
+import {
+  getGlobalFeaturedProjectSlugs,
+  getGlobalNdaProjectSlugs,
+  getGlobalNdaBlur,
+} from '@/lib/server-template';
+import {
+  getProjects,
+  isProfessionalProject,
+  sanitizeProjectForNda,
+  Project,
+} from '@/lib/api/glio-projects';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,13 +30,41 @@ export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
     const includeProjects = searchParams.get('includeProjects') !== 'false';
+    const includeAll = searchParams.get('includeAll') === 'true';
 
-    const featuredSlugs = await getGlobalFeaturedProjectSlugs();
+    const [featuredSlugs, ndaSlugs, ndaBlurEnabled] = await Promise.all([
+      getGlobalFeaturedProjectSlugs(),
+      getGlobalNdaProjectSlugs(),
+      getGlobalNdaBlur(),
+    ]);
 
-    let featuredProjects = undefined;
+    let featuredProjects: Project[] | undefined = undefined;
+    let ndaProjects: Project[] | undefined = undefined;
+    let allProjects: Project[] | undefined = undefined;
+
     if (includeProjects) {
-      const allProjects = await getProjects();
-      featuredProjects = allProjects.filter((p) => featuredSlugs.includes(p.slug));
+      const rawProjects = await getProjects();
+
+      // Enrich and sanitize each project according to NDA status
+      const enrichedProjects = rawProjects.map((p) => {
+        const isFeatured = featuredSlugs.includes(p.slug);
+        const isNda = ndaSlugs.includes(p.slug) || isProfessionalProject(p, ndaSlugs);
+        const sanitized = sanitizeProjectForNda(p, isNda && ndaBlurEnabled);
+
+        return {
+          ...sanitized,
+          isFeatured,
+          isNda,
+          isProfessional: isNda,
+        };
+      });
+
+      featuredProjects = enrichedProjects.filter((p) => featuredSlugs.includes(p.slug));
+      ndaProjects = enrichedProjects.filter((p) => p.isNda);
+
+      if (includeAll) {
+        allProjects = enrichedProjects;
+      }
     }
 
     const response = NextResponse.json({
@@ -35,6 +72,11 @@ export async function GET(req: NextRequest) {
       count: featuredSlugs.length,
       featuredSlugs,
       ...(featuredProjects ? { featuredProjects } : {}),
+      ndaCount: ndaSlugs.length,
+      ndaSlugs,
+      ndaBlurEnabled,
+      ...(ndaProjects ? { ndaProjects } : {}),
+      ...(allProjects ? { allProjects } : {}),
       updatedAt: new Date().toISOString(),
     });
 
@@ -48,7 +90,7 @@ export async function GET(req: NextRequest) {
     const errorResponse = NextResponse.json(
       {
         success: false,
-        error: error?.message || 'Failed to fetch featured projects',
+        error: error?.message || 'Failed to fetch public portfolio data',
       },
       { status: 500 }
     );

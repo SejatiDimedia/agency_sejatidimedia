@@ -233,7 +233,7 @@ export interface FeaturedProjectsResponse {
 ]
 ```
 
-### D. Endpoint Featured Projects (`GET https://www.sejatidimedia.web.id/api/public/featured-projects`)
+### D. Endpoint Portfolio, Featured & NDA Projects (`GET https://www.sejatidimedia.web.id/api/public/featured-projects` atau `/api/public/portfolio`)
 ```json
 {
   "success": true,
@@ -257,7 +257,30 @@ export interface FeaturedProjectsResponse {
       "categories": ["Enterprise", "Logistics"],
       "status": "COMPLETE",
       "startDate": "2025-06-01",
-      "order": 1
+      "order": 1,
+      "isFeatured": true,
+      "isNda": false
+    }
+  ],
+  "ndaCount": 7,
+  "ndaBlurEnabled": true,
+  "ndaSlugs": [
+    "report--dashboard-industry-manufaktur",
+    "erp-digitalisasi-produksi-industry-manufaktur",
+    "digitalisasi-sistem-surat-jalan-industry-manufaktur",
+    "digitalisasi-import-monitoring-system-industry-manufaktur",
+    "digitalisasi-sistem-bongkar-muat-material-logistik-kayu-industry-manufaktur",
+    "warehouse-management-system-industry-manufaktur",
+    "wood-tracebility-system-industry-manufaktur"
+  ],
+  "ndaProjects": [
+    {
+      "slug": "wood-tracebility-system-industry-manufaktur",
+      "name": "Wood Tracebility System (Industry Manufaktur)",
+      "summary": "Sistem pelacakan bahan baku kayu...",
+      "technologies": ["Laravel", "PostgreSQL", "Tailwind CSS"],
+      "isNda": true,
+      "isProfessional": true
     }
   ],
   "updatedAt": "2026-10-19T02:08:24.123Z"
