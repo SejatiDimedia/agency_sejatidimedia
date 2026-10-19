@@ -41,7 +41,7 @@ Website personal Anda mengonsumsi data dari dua sumber:
 | 2 | **Glio** | `https://glio.vercel.app/api/public/certificates` | `GET` | `x-api-key: <KEY>` | Daftar sertifikasi & lisensi |
 | 3 | **Glio** | `https://glio.vercel.app/api/public/skills` | `GET` | `x-api-key: <KEY>` | Daftar keahlian & kategori skill |
 | 4 | **Glio** | `https://glio.vercel.app/api/public/projects` | `GET` | `x-api-key: <KEY>` | Seluruh master proyek portofolio |
-| 5 | **SejatiDimedia** | `https://sejatidimedia.com/api/public/featured-projects` | `GET` | *None (Public + CORS)* | 6 Proyek Unggulan sinkron dari portal |
+| 5 | **SejatiDimedia** | `https://www.sejatidimedia.web.id/api/public/featured-projects` | `GET` | *None (Public + CORS)* | 6 Proyek Unggulan sinkron dari portal |
 
 ---
 
@@ -55,7 +55,7 @@ VITE_GLIO_API_URL=https://glio.vercel.app/api/public
 VITE_GLIO_API_KEY=your_glio_api_key_here
 
 # SejatiDimedia Featured Projects Sync API (CORS Enabled)
-VITE_SEJATIDIMEDIA_API=https://sejatidimedia.com/api/public/featured-projects
+VITE_SEJATIDIMEDIA_API=https://www.sejatidimedia.web.id/api/public/featured-projects
 ```
 
 ---
@@ -233,7 +233,7 @@ export interface FeaturedProjectsResponse {
 ]
 ```
 
-### D. Endpoint Featured Projects (`GET https://sejatidimedia.com/api/public/featured-projects`)
+### D. Endpoint Featured Projects (`GET https://www.sejatidimedia.web.id/api/public/featured-projects`)
 ```json
 {
   "success": true,
@@ -284,7 +284,7 @@ const GLIO_URL = import.meta.env.VITE_GLIO_API_URL || "https://glio.vercel.app/a
 const GLIO_KEY = import.meta.env.VITE_GLIO_API_KEY || "";
 const FEATURED_API =
   import.meta.env.VITE_SEJATIDIMEDIA_API ||
-  "https://sejatidimedia.com/api/public/featured-projects";
+  "https://www.sejatidimedia.web.id/api/public/featured-projects";
 
 const glioHeaders = {
   "x-api-key": GLIO_KEY,
@@ -501,7 +501,7 @@ jobs:
         env:
           VITE_GLIO_API_URL: ${{ secrets.GLIO_API_URL }}
           VITE_GLIO_API_KEY: ${{ secrets.GLIO_API_KEY }}
-          VITE_SEJATIDIMEDIA_API: "https://sejatidimedia.com/api/public/featured-projects"
+          VITE_SEJATIDIMEDIA_API: "https://www.sejatidimedia.web.id/api/public/featured-projects"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
