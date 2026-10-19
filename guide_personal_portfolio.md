@@ -1,10 +1,14 @@
-# Panduan Lengkap: Membangun Personal Portfolio Software Engineer di GitHub Pages
+# Panduan Integrasi Data: Personal Portfolio Software Engineer di GitHub Pages
 
-Dokumen panduan arsitektur dan langkah implementasi (*vibe coding*) untuk membangun website portofolio personal yang di-hosting di **GitHub Pages (`github.io`)**, dengan integrasi data master dari **Glio CMS** dan sinkronisasi status **Proyek Unggulan (Featured Projects)** dari dashboard **SejatiDimedia**.
+Dokumen spesifikasi teknis lengkap mengenai arsitektur data, kontrak endpoint API, TypeScript Interfaces, payload response aktual, dan data service layer untuk website portofolio personal yang di-hosting di **GitHub Pages (`github.io`)**.
 
 ---
 
-## 1. Arsitektur & Alur Data
+## 1. Arsitektur & Daftar Endpoint
+
+Website personal Anda mengonsumsi data dari dua sumber:
+1. **Glio Headless CMS** &rarr; Master konten personal (*Experiences*, *Certificates*, *Skills*, dan *Projects*).
+2. **SejatiDimedia API** &rarr; State Provider untuk 6 Proyek Unggulan (*Featured Projects*) yang disinkronkan secara realtime dari dashboard portal agency.
 
 ```
 ┌────────────────────────────────────────────────────────┐
@@ -22,30 +26,214 @@ Dokumen panduan arsitektur dan langkah implementasi (*vibe coding*) untuk memban
 └───────────┬───────────┘                    │
             │                                │
 (Endpoint Ringan CORS:                       │
- Daftar Slug / Detail Unggulan)              ▼
+ 6 Proyek Unggulan Terpilih)                 ▼
             │                    ┌─────────────────────────┐
             └───────────────────►│      WEB PERSONAL       │
                                  │  (username.github.io)   │
                                  └─────────────────────────┘
 ```
 
-### Keuntungan Arsitektur:
-1. **Decoupled**: Website personal tetap berjalan mandiri langsung dari Glio.
-2. **Single Control**: Mengganti 6 Proyek Unggulan cukup lewat dashboard `/portal/portfolio` di SejatiDimedia, kedua website langsung tersinkronisasi otomatis.
-3. **CORS Enabled**: Endpoint SejatiDimedia sudah mendukung browser fetch dari domain luar (`Access-Control-Allow-Origin: *`).
+### Ringkasan Endpoint
+
+| No | Sumber | Endpoint URL | Method | Auth / Header | Fungsi |
+|---|---|---|---|---|---|
+| 1 | **Glio** | `https://glio.vercel.app/api/public/experiences` | `GET` | `x-api-key: <KEY>` | Riwayat pengalaman kerja |
+| 2 | **Glio** | `https://glio.vercel.app/api/public/certificates` | `GET` | `x-api-key: <KEY>` | Daftar sertifikasi & lisensi |
+| 3 | **Glio** | `https://glio.vercel.app/api/public/skills` | `GET` | `x-api-key: <KEY>` | Daftar keahlian & kategori skill |
+| 4 | **Glio** | `https://glio.vercel.app/api/public/projects` | `GET` | `x-api-key: <KEY>` | Seluruh master proyek portofolio |
+| 5 | **SejatiDimedia** | `https://sejatidimedia.com/api/public/featured-projects` | `GET` | *None (Public + CORS)* | 6 Proyek Unggulan sinkron dari portal |
 
 ---
 
-## 2. Spesifikasi Endpoint SejatiDimedia
+## 2. Environment Variables
 
-Endpoint ini sudah aktif di server SejatiDimedia:
+Buat file `.env` pada root project website personal Anda:
 
-- **URL:** `https://sejatidimedia.com/api/public/featured-projects`
-- **Method:** `GET` (Mendukung preflight `OPTIONS`)
-- **Query Params (Opsional):**
-  - `?includeProjects=true` *(default)*: Mengembalikan daftar slug sekaligus data lengkap 6 proyek unggulan.
-  - `?includeProjects=false`: Hanya mengembalikan array string slug.
-- **Contoh Response JSON:**
+```env
+# Glio Headless CMS Configuration
+VITE_GLIO_API_URL=https://glio.vercel.app/api/public
+VITE_GLIO_API_KEY=your_glio_api_key_here
+
+# SejatiDimedia Featured Projects Sync API (CORS Enabled)
+VITE_SEJATIDIMEDIA_API=https://sejatidimedia.com/api/public/featured-projects
+```
+
+---
+
+## 3. Kontrak Data & TypeScript Interfaces
+
+Buat file definisi tipe data di `src/types/portfolio.ts`:
+
+```ts
+// src/types/portfolio.ts
+
+// ==========================================
+// 1. WORK EXPERIENCES
+// ==========================================
+export interface WorkExperience {
+  id: string;
+  company: string;
+  position: string;
+  startDate: string;
+  endDate?: string | null;
+  description?: string;
+  descriptionId?: string;
+  descriptionEn?: string;
+  location?: string;
+  locationId?: string;
+  locationEn?: string;
+}
+
+// ==========================================
+// 2. CERTIFICATES & LICENSES
+// ==========================================
+export interface Certificate {
+  id: string;
+  title: string;
+  issuer: string;
+  issueDate: string;
+  credentialUrl?: string | null;
+  fileUrl?: string | null;
+  fileName?: string | null;
+  fileType?: string | null;
+  descriptionId?: string | null;
+  descriptionEn?: string | null;
+  order: number;
+}
+
+// ==========================================
+// 3. SKILLS & TECH STACK
+// ==========================================
+export interface Skill {
+  id: string;
+  name: string;
+  nameId?: string | null;
+  nameEn?: string | null;
+  category: string; // e.g. "Programming Languages", "Frameworks & Libraries", "Tools & Platforms"
+  level: number;    // Nilai skala 0 - 100
+  order: number;
+}
+
+// ==========================================
+// 4. PROJECTS (PORTFOLIO & FEATURED)
+// ==========================================
+export interface ProjectLink {
+  title: string;
+  url: string;
+  icon?: string | null;
+}
+
+export interface ProjectDocument {
+  id: string;
+  name: string;
+  type: string;
+  url: string;
+  size: number;
+  order?: number;
+}
+
+export interface Project {
+  slug: string;
+  name: string;
+  summary?: string | null;
+  summaryId?: string | null;
+  summaryEn?: string | null;
+  clientSummaryId?: string | null;
+  clientSummaryEn?: string | null;
+  bannerImage?: string | null;
+  thumbnail?: string | null;
+  technologies: string[];
+  categories: string[];
+  status: "COMPLETE" | "ONGOING";
+  startDate: string;
+  endDate?: string | null;
+  order: number;
+  description?: string | null;
+  descriptionId?: string | null;
+  descriptionEn?: string | null;
+  links?: ProjectLink[];
+  documents?: ProjectDocument[];
+  isProfessional?: boolean;
+  isNda?: boolean;
+}
+
+// ==========================================
+// 5. SEJATIDIMEDIA FEATURED API RESPONSE
+// ==========================================
+export interface FeaturedProjectsResponse {
+  success: boolean;
+  count: number;
+  featuredSlugs: string[];
+  featuredProjects: Project[];
+  updatedAt: string;
+}
+```
+
+---
+
+## 4. Contoh Response Data Aktual (Live Payloads)
+
+### A. Endpoint Experience (`GET /api/public/experiences`)
+```json
+[
+  {
+    "id": "69b180de2f58d4552a7d8b5a",
+    "company": "Sejati Dimedia · Part-time",
+    "position": "Independent Software Engineer",
+    "startDate": "Desember 2025",
+    "endDate": "",
+    "description": "",
+    "descriptionId": "● Mengelola siklus pengembangan software (SDLC) secara mandiri dari perancangan arsitektur, penyusunan roadmap produk, hingga penentuan tech stack.\n● Merancang dan membangun platform berbasis web SaaS multi-tenant...\n● Mengintegrasikan pipeline LLM/AI API ke dalam aplikasi web...",
+    "descriptionEn": "● Independently managed the full software development lifecycle (SDLC)...\n● Architected and integrated LLM/AI API pipelines into web applications...",
+    "location": "Balikpapan",
+    "locationId": "",
+    "locationEn": ""
+  }
+]
+```
+
+### B. Endpoint Certificate (`GET /api/public/certificates`)
+```json
+[
+  {
+    "id": "6a05c8aad3f744a52c4763f9",
+    "title": "Fullstack Javascript Developer",
+    "issuer": "BuildWithAngga",
+    "issueDate": "May 2020",
+    "credentialUrl": null,
+    "fileUrl": "https://utfs.io/f/f2a699b9-b2a5-49d6-a874-a1fb3f35a8d4-5vgcsg.pdf",
+    "fileName": "full-stack-javascript-developer-timur-dian-radha-sejati.pdf",
+    "fileType": "application/pdf",
+    "descriptionId": null,
+    "descriptionEn": null,
+    "order": 1
+  }
+]
+```
+
+### C. Endpoint Skills (`GET /api/public/skills`)
+```json
+[
+  {
+    "id": "69b0a4c78daa4c9b10b00d20",
+    "name": "PHP",
+    "nameId": null,
+    "nameEn": null,
+    "category": "Programming Languages",
+    "level": 85,
+    "order": 0
+  },
+  {
+    "id": "69b0a4d58daa4c9b10b00d21",
+    "name": "TypeScript",
+    "category": "Programming Languages",
+    "level": 90,
+    "order": 1
+  }
+]
+```
+
+### D. Endpoint Featured Projects (`GET https://sejatidimedia.com/api/public/featured-projects`)
 ```json
 {
   "success": true,
@@ -62,9 +250,9 @@ Endpoint ini sudah aktif di server SejatiDimedia:
     {
       "slug": "routeforce",
       "name": "RouteForce",
-      "summary": "Platform orkestrasi armada logistik cerdas...",
-      "bannerImage": "https://...",
-      "thumbnail": "https://...",
+      "summary": "Platform orkestrasi armada logistik cerdas berbasis AI routing.",
+      "bannerImage": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1200",
+      "thumbnail": "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600",
       "technologies": ["Next.js", "TypeScript", "RabbitMQ", "PostgreSQL"],
       "categories": ["Enterprise", "Logistics"],
       "status": "COMPLETE",
@@ -78,65 +266,68 @@ Endpoint ini sudah aktif di server SejatiDimedia:
 
 ---
 
-## 3. Step-by-Step Vibe Coding
+## 5. Implementasi Data Service Layer
 
-### Langkah 1: Setup Proyek (Vite + React + TypeScript + Tailwind)
-Jalankan di terminal Anda:
-
-```bash
-# 1. Inisialisasi proyek
-npm create vite@latest personal-portfolio -- --template react-ts
-cd personal-portfolio
-
-# 2. Install dependensi UI & Icon
-npm install
-npm install lucide-react clsx tailwindcss @tailwindcss/vite
-```
-
----
-
-### Langkah 2: Setup Environment Variables
-Buat file `.env` di root proyek personal:
-
-```env
-VITE_GLIO_API_URL=https://api.glio.id/v1
-VITE_GLIO_API_KEY=your_glio_api_key_here
-VITE_SEJATIDIMEDIA_API=https://sejatidimedia.com/api/public/featured-projects
-```
-
----
-
-### Langkah 3: Buat Data Fetcher Service
-Buat file `src/services/portfolioService.ts`:
+Buat file client data service di `src/services/portfolioService.ts`:
 
 ```ts
 // src/services/portfolioService.ts
+import {
+  WorkExperience,
+  Certificate,
+  Skill,
+  Project,
+  FeaturedProjectsResponse,
+} from "../types/portfolio";
 
-const GLIO_URL = import.meta.env.VITE_GLIO_API_URL;
-const GLIO_KEY = import.meta.env.VITE_GLIO_API_KEY;
-const FEATURED_API = import.meta.env.VITE_SEJATIDIMEDIA_API || "https://sejatidimedia.com/api/public/featured-projects";
+const GLIO_URL = import.meta.env.VITE_GLIO_API_URL || "https://glio.vercel.app/api/public";
+const GLIO_KEY = import.meta.env.VITE_GLIO_API_KEY || "";
+const FEATURED_API =
+  import.meta.env.VITE_SEJATIDIMEDIA_API ||
+  "https://sejatidimedia.com/api/public/featured-projects";
 
 const glioHeaders = {
   "x-api-key": GLIO_KEY,
   "Content-Type": "application/json",
 };
 
-// 1. Ambil 6 Proyek Unggulan dari SejatiDimedia
-export async function getFeaturedProjects() {
+/**
+ * 1. Mengambil 6 Proyek Unggulan yang disinkronkan dari SejatiDimedia.
+ * Otomatis mengembalikan data Project lengkap siap pakai.
+ */
+export async function getFeaturedProjects(): Promise<Project[]> {
   try {
     const res = await fetch(FEATURED_API);
-    const data = await res.json();
+    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+    const data: FeaturedProjectsResponse = await res.json();
     return data.featuredProjects || [];
   } catch (error) {
-    console.error("Gagal memuat featured projects dari SejatiDimedia:", error);
+    console.warn("Fallback: Gagal memuat featured projects dari SejatiDimedia:", error);
     return [];
   }
 }
 
-// 2. Ambil Semua Riwayat Pengalaman Kerja dari Glio
-export async function getExperiences() {
+/**
+ * 2. Mengambil seluruh proyek portofolio master dari Glio CMS.
+ */
+export async function getAllProjects(): Promise<Project[]> {
+  try {
+    const res = await fetch(`${GLIO_URL}/projects`, { headers: glioHeaders });
+    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+    return res.json();
+  } catch (error) {
+    console.error("Gagal memuat master projects dari Glio:", error);
+    return [];
+  }
+}
+
+/**
+ * 3. Mengambil seluruh riwayat pengalaman kerja dari Glio CMS.
+ */
+export async function getWorkExperiences(): Promise<WorkExperience[]> {
   try {
     const res = await fetch(`${GLIO_URL}/experiences`, { headers: glioHeaders });
+    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
     return res.json();
   } catch (error) {
     console.error("Gagal memuat experiences dari Glio:", error);
@@ -144,219 +335,133 @@ export async function getExperiences() {
   }
 }
 
-// 3. Ambil Semua Sertifikat dari Glio
-export async function getCertificates() {
+/**
+ * 4. Mengambil seluruh sertifikat dari Glio CMS (diurutkan berdasarkan 'order').
+ */
+export async function getCertificates(): Promise<Certificate[]> {
   try {
     const res = await fetch(`${GLIO_URL}/certificates`, { headers: glioHeaders });
-    return res.json();
+    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+    const data: Certificate[] = await res.json();
+    return data.sort((a, b) => a.order - b.order);
   } catch (error) {
     console.error("Gagal memuat certificates dari Glio:", error);
     return [];
   }
 }
 
-// 4. Ambil Daftar Keahlian / Skills dari Glio
-export async function getSkills() {
+/**
+ * 5. Mengambil seluruh skills dari Glio CMS dan mengelompokkannya per kategori.
+ */
+export async function getSkills(): Promise<Skill[]> {
   try {
     const res = await fetch(`${GLIO_URL}/skills`, { headers: glioHeaders });
-    return res.json();
+    if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
+    const data: Skill[] = await res.json();
+    return data.sort((a, b) => a.order - b.order);
   } catch (error) {
     console.error("Gagal memuat skills dari Glio:", error);
     return [];
   }
 }
-```
 
----
+/**
+ * Helper: Mengelompokkan skill array menjadi Record kategori
+ * Output: { "Programming Languages": [Skill, Skill], "Frameworks": [Skill] }
+ */
+export function groupSkillsByCategory(skills: Skill[]): Record<string, Skill[]> {
+  return skills.reduce((acc, skill) => {
+    const cat = skill.category || "General";
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(skill);
+    return acc;
+  }, {} as Record<string, Skill[]>);
+}
 
-### Langkah 4: Susun Komponen UI Utama (`src/App.tsx`)
-Struktur satu halaman (*single-page portfolio*):
+/**
+ * 6. Master Aggregator: Mengambil seluruh data secara paralel (Promise.all).
+ */
+export async function getCompletePortfolioData() {
+  const [featuredProjects, allProjects, experiences, certificates, skills] =
+    await Promise.all([
+      getFeaturedProjects(),
+      getAllProjects(),
+      getWorkExperiences(),
+      getCertificates(),
+      getSkills(),
+    ]);
 
-```tsx
-// src/App.tsx
-import React, { useEffect, useState } from "react";
-import { getFeaturedProjects, getExperiences, getCertificates, getSkills } from "./services/portfolioService";
-import { Briefcase, Award, Code2, Star, ExternalLink, Github, Linkedin, Mail } from "lucide-react";
+  // Pisahkan proyek reguler (selain yang masuk ke featured)
+  const featuredSlugSet = new Set(featuredProjects.map((p) => p.slug));
+  const regularProjects = allProjects.filter((p) => !featuredSlugSet.has(p.slug));
 
-export default function App() {
-  const [featuredProjects, setFeaturedProjects] = useState<any[]>([]);
-  const [experiences, setExperiences] = useState<any[]>([]);
-  const [certificates, setCertificates] = useState<any[]>([]);
-  const [skills, setSkills] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function loadAllData() {
-      setLoading(true);
-      const [feat, exp, cert, skl] = await Promise.all([
-        getFeaturedProjects(),
-        getExperiences(),
-        getCertificates(),
-        getSkills(),
-      ]);
-      setFeaturedProjects(feat);
-      setExperiences(exp);
-      setCertificates(cert);
-      setSkills(skl);
-      setLoading(false);
-    }
-    loadAllData();
-  }, []);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 text-white flex items-center justify-center">
-        <p className="animate-pulse text-sm font-mono text-slate-400">Loading portfolio data...</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-blue-600 selection:text-white">
-      {/* 1. HERO SECTION */}
-      <header className="max-w-5xl mx-auto px-6 pt-24 pb-16">
-        <div className="inline-block px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-mono mb-4">
-          Available for Engineering Opportunities
-        </div>
-        <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-white mb-6">
-          Timur Dian Radha Sejati
-        </h1>
-        <p className="text-xl text-slate-400 max-w-2xl leading-relaxed mb-8">
-          Software Engineer & Systems Consultant spesialis arsitektur backend berkinerja tinggi,
-          multi-tenant SaaS, integrasi AI/LLM, dan aplikasi web modern.
-        </p>
-        <div className="flex gap-4">
-          <a href="https://github.com/..." target="_blank" className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 transition-colors">
-            <Github className="w-5 h-5" />
-          </a>
-          <a href="https://linkedin.com/in/..." target="_blank" className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 transition-colors">
-            <Linkedin className="w-5 h-5" />
-          </a>
-          <a href="mailto:your-email@example.com" className="p-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 transition-colors">
-            <Mail className="w-5 h-5" />
-          </a>
-        </div>
-      </header>
-
-      {/* 2. FEATURED PROJECTS (SINKRON DARI SEJATIDIMEDIA) */}
-      <section className="max-w-5xl mx-auto px-6 py-16 border-t border-slate-800/80">
-        <div className="flex items-center gap-2 mb-8">
-          <Star className="w-5 h-5 text-amber-400 fill-amber-400" />
-          <h2 className="text-2xl font-bold text-white tracking-tight">Proyek Unggulan</h2>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featuredProjects.map((project) => (
-            <div key={project.slug} className="group rounded-2xl bg-slate-900/60 border border-slate-800 hover:border-slate-700 transition-all overflow-hidden flex flex-col">
-              <div className="aspect-video relative overflow-hidden bg-slate-950">
-                <img src={project.bannerImage || project.thumbnail} alt={project.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-              </div>
-              <div className="p-5 flex-1 flex flex-col">
-                <h3 className="font-bold text-white text-lg mb-2">{project.name}</h3>
-                <p className="text-sm text-slate-400 line-clamp-2 mb-4">{project.summary}</p>
-                <div className="mt-auto flex flex-wrap gap-1.5 pt-3 border-t border-slate-800/60">
-                  {project.technologies?.slice(0, 4).map((tech: string) => (
-                    <span key={tech} className="text-[11px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-300">
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 3. WORK EXPERIENCES */}
-      <section className="max-w-5xl mx-auto px-6 py-16 border-t border-slate-800/80">
-        <div className="flex items-center gap-2 mb-8">
-          <Briefcase className="w-5 h-5 text-blue-400" />
-          <h2 className="text-2xl font-bold text-white tracking-tight">Pengalaman Kerja</h2>
-        </div>
-        <div className="space-y-6">
-          {experiences.map((exp, idx) => (
-            <div key={idx} className="p-6 rounded-2xl bg-slate-900/40 border border-slate-800/80">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-2">
-                <h3 className="font-bold text-white text-lg">{exp.role || exp.title}</h3>
-                <span className="text-xs font-mono text-slate-400">{exp.period || exp.duration}</span>
-              </div>
-              <p className="text-sm text-blue-400 font-medium mb-3">{exp.company}</p>
-              <p className="text-sm text-slate-400 leading-relaxed">{exp.description}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* 4. SKILLS & TECHNOLOGIES */}
-      <section className="max-w-5xl mx-auto px-6 py-16 border-t border-slate-800/80">
-        <div className="flex items-center gap-2 mb-8">
-          <Code2 className="w-5 h-5 text-emerald-400" />
-          <h2 className="text-2xl font-bold text-white tracking-tight">Keahlian & Teknologi</h2>
-        </div>
-        <div className="flex flex-wrap gap-2.5">
-          {skills.map((skill, idx) => (
-            <span key={idx} className="px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 text-sm font-medium">
-              {skill.name || skill}
-            </span>
-          ))}
-        </div>
-      </section>
-
-      {/* 5. CERTIFICATES & AWARDS */}
-      <section className="max-w-5xl mx-auto px-6 py-16 border-t border-slate-800/80">
-        <div className="flex items-center gap-2 mb-8">
-          <Award className="w-5 h-5 text-violet-400" />
-          <h2 className="text-2xl font-bold text-white tracking-tight">Sertifikasi & Lisensi</h2>
-        </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {certificates.map((cert, idx) => (
-            <div key={idx} className="p-5 rounded-2xl bg-slate-900/40 border border-slate-800/80 flex items-start justify-between">
-              <div>
-                <h3 className="font-semibold text-white mb-1">{cert.name || cert.title}</h3>
-                <p className="text-xs text-slate-400">{cert.issuer} • {cert.year || cert.date}</p>
-              </div>
-              {cert.credentialUrl && (
-                <a href={cert.credentialUrl} target="_blank" className="text-slate-400 hover:text-white">
-                  <ExternalLink className="w-4 h-4" />
-                </a>
-              )}
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* FOOTER */}
-      <footer className="max-w-5xl mx-auto px-6 py-12 border-t border-slate-800/80 text-center text-xs text-slate-500 font-mono">
-        © {new Date().getFullYear()} Timur Dian Radha Sejati. Hosted on GitHub Pages.
-      </footer>
-    </div>
-  );
+  return {
+    featuredProjects,
+    regularProjects,
+    allProjects,
+    experiences,
+    certificates,
+    skills,
+    groupedSkills: groupSkillsByCategory(skills),
+  };
 }
 ```
 
 ---
 
-## 4. Setup Deploy GitHub Pages (`github.io`)
+## 6. Contoh Pemakaian di State Management / Custom Hook
 
-### 1. Konfigurasi `vite.config.ts`
-Pastikan properti `base` sudah sesuai:
-- Jika repo bernama `username.github.io`: gunakan `base: '/'`
-- Jika repo bernama `portfolio`: gunakan `base: '/portfolio/'`
+Anda bisa menggunakan custom hook sederhana untuk mengambil data di komponen Anda:
 
+```ts
+// src/hooks/usePortfolioData.ts
+import { useState, useEffect } from "react";
+import { getCompletePortfolioData } from "../services/portfolioService";
+
+export function usePortfolioData() {
+  const [data, setData] = useState<Awaited<ReturnType<typeof getCompletePortfolioData>> | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    getCompletePortfolioData()
+      .then((res) => {
+        setData(res);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError(err?.message || "Failed to load data");
+        setIsLoading(false);
+      });
+  }, []);
+
+  return { data, isLoading, error };
+}
+```
+
+---
+
+## 7. Konfigurasi Hosting GitHub Pages (`github.io`)
+
+### 1. `vite.config.ts`
+Sesuaikan nama subpath base repository:
 ```ts
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default defineConfig({
+  // Gunakan '/' jika nama repo adalah: username.github.io
+  // Gunakan '/nama-repo/' jika nama repo adalah repository proyek biasa
   base: '/',
   plugins: [react()],
 });
 ```
 
-### 2. Buat Workflow GitHub Actions
-Buat file di `.github/workflows/deploy.yml`:
+### 2. Workflow GitHub Actions (`.github/workflows/deploy.yml`)
+Workflow otomatis yang melakukan instalasi dependensi, build, dan publish ke GitHub Pages setiap ada commit di branch `main`:
 
 ```yaml
-name: Deploy Portfolio to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -411,19 +516,9 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
-### 3. Masukkan Secrets di Repositori GitHub
-1. Buka Repositori GitHub Anda &rarr; **Settings** &rarr; **Secrets and variables** &rarr; **Actions**.
-2. Klik **New repository secret**:
-   - Name: `GLIO_API_URL` &rarr; Value: URL API Glio Anda.
-   - Name: `GLIO_API_KEY` &rarr; Value: API Key Glio Anda.
-3. Buka **Settings** &rarr; **Pages** &rarr; Pada bagian **Build and deployment**, ubah **Source** menjadi **GitHub Actions**.
-
----
-
-## 5. Checklist Verifikasi Akhir
-
-- [ ] Push kode web personal ke branch `main`.
-- [ ] Buka tab **Actions** di GitHub dan pastikan workflow deploy berstatus hijau (sukses).
-- [ ] Kunjungi `https://username.github.io` &rarr; Verifikasi data Glio dan 6 Proyek Unggulan muncul.
-- [ ] Buka `/portal/portfolio` di SejatiDimedia, ganti salah satu bintang (⭐) proyek unggulan.
-- [ ] Refresh website personal Anda di `github.io` &rarr; Proyek unggulan otomatis terupdate secara instan!
+### 3. Setup Secrets di GitHub
+1. Masuk ke **Settings** repository &rarr; **Secrets and variables** &rarr; **Actions**.
+2. Tambahkan Repository Secrets:
+   - `GLIO_API_URL` : `https://glio.vercel.app/api/public`
+   - `GLIO_API_KEY` : *(API Key Glio Anda)*
+3. Masuk ke **Settings** repository &rarr; **Pages** &rarr; Ubah Source menjadi **GitHub Actions**.
