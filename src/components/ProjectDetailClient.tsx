@@ -9,6 +9,7 @@ import { Icon } from "@iconify/react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import ShowcaseGallery from "./ShowcaseGallery";
+import { MermaidDiagram } from "./ui/MermaidDiagram";
 import { Project, isProfessionalProject, sortShowcaseImages } from "../lib/api/glio-projects";
 import { useLanguage } from "../lib/i18n/LanguageContext";
 import { TECH_ICONS } from "../lib/constants";
@@ -124,16 +125,65 @@ export default function ProjectDetailClient({
     li: ({ children }: any) => <li className="text-slate-600 dark:text-theme-fore-muted marker:font-bold marker:text-slate-800 [&>p]:m-0">{children}</li>,
     strong: ({ children }: any) => <strong className="font-bold text-slate-900 dark:text-theme-fore">{children}</strong>,
     em: ({ children }: any) => <em className="italic text-slate-700 dark:text-theme-fore">{children}</em>,
-    code: ({ inline, className, children, ...props }: any) => (
-      <code className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-theme-surface border border-slate-200/80 dark:border-theme-border font-mono text-xs text-[#2C5098] font-medium" {...props}>
-        {children}
-      </code>
-    ),
-    pre: ({ children }: any) => (
-      <pre className="p-4 my-4 rounded-2xl bg-slate-900 text-slate-100 font-mono text-xs overflow-x-auto border border-slate-800 shadow-sm leading-relaxed">
-        {children}
-      </pre>
-    ),
+    pre: ({ children }: any) => {
+      const childProps = children?.props;
+      const codeString = String(childProps?.children || "").trim();
+      const isMermaid =
+        childProps?.className?.includes("language-mermaid") ||
+        childProps?.className === "mermaid" ||
+        codeString.startsWith("graph ") ||
+        codeString.startsWith("flowchart ") ||
+        codeString.startsWith("sequenceDiagram") ||
+        codeString.startsWith("classDiagram") ||
+        codeString.startsWith("stateDiagram") ||
+        codeString.startsWith("erDiagram");
+
+      if (isMermaid) {
+        return <>{children}</>;
+      }
+
+      return (
+        <pre className="p-4 my-4 rounded-2xl bg-slate-900 text-slate-100 font-mono text-xs overflow-x-auto border border-slate-800 shadow-sm leading-relaxed">
+          {children}
+        </pre>
+      );
+    },
+    code: ({ inline, className, children, ...props }: any) => {
+      const codeString = String(children || "").replace(/\n$/, "");
+      const match = /language-(\w+)/.exec(className || "");
+      const language = match ? match[1] : "";
+
+      const isMermaid =
+        !inline &&
+        (language === "mermaid" ||
+          codeString.trim().startsWith("graph ") ||
+          codeString.trim().startsWith("flowchart ") ||
+          codeString.trim().startsWith("sequenceDiagram") ||
+          codeString.trim().startsWith("classDiagram") ||
+          codeString.trim().startsWith("stateDiagram") ||
+          codeString.trim().startsWith("erDiagram"));
+
+      if (isMermaid) {
+        return <MermaidDiagram chart={codeString} />;
+      }
+
+      if (inline) {
+        return (
+          <code
+            className="px-1.5 py-0.5 rounded bg-slate-100 dark:bg-theme-surface border border-slate-200/80 dark:border-theme-border font-mono text-xs text-[#2C5098] font-medium"
+            {...props}
+          >
+            {children}
+          </code>
+        );
+      }
+
+      return (
+        <code className={className} {...props}>
+          {children}
+        </code>
+      );
+    },
     table: ({ children }: any) => (
       <div className="w-full my-6 overflow-x-auto rounded-2xl border border-slate-200/90 dark:border-theme-border/80 shadow-xs bg-white dark:bg-theme-surface/40">
         <table className="w-full text-left border-collapse text-xs sm:text-sm">{children}</table>

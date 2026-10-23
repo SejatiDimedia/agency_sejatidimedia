@@ -13,6 +13,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { highlightCode } from "@/lib/syntaxHighlighter";
+import { MermaidDiagram } from "@/components/ui/MermaidDiagram";
 
 export interface CodeBlockBeautifiedProps {
   className?: string;
@@ -43,6 +44,20 @@ export default function CodeBlockBeautified({
   // Extract language from className (e.g., "language-php" -> "php")
   const langMatch = /language-([a-zA-Z0-9_-]+)/.exec(className || "");
   const extractedLang = langMatch ? langMatch[1] : "";
+
+  // If it is a Mermaid diagram, render it visually with MermaidDiagram
+  const isMermaid =
+    extractedLang === "mermaid" ||
+    rawCode.trim().startsWith("graph ") ||
+    rawCode.trim().startsWith("flowchart ") ||
+    rawCode.trim().startsWith("sequenceDiagram") ||
+    rawCode.trim().startsWith("classDiagram") ||
+    rawCode.trim().startsWith("stateDiagram") ||
+    rawCode.trim().startsWith("erDiagram");
+
+  if (isMermaid) {
+    return <MermaidDiagram chart={rawCode} title={title} />;
+  }
 
   // Highlight code and extract metadata
   const {
