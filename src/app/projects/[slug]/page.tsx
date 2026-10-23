@@ -19,7 +19,7 @@ export default async function ProjectDetailPage({
     getGlobalNdaProjectSlugs(),
   ]);
 
-  if (!project) {
+  if (!project || project.isPublic === false) {
     notFound();
   }
 

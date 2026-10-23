@@ -46,9 +46,9 @@ export async function GET(
       getGlobalNdaBlur(),
     ]);
 
-    if (!project) {
+    if (!project || project.isPublic === false) {
       return NextResponse.json(
-        { success: false, error: `Project not found for slug "${slug}"` },
+        { success: false, error: `Project not found or is private for slug "${slug}"` },
         { status: 404, headers: CORS_HEADERS }
       );
     }

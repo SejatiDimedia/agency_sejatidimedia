@@ -32,23 +32,27 @@ export async function GET(req: NextRequest) {
     const includeProjects = searchParams.get('includeProjects') !== 'false';
     const includeAll = searchParams.get('includeAll') === 'true';
 
-    const [featuredSlugs, ndaSlugs, ndaBlurEnabled] = await Promise.all([
+    const [featuredSlugs, ndaSlugs, ndaBlurEnabled, rawProjects] = await Promise.all([
       getGlobalFeaturedProjectSlugs(),
       getGlobalNdaProjectSlugs(),
       getGlobalNdaBlur(),
+      getProjects(),
     ]);
+
+    // Ensure slugs only reference projects that are actively public
+    const publicSlugsSet = new Set(rawProjects.map((p) => p.slug));
+    const activeFeaturedSlugs = featuredSlugs.filter((s) => publicSlugsSet.has(s));
+    const activeNdaSlugs = ndaSlugs.filter((s) => publicSlugsSet.has(s));
 
     let featuredProjects: Project[] | undefined = undefined;
     let ndaProjects: Project[] | undefined = undefined;
     let allProjects: Project[] | undefined = undefined;
 
     if (includeProjects) {
-      const rawProjects = await getProjects();
-
       // Enrich and sanitize each project according to NDA status
       const enrichedProjects = rawProjects.map((p) => {
-        const isFeatured = featuredSlugs.includes(p.slug);
-        const isNda = ndaSlugs.includes(p.slug) || isProfessionalProject(p, ndaSlugs);
+        const isFeatured = activeFeaturedSlugs.includes(p.slug);
+        const isNda = activeNdaSlugs.includes(p.slug) || isProfessionalProject(p, activeNdaSlugs);
         const sanitized = sanitizeProjectForNda(p, isNda && ndaBlurEnabled);
 
         return {
@@ -59,7 +63,7 @@ export async function GET(req: NextRequest) {
         };
       });
 
-      featuredProjects = enrichedProjects.filter((p) => featuredSlugs.includes(p.slug));
+      featuredProjects = enrichedProjects.filter((p) => activeFeaturedSlugs.includes(p.slug));
       ndaProjects = enrichedProjects.filter((p) => p.isNda);
 
       if (includeAll) {
@@ -69,11 +73,11 @@ export async function GET(req: NextRequest) {
 
     const response = NextResponse.json({
       success: true,
-      count: featuredSlugs.length,
-      featuredSlugs,
+      count: activeFeaturedSlugs.length,
+      featuredSlugs: activeFeaturedSlugs,
       ...(featuredProjects ? { featuredProjects } : {}),
-      ndaCount: ndaSlugs.length,
-      ndaSlugs,
+      ndaCount: activeNdaSlugs.length,
+      ndaSlugs: activeNdaSlugs,
       ndaBlurEnabled,
       ...(ndaProjects ? { ndaProjects } : {}),
       ...(allProjects ? { allProjects } : {}),

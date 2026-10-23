@@ -534,7 +534,8 @@ export default function AgencyLanding({
     }
   };
 
-  const projectList = (projects && projects.length > 0) ? projects : MOCK_PROJECTS;
+  const rawList = (projects && projects.length > 0) ? projects : MOCK_PROJECTS;
+  const projectList = useMemo(() => rawList.filter((p) => p.isPublic !== false), [rawList]);
 
   const displayedProjects = useMemo(() => {
     if (!projectList || projectList.length === 0) return [];

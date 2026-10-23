@@ -155,6 +155,7 @@ export interface Project {
   documents?: ProjectDocument[];
   isProfessional?: boolean;
   isNda?: boolean;
+  isPublic?: boolean;
 }
 
 // ==========================================
@@ -331,13 +332,15 @@ export async function getFeaturedProjects(): Promise<Project[]> {
 }
 
 /**
- * 2. Mengambil seluruh proyek portofolio master dari Glio CMS.
+ * 2. Mengambil seluruh proyek portofolio master dari Glio CMS (difilter hanya yang berstatus publik).
  */
 export async function getAllProjects(): Promise<Project[]> {
   try {
     const res = await fetch(`${GLIO_URL}/projects`, { headers: glioHeaders });
     if (!res.ok) throw new Error(`HTTP Error: ${res.status}`);
-    return res.json();
+    const data: Project[] = await res.json();
+    // Hanya tampilkan project yang aktif publik (isPublic !== false)
+    return (data || []).filter((p) => p.isPublic !== false);
   } catch (error) {
     console.error("Gagal memuat master projects dari Glio:", error);
     return [];

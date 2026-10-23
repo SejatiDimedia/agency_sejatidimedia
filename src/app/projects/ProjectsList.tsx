@@ -63,29 +63,34 @@ export default function ProjectsList({
     return "ph:stack-bold";
   };
 
+  // Filter out any non-public (draft/hidden) projects
+  const publicProjects = useMemo(() => {
+    return (projects || []).filter((p) => p.isPublic !== false);
+  }, [projects]);
+
   // 1. Featured Projects computation (6 flagship projects)
   const featuredProjects = useMemo(() => {
-    if (!projects || projects.length === 0) return [];
-    const featured = projects
+    if (!publicProjects || publicProjects.length === 0) return [];
+    const featured = publicProjects
       .filter((p) => featuredProjectSlugs.includes(p.slug))
       .sort((a, b) => featuredProjectSlugs.indexOf(a.slug) - featuredProjectSlugs.indexOf(b.slug));
 
     if (featured.length < 6) {
-      const remaining = projects.filter((p) => !featuredProjectSlugs.includes(p.slug));
+      const remaining = publicProjects.filter((p) => !featuredProjectSlugs.includes(p.slug));
       return [...featured, ...remaining].slice(0, 6);
     }
 
     return featured.slice(0, 6);
-  }, [projects, featuredProjectSlugs]);
+  }, [publicProjects, featuredProjectSlugs]);
 
   // 2. Dynamic categories for catalog
-  const allCategories = projects.flatMap((p) => p.categories?.map(getCategoryName) || []);
+  const allCategories = publicProjects.flatMap((p) => p.categories?.map(getCategoryName) || []);
   const uniqueCategories = Array.from(new Set(allCategories)).filter(Boolean);
   const allCategoryLabel = language === 'en' ? "All" : "Semua";
   const categories = [allCategoryLabel, ...uniqueCategories];
 
   // 3. Filtered projects for general catalog
-  const filteredProjects = projects.filter((project) => {
+  const filteredProjects = publicProjects.filter((project) => {
     if (activeCategory === allCategoryLabel) return true;
     const projectCategoryNames = project.categories?.map(getCategoryName) || [];
     return projectCategoryNames.includes(activeCategory);

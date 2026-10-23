@@ -17,7 +17,7 @@ export async function GET() {
   const ndaBlurEnabled = await getGlobalNdaBlur();
   const ndaProjectSlugs = await getGlobalNdaProjectSlugs();
   const featuredProjectSlugs = await getGlobalFeaturedProjectSlugs();
-  const projects = await getProjects();
+  const projects = await getProjects({ includeDrafts: true });
 
   const res = NextResponse.json({
     success: true,

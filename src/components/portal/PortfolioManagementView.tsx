@@ -35,7 +35,7 @@ export const PortfolioManagementView: React.FC = () => {
   const [savingFeaturedSlug, setSavingFeaturedSlug] = useState<string | null>(null);
   const [masterLoading, setMasterLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterTab, setFilterTab] = useState<'all' | 'featured' | 'nda' | 'public'>('all');
+  const [filterTab, setFilterTab] = useState<'all' | 'featured' | 'public' | 'hidden' | 'nda'>('all');
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   // Load NDA settings and portfolio projects from API
@@ -158,13 +158,22 @@ export const PortfolioManagementView: React.FC = () => {
     }
   };
 
-  // Toggle Proyek Unggulan status (Max 3 projects for Landing Page)
+  // Toggle Proyek Unggulan status (Max 6 projects for Landing Page & Portfolio)
   const handleToggleFeaturedProject = async (project: Project) => {
     setSavingFeaturedSlug(project.slug);
 
+    if (project.isPublic === false) {
+      setToast({
+        message: `Proyek "${project.name}" berstatus Draft / Non-Publik di Glio. Aktifkan status Publik terlebih dahulu di Glio sebelum menjadikannya Proyek Unggulan.`,
+        type: 'error',
+      });
+      setSavingFeaturedSlug(null);
+      return;
+    }
+
     // Sanitize current featured list against actual projects loaded
     const currentValidSlugs = featuredProjectSlugs.filter((s) =>
-      projects.some((p) => p.slug === s)
+      projects.some((p) => p.slug === s && p.isPublic !== false)
     );
     const isCurrentlyFeatured = currentValidSlugs.includes(project.slug);
     let nextFeatured: string[];
@@ -226,6 +235,7 @@ export const PortfolioManagementView: React.FC = () => {
     return projects.filter((p) => {
       const isNda = ndaProjectSlugs.includes(p.slug);
       const isFeatured = featuredProjectSlugs.includes(p.slug);
+      const isHidden = p.isPublic === false;
       const matchesSearch =
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.technologies.some((t) => t.toLowerCase().includes(searchQuery.toLowerCase())) ||
@@ -234,8 +244,9 @@ export const PortfolioManagementView: React.FC = () => {
       if (!matchesSearch) return false;
 
       if (filterTab === 'featured') return isFeatured;
+      if (filterTab === 'public') return !isHidden;
+      if (filterTab === 'hidden') return isHidden;
       if (filterTab === 'nda') return isNda;
-      if (filterTab === 'public') return !isNda;
       return true;
     });
   }, [projects, ndaProjectSlugs, featuredProjectSlugs, searchQuery, filterTab]);
@@ -248,7 +259,13 @@ export const PortfolioManagementView: React.FC = () => {
     return projects.filter((p) => ndaProjectSlugs.includes(p.slug)).length;
   }, [projects, ndaProjectSlugs]);
 
-  const publicCount = projects.length - ndaCount;
+  const publicActiveCount = useMemo(() => {
+    return projects.filter((p) => p.isPublic !== false).length;
+  }, [projects]);
+
+  const hiddenCount = useMemo(() => {
+    return projects.filter((p) => p.isPublic === false).length;
+  }, [projects]);
 
   return (
     <div className="space-y-8 w-full pb-12">
@@ -308,8 +325,8 @@ export const PortfolioManagementView: React.FC = () => {
       </div>
 
       {/* Summary KPI Stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-5 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+        <div className="p-4 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
           <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Portofolio</span>
           <div className="flex items-baseline justify-between mt-2">
             <span className="text-2xl font-black text-slate-900">{projects.length}</span>
@@ -317,7 +334,7 @@ export const PortfolioManagementView: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-5 rounded-3xl bg-amber-50/50 border border-amber-200/90 shadow-xs flex flex-col justify-between">
+        <div className="p-4 rounded-3xl bg-amber-50/50 border border-amber-200/90 shadow-xs flex flex-col justify-between">
           <div className="flex items-center justify-between">
             <span className="text-[11px] font-bold text-amber-700 uppercase tracking-wider">Proyek Unggulan</span>
             <span className="text-[10px] font-mono font-bold text-amber-700 bg-amber-100 px-2 py-0.5 rounded-full border border-amber-300">
@@ -333,19 +350,27 @@ export const PortfolioManagementView: React.FC = () => {
           </div>
         </div>
 
-        <div className="p-5 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
-          <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Terikat NDA</span>
+        <div className="p-4 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <span className="text-[11px] font-bold text-emerald-600 uppercase tracking-wider">Publik Aktif</span>
           <div className="flex items-baseline justify-between mt-2">
-            <span className="text-2xl font-black text-slate-800">{ndaCount}</span>
-            <ShieldAlert className="w-5 h-5 text-amber-500" />
+            <span className="text-2xl font-black text-emerald-600">{publicActiveCount}</span>
+            <Eye className="w-5 h-5 text-emerald-500" />
           </div>
         </div>
 
-        <div className="p-5 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
-          <span className="text-[11px] font-bold text-blue-500 uppercase tracking-wider">Karya Publik</span>
+        <div className="p-4 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between">
+          <span className="text-[11px] font-bold text-rose-500 uppercase tracking-wider">Draft / Hidden</span>
           <div className="flex items-baseline justify-between mt-2">
-            <span className="text-2xl font-black text-blue-600">{publicCount}</span>
-            <Sparkles className="w-5 h-5 text-blue-500" />
+            <span className="text-2xl font-black text-rose-600">{hiddenCount}</span>
+            <EyeOff className="w-5 h-5 text-rose-400" />
+          </div>
+        </div>
+
+        <div className="p-4 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col justify-between col-span-2 sm:col-span-1">
+          <span className="text-[11px] font-bold text-amber-600 uppercase tracking-wider">Terikat NDA</span>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-2xl font-black text-amber-600">{ndaCount}</span>
+            <ShieldAlert className="w-5 h-5 text-amber-500" />
           </div>
         </div>
       </div>
@@ -453,10 +478,10 @@ export const PortfolioManagementView: React.FC = () => {
             </div>
 
             {/* Filter Tabs */}
-            <div className="flex rounded-xl bg-slate-200/70 p-1 text-[11px] font-bold text-slate-600">
+            <div className="flex rounded-xl bg-slate-200/70 p-1 text-[11px] font-bold text-slate-600 overflow-x-auto">
               <button
                 onClick={() => setFilterTab('all')}
-                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap ${
                   filterTab === 'all' ? 'bg-white text-slate-900 shadow-xs' : 'hover:text-slate-900'
                 }`}
               >
@@ -464,7 +489,7 @@ export const PortfolioManagementView: React.FC = () => {
               </button>
               <button
                 onClick={() => setFilterTab('featured')}
-                className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer ${
+                className={`px-2.5 py-1 rounded-lg transition-all flex items-center gap-1 cursor-pointer whitespace-nowrap ${
                   filterTab === 'featured' ? 'bg-amber-500 text-white shadow-xs' : 'hover:text-slate-900'
                 }`}
               >
@@ -472,20 +497,31 @@ export const PortfolioManagementView: React.FC = () => {
                 Unggulan ({featuredCount}/6)
               </button>
               <button
+                onClick={() => setFilterTab('public')}
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap ${
+                  filterTab === 'public' ? 'bg-white text-emerald-700 shadow-xs' : 'hover:text-slate-900'
+                }`}
+              >
+                Publik ({publicActiveCount})
+              </button>
+              {hiddenCount > 0 && (
+                <button
+                  onClick={() => setFilterTab('hidden')}
+                  className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap flex items-center gap-1 ${
+                    filterTab === 'hidden' ? 'bg-rose-500 text-white shadow-xs' : 'text-rose-600 hover:text-rose-700'
+                  }`}
+                >
+                  <EyeOff className="w-3 h-3" />
+                  Draft ({hiddenCount})
+                </button>
+              )}
+              <button
                 onClick={() => setFilterTab('nda')}
-                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
+                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer whitespace-nowrap ${
                   filterTab === 'nda' ? 'bg-white text-amber-700 shadow-xs' : 'hover:text-slate-900'
                 }`}
               >
                 NDA ({ndaCount})
-              </button>
-              <button
-                onClick={() => setFilterTab('public')}
-                className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
-                  filterTab === 'public' ? 'bg-white text-blue-700 shadow-xs' : 'hover:text-slate-900'
-                }`}
-              >
-                Publik ({publicCount})
               </button>
             </div>
           </div>
@@ -584,22 +620,34 @@ export const PortfolioManagementView: React.FC = () => {
 
                         {/* Status Badges */}
                         <div className="pt-1 flex items-center gap-1.5 flex-wrap">
+                          {project.isPublic === false ? (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-rose-50 text-rose-700 border border-rose-200">
+                              <EyeOff className="w-3 h-3 text-rose-600" />
+                              Draft / Non-Publik
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+                              <Eye className="w-3 h-3 text-emerald-600" />
+                              Publik
+                            </span>
+                          )}
+
                           {isFeatured && (
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs">
                               <Star className="w-3 h-3 text-amber-600 fill-amber-500" />
-                              Unggulan Landing Page
+                              Unggulan
                             </span>
                           )}
 
                           {isNda ? (
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-amber-500/10 text-amber-700 border border-amber-500/25">
                               <ShieldAlert className="w-3 h-3 text-amber-600" />
-                              Pengalaman Profesional (NDA)
+                              NDA
                             </span>
                           ) : (
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200/60">
                               <Sparkles className="w-3 h-3 text-blue-600" />
-                              Karya SejatiDimedia (Publik)
+                              Karya Reguler
                             </span>
                           )}
                         </div>

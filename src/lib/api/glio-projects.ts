@@ -37,6 +37,7 @@ export interface Project {
   showcaseOrder?: string[];
   isProfessional?: boolean;
   isNda?: boolean;
+  isPublic?: boolean;
 }
 
 /**
@@ -389,6 +390,7 @@ export const MOCK_PROJECTS: Project[] = [
     startDate: "2025-01-15",
     endDate: "2025-03-31",
     order: 1,
+    isPublic: true,
     links: [
       { title: "Case Study", url: "/projects/nexus-erp-suite", icon: null }
     ],
@@ -411,6 +413,7 @@ export const MOCK_PROJECTS: Project[] = [
     startDate: "2025-04-01",
     endDate: "2025-05-15",
     order: 2,
+    isPublic: true,
     links: [
       { title: "Case Study", url: "/projects/antreey-reservation-system", icon: null }
     ],
@@ -433,6 +436,7 @@ export const MOCK_PROJECTS: Project[] = [
     startDate: "2025-06-01",
     endDate: "2025-06-30",
     order: 3,
+    isPublic: true,
     links: [
       { title: "Case Study", url: "/projects/ai-resume-analyzer", icon: null }
     ],
@@ -440,10 +444,13 @@ export const MOCK_PROJECTS: Project[] = [
   }
 ];
 
-export async function getProjects(): Promise<Project[]> {
+export async function getProjects(options?: { includeDrafts?: boolean }): Promise<Project[]> {
+  const includeDrafts = options?.includeDrafts === true;
+
   if (!GLIO_API_URL || !GLIO_API_KEY) {
     console.warn("Glio API configuration is missing. Falling back to mock projects.");
-    return [...MOCK_PROJECTS].sort(
+    const list = includeDrafts ? MOCK_PROJECTS : MOCK_PROJECTS.filter((p) => p.isPublic !== false);
+    return [...list].sort(
       (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
     );
   }
@@ -464,23 +471,34 @@ export async function getProjects(): Promise<Project[]> {
 
     const data = (await res.json()) as Project[];
     const list = (!data || data.length === 0) ? MOCK_PROJECTS : data;
+    const filtered = includeDrafts ? list : list.filter((p) => p.isPublic !== false);
 
     // Sort projects by startDate descending (newest first)
-    return [...list].sort(
+    return [...filtered].sort(
       (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
     );
   } catch (error) {
     console.warn("Glio API request failed, falling back to mock projects:", error);
-    return [...MOCK_PROJECTS].sort(
+    const list = includeDrafts ? MOCK_PROJECTS : MOCK_PROJECTS.filter((p) => p.isPublic !== false);
+    return [...list].sort(
       (a, b) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
     );
   }
 }
 
-export async function getProjectBySlug(slug: string): Promise<Project | null> {
+export async function getProjectBySlug(
+  slug: string,
+  options?: { allowDraft?: boolean }
+): Promise<Project | null> {
+  const allowDraft = options?.allowDraft === true;
+
   if (!GLIO_API_URL || !GLIO_API_KEY) {
     console.warn("Glio API configuration is missing. Falling back to mock projects.");
-    return MOCK_PROJECTS.find((p) => p.slug === slug) || null;
+    const localProject = MOCK_PROJECTS.find((p) => p.slug === slug);
+    if (localProject && !allowDraft && localProject.isPublic === false) {
+      return null;
+    }
+    return localProject || null;
   }
 
   const url = `${GLIO_API_URL}/projects/${slug}`;
@@ -496,6 +514,9 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     if (res.status === 404) {
       // Check local fallback first
       const localProject = MOCK_PROJECTS.find((p) => p.slug === slug);
+      if (localProject && !allowDraft && localProject.isPublic === false) {
+        return null;
+      }
       return localProject || null;
     }
 
@@ -504,13 +525,21 @@ export async function getProjectBySlug(slug: string): Promise<Project | null> {
     }
 
     const project = (await res.json()) as Project;
-    if (project && project.documents) {
+    if (!project) return null;
+    if (!allowDraft && project.isPublic === false) {
+      return null;
+    }
+
+    if (project.documents) {
       project.documents = sortShowcaseImages(project.documents, slug, project.showcaseOrder);
     }
     return project;
   } catch (error) {
     console.warn(`Glio API detail request failed for "${slug}", trying fallback:`, error);
     const localProject = MOCK_PROJECTS.find((p) => p.slug === slug);
+    if (localProject && !allowDraft && localProject.isPublic === false) {
+      return null;
+    }
     return localProject || null;
   }
 }
