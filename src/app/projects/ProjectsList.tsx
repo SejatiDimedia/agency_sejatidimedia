@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
@@ -20,9 +21,29 @@ export default function ProjectsList({
   initialFeaturedSlugs = [],
 }: ProjectsListProps) {
   const { language } = useLanguage();
+  const [mounted, setMounted] = useState(false);
   const [activeCategory, setActiveCategory] = useState(language === 'en' ? "All" : "Semua");
   const [ndaProjectSlugs, setNdaProjectSlugs] = useState<string[]>([]);
   const [featuredProjectSlugs, setFeaturedProjectSlugs] = useState<string[]>(initialFeaturedSlugs);
+  const [selectedHighlightProject, setSelectedHighlightProject] = useState<Project | null>(null);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (selectedHighlightProject) {
+      document.body.style.overflow = 'hidden';
+      const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') setSelectedHighlightProject(null);
+      };
+      window.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = 'unset';
+        window.removeEventListener('keydown', handleKeyDown);
+      };
+    }
+  }, [selectedHighlightProject]);
 
   useEffect(() => {
     fetch('/api/settings/nda')
@@ -163,9 +184,10 @@ export default function ProjectsList({
             </div>
           </div>
 
-          {/* Grid of 6 Featured Cards (3 Columns) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {featuredProjects.map((project) => {
+          {/* Wide Project Cards List - Featured Projects */}
+          <div className="space-y-8 sm:space-y-12 text-left">
+            {featuredProjects.map((project, index) => {
+              const isImageLeft = index % 2 === 1;
               const isDummy =
                 !project.thumbnail ||
                 project.thumbnail.trim() === "" ||
@@ -174,47 +196,24 @@ export default function ProjectsList({
               const displayThumbnail = (isDummy ? "/logo.svg" : project.thumbnail) as string;
               const isProfessionalExp = isProfessionalProject(project, ndaProjectSlugs);
 
+              const summaryText = language === 'en'
+                ? (project.summaryEn || project.descriptionEn || project.summary || project.description || '')
+                : (project.summaryId || project.descriptionId || project.summary || project.description || '');
+
               return (
                 <div
                   key={`featured-${project.slug}`}
-                  className="group flex flex-col justify-between p-5 rounded-3xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border hover:border-[#2C5098]/50 dark:hover:border-theme-border-accent hover:shadow-xl hover:shadow-[#2C5098]/10 transition-all duration-300 relative overflow-hidden"
+                  className="group rounded-3xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border hover:border-[#2C5098]/50 dark:hover:border-theme-border-accent hover:shadow-xl hover:shadow-[#2C5098]/10 transition-all duration-300 relative overflow-hidden p-6 sm:p-8"
                 >
-                  <div className="space-y-4">
-                    {/* Thumbnail with Featured Pill */}
-                    <div className="relative w-full h-48 rounded-2xl overflow-hidden bg-slate-50 dark:bg-theme-surface border border-slate-200/80 dark:border-theme-border/40">
-                      <Image
-                        src={displayThumbnail}
-                        alt={project.name}
-                        fill
-                        className={
-                          isDummy
-                            ? "object-contain p-8 bg-slate-50 dark:bg-theme-surface/40"
-                            : "object-cover group-hover:scale-[1.03] transition-transform duration-500"
-                        }
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                      />
-
-                      {/* Featured Star Badge on top-right */}
-                      <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white shadow-md shadow-[#2C5098]/30 border border-white/20">
-                        <Icon icon="ph:star-fill" className="w-3 h-3 text-white" />
-                        <span>{language === 'en' ? 'Featured' : 'Unggulan'}</span>
-                      </div>
-
-                      {/* NDA indicator if applicable */}
-                      {isProfessionalExp && (
-                        <div className="absolute top-2.5 left-2.5 z-10 flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-mono font-bold uppercase tracking-wider bg-slate-900/85 backdrop-blur-md text-slate-200 border border-slate-700/60">
-                          <Icon icon="ph:shield-check-bold" className="w-2.5 h-2.5 text-blue-400" />
-                          <span>NDA</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Title & Description */}
-                    <div className="space-y-2 text-left">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
+                    {/* Details Column: Alternates left/right on desktop */}
+                    <div className={`lg:col-span-7 space-y-4 text-left order-2 ${isImageLeft ? 'lg:order-2' : 'lg:order-1'}`}>
+                      {/* Categories / Tags - Blue gradient badge consistent across the app */}
                       {project.categories && project.categories.length > 0 && (
                         <div className="flex flex-wrap gap-1.5 pb-1">
                           {project.categories.map((cat) => {
                             const catName = getCategoryName(cat);
+                            if (/^[0-9a-fA-F]{24}$/.test(catName)) return null;
                             return (
                               <span
                                 key={cat}
@@ -228,38 +227,79 @@ export default function ProjectsList({
                         </div>
                       )}
 
-                      <h3 className="text-base font-jakarta font-sans font-bold text-slate-900 dark:text-theme-fore group-hover:text-[#2C5098] transition-colors">
+                      {/* Title */}
+                      <h3
+                        onClick={() => setSelectedHighlightProject(project)}
+                        className="text-xl sm:text-2xl font-sans font-bold text-slate-900 dark:text-theme-fore group-hover:text-[#2C5098] transition-colors line-clamp-1 sm:line-clamp-2 cursor-pointer"
+                      >
                         {project.name}
                       </h3>
-                      <p className="text-xs text-slate-600 dark:text-theme-fore-muted leading-relaxed line-clamp-3 font-sans">
-                        {language === 'en'
-                          ? (project.summaryEn || project.descriptionEn || project.summary || project.description)
-                          : (project.summaryId || project.descriptionId || project.summary || project.description)}
+
+                      {/* Description */}
+                      <p className="text-xs sm:text-sm text-slate-500 dark:text-theme-fore-muted font-sans leading-relaxed line-clamp-3">
+                        {summaryText || project.description}
                       </p>
-                    </div>
-                  </div>
 
-                  {/* Footer: Tech Stack & Featured Primary Action Button */}
-                  <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-theme-border/30 mt-4">
-                    <div className="flex flex-wrap gap-1.5">
-                      {project.technologies.map((tech) => (
-                        <span
-                          key={tech}
-                          className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono bg-slate-50 dark:bg-theme-surface text-slate-600 dark:text-theme-fore-muted border border-slate-200/60 dark:border-theme-border/40"
+                      {/* Tech stack tags */}
+                      <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100 dark:border-theme-border/30">
+                        {project.technologies.map((tech) => (
+                          <span
+                            key={tech}
+                            className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono bg-slate-50 dark:bg-theme-surface text-slate-600 dark:text-theme-fore-muted border border-slate-200/60 dark:border-theme-border/40"
+                          >
+                            {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5 opacity-80" />}
+                            <span>{tech}</span>
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* View project link and Highlight Trigger */}
+                      <div className="pt-4 mt-2 border-t border-slate-100 dark:border-theme-border/30 flex flex-wrap items-center justify-between gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedHighlightProject(project)}
+                          className="inline-flex items-center gap-1.5 text-xs font-sans font-bold text-[#2C5098] dark:text-theme-accent hover:text-[#23385B] hover:underline transition-colors cursor-pointer group/btn"
                         >
-                          {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5 opacity-80" />}
-                          <span>{tech}</span>
-                        </span>
-                      ))}
+                          <Icon icon="ph:list-checks-bold" className="w-4 h-4 text-[#2C5098] dark:text-theme-accent group-hover/btn:scale-110 transition-transform" />
+                          <span>{language === 'en' ? 'Highlight & Outcomes' : 'Ringkasan & Hasil Utama'}</span>
+                        </button>
+
+                        <div className="flex items-center gap-3">
+                          {isProfessionalExp && (
+                            <span className="text-[10px] font-mono text-amber-600 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded">
+                              NDA
+                            </span>
+                          )}
+                          <Link
+                            href={`/projects/${project.slug}`}
+                            className="text-xs font-sans font-bold text-slate-700 dark:text-theme-fore hover:text-[#2C5098] hover:underline inline-flex items-center gap-1 transition-colors group/link"
+                          >
+                            <span>{language === 'en' ? 'View Details' : 'Lihat Detail'}</span>
+                            <Icon icon="ph:arrow-right-bold" className="w-3 h-3 group-hover/link:translate-x-1 transition-transform" />
+                          </Link>
+                        </div>
+                      </div>
                     </div>
 
-                    <Link
-                      href={`/projects/${project.slug}`}
-                      className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl bg-gradient-to-r from-[#2C5098] to-[#23385B] text-white hover:from-[#23385B] hover:to-[#1b2d4b] text-xs font-sans font-bold transition-all duration-300 shadow-md shadow-[#2C5098]/20 hover:shadow-lg hover:shadow-[#2C5098]/30 cursor-pointer"
-                    >
-                      <span>{language === 'en' ? 'View Details' : 'Lihat Detail'}</span>
-                      <Icon icon="ph:caret-right-bold" className="w-3.5 h-3.5" />
-                    </Link>
+                    {/* Mockup Image Column: Alternates left/right on desktop */}
+                    <div className={`lg:col-span-5 order-1 ${isImageLeft ? 'lg:order-1' : 'lg:order-2'}`}>
+                      <div
+                        onClick={() => setSelectedHighlightProject(project)}
+                        className="relative w-full aspect-[4/3] sm:aspect-[16/10] rounded-2xl overflow-hidden bg-slate-50 dark:bg-theme-surface border border-slate-200/80 dark:border-theme-border/40 cursor-pointer"
+                      >
+                        <Image
+                          src={displayThumbnail}
+                          alt={project.name}
+                          fill
+                          className={
+                            isDummy
+                              ? "object-contain p-8 bg-slate-50 dark:bg-theme-surface/40"
+                              : "object-cover group-hover:scale-[1.03] transition-transform duration-500"
+                          }
+                          sizes="(max-width: 1024px) 100vw, 42vw"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               );
@@ -417,6 +457,183 @@ export default function ProjectsList({
           </AnimatePresence>
         </div>
       </section>
+
+      {/* =========================================================================
+          MODAL HIGHLIGHT: RINGKASAN & KEY OUTCOMES ID (MOUNTED TO BODY VIA PORTAL)
+          ========================================================================= */}
+      {mounted && typeof document !== 'undefined' && createPortal(
+        <AnimatePresence>
+          {selectedHighlightProject && (
+            <div
+              role="dialog"
+              aria-modal="true"
+              className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-y-auto"
+            >
+              {/* Backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                onClick={() => setSelectedHighlightProject(null)}
+                className="fixed inset-0 bg-slate-950/75 backdrop-blur-md"
+              />
+
+              {/* Modal Dialog Card - Widened to max-w-4xl lg:max-w-5xl */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: 16 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 16 }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                className="relative w-full max-w-4xl lg:max-w-5xl bg-white dark:bg-theme-elevated rounded-3xl shadow-2xl border border-slate-200 dark:border-theme-border overflow-hidden z-10 my-auto flex flex-col max-h-[90vh]"
+              >
+                {/* Modal Header */}
+                <div className="p-6 sm:p-8 border-b border-slate-100 dark:border-theme-border/50 flex items-start justify-between gap-4 bg-slate-50/50 dark:bg-theme-surface/30">
+                  <div className="space-y-2 text-left">
+                    <div className="flex flex-wrap items-center gap-2">
+                      {selectedHighlightProject.categories && selectedHighlightProject.categories.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5">
+                          {selectedHighlightProject.categories.map((cat) => {
+                            const catName = getCategoryName(cat);
+                            if (/^[0-9a-fA-F]{24}$/.test(catName)) return null;
+                            return (
+                              <span
+                                key={cat}
+                                className="inline-flex items-center gap-1.5 text-[10px] font-sans uppercase tracking-wider font-bold text-white bg-gradient-to-r from-[#2C5098] to-[#23385B] border border-white/10 px-2.5 py-0.5 rounded-full shadow-2xs"
+                              >
+                                <Icon icon={getCategoryIcon(catName)} className="w-3 h-3 text-white" />
+                                <span>{catName}</span>
+                              </span>
+                            );
+                          })}
+                        </div>
+                      )}
+                      {ndaProjectSlugs.includes(selectedHighlightProject.slug) && (
+                        <span className="text-[10px] font-mono text-amber-600 bg-amber-50 border border-amber-200/60 px-2.5 py-0.5 rounded-full font-semibold">
+                          NDA
+                        </span>
+                      )}
+                    </div>
+                    <h3 className="text-xl sm:text-2xl lg:text-3xl font-sans font-bold text-slate-900 dark:text-theme-fore tracking-tight leading-snug">
+                      {selectedHighlightProject.name}
+                    </h3>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setSelectedHighlightProject(null)}
+                    className="p-2 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-theme-fore hover:bg-slate-200/60 dark:hover:bg-theme-surface transition-colors cursor-pointer shrink-0"
+                    aria-label="Tutup dialog"
+                  >
+                    <Icon icon="ph:x-bold" className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Modal Body - Scrollable 2-Column Responsive Layout */}
+                <div className="p-6 sm:p-8 overflow-y-auto space-y-6 text-left">
+                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                    {/* Left Column: Summary & Technologies */}
+                    <div className="lg:col-span-5 space-y-6">
+                      {/* Ringkasan Eksekutif */}
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#2C5098] dark:text-theme-accent">
+                          <Icon icon="ph:file-text-bold" className="w-4 h-4" />
+                          <span>{language === 'en' ? 'Executive Summary' : 'Ringkasan Proyek'}</span>
+                        </div>
+                        <p className="text-xs sm:text-sm text-slate-600 dark:text-theme-fore-muted leading-relaxed font-sans">
+                          {language === 'en'
+                            ? (selectedHighlightProject.summaryEn || selectedHighlightProject.descriptionEn || selectedHighlightProject.summary || selectedHighlightProject.description)
+                            : (selectedHighlightProject.summaryId || selectedHighlightProject.descriptionId || selectedHighlightProject.summary || selectedHighlightProject.description)}
+                        </p>
+                      </div>
+
+                      {/* Core Technologies */}
+                      <div className="space-y-2 pt-4 border-t border-slate-100 dark:border-theme-border/50">
+                        <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 dark:text-theme-fore-muted block">
+                          {language === 'en' ? 'Core Technologies' : 'Teknologi Utama'}
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {selectedHighlightProject.technologies.map((tech) => (
+                            <span
+                              key={tech}
+                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono bg-slate-50 dark:bg-theme-surface text-slate-700 dark:text-theme-fore-muted border border-slate-200/70 dark:border-theme-border/40"
+                            >
+                              {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5" />}
+                              <span>{tech}</span>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right Column: Key Outcomes & Impact */}
+                    <div className="lg:col-span-7 space-y-3">
+                      <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                        <Icon icon="ph:trend-up-bold" className="w-4 h-4" />
+                        <span>{language === 'en' ? 'Key Outcomes & Impact' : 'Hasil & Dampak Utama Sistem (Key Outcomes)'}</span>
+                      </div>
+
+                      {(() => {
+                        const rawOutcomes = language === 'en'
+                          ? (selectedHighlightProject.keyOutcomesEn || selectedHighlightProject.keyOutcomesId || selectedHighlightProject.keyOutcomes || "")
+                          : (selectedHighlightProject.keyOutcomesId || selectedHighlightProject.keyOutcomesEn || selectedHighlightProject.keyOutcomes || "");
+                        
+                        const points = rawOutcomes
+                          .split('\n')
+                          .map((line) => line.trim().replace(/^[●•\-\*]\s*/, ''))
+                          .filter(Boolean);
+
+                        if (points.length === 0) {
+                          return (
+                            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 dark:bg-theme-surface/50 border border-slate-200/80 dark:border-theme-border/50 text-xs text-slate-500 dark:text-theme-fore-muted leading-relaxed">
+                              {language === 'en'
+                                ? 'Detailed performance metrics and engineering outcomes for this project are available in the full architecture case study.'
+                                : 'Metrik performa dan dampak arsitektur untuk proyek ini dapat dieksplorasi secara lengkap pada halaman studi kasus arsitektur.'}
+                            </div>
+                          );
+                        }
+
+                        return (
+                          <div className="p-5 sm:p-6 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/20 space-y-3">
+                            <ul className="space-y-3">
+                              {points.map((pt, idx) => (
+                                <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-800 dark:text-slate-200 leading-relaxed">
+                                  <Icon icon="ph:check-circle-fill" className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5" />
+                                  <span>{pt}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        );
+                      })()}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Modal Footer */}
+                <div className="p-5 sm:p-6 bg-slate-50 dark:bg-theme-surface/40 border-t border-slate-100 dark:border-theme-border/50 flex flex-col-reverse sm:flex-row items-center justify-end gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setSelectedHighlightProject(null)}
+                    className="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-200 dark:border-theme-border hover:bg-slate-100 dark:hover:bg-theme-surface text-xs sm:text-sm font-bold text-slate-700 dark:text-theme-fore transition-colors cursor-pointer"
+                  >
+                    {language === 'en' ? 'Close' : 'Tutup'}
+                  </button>
+
+                  <Link
+                    href={`/projects/${selectedHighlightProject.slug}`}
+                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#1b2d4b] text-white text-xs sm:text-sm font-bold shadow-md shadow-[#2C5098]/20 hover:shadow-lg hover:shadow-[#2C5098]/30 transition-all cursor-pointer border border-white/10"
+                  >
+                    <span>{language === 'en' ? 'View Full Case Study' : 'Buka Studi Kasus Lengkap'}</span>
+                    <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
+                  </Link>
+                </div>
+              </motion.div>
+            </div>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }
