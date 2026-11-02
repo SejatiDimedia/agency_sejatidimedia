@@ -2387,7 +2387,7 @@ export default function AgencyLanding({
                             onClick={() => setSelectedHighlightProject(project)}
                             className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-[#2C5098]/10 hover:text-[#2C5098] border border-slate-200 text-xs font-sans font-semibold text-slate-700 transition-all cursor-pointer"
                           >
-                            <Icon icon="ph:sparkle-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
+                            <Icon icon="ph:list-checks-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
                             <span>{language === 'en' ? 'Highlight & Outcomes' : 'Ringkasan & Hasil Utama'}</span>
                           </button>
 
@@ -2475,7 +2475,7 @@ export default function AgencyLanding({
                 <div className="space-y-2 text-left">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20">
-                      <Icon icon="ph:sparkle-bold" className="w-3 h-3" />
+                      <Icon icon="ph:star-bold" className="w-3 h-3 text-[#2C5098]" />
                       <span>{language === 'en' ? 'Project Highlight' : 'Sorotan Proyek'}</span>
                     </span>
                     {selectedHighlightProject.categories && selectedHighlightProject.categories.length > 0 && (
@@ -2512,7 +2512,7 @@ export default function AgencyLanding({
                     {/* Ringkasan Eksekutif */}
                     <div className="space-y-2">
                       <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#2C5098]">
-                        <Icon icon="ph:article-bold" className="w-4 h-4" />
+                        <Icon icon="ph:file-text-bold" className="w-4 h-4" />
                         <span>{language === 'en' ? 'Executive Summary' : 'Ringkasan Proyek'}</span>
                       </div>
                       <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans">
