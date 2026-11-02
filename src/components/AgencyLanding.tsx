@@ -342,7 +342,6 @@ export default function AgencyLanding({
   const { t, language } = useLanguage();
   const [ndaProjectSlugs, setNdaProjectSlugs] = useState<string[]>([]);
   const [featuredProjectSlugs, setFeaturedProjectSlugs] = useState<string[]>(initialFeaturedSlugs || []);
-  const [activePortfolioTab, setActivePortfolioTab] = useState<'featured' | 'all'>('featured');
   const [selectedHighlightProject, setSelectedHighlightProject] = useState<Project | null>(null);
 
   useEffect(() => {
@@ -553,28 +552,21 @@ export default function AgencyLanding({
   const rawList = (projects && projects.length > 0) ? projects : MOCK_PROJECTS;
   const projectList = useMemo(() => rawList.filter((p) => p.isPublic !== false), [rawList]);
 
-  const featuredProjects = useMemo(() => {
+  const displayedProjects = useMemo(() => {
     if (!projectList || projectList.length === 0) return [];
     // 1. Projects marked as featured
     const featured = projectList
       .filter((p) => featuredProjectSlugs.includes(p.slug))
       .sort((a, b) => featuredProjectSlugs.indexOf(a.slug) - featuredProjectSlugs.indexOf(b.slug));
 
-    // 2. Remaining projects backfill if fewer than 6
-    if (featured.length < 6) {
+    // 2. Remaining projects backfill if fewer than 3
+    if (featured.length < 3) {
       const remaining = projectList.filter((p) => !featuredProjectSlugs.includes(p.slug));
-      return [...featured, ...remaining].slice(0, 6);
+      return [...featured, ...remaining].slice(0, 3);
     }
 
-    return featured.slice(0, 6);
+    return featured.slice(0, 3);
   }, [projectList, featuredProjectSlugs]);
-
-  const displayedProjects = useMemo(() => {
-    if (activePortfolioTab === 'featured') {
-      return featuredProjects;
-    }
-    return projectList;
-  }, [activePortfolioTab, featuredProjects, projectList]);
 
   return (
     <div className="w-full text-slate-900 font-sans [&_h1]:font-sans [&_h2]:font-sans [&_h3]:font-sans [&_h4]:font-sans [&_h5]:font-sans [&_h6]:font-sans">
@@ -2326,58 +2318,13 @@ export default function AgencyLanding({
                 href="/projects"
                 className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-xs font-sans font-bold text-slate-700 shadow-2xs hover:bg-slate-50 transition-all"
               >
-                <span>{language === 'en' ? 'All Projects' : 'Semua Galeri'} ({projectList.length})</span>
+                <span>{language === 'en' ? 'View All Projects' : 'Semua Galeri'} ({projectList.length})</span>
                 <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>
 
-          {/* Pill Tabs for Filtering: Featured vs All Projects */}
-          <div className="flex items-center gap-2.5">
-            <button
-              type="button"
-              onClick={() => setActivePortfolioTab('featured')}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activePortfolioTab === 'featured'
-                  ? 'bg-slate-900 text-white shadow-sm'
-                  : 'bg-white hover:bg-slate-100 text-slate-600 border border-slate-200/80'
-              }`}
-            >
-              <span>{language === 'en' ? 'Featured' : 'Unggulan'}</span>
-              <span
-                className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold ${
-                  activePortfolioTab === 'featured'
-                    ? 'bg-slate-800 text-slate-200'
-                    : 'bg-slate-100 text-slate-600'
-                }`}
-              >
-                {featuredProjects.length}
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActivePortfolioTab('all')}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                activePortfolioTab === 'all'
-                  ? 'bg-slate-900 text-white shadow-sm'
-                  : 'bg-white hover:bg-slate-100 text-slate-600 border border-slate-200/80'
-              }`}
-            >
-              <span>{language === 'en' ? 'All Projects' : 'Semua Proyek'}</span>
-              <span
-                className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold ${
-                  activePortfolioTab === 'all'
-                    ? 'bg-slate-800 text-slate-200'
-                    : 'bg-slate-100 text-slate-600'
-                }`}
-              >
-                {projectList.length}
-              </span>
-            </button>
-          </div>
-
-          {/* Wide Project Cards List */}
+          {/* Wide Project Cards List - Curated Featured Projects */}
           <div className="space-y-8 sm:space-y-12 text-left">
             {displayedProjects && displayedProjects.length > 0 ? (
               displayedProjects.map((project) => {
@@ -2502,6 +2449,27 @@ export default function AgencyLanding({
                 </span>
               </div>
             )}
+          </div>
+
+          {/* Bottom Catalog Banner */}
+          <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-xs text-left">
+            <div className="space-y-1">
+              <h4 className="text-base sm:text-lg font-sans font-bold text-slate-900">
+                {language === 'en' ? 'Looking for more industry solutions?' : 'Ingin melihat solusi sistem industri lainnya?'}
+              </h4>
+              <p className="text-xs sm:text-sm text-slate-600 font-sans">
+                {language === 'en'
+                  ? `Explore our full catalog of ${projectList.length}+ software engineering case studies across AI, Web, and Mobile.`
+                  : `Jelajahi seluruh katalog ${projectList.length}+ studi kasus rekayasa software kami di bidang AI, Web, dan Mobile.`}
+              </p>
+            </div>
+            <Link
+              href="/projects"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 hover:bg-[#2C5098] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow-md transition-all shrink-0 cursor-pointer"
+            >
+              <span>{language === 'en' ? `Browse All ${projectList.length} Projects` : `Lihat Semua ${projectList.length} Portofolio`}</span>
+              <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </motion.section>
