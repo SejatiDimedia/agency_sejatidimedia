@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, ExternalLink, Calendar, CheckCircle2, Clock, ShieldAlert, Briefcase, Lock, ShieldCheck, FileText, Code2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Calendar, CheckCircle2, Clock, ShieldAlert, Briefcase, Lock, ShieldCheck, FileText, Code2, TrendingUp } from "lucide-react";
 import { Icon } from "@iconify/react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -83,6 +83,18 @@ export default function ProjectDetailClient({
   const displayClientSummary = language === 'en'
     ? (project.clientSummaryEn || project.clientSummaryId || "")
     : (project.clientSummaryId || project.clientSummaryEn || "");
+
+  const displayKeyOutcomes = language === 'en'
+    ? (project.keyOutcomesEn || project.keyOutcomesId || project.keyOutcomes || "")
+    : (project.keyOutcomesId || project.keyOutcomesEn || project.keyOutcomes || "");
+
+  const keyOutcomePoints = useMemo(() => {
+    if (!displayKeyOutcomes) return [];
+    return displayKeyOutcomes
+      .split('\n')
+      .map((line) => line.trim().replace(/^[●•\-\*]\s*/, ''))
+      .filter((line) => line.length > 0);
+  }, [displayKeyOutcomes]);
 
   const hasClientSummary = Boolean(displayClientSummary && displayClientSummary.trim().length > 0);
 
@@ -399,6 +411,33 @@ export default function ProjectDetailClient({
                     <span>NDA Mode Active</span>
                   </span>
                 )}
+              </div>
+            )}
+
+            {/* Key Outcomes & Impact Highlight */}
+            {keyOutcomePoints.length > 0 && (
+              <div className="mb-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-emerald-500/[0.04] via-emerald-500/[0.07] to-transparent dark:from-emerald-500/10 dark:via-emerald-500/5 dark:to-transparent border border-emerald-500/20 dark:border-emerald-500/30 space-y-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">
+                    <TrendingUp className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-sans font-bold text-slate-900 dark:text-theme-fore tracking-tight">
+                      {language === 'en' ? 'Key Outcomes & Technical Impact' : 'Hasil & Dampak Utama Sistem'}
+                    </h3>
+                    <p className="text-[11px] font-mono text-slate-500 dark:text-theme-fore-muted">
+                      {language === 'en' ? 'Core engineering metrics & verified achievements' : 'Metrik teknis terverifikasi & pencapaian performa sistem'}
+                    </p>
+                  </div>
+                </div>
+                <ul className="space-y-2.5 pt-1">
+                  {keyOutcomePoints.map((point, idx) => (
+                    <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-theme-fore-muted leading-relaxed">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
               </div>
             )}
 

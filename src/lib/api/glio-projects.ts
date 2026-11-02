@@ -19,8 +19,12 @@ export interface Project {
   summary?: string | null;
   summaryId?: string | null;
   summaryEn?: string | null;
+  clientSummary?: string | null;
   clientSummaryId?: string | null;
   clientSummaryEn?: string | null;
+  keyOutcomes?: string | null;
+  keyOutcomesId?: string | null;
+  keyOutcomesEn?: string | null;
   bannerImage?: string | null;
   thumbnail?: string | null;
   technologies: string[];
