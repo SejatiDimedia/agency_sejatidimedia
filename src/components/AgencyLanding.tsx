@@ -2293,35 +2293,27 @@ export default function AgencyLanding({
         viewport={{ once: true, margin: "-80px" }}
         variants={sectionFadeIn}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-10 sm:space-y-12">
-          {/* Header Section styled after portfolio showcase design */}
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 text-left border-b border-slate-200/60 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-12 sm:space-y-16">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4 text-left">
             <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <span className="text-sm sm:text-base font-mono font-bold text-slate-400">05</span>
-                <h2 className="text-2xl sm:text-4xl lg:text-5xl font-sans font-extrabold tracking-tight text-slate-900 leading-tight">
-                  {language === 'en' ? 'Check out our latest work' : 'Karya Rekayasa Sistem Terbaru'}
-                </h2>
+              <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.3em] text-[#2C5098] font-bold">
+                <span>{t.nav.portfolio}</span>
               </div>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl font-sans">
-                {language === 'en'
-                  ? 'Flagship enterprise platforms, mobile applications, and distributed SaaS systems crafted for performance and scale.'
-                  : 'Platform enterprise unggulan, aplikasi mobile, dan sistem SaaS terdistribusi yang dibangun dengan keandalan dan skalabilitas tinggi.'}
-              </p>
+              <h2 className="text-2xl sm:text-4xl font-sans font-bold tracking-tight text-slate-900 leading-tight">
+                {t.portfolio.mainHeading}{' '}
+                <span className="text-[#2C5098]">
+                  {t.portfolio.mainHeadingHighlight}
+                </span>
+              </h2>
             </div>
 
-            <div className="flex items-center gap-3">
-              <span className="text-xs font-mono uppercase tracking-wider text-slate-400 font-semibold hidden sm:inline-block">
-                {language === 'en' ? 'Selected works' : 'Karya pilihan'}
-              </span>
-              <Link
-                href="/projects"
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-xs font-sans font-bold text-slate-700 shadow-2xs hover:bg-slate-50 transition-all"
-              >
-                <span>{language === 'en' ? 'View All Projects' : 'Semua Galeri'} ({projectList.length})</span>
-                <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5" />
-              </Link>
-            </div>
+            <Link
+              href="/projects"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-slate-200 hover:border-slate-300 text-xs font-sans font-bold text-slate-700 shadow-xs hover:bg-slate-50 transition-all"
+            >
+              <span>{t.portfolio.viewAll} ({projectList.length})</span>
+              <Icon icon="ph:arrow-right-bold" className="w-3.5 h-3.5" />
+            </Link>
           </div>
 
           {/* Wide Project Cards List - Curated Featured Projects */}
