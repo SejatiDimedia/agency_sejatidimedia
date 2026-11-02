@@ -448,6 +448,70 @@ export const MOCK_PROJECTS: Project[] = [
   }
 ];
 
+async function fetchGlioJson<T>(url: string): Promise<T | null> {
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "x-api-key": GLIO_API_KEY,
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+    });
+
+    if (res.status === 404) {
+      return null;
+    }
+
+    if (!res.ok) {
+      throw new Error(`Glio API: HTTP ${res.status}`);
+    }
+
+    return (await res.json()) as T;
+  } catch (err) {
+    // Robust Node-level fallback for environments where undici encounters DNS/connect timeouts
+    if (typeof window === "undefined") {
+      try {
+        const https = await import("https");
+        return await new Promise<T | null>((resolve, reject) => {
+          const req = https.get(
+            url,
+            {
+              headers: {
+                "x-api-key": GLIO_API_KEY,
+                "Content-Type": "application/json",
+              },
+              timeout: 10000,
+            },
+            (res) => {
+              if (res.statusCode === 404) return resolve(null);
+              if (res.statusCode && res.statusCode >= 400) {
+                return reject(new Error(`Glio API: HTTP ${res.statusCode}`));
+              }
+              let raw = "";
+              res.on("data", (chunk) => (raw += chunk));
+              res.on("end", () => {
+                try {
+                  resolve(JSON.parse(raw) as T);
+                } catch (parseErr) {
+                  reject(parseErr);
+                }
+              });
+            }
+          );
+          req.on("error", reject);
+          req.on("timeout", () => {
+            req.destroy();
+            reject(new Error("HTTPS fallback connection timeout"));
+          });
+        });
+      } catch {
+        throw err;
+      }
+    }
+    throw err;
+  }
+}
+
 export async function getProjects(options?: { includeDrafts?: boolean }): Promise<Project[]> {
   const includeDrafts = options?.includeDrafts === true;
 
@@ -461,19 +525,7 @@ export async function getProjects(options?: { includeDrafts?: boolean }): Promis
 
   const url = `${GLIO_API_URL}/projects`;
   try {
-    const res = await fetch(url, {
-      headers: {
-        "x-api-key": GLIO_API_KEY,
-        "Content-Type": "application/json",
-      },
-      cache: "no-store",
-    });
-
-    if (!res.ok) {
-      throw new Error(`Glio API: Failed to fetch projects list. Status code: ${res.status}`);
-    }
-
-    const data = (await res.json()) as Project[];
+    const data = await fetchGlioJson<Project[]>(url);
     const list = (!data || data.length === 0) ? MOCK_PROJECTS : data;
     const filtered = includeDrafts ? list : list.filter((p) => p.isPublic !== false);
 
@@ -507,15 +559,9 @@ export async function getProjectBySlug(
 
   const url = `${GLIO_API_URL}/projects/${slug}`;
   try {
-    const res = await fetch(url, {
-      headers: {
-        "x-api-key": GLIO_API_KEY,
-        "Content-Type": "application/json",
-      },
-      cache: "no-store",
-    });
+    const project = await fetchGlioJson<Project>(url);
 
-    if (res.status === 404) {
+    if (!project) {
       // Check local fallback first
       const localProject = MOCK_PROJECTS.find((p) => p.slug === slug);
       if (localProject && !allowDraft && localProject.isPublic === false) {
@@ -524,12 +570,6 @@ export async function getProjectBySlug(
       return localProject || null;
     }
 
-    if (!res.ok) {
-      throw new Error(`Glio API: Failed to fetch project detail for slug "${slug}". Status code: ${res.status}`);
-    }
-
-    const project = (await res.json()) as Project;
-    if (!project) return null;
     if (!allowDraft && project.isPublic === false) {
       return null;
     }
