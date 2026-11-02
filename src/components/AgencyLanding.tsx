@@ -2335,73 +2335,76 @@ export default function AgencyLanding({
                 return (
                   <div
                     key={project.slug}
-                    className="group rounded-3xl bg-white border border-slate-200/90 hover:border-[#2C5098]/40 p-6 sm:p-8 lg:p-10 shadow-xs hover:shadow-xl hover:shadow-[#2C5098]/5 transition-all duration-300 relative overflow-hidden"
+                    className="group rounded-3xl bg-white border border-slate-200 hover:border-[#2C5098]/50 hover:shadow-xl hover:shadow-[#2C5098]/10 transition-all duration-300 relative overflow-hidden p-6 sm:p-8"
                   >
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">
                       {/* Left Column: Details, Tech, & Action Buttons */}
-                      <div className="lg:col-span-7 space-y-5 sm:space-y-6 text-left order-2 lg:order-1">
+                      <div className="lg:col-span-7 space-y-4 text-left order-2 lg:order-1">
                         {/* Categories / Tags */}
                         {project.categories && project.categories.length > 0 && (
-                          <div className="flex flex-wrap gap-2">
-                            {project.categories.map((cat) => {
-                              const catName = getCategoryName(cat);
-                              return (
-                                <span
-                                  key={cat}
-                                  className="inline-flex items-center gap-1.5 text-[11px] font-sans uppercase tracking-wider font-bold text-[#2C5098] bg-[#2C5098]/10 border border-[#2C5098]/20 px-3 py-1 rounded-full"
-                                >
-                                  <Icon icon={getCategoryIcon(catName)} className="w-3.5 h-3.5 text-[#2C5098]" />
-                                  <span>{catName}</span>
-                                </span>
-                              );
-                            })}
+                          <div className="flex flex-wrap gap-1.5 pb-1">
+                            {project.categories.slice(0, 3).map((cat) => (
+                              <span
+                                key={cat}
+                                className="px-2 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200/60"
+                              >
+                                {cat}
+                              </span>
+                            ))}
                           </div>
                         )}
 
                         {/* Title */}
                         <h3
                           onClick={() => setSelectedHighlightProject(project)}
-                          className="text-2xl sm:text-3xl lg:text-4xl font-sans font-extrabold text-slate-900 tracking-tight leading-snug hover:text-[#2C5098] transition-colors cursor-pointer"
+                          className="text-xl sm:text-2xl font-sans font-bold text-slate-900 group-hover:text-[#2C5098] transition-colors line-clamp-1 sm:line-clamp-2 cursor-pointer"
                         >
                           {project.name}
                         </h3>
 
-                        {/* Summary Description */}
-                        <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-sans line-clamp-3">
-                          {summaryText}
+                        {/* Description */}
+                        <p className="text-xs sm:text-sm text-slate-500 font-sans leading-relaxed line-clamp-3">
+                          {summaryText || project.description}
                         </p>
 
-                        {/* Technology Stack Pills with Logos */}
-                        <div className="flex flex-wrap gap-2 pt-1">
+                        {/* Tech stack tags */}
+                        <div className="flex flex-wrap gap-1.5 pt-2 border-t border-slate-100">
                           {project.technologies.map((tech) => (
                             <span
                               key={tech}
-                              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-mono font-medium bg-slate-50 text-slate-700 border border-slate-200/80 shadow-2xs hover:border-slate-300 transition-colors"
+                              className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-mono bg-slate-50 text-slate-600 border border-slate-200/60"
                             >
-                              {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-4 h-4 shrink-0" />}
+                              {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5 opacity-80" />}
                               <span>{tech}</span>
                             </span>
                           ))}
                         </div>
 
-                        {/* Action Buttons: Modal Highlight Trigger & Detail Case Study Link */}
-                        <div className="flex flex-wrap items-center gap-3 pt-3">
+                        {/* View project link and Highlight Trigger */}
+                        <div className="pt-4 mt-2 border-t border-slate-100 flex flex-wrap items-center justify-between gap-3">
                           <button
                             type="button"
                             onClick={() => setSelectedHighlightProject(project)}
-                            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow-md hover:shadow-[#2C5098]/20 transition-all cursor-pointer group/btn"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-[#2C5098]/10 hover:text-[#2C5098] border border-slate-200 text-xs font-sans font-semibold text-slate-700 transition-all cursor-pointer"
                           >
-                            <Icon icon="ph:sparkle-bold" className="w-4 h-4 group-hover/btn:rotate-12 transition-transform" />
-                            <span>{language === 'en' ? 'Highlight & Key Outcomes' : 'Ringkasan & Hasil Utama'}</span>
+                            <Icon icon="ph:sparkle-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
+                            <span>{language === 'en' ? 'Highlight & Outcomes' : 'Ringkasan & Hasil Utama'}</span>
                           </button>
 
-                          <Link
-                            href={`/projects/${project.slug}`}
-                            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs sm:text-sm font-bold transition-all cursor-pointer"
-                          >
-                            <span>{language === 'en' ? 'Full Case Study' : 'Lihat Detail Proyek'}</span>
-                            <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
-                          </Link>
+                          <div className="flex items-center gap-3">
+                            {ndaProjectSlugs.includes(project.slug) && (
+                              <span className="text-[10px] font-mono text-amber-600 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded">
+                                NDA
+                              </span>
+                            )}
+                            <Link
+                              href={`/projects/${project.slug}`}
+                              className="text-xs font-sans font-bold text-[#2C5098] hover:underline inline-flex items-center gap-1"
+                            >
+                              <span>{t.portfolio.viewProject}</span>
+                              <Icon icon="ph:arrow-right-bold" className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                          </div>
                         </div>
                       </div>
 
@@ -2409,7 +2412,7 @@ export default function AgencyLanding({
                       <div className="lg:col-span-5 order-1 lg:order-2">
                         <div
                           onClick={() => setSelectedHighlightProject(project)}
-                          className="relative w-full aspect-[4/3] sm:aspect-[16/10] rounded-2xl sm:rounded-3xl overflow-hidden bg-slate-100 border border-slate-200/80 shadow-md group-hover:shadow-xl transition-all duration-500 cursor-pointer"
+                          className="relative w-full aspect-[4/3] sm:aspect-[16/10] rounded-2xl overflow-hidden bg-slate-50 border border-slate-200/80 cursor-pointer"
                         >
                           <Image
                             src={displayThumbnail}
@@ -2417,17 +2420,11 @@ export default function AgencyLanding({
                             fill
                             className={
                               isDummy
-                                ? "object-contain p-10 bg-slate-50"
+                                ? "object-contain p-8 bg-slate-50"
                                 : "object-cover group-hover:scale-[1.03] transition-transform duration-500"
                             }
                             sizes="(max-width: 1024px) 100vw, 42vw"
                           />
-                          <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/10 transition-colors flex items-center justify-center">
-                            <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 px-4 py-2 rounded-full bg-slate-950/80 backdrop-blur-md text-white text-xs font-bold flex items-center gap-1.5 shadow-lg">
-                              <Icon icon="ph:sparkle-bold" className="w-3.5 h-3.5" />
-                              <span>{language === 'en' ? 'View Highlight' : 'Buka Ringkasan'}</span>
-                            </div>
-                          </div>
                         </div>
                       </div>
                     </div>
@@ -2442,27 +2439,6 @@ export default function AgencyLanding({
               </div>
             )}
           </div>
-
-          {/* Bottom Catalog Banner */}
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 p-6 sm:p-8 rounded-3xl bg-white border border-slate-200/90 shadow-xs text-left">
-            <div className="space-y-1">
-              <h4 className="text-base sm:text-lg font-sans font-bold text-slate-900">
-                {language === 'en' ? 'Looking for more industry solutions?' : 'Ingin melihat solusi sistem industri lainnya?'}
-              </h4>
-              <p className="text-xs sm:text-sm text-slate-600 font-sans">
-                {language === 'en'
-                  ? `Explore our full catalog of ${projectList.length}+ software engineering case studies across AI, Web, and Mobile.`
-                  : `Jelajahi seluruh katalog ${projectList.length}+ studi kasus rekayasa software kami di bidang AI, Web, dan Mobile.`}
-              </p>
-            </div>
-            <Link
-              href="/projects"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 hover:bg-[#2C5098] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow-md transition-all shrink-0 cursor-pointer"
-            >
-              <span>{language === 'en' ? `Browse All ${projectList.length} Projects` : `Lihat Semua ${projectList.length} Portofolio`}</span>
-              <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
-            </Link>
-          </div>
         </div>
       </motion.section>
 
@@ -2474,7 +2450,7 @@ export default function AgencyLanding({
           <div
             role="dialog"
             aria-modal="true"
-            className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-y-auto"
           >
             {/* Backdrop */}
             <motion.div
@@ -2483,19 +2459,19 @@ export default function AgencyLanding({
               exit={{ opacity: 0 }}
               transition={{ duration: 0.2 }}
               onClick={() => setSelectedHighlightProject(null)}
-              className="fixed inset-0 bg-slate-950/60 backdrop-blur-md"
+              className="fixed inset-0 bg-slate-950/70 backdrop-blur-md"
             />
 
-            {/* Modal Dialog Card */}
+            {/* Modal Dialog Card - Widened to max-w-4xl lg:max-w-5xl */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 16 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 16 }}
               transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden z-10 my-auto flex flex-col max-h-[90vh]"
+              className="relative w-full max-w-4xl lg:max-w-5xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden z-10 my-auto flex flex-col max-h-[90vh]"
             >
               {/* Modal Header */}
-              <div className="p-6 sm:p-7 border-b border-slate-100 flex items-start justify-between gap-4 bg-slate-50/50">
+              <div className="p-6 sm:p-8 border-b border-slate-100 flex items-start justify-between gap-4 bg-slate-50/50">
                 <div className="space-y-2 text-left">
                   <div className="flex flex-wrap items-center gap-2">
                     <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20">
@@ -2507,8 +2483,13 @@ export default function AgencyLanding({
                         {selectedHighlightProject.categories.map(getCategoryName).join(' • ')}
                       </span>
                     )}
+                    {ndaProjectSlugs.includes(selectedHighlightProject.slug) && (
+                      <span className="text-[10px] font-mono text-amber-600 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded">
+                        NDA
+                      </span>
+                    )}
                   </div>
-                  <h3 className="text-xl sm:text-2xl font-sans font-extrabold text-slate-900 tracking-tight leading-snug">
+                  <h3 className="text-xl sm:text-2xl lg:text-3xl font-sans font-bold text-slate-900 tracking-tight leading-snug">
                     {selectedHighlightProject.name}
                   </h3>
                 </div>
@@ -2523,78 +2504,83 @@ export default function AgencyLanding({
                 </button>
               </div>
 
-              {/* Modal Body - Scrollable */}
-              <div className="p-6 sm:p-7 overflow-y-auto space-y-6 text-left">
-                {/* Ringkasan Eksekutif Section */}
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#2C5098]">
-                    <Icon icon="ph:article-bold" className="w-4 h-4" />
-                    <span>{language === 'en' ? 'Executive Summary' : 'Ringkasan Proyek'}</span>
+              {/* Modal Body - Scrollable 2-Column Responsive Layout */}
+              <div className="p-6 sm:p-8 overflow-y-auto space-y-6 text-left">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                  {/* Left Column: Summary & Technologies */}
+                  <div className="lg:col-span-5 space-y-6">
+                    {/* Ringkasan Eksekutif */}
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-[#2C5098]">
+                        <Icon icon="ph:article-bold" className="w-4 h-4" />
+                        <span>{language === 'en' ? 'Executive Summary' : 'Ringkasan Proyek'}</span>
+                      </div>
+                      <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-sans">
+                        {language === 'en'
+                          ? (selectedHighlightProject.summaryEn || selectedHighlightProject.descriptionEn || selectedHighlightProject.summary || selectedHighlightProject.description)
+                          : (selectedHighlightProject.summaryId || selectedHighlightProject.descriptionId || selectedHighlightProject.summary || selectedHighlightProject.description)}
+                      </p>
+                    </div>
+
+                    {/* Core Technologies */}
+                    <div className="space-y-2 pt-4 border-t border-slate-100">
+                      <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 block">
+                        {language === 'en' ? 'Core Technologies' : 'Teknologi Utama'}
+                      </span>
+                      <div className="flex flex-wrap gap-1.5">
+                        {selectedHighlightProject.technologies.map((tech) => (
+                          <span
+                            key={tech}
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono bg-slate-50 text-slate-700 border border-slate-200/70"
+                          >
+                            {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5" />}
+                            <span>{tech}</span>
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                   </div>
-                  <p className="text-sm sm:text-base text-slate-700 leading-relaxed font-sans">
-                    {language === 'en'
-                      ? (selectedHighlightProject.summaryEn || selectedHighlightProject.descriptionEn || selectedHighlightProject.summary || selectedHighlightProject.description)
-                      : (selectedHighlightProject.summaryId || selectedHighlightProject.descriptionId || selectedHighlightProject.summary || selectedHighlightProject.description)}
-                  </p>
-                </div>
 
-                {/* Key Outcomes & Dampak Utama Section */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-emerald-600">
-                    <Icon icon="ph:trend-up-bold" className="w-4 h-4" />
-                    <span>{language === 'en' ? 'Key Outcomes & Impact' : 'Hasil & Dampak Utama Sistem (Key Outcomes)'}</span>
-                  </div>
+                  {/* Right Column: Key Outcomes & Impact */}
+                  <div className="lg:col-span-7 space-y-3">
+                    <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-wider text-emerald-600">
+                      <Icon icon="ph:trend-up-bold" className="w-4 h-4" />
+                      <span>{language === 'en' ? 'Key Outcomes & Impact' : 'Hasil & Dampak Utama Sistem (Key Outcomes)'}</span>
+                    </div>
 
-                  {(() => {
-                    const rawOutcomes = language === 'en'
-                      ? (selectedHighlightProject.keyOutcomesEn || selectedHighlightProject.keyOutcomesId || selectedHighlightProject.keyOutcomes || "")
-                      : (selectedHighlightProject.keyOutcomesId || selectedHighlightProject.keyOutcomesEn || selectedHighlightProject.keyOutcomes || "");
-                    
-                    const points = rawOutcomes
-                      .split('\n')
-                      .map((line) => line.trim().replace(/^[●•\-\*]\s*/, ''))
-                      .filter(Boolean);
+                    {(() => {
+                      const rawOutcomes = language === 'en'
+                        ? (selectedHighlightProject.keyOutcomesEn || selectedHighlightProject.keyOutcomesId || selectedHighlightProject.keyOutcomes || "")
+                        : (selectedHighlightProject.keyOutcomesId || selectedHighlightProject.keyOutcomesEn || selectedHighlightProject.keyOutcomes || "");
+                      
+                      const points = rawOutcomes
+                        .split('\n')
+                        .map((line) => line.trim().replace(/^[●•\-\*]\s*/, ''))
+                        .filter(Boolean);
 
-                    if (points.length === 0) {
+                      if (points.length === 0) {
+                        return (
+                          <div className="p-4 sm:p-5 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-500 leading-relaxed">
+                            {language === 'en'
+                              ? 'Detailed performance metrics and engineering outcomes for this project are available in the full architecture case study.'
+                              : 'Metrik performa dan dampak arsitektur untuk proyek ini dapat dieksplorasi secara lengkap pada halaman studi kasus arsitektur.'}
+                          </div>
+                        );
+                      }
+
                       return (
-                        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 text-xs text-slate-500 leading-relaxed">
-                          {language === 'en'
-                            ? 'Detailed performance metrics and engineering outcomes for this project are available in the full architecture case study.'
-                            : 'Metrik performa dan dampak arsitektur untuk proyek ini dapat dieksplorasi secara lengkap pada halaman studi kasus arsitektur.'}
+                        <div className="p-5 sm:p-6 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/20 space-y-3">
+                          <ul className="space-y-3">
+                            {points.map((pt, idx) => (
+                              <li key={idx} className="flex items-start gap-3 text-xs sm:text-sm text-slate-800 leading-relaxed">
+                                <Icon icon="ph:check-circle-fill" className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                                <span>{pt}</span>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                       );
-                    }
-
-                    return (
-                      <div className="p-4 sm:p-5 rounded-2xl bg-emerald-500/[0.04] border border-emerald-500/20 space-y-2.5">
-                        <ul className="space-y-2.5">
-                          {points.map((pt, idx) => (
-                            <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-800 leading-relaxed">
-                              <Icon icon="ph:check-circle-fill" className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                              <span>{pt}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    );
-                  })()}
-                </div>
-
-                {/* Core Technologies */}
-                <div className="space-y-2 pt-1 border-t border-slate-100">
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400 block">
-                    {language === 'en' ? 'Core Technologies' : 'Teknologi Utama'}
-                  </span>
-                  <div className="flex flex-wrap gap-2">
-                    {selectedHighlightProject.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-mono bg-slate-100 text-slate-700 border border-slate-200/60"
-                      >
-                        {TECH_ICONS[tech] && <Icon icon={TECH_ICONS[tech]} className="w-3.5 h-3.5" />}
-                        <span>{tech}</span>
-                      </span>
-                    ))}
+                    })()}
                   </div>
                 </div>
               </div>
@@ -2611,7 +2597,7 @@ export default function AgencyLanding({
 
                 <Link
                   href={`/projects/${selectedHighlightProject.slug}`}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#2C5098] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow-md hover:shadow-[#2C5098]/25 transition-all cursor-pointer"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-[#2C5098] text-white text-xs sm:text-sm font-bold shadow-sm hover:shadow-md transition-all cursor-pointer"
                 >
                   <span>{language === 'en' ? 'View Full Case Study' : 'Buka Studi Kasus Lengkap'}</span>
                   <Icon icon="ph:arrow-right-bold" className="w-4 h-4" />
