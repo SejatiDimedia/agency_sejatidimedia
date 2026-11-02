@@ -145,8 +145,7 @@ export default function ProjectsList({
         <section className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 border-b border-slate-200/80 dark:border-theme-border/60 pb-4">
             <div className="space-y-1 text-left">
-              <div className="inline-flex items-center gap-1.5 text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] text-[#2C5098] dark:text-theme-accent font-bold">
-                <Icon icon="ph:star-fill" className="w-3.5 h-3.5 text-[#2C5098] dark:text-theme-accent" />
+              <div className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.25em] text-[#2C5098] dark:text-theme-accent font-bold">
                 <span>{language === 'en' ? 'FEATURED SHOWCASE' : 'PROYEK UNGGULAN'}</span>
               </div>
               <h2 className="text-xl sm:text-2xl font-jakarta font-sans font-bold tracking-tight text-slate-900 dark:text-theme-fore">
@@ -178,7 +177,7 @@ export default function ProjectsList({
               return (
                 <div
                   key={`featured-${project.slug}`}
-                  className="group flex flex-col justify-between p-5 rounded-3xl bg-white dark:bg-theme-elevated border-2 border-[#2C5098]/30 dark:border-theme-border-accent/60 hover:border-[#2C5098] dark:hover:border-theme-accent shadow-md shadow-[#2C5098]/5 hover:shadow-xl hover:shadow-[#2C5098]/15 transition-all duration-300 relative overflow-hidden"
+                  className="group flex flex-col justify-between p-5 rounded-3xl bg-white dark:bg-theme-elevated border border-slate-200 dark:border-theme-border hover:border-[#2C5098]/50 dark:hover:border-theme-border-accent hover:shadow-xl hover:shadow-[#2C5098]/10 transition-all duration-300 relative overflow-hidden"
                 >
                   <div className="space-y-4">
                     {/* Thumbnail with Featured Pill */}

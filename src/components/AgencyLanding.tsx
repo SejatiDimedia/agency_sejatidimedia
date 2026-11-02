@@ -2397,9 +2397,9 @@ export default function AgencyLanding({
                           <button
                             type="button"
                             onClick={() => setSelectedHighlightProject(project)}
-                            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-[#2C5098] to-[#23385B] hover:from-[#23385B] hover:to-[#1b2d4b] text-white text-xs font-sans font-bold shadow-md shadow-[#2C5098]/20 hover:shadow-lg hover:shadow-[#2C5098]/30 transition-all duration-300 border border-white/10 cursor-pointer"
+                            className="inline-flex items-center gap-1.5 text-xs font-sans font-bold text-[#2C5098] hover:text-[#23385B] hover:underline transition-colors cursor-pointer group/btn"
                           >
-                            <Icon icon="ph:list-checks-bold" className="w-4 h-4 text-white" />
+                            <Icon icon="ph:list-checks-bold" className="w-4 h-4 text-[#2C5098] group-hover/btn:scale-110 transition-transform" />
                             <span>{language === 'en' ? 'Highlight & Outcomes' : 'Ringkasan & Hasil Utama'}</span>
                           </button>
 
@@ -2411,10 +2411,10 @@ export default function AgencyLanding({
                             )}
                             <Link
                               href={`/projects/${project.slug}`}
-                              className="text-xs font-sans font-bold text-[#2C5098] hover:text-[#23385B] hover:underline inline-flex items-center gap-1 transition-colors"
+                              className="text-xs font-sans font-bold text-slate-700 hover:text-[#2C5098] hover:underline inline-flex items-center gap-1 transition-colors group/link"
                             >
                               <span>{t.portfolio.viewProject}</span>
-                              <Icon icon="ph:arrow-right-bold" className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                              <Icon icon="ph:arrow-right-bold" className="w-3 h-3 group-hover/link:translate-x-1 transition-transform" />
                             </Link>
                           </div>
                         </div>
@@ -2487,10 +2487,6 @@ export default function AgencyLanding({
                 <div className="p-6 sm:p-8 border-b border-slate-100 flex items-start justify-between gap-4 bg-slate-50/50">
                   <div className="space-y-2 text-left">
                     <div className="flex flex-wrap items-center gap-2">
-                      <span className="inline-flex items-center gap-1.5 text-[10px] font-sans uppercase tracking-wider font-bold text-white bg-gradient-to-r from-[#2C5098] to-[#23385B] border border-white/10 px-2.5 py-0.5 rounded-full shadow-2xs">
-                        <Icon icon="ph:star-bold" className="w-3 h-3 text-white" />
-                        <span>{language === 'en' ? 'Project Highlight' : 'Sorotan Proyek'}</span>
-                      </span>
                       {selectedHighlightProject.categories && selectedHighlightProject.categories.length > 0 && (
                         <div className="flex flex-wrap gap-1.5">
                           {selectedHighlightProject.categories.map((cat) => {
@@ -2499,9 +2495,9 @@ export default function AgencyLanding({
                             return (
                               <span
                                 key={cat}
-                                className="inline-flex items-center gap-1.5 text-[10px] font-sans uppercase tracking-wider font-bold text-[#2C5098] bg-[#2C5098]/10 border border-[#2C5098]/20 px-2 py-0.5 rounded-full"
+                                className="inline-flex items-center gap-1.5 text-[10px] font-sans uppercase tracking-wider font-bold text-white bg-gradient-to-r from-[#2C5098] to-[#23385B] border border-white/10 px-2.5 py-0.5 rounded-full shadow-2xs"
                               >
-                                <Icon icon={getCategoryIcon(catName)} className="w-3 h-3 text-[#2C5098]" />
+                                <Icon icon={getCategoryIcon(catName)} className="w-3 h-3 text-white" />
                                 <span>{catName}</span>
                               </span>
                             );
@@ -2509,7 +2505,7 @@ export default function AgencyLanding({
                         </div>
                       )}
                       {ndaProjectSlugs.includes(selectedHighlightProject.slug) && (
-                        <span className="text-[10px] font-mono text-amber-600 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded">
+                        <span className="text-[10px] font-mono text-amber-600 bg-amber-50 border border-amber-200/60 px-2.5 py-0.5 rounded-full font-semibold">
                           NDA
                         </span>
                       )}
