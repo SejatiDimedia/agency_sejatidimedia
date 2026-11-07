@@ -696,7 +696,7 @@ export default function ProjectDetailsPage() {
                             ? 'bg-amber-500/10 text-amber-700 border border-amber-200'
                             : 'bg-slate-100 text-slate-600 border border-slate-200'
                             }`}>
-                            <span className={`w-1.5 h-1.5 rounded-full ${outstandingAmount > 0 ? 'bg-amber-500 animate-ping' : 'bg-slate-400'}`} />
+                            <span className={`w-1.5 h-1.5 rounded-full ${outstandingAmount > 0 ? 'bg-amber-500' : 'bg-slate-400'}`} />
                             {outstandingAmount > 0 ? 'Belum Lunas' : 'Lunas Sepenuhnya'}
                           </span>
                         </div>

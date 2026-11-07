@@ -109,12 +109,7 @@ export const MilestoneKanbanBoard: React.FC<MilestoneKanbanBoardProps> = ({
               {/* Column Header */}
               <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-200/80">
                 <div className="flex items-center gap-2.5">
-                  <span className="relative flex h-2.5 w-2.5">
-                    {column.key === 'In Progress' && (
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                    )}
-                    <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${column.dotColor}`}></span>
-                  </span>
+                  <span className={`inline-flex rounded-full h-2.5 w-2.5 ${column.dotColor}`}></span>
                   <div>
                     <div className="flex items-center gap-2">
                       <h3 className="font-bold text-slate-900 text-sm font-sans">{column.title}</h3>

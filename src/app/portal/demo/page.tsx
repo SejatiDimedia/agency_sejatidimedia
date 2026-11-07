@@ -384,10 +384,7 @@ export default function GuestDemoClientPortal() {
           ===================================================================== */}
       <div className="no-print sticky top-0 z-50 bg-gradient-to-r from-[#1E315B] via-[#2C5098] to-[#1E315B] text-white px-3 sm:px-6 py-2.5 shadow-md flex flex-wrap items-center justify-between gap-3 border-b border-white/10">
         <div className="flex items-center gap-2.5 text-xs sm:text-sm">
-          <span className="flex h-2.5 w-2.5 relative shrink-0">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-          </span>
+          <span className="inline-flex rounded-full h-2 w-2 bg-emerald-400 shrink-0"></span>
           <div>
             <span className="font-bold tracking-wide">Mode Tamu (Guest Demo):</span>{' '}
             <span className="text-blue-100 hidden sm:inline">

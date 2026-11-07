@@ -447,7 +447,7 @@ export default function LayoutWrapper({
                                     </span>
                                     {tool.badge && (
                                       <span className="inline-flex items-center gap-1 text-[9px] font-sans font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded-full">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                                         {tool.badge[language]}
                                       </span>
                                     )}
@@ -820,7 +820,7 @@ export default function LayoutWrapper({
                               </span>
                               {tool.badge && (
                                 <span className="inline-flex items-center gap-1 text-[9px] font-sans font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 rounded-full">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
                                   {tool.badge[language]}
                                 </span>
                               )}
@@ -1015,7 +1015,7 @@ export default function LayoutWrapper({
                                       </span>
                                       {tool.badge && (
                                         <span className="inline-flex items-center gap-1 text-[9px] font-sans font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-1.5 py-0.5 rounded-full">
-                                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                                           {tool.badge[language]}
                                         </span>
                                       )}
@@ -1407,7 +1407,7 @@ export default function LayoutWrapper({
                               </span>
                               {tool.badge && (
                                 <span className="inline-flex items-center gap-1 text-[9px] font-sans font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.5 rounded-full">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                                   {tool.badge[language]}
                                 </span>
                               )}
