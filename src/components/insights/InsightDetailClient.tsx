@@ -28,6 +28,7 @@ import { InsightArticle } from "@/lib/api/insights";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 import { Toast } from "@/components/ui/Toast";
 import CodeBlockBeautified from "./CodeBlockBeautified";
+import { CategoryIcon } from "./CategoryIcon";
 import {
   BeautifiedTable,
   BeautifiedThead,
@@ -460,7 +461,7 @@ export default function InsightDetailClient({
                       key={cat}
                       className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 text-[10px] font-sans font-bold uppercase tracking-wider shadow-2xs"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+                      <CategoryIcon category={cat} className="w-3 h-3 text-[#2C5098] shrink-0" />
                       {cat}
                     </span>
                   ))}
@@ -894,7 +895,7 @@ export default function InsightDetailClient({
                       />
                       <div className="absolute top-3 left-3 z-10">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+                          <CategoryIcon category={rel.category} className="w-3 h-3 text-[#2C5098] shrink-0" />
                           {rel.category}
                         </span>
                       </div>

@@ -15,6 +15,7 @@ import { useLanguage } from '../lib/i18n/LanguageContext';
 import { TECH_ICONS } from '../lib/constants';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { Icon } from '@iconify/react';
+import { CategoryIcon } from './insights/CategoryIcon';
 
 const SERVICE_IMAGES = [
   '/service_web_app.webp',
@@ -1467,7 +1468,7 @@ export default function AgencyLanding({
                     <div className="space-y-1.5 text-xs font-sans">
                       <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
                         <div className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+                          <Icon icon="ph:browsers-bold" className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
                           <span className="font-semibold text-slate-800 text-[11px]">
                             {language === 'en' ? 'Presentation Layer' : 'Lapisan Antarmuka (UI)'}
                           </span>
@@ -1477,7 +1478,7 @@ export default function AgencyLanding({
 
                       <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-white border border-blue-200/70 shadow-2xs bg-blue-50/20">
                         <div className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                          <Icon icon="ph:cpu-bold" className="w-3.5 h-3.5 text-blue-500 shrink-0" />
                           <span className="font-semibold text-slate-800 text-[11px]">
                             {language === 'en' ? 'Core Business Logic' : 'Logika Bisnis & Domain'}
                           </span>
@@ -1487,7 +1488,7 @@ export default function AgencyLanding({
 
                       <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs">
                         <div className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                          <Icon icon="ph:database-bold" className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
                           <span className="font-semibold text-slate-800 text-[11px]">
                             {language === 'en' ? 'Data & Storage Tier' : 'Akses Data & Database'}
                           </span>
@@ -1570,8 +1571,8 @@ export default function AgencyLanding({
                         </div>
                         <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1.5 py-0.5 rounded">PASSED</span>
                       </div>
-                      <div className="text-[10px] text-slate-500 pt-0.5 border-t border-slate-100 flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block" />
+                      <div className="text-[10px] text-slate-500 pt-0.5 border-t border-slate-100 flex items-center gap-1.5">
+                        <Icon icon="ph:shield-check-bold" className="w-3.5 h-3.5 text-blue-500 shrink-0" />
                         <span>{language === 'en' ? 'Zero runtime exceptions in production' : 'Nol runtime error pada skenario uji'}</span>
                       </div>
                     </div>
@@ -3065,7 +3066,7 @@ export default function AgencyLanding({
                       {/* Floating Category & Series Pill */}
                       <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 flex-wrap max-w-[90%]">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-white/95 text-[#2C5098] border border-[#2C5098]/20 shadow-xs backdrop-blur-md">
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+                          <CategoryIcon category={article.category} className="w-3 h-3 text-[#2C5098] shrink-0" />
                           {article.category}
                         </span>
                         {article.series && (

@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { InsightSeriesInfo } from '@/lib/api/insights';
 import CodeBlockBeautified from './CodeBlockBeautified';
+import { CategoryIcon } from './CategoryIcon';
 import {
   BeautifiedTable,
   BeautifiedThead,
@@ -345,7 +346,7 @@ export function InsightArticleViewer({
             </Link>
           ) : (
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 text-[10px] font-sans font-bold uppercase tracking-wider shadow-2xs">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+              <CategoryIcon category={category} className="w-3 h-3 text-[#2C5098] shrink-0" />
               {category}
             </span>
           )}

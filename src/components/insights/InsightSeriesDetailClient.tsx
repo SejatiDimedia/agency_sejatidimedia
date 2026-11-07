@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import { InsightSeriesDetail } from "@/lib/api/insights";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
+import { CategoryIcon } from "./CategoryIcon";
 
 interface InsightSeriesDetailClientProps {
   series: InsightSeriesDetail;
@@ -78,7 +79,7 @@ export default function InsightSeriesDetailClient({ series }: InsightSeriesDetai
                       key={cat}
                       className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-sans font-bold uppercase tracking-wider bg-[#2C5098]/10 text-[#2C5098] border border-[#2C5098]/20 shadow-xs"
                     >
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#2C5098]" />
+                      <CategoryIcon category={cat} className="w-3 h-3 text-[#2C5098] shrink-0" />
                       {cat}
                     </span>
                   ))}
