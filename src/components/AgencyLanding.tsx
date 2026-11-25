@@ -2053,7 +2053,7 @@ export default function AgencyLanding({
                   </div>
                   <p className="text-xs text-slate-600 mb-4 font-sans leading-relaxed">{t.tech.backendDesc}</p>
                   <div className="flex flex-wrap gap-1.5 pt-3 border-t border-slate-100">
-                    {["Laravel", "Node.js", "Golang", "Python", "Express", "GraphQL"].map((tech) => (
+                    {["Laravel", "Node.js", "Golang", "Python", "Express", "GraphQL", "Java Springboot"].map((tech) => (
                       <div key={tech} className="px-2 py-1 rounded-xl text-[10px] font-mono font-medium bg-slate-50 border border-slate-200 text-slate-800 hover:border-[#2C5098]/50 hover:bg-[#2C5098]/10 transition-all duration-300 cursor-default flex items-center gap-1.5 shadow-2xs">
                         <Icon icon={TECH_ICONS[tech] || 'ph:code-duotone'} className="w-3.5 h-3.5 shrink-0" />
                         <span>{tech}</span>
@@ -2567,7 +2567,7 @@ export default function AgencyLanding({
                         const rawOutcomes = language === 'en'
                           ? (selectedHighlightProject.keyOutcomesEn || selectedHighlightProject.keyOutcomesId || selectedHighlightProject.keyOutcomes || "")
                           : (selectedHighlightProject.keyOutcomesId || selectedHighlightProject.keyOutcomesEn || selectedHighlightProject.keyOutcomes || "");
-                        
+
                         const points = rawOutcomes
                           .split('\n')
                           .map((line) => line.trim().replace(/^[●•\-\*]\s*/, ''))

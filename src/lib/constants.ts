@@ -111,7 +111,11 @@ const BASE_TECH_ICONS: Record<string, string> = {
   "Multi-Agent": "ph:robot-duotone",
   "Multi Agents": "ph:robot-duotone",
   "multi agent": "ph:robot-duotone",
-  "multi-agent": "ph:robot-duotone"
+  "multi-agent": "ph:robot-duotone",
+  "Java Springboot": "logos:spring-icon",
+  "java springboot": "logos:spring-icon",
+  "springboot": "logos:spring-icon",
+  "spring boot": "logos:spring-icon"
 };
 
 /**
