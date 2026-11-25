@@ -84,9 +84,13 @@ export default function ProjectDetailClient({
     ? (project.clientSummaryEn || project.clientSummaryId || "")
     : (project.clientSummaryId || project.clientSummaryEn || "");
 
-  const displayKeyOutcomes = language === 'en'
-    ? (project.keyOutcomesEn || project.keyOutcomesId || project.keyOutcomes || "")
-    : (project.keyOutcomesId || project.keyOutcomesEn || project.keyOutcomes || "");
+  const isKeyOutcomesHidden = project.slug?.toLowerCase().trim() === 'flash-sale--event-ticketing-platform';
+
+  const displayKeyOutcomes = isKeyOutcomesHidden
+    ? ""
+    : (language === 'en'
+      ? (project.keyOutcomesEn || project.keyOutcomesId || project.keyOutcomes || "")
+      : (project.keyOutcomesId || project.keyOutcomesEn || project.keyOutcomes || ""));
 
   const keyOutcomePoints = useMemo(() => {
     if (!displayKeyOutcomes) return [];
@@ -415,7 +419,7 @@ export default function ProjectDetailClient({
             )}
 
             {/* Key Outcomes & Impact Highlight */}
-            {keyOutcomePoints.length > 0 && (
+            {!isKeyOutcomesHidden && keyOutcomePoints.length > 0 && (
               <div className="mb-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-br from-emerald-500/[0.04] via-emerald-500/[0.07] to-transparent dark:from-emerald-500/10 dark:via-emerald-500/5 dark:to-transparent border border-emerald-500/20 dark:border-emerald-500/30 space-y-3">
                 <div className="flex items-center gap-2.5">
                   <div className="w-8 h-8 rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 flex items-center justify-center shrink-0">

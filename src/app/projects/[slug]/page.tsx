@@ -29,6 +29,12 @@ export default async function ProjectDetailPage({
   // Perform true server-side redaction (strips proprietary text & real screenshot URLs before SSR)
   const safeProject = sanitizeProjectForNda(project, isNdaActive);
 
+  if (slug?.toLowerCase().trim() === 'flash-sale--event-ticketing-platform') {
+    safeProject.keyOutcomes = null;
+    safeProject.keyOutcomesId = null;
+    safeProject.keyOutcomesEn = null;
+  }
+
   const relatedProjects = allProjects.filter((p) => p.slug !== slug).slice(0, 3);
 
   return (
