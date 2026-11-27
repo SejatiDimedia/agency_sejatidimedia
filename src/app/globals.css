@@ -132,23 +132,49 @@ samp {
 
 /* GPU-accelerated CSS animations (Compositor Thread - 0% JS CPU) */
 @keyframes laser-shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(350%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(350%);
+  }
 }
 
 @keyframes text-shine {
-  0% { background-position: 250% center; }
-  100% { background-position: -250% center; }
+  0% {
+    background-position: 250% center;
+  }
+
+  100% {
+    background-position: -250% center;
+  }
 }
 
 @keyframes gentle-pulse {
-  0%, 100% { transform: scale(1); opacity: 0.7; }
-  50% { transform: scale(1.06); opacity: 1; }
+
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: scale(1.06);
+    opacity: 1;
+  }
 }
 
 @keyframes gentle-float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-7px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
 }
 
 .animate-laser-shimmer {
@@ -172,24 +198,69 @@ samp {
 }
 
 @keyframes spark-glide-1 {
-  0% { transform: translate(0, 0) scale(0.7); opacity: 0; }
-  20% { opacity: 1; transform: translate(-30px, 18px) scale(1.05); }
-  80% { opacity: 0.85; transform: translate(-100px, 60px) scale(1); }
-  100% { transform: translate(-130px, 75px) scale(0.7); opacity: 0; }
+  0% {
+    transform: translate(0, 0) scale(0.7);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+    transform: translate(-30px, 18px) scale(1.05);
+  }
+
+  80% {
+    opacity: 0.85;
+    transform: translate(-100px, 60px) scale(1);
+  }
+
+  100% {
+    transform: translate(-130px, 75px) scale(0.7);
+    opacity: 0;
+  }
 }
 
 @keyframes spark-glide-2 {
-  0% { transform: translate(0, 0) scale(0.7); opacity: 0; }
-  20% { opacity: 0.95; transform: translate(-15px, 20px) scale(1); }
-  80% { opacity: 0.8; transform: translate(-50px, 62px) scale(1); }
-  100% { transform: translate(-65px, 80px) scale(0.7); opacity: 0; }
+  0% {
+    transform: translate(0, 0) scale(0.7);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 0.95;
+    transform: translate(-15px, 20px) scale(1);
+  }
+
+  80% {
+    opacity: 0.8;
+    transform: translate(-50px, 62px) scale(1);
+  }
+
+  100% {
+    transform: translate(-65px, 80px) scale(0.7);
+    opacity: 0;
+  }
 }
 
 @keyframes spark-glide-3 {
-  0% { transform: translate(0, 0) scale(0.7); opacity: 0; }
-  20% { opacity: 1; transform: translate(-25px, -15px) scale(1); }
-  80% { opacity: 0.85; transform: translate(-88px, -48px) scale(1); }
-  100% { transform: translate(-110px, -60px) scale(0.7); opacity: 0; }
+  0% {
+    transform: translate(0, 0) scale(0.7);
+    opacity: 0;
+  }
+
+  20% {
+    opacity: 1;
+    transform: translate(-25px, -15px) scale(1);
+  }
+
+  80% {
+    opacity: 0.85;
+    transform: translate(-88px, -48px) scale(1);
+  }
+
+  100% {
+    transform: translate(-110px, -60px) scale(0.7);
+    opacity: 0;
+  }
 }
 
 .animate-spark-1 {
@@ -209,8 +280,17 @@ samp {
 
 /* Breathing ambient glow */
 @keyframes breathing-glow {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
-  50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.9; }
+
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.6;
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(1.1);
+    opacity: 0.9;
+  }
 }
 
 .animate-breathing-glow {
@@ -220,8 +300,15 @@ samp {
 
 /* Opacity-only pulse (for badges/indicators) */
 @keyframes opacity-pulse {
-  0%, 100% { opacity: 0.8; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 .animate-opacity-pulse {
@@ -230,8 +317,15 @@ samp {
 
 /* Downward gentle float (inverse of gentle-float) */
 @keyframes gentle-float-down {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(7px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(7px);
+  }
 }
 
 .animate-gentle-float-down {
@@ -241,8 +335,15 @@ samp {
 
 /* Scale pulse for badges */
 @keyframes badge-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
 }
 
 .animate-badge-pulse {
@@ -251,8 +352,13 @@ samp {
 
 /* Shimmer sweep (for amount paid / laser lines) */
 @keyframes shimmer-sweep {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(250%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(250%);
+  }
 }
 
 .animate-shimmer-sweep {
@@ -262,8 +368,15 @@ samp {
 
 /* Progress bar breathing width via clip-path */
 @keyframes progress-breathe {
-  0%, 100% { clip-path: inset(0 22% 0 0); }
-  50% { clip-path: inset(0 12% 0 0); }
+
+  0%,
+  100% {
+    clip-path: inset(0 22% 0 0);
+  }
+
+  50% {
+    clip-path: inset(0 12% 0 0);
+  }
 }
 
 .animate-progress-breathe {
@@ -274,8 +387,17 @@ samp {
 
 /* Footer ambient glow - slow rhythmic atmospheric breath */
 @keyframes footer-glow {
-  0%, 100% { transform: scaleX(0.96); opacity: 0.35; }
-  50% { transform: scaleX(1.04); opacity: 0.75; }
+
+  0%,
+  100% {
+    transform: scaleX(0.96);
+    opacity: 0.35;
+  }
+
+  50% {
+    transform: scaleX(1.04);
+    opacity: 0.75;
+  }
 }
 
 .animate-footer-glow {
@@ -289,33 +411,36 @@ samp {
     background-position: 250% 0;
     opacity: 0;
   }
+
   6% {
     opacity: 0.9;
   }
+
   74% {
     opacity: 0.9;
   }
+
   84% {
     background-position: -150% 0;
     opacity: 0;
   }
-  84.1%, 100% {
+
+  84.1%,
+  100% {
     background-position: 250% 0;
     opacity: 0;
   }
 }
 
 .animate-light-flare {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    transparent 35%,
-    rgba(56, 189, 248, 0.25) 45%,
-    rgba(56, 189, 248, 0.95) 50%,
-    rgba(56, 189, 248, 0.25) 55%,
-    transparent 65%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      transparent 35%,
+      rgba(56, 189, 248, 0.25) 45%,
+      rgba(56, 189, 248, 0.95) 50%,
+      rgba(56, 189, 248, 0.25) 55%,
+      transparent 65%,
+      transparent 100%);
   background-size: 300% 100%;
   animation: light-flare 14s cubic-bezier(0.37, 0, 0.63, 1) infinite;
   will-change: background-position, opacity;
@@ -327,17 +452,22 @@ samp {
     background-position: 250% center;
     opacity: 0;
   }
+
   6% {
     opacity: 1;
   }
+
   74% {
     opacity: 1;
   }
+
   84% {
     background-position: -250% center;
     opacity: 0;
   }
-  84.1%, 100% {
+
+  84.1%,
+  100% {
     background-position: 250% center;
     opacity: 0;
   }
@@ -350,8 +480,15 @@ samp {
 
 /* Scroll arrow bounce */
 @keyframes scroll-bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(4px); }
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(4px);
+  }
 }
 
 .animate-scroll-bounce {
@@ -446,23 +583,28 @@ html.dark {
   scrollbar-color: #2C5098 transparent;
   -webkit-overflow-scrolling: touch;
 }
+
 .custom-scrollbar::-webkit-scrollbar {
   width: 5px;
   height: 5px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background: linear-gradient(180deg, #2C5098 0%, #23385B 100%);
   border-radius: 9999px;
 }
+
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(180deg, #38BDF8 0%, #2C5098 100%);
 }
 
 /* Custom Cursor Support (Fine-pointer desktop devices only) */
 @media (pointer: fine) {
+
   body.custom-cursor-active,
   body.custom-cursor-active a,
   body.custom-cursor-active button,
@@ -480,22 +622,26 @@ html.dark {
 }
 
 /* ==========================================================================
-   Syntax Highlighting Theme (Tokyo Night / GitHub Dark Dimmed Hybrid)
+   Syntax Highlighting Theme (Soft Muted Slate & Pastel-Dimmed IDE Palette)
+   Syntax Highlighting Theme (Soft Light Editorial IDE Palette)
    ========================================================================== */
 .prism-code .token.comment,
 .prism-code .token.prolog,
 .prism-code .token.doctype,
 .prism-code .token.cdata {
-  color: #768390;
+  color: #64748b;
+  color: #94a3b8;
   font-style: italic;
 }
 
 .prism-code .token.punctuation {
-  color: #8b949e;
+  color: #7c8ba1;
+  color: #64748b;
 }
 
 .prism-code .token.namespace {
   opacity: 0.7;
+  opacity: 0.75;
 }
 
 .prism-code .token.property,
@@ -505,7 +651,10 @@ html.dark {
 .prism-code .token.constant,
 .prism-code .token.symbol,
 .prism-code .token.deleted {
-  color: #ff9e64; /* warm orange/amber */
+  color: #deb48e;
+  /* muted warm sand */
+  color: #9a5b25;
+  /* muted warm amber */
 }
 
 .prism-code .token.selector,
@@ -514,7 +663,10 @@ html.dark {
 .prism-code .token.char,
 .prism-code .token.builtin,
 .prism-code .token.inserted {
-  color: #7ee787; /* vivid emerald green */
+  color: #8ab89d;
+  /* soft muted sage */
+  color: #2f7a57;
+  /* calm muted sage */
 }
 
 .prism-code .token.operator,
@@ -522,27 +674,39 @@ html.dark {
 .prism-code .token.url,
 .language-css .prism-code .token.string,
 .style .prism-code .token.string {
-  color: #79c0ff; /* sky blue */
+  color: #8bb3d9;
+  /* calm steel sky-blue */
+  color: #3b6ea5;
+  /* muted steel blue */
 }
 
 .prism-code .token.atrule,
 .prism-code .token.attr-value,
 .prism-code .token.keyword {
-  color: #d2a8ff; /* vibrant lilac/purple */
-  font-weight: 600;
+  color: #b5a8d4;
+  /* soft muted lavender */
+  color: #6d4c9c;
+  /* soft muted plum */
+  font-weight: 500;
 }
 
 .prism-code .token.function,
 .prism-code .token.class-name,
 .prism-code .token.class-name-definition {
-  color: #58a6ff; /* bright cyan blue */
+  color: #8fb4e3;
+  /* soft periwinkle blue */
+  color: #2c5098;
+  /* brand slate blue */
   font-weight: 500;
 }
 
 .prism-code .token.regex,
 .prism-code .token.important,
 .prism-code .token.variable {
-  color: #ffa657; /* soft coral */
+  color: #d6a883;
+  /* soft muted clay */
+  color: #a15c38;
+  /* soft terracotta */
 }
 
 .prism-code .token.important,

@@ -281,20 +281,27 @@ export function InsightArticleViewer({
         {children}
       </blockquote>
     ),
-    pre: ({ children }: any) => <>{children}</>,
-    code: ({ inline, className, children, ...props }: any) => {
-      if (inline) {
+    pre: ({ children }: any) => {
+      const codeChild = React.isValidElement(children)
+        ? (children as React.ReactElement<{ className?: string; children?: React.ReactNode }>)
+        : null;
+      if (codeChild && codeChild.props) {
         return (
-          <code
-            className="px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 font-sans text-xs sm:text-[12.5px] text-[#1E315B] dark:text-blue-300 font-semibold"
-            {...props}
-          >
-            {children}
-          </code>
+          <ArticleCodeBlock className={codeChild.props.className} language={language}>
+            {codeChild.props.children}
+          </ArticleCodeBlock>
         );
       }
-      return <ArticleCodeBlock className={className} language={language} {...props}>{children}</ArticleCodeBlock>;
+      return <pre>{children}</pre>;
     },
+    code: ({ children, ...props }: any) => (
+      <code
+        className="px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 font-mono text-xs sm:text-[13px] text-[#1E315B] dark:text-blue-300 font-semibold"
+        {...props}
+      >
+        {children}
+      </code>
+    ),
     table: ({ children, ...props }: any) => (
       <BeautifiedTable language={language} {...props}>
         {children}
