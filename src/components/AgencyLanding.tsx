@@ -24,6 +24,39 @@ const SERVICE_IMAGES = [
   '/service_ai_llm.webp',
 ];
 
+function BlueMeshFrame({
+  children,
+  className = '',
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={`relative overflow-hidden ${className}`}
+      style={{
+        backgroundColor: '#23385B',
+        backgroundImage: [
+          'radial-gradient(at 10% 12%, #4A85D9 0px, transparent 55%)',
+          'radial-gradient(at 88% 14%, #A5C4F3 0px, transparent 50%)',
+          'radial-gradient(at 32% 58%, #1B2D52 0px, transparent 58%)',
+          'radial-gradient(at 14% 90%, #2C5098 0px, transparent 55%)',
+          'radial-gradient(at 88% 86%, #6B9EE8 0px, transparent 55%)',
+        ].join(', '),
+      }}
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-30 mix-blend-overlay"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        }}
+      />
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
+}
+
 const CATEGORY_MAP: Record<string, string> = {
   "68fd86b3efc68bfc3fd16532": "AI",
   "68fd8688efc68bfc3fd16531": "Web",
@@ -874,11 +907,9 @@ export default function AgencyLanding({
 
           {/* 3. Main Interactive Live Showcase Window */}
           <div className="relative flex justify-center items-center py-2 max-w-5xl mx-auto w-full">
-            {/* Ambient Background Soft Radial Glow */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[340px] bg-gradient-to-tr from-[#2C5098]/12 via-indigo-50/40 to-[#23385B]/10 rounded-full blur-[90px] pointer-events-none -z-10" />
-
-            {/* Clean macOS Client Portal Window */}
-            <div className="w-full rounded-3xl bg-white border border-slate-200/90 shadow-2xl shadow-slate-900/8 overflow-hidden relative group hover:border-[#2C5098]/50 transition-all duration-300">
+            <BlueMeshFrame className="w-full rounded-[2rem] p-4 sm:p-7 md:p-9 border border-[#2C5098]/30 shadow-xl shadow-[#2C5098]/20">
+              {/* Clean macOS Client Portal Window */}
+              <div className="w-full rounded-2xl sm:rounded-3xl bg-white border border-black/[0.05] shadow-[0_18px_45px_-12px_rgba(15,23,42,0.15)] overflow-hidden relative group transition-all duration-300">
               {/* Laser Moving Shimmer Accent */}
               <div
                 className="animate-laser-shimmer absolute top-0 left-0 h-[2px] w-48 bg-gradient-to-r from-transparent via-[#2C5098] to-transparent z-30 pointer-events-none"
@@ -1242,7 +1273,8 @@ export default function AgencyLanding({
                   </motion.div>
                 )}
               </div>
-            </div>
+              </div>
+            </BlueMeshFrame>
           </div>
 
           {/* Dedicated CTA Button to Live Demo Portal */}
@@ -1446,7 +1478,8 @@ export default function AgencyLanding({
                   </div>
 
                   {/* Visual Artifact: Multi-Tier Architecture Diagram */}
-                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                  <BlueMeshFrame className="rounded-2xl p-3 sm:p-3.5 border border-[#2C5098]/25 shadow-sm">
+                    <div className="p-3.5 rounded-xl bg-white border border-black/[0.05] shadow-[0_10px_28px_-8px_rgba(15,23,42,0.18)] space-y-2">
                     <div className="text-[11px] font-sans font-semibold text-slate-700 flex items-center justify-between pb-1.5 border-b border-slate-200/60">
                       <span className="flex items-center gap-1.5">
                         <Icon icon="ph:stack-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
@@ -1490,6 +1523,7 @@ export default function AgencyLanding({
                       </div>
                     </div>
                   </div>
+                  </BlueMeshFrame>
                 </div>
 
                 {/* Footer Chips */}
@@ -1534,7 +1568,8 @@ export default function AgencyLanding({
                   </div>
 
                   {/* Visual Artifact: Simulated IDE / Code Quality & Testing Window */}
-                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                  <BlueMeshFrame className="rounded-2xl p-3 sm:p-3.5 border border-[#2C5098]/25 shadow-sm">
+                    <div className="p-3.5 rounded-xl bg-white border border-black/[0.05] shadow-[0_10px_28px_-8px_rgba(15,23,42,0.18)] space-y-2">
                     <div className="flex items-center justify-between pb-1.5 border-b border-slate-200/60">
                       <div className="flex items-center gap-1.5">
                         <span className="w-2.5 h-2.5 rounded-full bg-slate-300" />
@@ -1570,6 +1605,7 @@ export default function AgencyLanding({
                       </div>
                     </div>
                   </div>
+                  </BlueMeshFrame>
                 </div>
 
                 {/* Footer Chips */}
@@ -1614,7 +1650,8 @@ export default function AgencyLanding({
                   </div>
 
                   {/* Visual Artifact: Security Checklist Rows */}
-                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                  <BlueMeshFrame className="rounded-2xl p-3 sm:p-3.5 border border-[#2C5098]/25 shadow-sm">
+                    <div className="p-3.5 rounded-xl bg-white border border-black/[0.05] shadow-[0_10px_28px_-8px_rgba(15,23,42,0.18)] space-y-2">
                     <div className="text-[11px] font-sans font-semibold text-slate-700 flex items-center justify-between pb-1.5 border-b border-slate-200/60">
                       <span className="flex items-center gap-1.5">
                         <Icon icon="ph:lock-key-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
@@ -1652,6 +1689,7 @@ export default function AgencyLanding({
                       </div>
                     </div>
                   </div>
+                  </BlueMeshFrame>
                 </div>
 
                 {/* Footer Chips */}
@@ -1696,7 +1734,8 @@ export default function AgencyLanding({
                   </div>
 
                   {/* Visual Artifact: Deliverables Blueprint Checklist */}
-                  <div className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                  <BlueMeshFrame className="rounded-2xl p-3 sm:p-3.5 border border-[#2C5098]/25 shadow-sm">
+                    <div className="p-3.5 rounded-xl bg-white border border-black/[0.05] shadow-[0_10px_28px_-8px_rgba(15,23,42,0.18)] space-y-2">
                     <div className="text-[11px] font-sans font-semibold text-slate-700 flex items-center justify-between pb-1.5 border-b border-slate-200/60">
                       <span className="flex items-center gap-1.5">
                         <Icon icon="ph:files-bold" className="w-3.5 h-3.5 text-[#2C5098]" />
@@ -1740,6 +1779,7 @@ export default function AgencyLanding({
                       </div>
                     </div>
                   </div>
+                  </BlueMeshFrame>
                 </div>
 
                 {/* Footer Chips */}
