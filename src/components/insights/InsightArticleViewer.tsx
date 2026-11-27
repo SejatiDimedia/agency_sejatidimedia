@@ -296,7 +296,7 @@ export function InsightArticleViewer({
     },
     code: ({ children, ...props }: any) => (
       <code
-        className="px-1.5 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700 font-mono text-xs sm:text-[13px] text-[#1E315B] dark:text-blue-300 font-semibold"
+        className="px-1.5 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-800/60 font-mono text-xs sm:text-[13px] text-[#2C5098] dark:text-blue-300 font-semibold"
         {...props}
       >
         {children}

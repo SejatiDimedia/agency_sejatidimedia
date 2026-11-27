@@ -384,7 +384,7 @@ export default function InsightDetailClient({
     },
     code: ({ children, ...props }: any) => (
       <code
-        className="px-1.5 py-0.5 rounded-md bg-slate-100 border border-slate-200/80 font-mono text-xs sm:text-[13px] text-[#1E315B] font-semibold"
+        className="px-1.5 py-0.5 rounded-md bg-blue-50 border border-blue-200/80 font-mono text-xs sm:text-[13px] text-[#2C5098] font-semibold"
         {...props}
       >
         {children}
@@ -484,7 +484,14 @@ export default function InsightDetailClient({
             <p className={`font-sans text-slate-600 leading-[1.8] ${
               fontSize === "large" ? "text-lg sm:text-[18.5px]" : "text-base sm:text-[16.5px]"
             }`}>
-              {excerpt}
+              <ReactMarkdown
+                components={{
+                  p: ({ children }: any) => <>{children}</>,
+                  code: markdownComponents.code,
+                }}
+              >
+                {(excerpt || "").replace(/\\`/g, "`")}
+              </ReactMarkdown>
             </p>
           </div>
 
@@ -689,7 +696,7 @@ export default function InsightDetailClient({
             {/* Markdown Article Prose Body - Starts Directly without synthetic duplicate box */}
             <article className="prose prose-slate max-w-none text-left">
               <ReactMarkdown remarkPlugins={[remarkGfm]} components={markdownComponents}>
-                {content}
+                {(content || "").replace(/\\`/g, "`")}
               </ReactMarkdown>
             </article>
 
