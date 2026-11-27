@@ -325,6 +325,15 @@ export const PortalSidebar: React.FC<PortalSidebarProps> = ({
                       collapsed={isCollapsed}
                     />
 
+                    {/* Web & Landing Page CMS (ADMIN ONLY) */}
+                    <SidebarItem
+                      icon={<Globe className="w-5 h-5" />}
+                      label="Web & Landing Page"
+                      isActive={pathname === '/portal/static-web' || activeSection === 'static-web-cms'}
+                      onClick={() => handleNavigate('/portal/static-web', 'static-web-cms')}
+                      collapsed={isCollapsed}
+                    />
+
                     {/* Insights CMS (ADMIN ONLY) */}
                     <SidebarItem
                       icon={<BookOpen className="w-5 h-5" />}

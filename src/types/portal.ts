@@ -143,5 +143,6 @@ export type ActiveNavSection =
   | 'calendar' 
   | 'team' 
   | 'portfolio'
+  | 'static-web-cms'
   | 'insights-cms'
   | 'settings';
