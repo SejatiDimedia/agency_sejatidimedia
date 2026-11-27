@@ -5,7 +5,8 @@ import { flushSync } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
-import { Home, Layers, FolderOpen, BookOpen, MessageCircle, Wrench, X } from "lucide-react";
+import Link from "next/link";
+import { Home, Layers, FolderOpen, BookOpen, MessageCircle, Wrench, X, Globe, Code2, Check } from "lucide-react";
 import dynamic from "next/dynamic";
 import ThemeToggle from "./ThemeToggle";
 const AiChatWidget = dynamic(() => import("./AiChatWidget"), { ssr: false });
@@ -17,6 +18,35 @@ import { TemplateId, getActiveTemplate } from "@/lib/templates";
 import { Icon } from "@iconify/react";
 import "@/lib/icons-bundle";
 import { PRODUCT_TOOLS } from "@/lib/tools-data";
+
+const PORTFOLIO_NAV_ITEMS = [
+  {
+    id: "systems-apps",
+    href: "/projects",
+    title: {
+      id: "Sistem & Aplikasi",
+      en: "Systems & Apps",
+    },
+    description: {
+      id: "Sistem operasional, SaaS, dashboard & aplikasi mobile",
+      en: "Operational systems, SaaS, dashboards & mobile apps",
+    },
+    iconName: "code" as const,
+  },
+  {
+    id: "web-landing",
+    href: "/statis-web",
+    title: {
+      id: "Web & Landing Page",
+      en: "Web & Landing Page",
+    },
+    description: {
+      id: "Website company profile, landing page & situs web statis",
+      en: "Company profile websites, landing pages & static web",
+    },
+    iconName: "globe" as const,
+  },
+] as const;
 
 export default function LayoutWrapper({
   children,
@@ -43,10 +73,18 @@ export default function LayoutWrapper({
   const [isToolsOpen, setIsToolsOpen] = useState(false);
   const [isClassicToolsOpen, setIsClassicToolsOpen] = useState(false);
   const [isMobileToolsOpen, setIsMobileToolsOpen] = useState(false);
+  const [isPortfolioOpen, setIsPortfolioOpen] = useState(false);
+  const [isClassicPortfolioOpen, setIsClassicPortfolioOpen] = useState(false);
+  const [isMobilePortfolioOpen, setIsMobilePortfolioOpen] = useState(false);
   const toolsDropdownRef = useRef<HTMLDivElement>(null);
   const classicToolsDropdownRef = useRef<HTMLDivElement>(null);
+  const portfolioDropdownRef = useRef<HTMLDivElement>(null);
+  const classicPortfolioDropdownRef = useRef<HTMLDivElement>(null);
 
-  // Close tools dropdowns on outside click or escape
+  const isPortfolioRoute =
+    pathname.startsWith("/projects") || pathname.startsWith("/statis-web");
+
+  // Close dropdowns on outside click or escape
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -61,6 +99,18 @@ export default function LayoutWrapper({
       ) {
         setIsClassicToolsOpen(false);
       }
+      if (
+        portfolioDropdownRef.current &&
+        !portfolioDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsPortfolioOpen(false);
+      }
+      if (
+        classicPortfolioDropdownRef.current &&
+        !classicPortfolioDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsClassicPortfolioOpen(false);
+      }
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -68,10 +118,20 @@ export default function LayoutWrapper({
         setIsToolsOpen(false);
         setIsClassicToolsOpen(false);
         setIsMobileToolsOpen(false);
+        setIsPortfolioOpen(false);
+        setIsClassicPortfolioOpen(false);
+        setIsMobilePortfolioOpen(false);
       }
     };
 
-    if (isToolsOpen || isClassicToolsOpen || isMobileToolsOpen) {
+    if (
+      isToolsOpen ||
+      isClassicToolsOpen ||
+      isMobileToolsOpen ||
+      isPortfolioOpen ||
+      isClassicPortfolioOpen ||
+      isMobilePortfolioOpen
+    ) {
       document.addEventListener("mousedown", handleClickOutside);
       document.addEventListener("keydown", handleKeyDown);
     }
@@ -79,13 +139,23 @@ export default function LayoutWrapper({
       document.removeEventListener("mousedown", handleClickOutside);
       document.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isToolsOpen, isClassicToolsOpen, isMobileToolsOpen]);
+  }, [
+    isToolsOpen,
+    isClassicToolsOpen,
+    isMobileToolsOpen,
+    isPortfolioOpen,
+    isClassicPortfolioOpen,
+    isMobilePortfolioOpen,
+  ]);
 
   // Close dropdowns on route changes
   useEffect(() => {
     setIsToolsOpen(false);
     setIsClassicToolsOpen(false);
     setIsMobileToolsOpen(false);
+    setIsPortfolioOpen(false);
+    setIsClassicPortfolioOpen(false);
+    setIsMobilePortfolioOpen(false);
   }, [pathname]);
 
   // Template state synchronization
@@ -365,21 +435,113 @@ export default function LayoutWrapper({
                 >
                   {t.nav.workflow}
                 </button>
-                <button
-                  onClick={() => router.push("/projects")}
-                  className={`px-4 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors ${pathname.startsWith("/projects")
-                    ? "text-theme-fore bg-theme-surface"
-                    : "text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface"
-                    }`}
-                >
-                  {t.nav.portfolio}
-                </button>
+                {/* Portfolio Dropdown (Classic) */}
+                <div className="relative" ref={classicPortfolioDropdownRef}>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsClassicPortfolioOpen((prev) => !prev);
+                      setIsClassicToolsOpen(false);
+                    }}
+                    aria-expanded={isClassicPortfolioOpen}
+                    aria-controls="classic-portfolio-menu"
+                    className={`px-4 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors flex items-center gap-1.5 ${isPortfolioRoute || isClassicPortfolioOpen
+                      ? "text-theme-fore bg-theme-surface"
+                      : "text-theme-fore-muted hover:text-theme-fore hover:bg-theme-surface"
+                      }`}
+                  >
+                    <span>{t.nav.portfolio}</span>
+                    <Icon
+                      icon="ph:caret-down-bold"
+                      aria-hidden="true"
+                      className={`w-3 h-3 transition-transform duration-200 ${isClassicPortfolioOpen ? "rotate-180 text-theme-accent" : "opacity-60"
+                        }`}
+                    />
+                  </button>
+
+                  <AnimatePresence>
+                    {isClassicPortfolioOpen && (
+                      <motion.div
+                        id="classic-portfolio-menu"
+                        initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                        transition={{ duration: 0.16, ease: "easeOut" }}
+                        className="absolute top-full mt-2.5 left-1/2 -translate-x-1/2 w-80 rounded-2xl bg-theme-surface/98 backdrop-blur-2xl border border-theme-border shadow-2xl p-2 z-50 overflow-hidden text-left"
+                      >
+                        <div className="px-3 py-2 border-b border-theme-border/60 flex items-center justify-between">
+                          <div className="flex items-center gap-1.5">
+                            <FolderOpen className="w-3.5 h-3.5 text-theme-accent" aria-hidden="true" />
+                            <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-theme-fore-subtle">
+                              {t.nav.portfolio}
+                            </span>
+                          </div>
+                          <span className="text-[10px] font-sans font-semibold text-theme-accent bg-theme-accent/10 px-2 py-0.5 rounded-full border border-theme-accent/20">
+                            {PORTFOLIO_NAV_ITEMS.length} {language === "en" ? "Categories" : "Kategori"}
+                          </span>
+                        </div>
+
+                        <ul className="p-1 space-y-1">
+                          {PORTFOLIO_NAV_ITEMS.map((item) => {
+                            const isCurrent = pathname.startsWith(item.href);
+                            return (
+                              <li key={item.id}>
+                                <Link
+                                  href={item.href}
+                                  aria-current={isCurrent ? "page" : undefined}
+                                  onClick={() => setIsClassicPortfolioOpen(false)}
+                                  className={`group p-3 rounded-xl transition-all flex items-start gap-3 border cursor-pointer block ${isCurrent
+                                    ? "bg-theme-base/60 border-theme-accent/40"
+                                    : "border-transparent hover:bg-theme-base/40 hover:border-theme-border/80"
+                                    }`}
+                                >
+                                  <div className="w-9 h-9 rounded-xl bg-white/10 border border-theme-border/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-all duration-200">
+                                    {item.iconName === "code" ? (
+                                      <Code2 className="w-4 h-4 text-theme-accent" aria-hidden="true" />
+                                    ) : (
+                                      <Globe className="w-4 h-4 text-theme-accent" aria-hidden="true" />
+                                    )}
+                                  </div>
+                                  <div className="flex-1 min-w-0 space-y-1">
+                                    <div className="flex items-center justify-between gap-2">
+                                      <span className={`text-xs font-sans font-bold transition-colors ${isCurrent ? "text-theme-accent" : "text-theme-fore group-hover:text-theme-accent"}`}>
+                                        {item.title[language]}
+                                      </span>
+                                      {isCurrent ? (
+                                        <span className="inline-flex items-center gap-1 text-[9px] font-sans font-bold text-theme-accent bg-theme-accent/10 border border-theme-accent/30 px-1.5 py-0.5 rounded-full shrink-0">
+                                          <Check className="w-2.5 h-2.5" aria-hidden="true" />
+                                          {language === "en" ? "Active" : "Aktif"}
+                                        </span>
+                                      ) : (
+                                        <Icon
+                                          icon="ph:caret-right-bold"
+                                          aria-hidden="true"
+                                          className="w-3.5 h-3.5 text-theme-fore-subtle group-hover:text-theme-accent group-hover:translate-x-0.5 transition-all shrink-0"
+                                        />
+                                      )}
+                                    </div>
+                                    <p className="text-[11px] font-sans text-theme-fore-muted leading-snug">
+                                      {item.description[language]}
+                                    </p>
+                                  </div>
+                                </Link>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
 
                 {/* Tools Dropdown (Classic) */}
                 <div className="relative" ref={classicToolsDropdownRef}>
                   <button
                     type="button"
-                    onClick={() => setIsClassicToolsOpen((prev) => !prev)}
+                    onClick={() => {
+                      setIsClassicToolsOpen((prev) => !prev);
+                      setIsClassicPortfolioOpen(false);
+                    }}
                     aria-expanded={isClassicToolsOpen}
                     aria-haspopup="true"
                     className={`px-4 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-colors flex items-center gap-1.5 ${isClassicToolsOpen
@@ -722,10 +884,13 @@ export default function LayoutWrapper({
                 <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.services}</span>
               </button>
               <button
-                onClick={() => router.push("/projects")}
-                className={`flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/projects") ? "text-theme-accent bg-theme-accent/10 font-bold" : "text-theme-fore-muted hover:text-theme-fore"}`}
+                type="button"
+                onClick={() => setIsMobilePortfolioOpen(true)}
+                aria-expanded={isMobilePortfolioOpen}
+                aria-controls="classic-mobile-portfolio-sheet"
+                className={`flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl transition-all duration-300 ${isPortfolioRoute || isMobilePortfolioOpen ? "text-theme-accent bg-theme-accent/10 font-bold" : "text-theme-fore-muted hover:text-theme-fore"}`}
               >
-                <FolderOpen className="w-4.5 h-4.5 mb-1" />
+                <FolderOpen className="w-4.5 h-4.5 mb-1" aria-hidden="true" />
                 <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.portfolio}</span>
               </button>
               <button
@@ -751,6 +916,94 @@ export default function LayoutWrapper({
               </button>
             </div>
           </nav>
+
+          {/* Mobile Portfolio Bottom Sheet (Classic) */}
+          <AnimatePresence>
+            {isMobilePortfolioOpen && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setIsMobilePortfolioOpen(false)}
+                  className="fixed inset-0 bg-black/60 backdrop-blur-xs z-[60] md:hidden"
+                />
+                <motion.div
+                  id="classic-mobile-portfolio-sheet"
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "100%" }}
+                  transition={{ type: "spring", damping: 28, stiffness: 300 }}
+                  className="fixed bottom-0 left-0 right-0 z-[70] bg-theme-surface rounded-t-3xl border-t border-theme-border shadow-2xl p-5 pb-8 space-y-4 md:hidden max-h-[85vh] overflow-y-auto text-theme-fore"
+                >
+                  <div className="w-12 h-1.5 bg-theme-border rounded-full mx-auto -mt-1 mb-2" />
+                  <div className="flex items-center justify-between pb-3 border-b border-theme-border/60">
+                    <div>
+                      <h3 className="text-sm font-sans font-bold text-theme-fore">
+                        {t.nav.portfolio}
+                      </h3>
+                      <p className="text-[11px] font-sans text-theme-fore-muted">
+                        {language === "en" ? "Choose portfolio category" : "Pilih kategori portofolio"}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setIsMobilePortfolioOpen(false)}
+                      className="p-2 rounded-full text-theme-fore-muted hover:text-theme-fore bg-theme-base hover:bg-theme-surface cursor-pointer transition-colors"
+                      aria-label={language === "en" ? "Close" : "Tutup"}
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <ul className="space-y-2.5">
+                    {PORTFOLIO_NAV_ITEMS.map((item) => {
+                      const isCurrent = pathname.startsWith(item.href);
+                      return (
+                        <li key={item.id}>
+                          <Link
+                            href={item.href}
+                            aria-current={isCurrent ? "page" : undefined}
+                            onClick={() => setIsMobilePortfolioOpen(false)}
+                            className={`p-3.5 rounded-2xl border flex items-start gap-3.5 transition-all block ${isCurrent
+                              ? "bg-theme-base border-theme-accent/50"
+                              : "bg-theme-base/60 hover:bg-theme-base border-theme-border/80"
+                              }`}
+                          >
+                            <div className="w-10 h-10 rounded-xl bg-white/10 border border-theme-border/80 flex items-center justify-center shrink-0">
+                              {item.iconName === "code" ? (
+                                <Code2 className="w-5 h-5 text-theme-accent" aria-hidden="true" />
+                              ) : (
+                                <Globe className="w-5 h-5 text-theme-accent" aria-hidden="true" />
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0 space-y-1">
+                              <div className="flex items-center justify-between gap-2">
+                                <span className={`text-sm font-sans font-bold ${isCurrent ? "text-theme-accent" : "text-theme-fore"}`}>
+                                  {item.title[language]}
+                                </span>
+                                {isCurrent ? (
+                                  <span className="inline-flex items-center gap-1 text-[9px] font-sans font-bold text-theme-accent bg-theme-accent/10 border border-theme-accent/30 px-2 py-0.5 rounded-full shrink-0">
+                                    <Check className="w-2.5 h-2.5" aria-hidden="true" />
+                                    {language === "en" ? "Active" : "Aktif"}
+                                  </span>
+                                ) : (
+                                  <Icon icon="ph:caret-right-bold" aria-hidden="true" className="w-4 h-4 text-theme-fore-subtle" />
+                                )}
+                              </div>
+                              <p className="text-xs font-sans text-theme-fore-muted leading-relaxed">
+                                {item.description[language]}
+                              </p>
+                            </div>
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
 
           {/* Mobile Tools Bottom Sheet (Classic) */}
           <AnimatePresence>
@@ -933,21 +1186,113 @@ export default function LayoutWrapper({
                   >
                     {t.nav.workflow}
                   </button>
-                  <button
-                    onClick={() => router.push("/projects")}
-                    className={`px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 ${pathname.startsWith("/projects")
-                      ? "text-[#2C5098] bg-[#2C5098]/8 font-bold"
-                      : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
-                      }`}
-                  >
-                    {t.nav.portfolio}
-                  </button>
+                  {/* Portfolio Dropdown */}
+                  <div className="relative" ref={portfolioDropdownRef}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsPortfolioOpen((prev) => !prev);
+                        setIsToolsOpen(false);
+                      }}
+                      aria-expanded={isPortfolioOpen}
+                      aria-controls="v2-portfolio-menu"
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 flex items-center gap-1.5 ${isPortfolioRoute || isPortfolioOpen
+                        ? "text-[#2C5098] bg-[#2C5098]/10 font-bold"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/80"
+                        }`}
+                    >
+                      <span>{t.nav.portfolio}</span>
+                      <Icon
+                        icon="ph:caret-down-bold"
+                        aria-hidden="true"
+                        className={`w-3 h-3 transition-transform duration-200 ${isPortfolioOpen ? "rotate-180 text-[#2C5098]" : "opacity-60"
+                          }`}
+                      />
+                    </button>
+
+                    <AnimatePresence>
+                      {isPortfolioOpen && (
+                        <motion.div
+                          id="v2-portfolio-menu"
+                          initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          exit={{ opacity: 0, y: 6, scale: 0.96 }}
+                          transition={{ duration: 0.16, ease: "easeOut" }}
+                          className="absolute top-full mt-2.5 left-1/2 -translate-x-1/2 w-80 rounded-2xl bg-white/95 backdrop-blur-2xl border border-slate-200 shadow-2xl shadow-slate-900/10 p-2 z-50 overflow-hidden text-left"
+                        >
+                          <div className="px-3 py-2 border-b border-slate-100 flex items-center justify-between">
+                            <div className="flex items-center gap-1.5">
+                              <FolderOpen className="w-3.5 h-3.5 text-[#2C5098]" aria-hidden="true" />
+                              <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-slate-400">
+                                {t.nav.portfolio}
+                              </span>
+                            </div>
+                            <span className="text-[10px] font-sans font-semibold text-[#2C5098] bg-[#2C5098]/8 px-2 py-0.5 rounded-full border border-[#2C5098]/20">
+                              {PORTFOLIO_NAV_ITEMS.length} {language === "en" ? "Categories" : "Kategori"}
+                            </span>
+                          </div>
+
+                          <ul className="p-1 space-y-1">
+                            {PORTFOLIO_NAV_ITEMS.map((item) => {
+                              const isCurrent = pathname.startsWith(item.href);
+                              return (
+                                <li key={item.id}>
+                                  <Link
+                                    href={item.href}
+                                    aria-current={isCurrent ? "page" : undefined}
+                                    onClick={() => setIsPortfolioOpen(false)}
+                                    className={`group p-3 rounded-xl transition-all flex items-start gap-3 border cursor-pointer block ${isCurrent
+                                      ? "bg-[#2C5098]/[0.05] border-[#2C5098]/30"
+                                      : "border-transparent hover:bg-slate-50 hover:border-slate-200/80"
+                                      }`}
+                                  >
+                                    <div className="w-9 h-9 rounded-xl bg-white border border-slate-200/80 flex items-center justify-center shrink-0 group-hover:scale-105 transition-all duration-200 shadow-2xs">
+                                      {item.iconName === "code" ? (
+                                        <Code2 className="w-4 h-4 text-[#2C5098]" aria-hidden="true" />
+                                      ) : (
+                                        <Globe className="w-4 h-4 text-[#2C5098]" aria-hidden="true" />
+                                      )}
+                                    </div>
+                                    <div className="flex-1 min-w-0 space-y-1">
+                                      <div className="flex items-center justify-between gap-2">
+                                        <span className={`text-xs font-sans font-bold transition-colors ${isCurrent ? "text-[#2C5098]" : "text-slate-900 group-hover:text-[#2C5098]"}`}>
+                                          {item.title[language]}
+                                        </span>
+                                        {isCurrent ? (
+                                          <span className="inline-flex items-center gap-1 text-[9px] font-sans font-bold text-[#2C5098] bg-[#2C5098]/10 border border-[#2C5098]/25 px-1.5 py-0.5 rounded-full shrink-0">
+                                            <Check className="w-2.5 h-2.5" aria-hidden="true" />
+                                            {language === "en" ? "Active" : "Aktif"}
+                                          </span>
+                                        ) : (
+                                          <Icon
+                                            icon="ph:caret-right-bold"
+                                            aria-hidden="true"
+                                            className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#2C5098] group-hover:translate-x-0.5 transition-all shrink-0"
+                                          />
+                                        )}
+                                      </div>
+                                      <p className="text-[11px] font-sans text-slate-500 leading-snug">
+                                        {item.description[language]}
+                                      </p>
+                                    </div>
+                                  </Link>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
 
                   {/* Tools Dropdown */}
                   <div className="relative" ref={toolsDropdownRef}>
                     <button
                       type="button"
-                      onClick={() => setIsToolsOpen((prev) => !prev)}
+                      onClick={() => {
+                        setIsToolsOpen((prev) => !prev);
+                        setIsPortfolioOpen(false);
+                      }}
                       aria-expanded={isToolsOpen}
                       aria-haspopup="true"
                       className={`px-3.5 py-1.5 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 flex items-center gap-1.5 ${isToolsOpen
@@ -1309,10 +1654,13 @@ export default function LayoutWrapper({
                 <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.services}</span>
               </button>
               <button
-                onClick={() => router.push("/projects")}
-                className={`flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl transition-all duration-300 ${pathname.startsWith("/projects") ? "text-[#2C5098] bg-[#2C5098]/10 font-bold" : "text-slate-600 hover:text-slate-900"}`}
+                type="button"
+                onClick={() => setIsMobilePortfolioOpen(true)}
+                aria-expanded={isMobilePortfolioOpen}
+                aria-controls="v2-mobile-portfolio-sheet"
+                className={`flex flex-col items-center justify-center flex-1 min-w-0 h-12 rounded-xl transition-all duration-300 ${isPortfolioRoute || isMobilePortfolioOpen ? "text-[#2C5098] bg-[#2C5098]/10 font-bold" : "text-slate-600 hover:text-slate-900"}`}
               >
-                <FolderOpen className="w-4.5 h-4.5 mb-1" />
+                <FolderOpen className="w-4.5 h-4.5 mb-1" aria-hidden="true" />
                 <span className="text-[8.5px] font-bold tracking-tight leading-none truncate px-0.5">{t.nav.portfolio}</span>
               </button>
               <button
@@ -1338,6 +1686,94 @@ export default function LayoutWrapper({
               </button>
             </div>
           </nav>
+
+          {/* Mobile Portfolio Bottom Sheet */}
+          <AnimatePresence>
+            {isMobilePortfolioOpen && (
+              <>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setIsMobilePortfolioOpen(false)}
+                  className="fixed inset-0 bg-slate-900/50 backdrop-blur-xs z-[60] md:hidden"
+                />
+                <motion.div
+                  id="v2-mobile-portfolio-sheet"
+                  initial={{ y: "100%" }}
+                  animate={{ y: 0 }}
+                  exit={{ y: "100%" }}
+                  transition={{ type: "spring", damping: 28, stiffness: 300 }}
+                  className="fixed bottom-0 left-0 right-0 z-[70] bg-white rounded-t-3xl border-t border-slate-200 shadow-2xl p-5 pb-8 space-y-4 md:hidden max-h-[85vh] overflow-y-auto"
+                >
+                  <div className="w-12 h-1.5 bg-slate-200 rounded-full mx-auto -mt-1 mb-2" />
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                    <div>
+                      <h3 className="text-sm font-sans font-bold text-slate-900">
+                        {t.nav.portfolio}
+                      </h3>
+                      <p className="text-[11px] font-sans text-slate-500">
+                        {language === "en" ? "Choose portfolio category" : "Pilih kategori portofolio"}
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setIsMobilePortfolioOpen(false)}
+                      className="p-2 rounded-full text-slate-400 hover:text-slate-600 bg-slate-100 hover:bg-slate-200 cursor-pointer transition-colors"
+                      aria-label={language === "en" ? "Close" : "Tutup"}
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+
+                  <ul className="space-y-2.5">
+                    {PORTFOLIO_NAV_ITEMS.map((item) => {
+                      const isCurrent = pathname.startsWith(item.href);
+                      return (
+                        <li key={item.id}>
+                          <Link
+                            href={item.href}
+                            aria-current={isCurrent ? "page" : undefined}
+                            onClick={() => setIsMobilePortfolioOpen(false)}
+                            className={`p-3.5 rounded-2xl border flex items-start gap-3.5 transition-all block ${isCurrent
+                              ? "bg-[#2C5098]/[0.05] border-[#2C5098]/30"
+                              : "bg-slate-50 hover:bg-slate-100/80 border-slate-200/80"
+                              }`}
+                          >
+                            <div className="w-10 h-10 rounded-xl bg-white border border-slate-200/80 flex items-center justify-center shrink-0 shadow-2xs">
+                              {item.iconName === "code" ? (
+                                <Code2 className="w-5 h-5 text-[#2C5098]" aria-hidden="true" />
+                              ) : (
+                                <Globe className="w-5 h-5 text-[#2C5098]" aria-hidden="true" />
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0 space-y-1">
+                              <div className="flex items-center justify-between gap-2">
+                                <span className={`text-sm font-sans font-bold ${isCurrent ? "text-[#2C5098]" : "text-slate-900"}`}>
+                                  {item.title[language]}
+                                </span>
+                                {isCurrent ? (
+                                  <span className="inline-flex items-center gap-1 text-[9px] font-sans font-bold text-[#2C5098] bg-[#2C5098]/10 border border-[#2C5098]/25 px-2 py-0.5 rounded-full shrink-0">
+                                    <Check className="w-2.5 h-2.5" aria-hidden="true" />
+                                    {language === "en" ? "Active" : "Aktif"}
+                                  </span>
+                                ) : (
+                                  <Icon icon="ph:caret-right-bold" aria-hidden="true" className="w-4 h-4 text-slate-400" />
+                                )}
+                              </div>
+                              <p className="text-xs font-sans text-slate-600 leading-relaxed">
+                                {item.description[language]}
+                              </p>
+                            </div>
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
 
           {/* Mobile Tools Bottom Sheet */}
           <AnimatePresence>
