@@ -416,33 +416,33 @@ export default function InsightDetailClient({
         />
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 overflow-x-clip">
         {/* 2. Top Editorial Breadcrumb & Navigation Bar */}
-        <div className="mb-6 pt-2">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs sm:text-sm font-sans text-slate-500">
-            <Link href="/" className="hover:text-[#2C5098] transition-colors">
+        <div className="mb-4 sm:mb-6 pt-1 sm:pt-2">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-sans text-slate-500 min-w-0">
+            <Link href="/" className="hover:text-[#2C5098] transition-colors shrink-0">
               {language === "en" ? "Home" : "Beranda"}
             </Link>
-            <span className="text-slate-300">/</span>
-            <Link href="/insights" className="hover:text-[#2C5098] transition-colors">
+            <span className="text-slate-300 shrink-0">/</span>
+            <Link href="/insights" className="hover:text-[#2C5098] transition-colors shrink-0">
               Insights
             </Link>
-            <span className="text-slate-300">/</span>
-            <span className="text-slate-700 font-semibold">{article.category}</span>
+            <span className="text-slate-300 shrink-0">/</span>
+            <span className="text-slate-700 font-semibold truncate">{article.category}</span>
           </nav>
         </div>
 
         {/* 3. Hero Article Header */}
-        <header className="space-y-6 mb-12 w-full">
+        <header className="space-y-4 sm:space-y-6 mb-7 sm:mb-11 w-full">
           {/* Eyebrow / Context: Clean Series Pill or Category Badge */}
           <div>
             {article.series ? (
               <Link
                 href={`/insights/series/${article.series.slug}`}
-                className="inline-flex items-center gap-2 text-xs font-sans font-bold text-[#2C5098] hover:text-[#1E315B] transition-colors group"
+                className="inline-flex flex-col sm:flex-row sm:items-center items-start gap-2 sm:gap-2.5 text-xs font-sans font-bold text-[#2C5098] hover:text-[#1E315B] transition-colors group max-w-full"
               >
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/70 text-[10px] font-sans font-bold text-[#2C5098] uppercase tracking-wider shadow-2xs">
-                  <Layers className="w-3.5 h-3.5 text-[#2C5098] group-hover:rotate-12 transition-transform" />
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/70 text-[10px] font-sans font-bold text-[#2C5098] uppercase tracking-wider shadow-2xs whitespace-nowrap shrink-0">
+                  <Layers className="w-3.5 h-3.5 text-[#2C5098] shrink-0" />
                   <span>{language === "en" ? "Series" : "Seri"}</span>
                   {article.series.part && (
                     <span className="font-extrabold text-[#1E315B]">
@@ -450,9 +450,9 @@ export default function InsightDetailClient({
                     </span>
                   )}
                 </span>
-                <span className="font-semibold text-slate-700 group-hover:text-[#2C5098] flex items-center gap-1">
-                  {language === "en" ? (article.series.titleEn || article.series.titleId) : article.series.titleId}
-                  <ChevronRight className="w-3.5 h-3.5 text-[#2C5098]/60 group-hover:translate-x-0.5 transition-transform" />
+                <span className="font-semibold text-slate-700 group-hover:text-[#2C5098] inline-flex items-center gap-1 leading-snug">
+                  <span>{language === "en" ? (article.series.titleEn || article.series.titleId) : article.series.titleId}</span>
+                  <ChevronRight className="w-3.5 h-3.5 text-[#2C5098]/60 shrink-0 group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </Link>
             ) : (
@@ -475,14 +475,14 @@ export default function InsightDetailClient({
           </div>
 
           {/* Main Editorial Headline - Full Width */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[46px] font-sans font-extrabold tracking-tight text-slate-900 leading-[1.18] w-full">
+          <h1 className="text-[26px] sm:text-4xl md:text-5xl lg:text-[46px] font-sans font-extrabold tracking-tight text-slate-900 leading-[1.2] w-full">
             {title}
           </h1>
 
           {/* Lead-in Excerpt Paragraph - Full Width Editorial Deck (Harmonized with Content Font Size) */}
           <div className="w-full">
-            <p className={`font-sans text-slate-600 leading-[1.8] ${
-              fontSize === "large" ? "text-lg sm:text-[18.5px]" : "text-base sm:text-[16.5px]"
+            <p className={`font-sans text-slate-600 leading-[1.7] sm:leading-[1.8] ${
+              fontSize === "large" ? "text-base sm:text-[18.5px]" : "text-[15px] sm:text-[16.5px]"
             }`}>
               <ReactMarkdown
                 components={{
@@ -496,10 +496,10 @@ export default function InsightDetailClient({
           </div>
 
           {/* Harmonious Unified Byline & Reader Tools Bar */}
-          <div className="pt-5 border-t border-slate-200/80 flex flex-wrap items-center justify-between gap-4 w-full">
+          <div className="pt-4 sm:pt-5 border-t border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 sm:gap-4 w-full">
             {/* Left: Author Profile, Date & Reading Time */}
-            <div className="flex items-center gap-3.5">
-              <div className="relative w-11 h-11 rounded-full overflow-hidden border border-slate-200 shadow-xs shrink-0">
+            <div className="flex items-center gap-3">
+              <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full overflow-hidden border border-slate-200 shadow-xs shrink-0">
                 <Image
                   src={article.author.avatar}
                   alt={article.author.name}
@@ -508,25 +508,25 @@ export default function InsightDetailClient({
                   className="object-cover"
                 />
               </div>
-              <div className="text-left">
+              <div className="text-left min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <p className="text-sm font-sans font-bold text-slate-900">
+                  <p className="text-sm font-sans font-bold text-slate-900 truncate">
                     {article.author.name}
                   </p>
-                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
                 </div>
-                <div className="flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-xs text-slate-500 font-sans mt-0.5">
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11.5px] sm:text-xs text-slate-500 font-sans mt-0.5">
                   <span>{article.author.role}</span>
-                  <span className="text-slate-300">•</span>
-                  <span>
+                  <span className="text-slate-300" aria-hidden="true">•</span>
+                  <span className="whitespace-nowrap">
                     {new Date(article.publishedAt).toLocaleDateString(language === "en" ? "en-US" : "id-ID", {
-                      month: "long",
+                      month: "short",
                       day: "numeric",
                       year: "numeric",
                     })}
                   </span>
-                  <span className="text-slate-300">•</span>
-                  <span>
+                  <span className="text-slate-300" aria-hidden="true">•</span>
+                  <span className="whitespace-nowrap">
                     {article.readTimeMinutes} {language === "en" ? "min read" : "menit baca"}
                   </span>
                 </div>
@@ -964,7 +964,7 @@ export default function InsightDetailClient({
           type="button"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
           aria-label={language === "en" ? "Back to top" : "Kembali ke atas"}
-          className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 text-slate-700 hover:text-[#2C5098] hover:border-[#2C5098]/40 shadow-xl transition-all hover:scale-110 cursor-pointer flex items-center justify-center group"
+          className="fixed bottom-22 md:bottom-6 right-4 md:right-6 z-40 p-3 rounded-full bg-white/95 backdrop-blur-md border border-slate-200/90 text-slate-700 hover:text-[#2C5098] hover:border-[#2C5098]/40 shadow-xl transition-all hover:scale-110 cursor-pointer flex items-center justify-center group"
         >
           <ArrowUp className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
         </button>

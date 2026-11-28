@@ -194,18 +194,38 @@ export default function LayoutWrapper({
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Check if current route is an admin, portal, or auth route (standalone full-page layout)
-  const isStandalonePage =
-    pathname?.startsWith('/admin') ||
-    pathname?.startsWith('/portal') ||
-    pathname?.startsWith('/auth') ||
-    pathname?.startsWith('/design-system');
+  // Check if current route is a valid admin, portal, auth, or design-system route (standalone full-page layout)
+  // Unknown sub-routes (e.g. /admin/dasdsad) fall through to the standard 404 layout so they match /<not-found>
+  const isStandalonePage = Boolean(
+    pathname &&
+      (pathname === "/admin/dashboard" ||
+        pathname.startsWith("/admin/dashboard/") ||
+        pathname === "/admin/components" ||
+        pathname.startsWith("/admin/components/") ||
+        pathname === "/portal" ||
+        pathname === "/portal/demo" ||
+        pathname === "/portal/portfolio" ||
+        pathname === "/portal/files" ||
+        pathname === "/portal/settings" ||
+        pathname === "/portal/static-web" ||
+        pathname === "/portal/insights" ||
+        pathname === "/portal/insights/new" ||
+        /^\/portal\/insights\/[^/]+\/edit$/.test(pathname) ||
+        /^\/portal\/projects\/[^/]+$/.test(pathname) ||
+        pathname === "/auth/login" ||
+        pathname === "/auth/activate" ||
+        pathname === "/design-system")
+  );
 
   // Synchronize theme class with document element
   useEffect(() => {
-    if (isStandalonePage) return;
     const root = window.document.documentElement;
     root.classList.remove("light", "dark");
+
+    if (isStandalonePage) {
+      root.classList.add("light");
+      return;
+    }
 
     // If template is professional, force light theme
     const activeTheme = template === 'professional' ? 'light' : theme;
