@@ -756,43 +756,47 @@ export default function InsightDetailClient({
             )}
 
             {/* Author Spotlight Bio Card (ONE authoritative place for author bio) */}
-            <div className="mt-12 p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-200/90 flex flex-col sm:flex-row items-start gap-5">
-              <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-white shadow-md shrink-0">
-                <Image
-                  src={article.author.avatar}
-                  alt={article.author.name}
-                  fill
-                  sizes="64px"
-                  className="object-cover"
-                />
-              </div>
-              <div className="space-y-2 flex-1">
-                <div className="flex items-center gap-2">
-                  <h4 className="font-sans font-bold text-base text-slate-900">
+            <div className="mt-12 p-5 sm:p-6 rounded-2xl bg-white border border-slate-200/90 shadow-2xs space-y-4">
+              <div className="flex items-center gap-3.5">
+                <div className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden border border-slate-200 shrink-0">
+                  <Image
+                    src={article.author.avatar}
+                    alt={article.author.name}
+                    fill
+                    sizes="56px"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="min-w-0">
+                  <h4 className="font-sans font-bold text-base text-slate-900 leading-snug">
                     {article.author.name}
                   </h4>
-                  <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/60 text-[10px] font-sans font-bold uppercase">
-                    {language === "en" ? "Author & Lead Engineer" : "Penulis & Lead Engineer"}
-                  </span>
+                  <p className="text-xs text-slate-500 font-sans font-medium mt-0.5">
+                    {language === "en" ? "Author & Lead Engineer · SejatiDimedia" : "Penulis & Lead Engineer · SejatiDimedia"}
+                  </p>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed">
-                  {language === "en"
-                    ? (article.author.bioEn || "Software engineer and systems consultant at SejatiDimedia. Specializing in high-performance architecture design, enterprise-scale backend refactoring (Laravel / Node.js), and modern web & mobile engineering.")
-                    : (article.author.bioId || "Software engineer dan konsultan sistem di SejatiDimedia. Berfokus pada perancangan arsitektur berkinerja tinggi, refactoring backend skala enterprise (Laravel / Node.js), hingga pengembangan aplikasi mobile & web modern.")}
-                </p>
-                <div className="pt-2 flex items-center gap-3 text-xs font-bold">
-                  <Link
-                    href="/#about-section"
-                    className="text-[#2C5098] hover:underline inline-flex items-center gap-1"
-                  >
-                    <span>{language === "en" ? "Profile & Studio Standards" : "Profil & Standar Studio"}</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </Link>
-                  <span className="text-slate-300">•</span>
-                  <Link href="/insights" className="text-slate-600 hover:text-slate-900">
-                    {language === "en" ? "All Engineering Articles" : "Semua Artikel Rekayasa"}
-                  </Link>
-                </div>
+              </div>
+
+              <p className="text-xs sm:text-sm text-slate-600 font-sans leading-relaxed">
+                {language === "en"
+                  ? (article.author.bioEn || "Software engineer and systems consultant at SejatiDimedia. Specializing in high-performance architecture design, enterprise-scale backend refactoring (Laravel / Node.js), and modern web & mobile engineering.")
+                  : (article.author.bioId || "Software engineer dan konsultan sistem di SejatiDimedia. Berfokus pada perancangan arsitektur berkinerja tinggi, refactoring backend skala enterprise (Laravel / Node.js), hingga pengembangan aplikasi mobile & web modern.")}
+              </p>
+
+              <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs font-semibold">
+                <Link
+                  href="/#about-section"
+                  className="text-[#2C5098] hover:underline inline-flex items-center gap-1.5 whitespace-nowrap"
+                >
+                  <span>{language === "en" ? "Profile & Studio Standards" : "Profil & Standar Studio"}</span>
+                  <ExternalLink className="w-3.5 h-3.5 shrink-0" aria-hidden="true" />
+                </Link>
+                <Link
+                  href="/insights"
+                  className="text-slate-600 hover:text-slate-900 hover:underline whitespace-nowrap"
+                >
+                  {language === "en" ? "All Engineering Articles" : "Semua Artikel Rekayasa"}
+                </Link>
               </div>
             </div>
 
