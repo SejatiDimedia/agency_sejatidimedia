@@ -9,10 +9,15 @@ import {
   Calendar, AlertCircle, FileText, ExternalLink, Image as ImageIcon,
   Columns, Edit3, Loader2, CheckCircle2, ShieldAlert, Settings2,
   Sliders, Layout, Hash, Monitor, Smartphone, UploadCloud, Link2,
-  Trash2, Maximize2, X, BookOpen
+  Trash2, Maximize2, X, BookOpen, ClipboardPaste, Copy
 } from 'lucide-react';
-import { Toast } from '@/components/ui';
+import { Toast, Modal, Button } from '@/components/ui';
 import { InsightArticleViewer } from '@/components/insights/InsightArticleViewer';
+import {
+  parseMarkdownArticle,
+  MARKDOWN_BILINGUAL_TEMPLATE,
+  ARTICLE_WRITING_PROMPT,
+} from '@/lib/markdown-import';
 
 interface InsightEditorViewProps {
   mode: 'create' | 'edit';
@@ -34,6 +39,10 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
   const [previewScope, setPreviewScope] = useState<'full' | 'body'>('full');
   const [previewDevice, setPreviewDevice] = useState<'desktop' | 'mobile'>('desktop');
   const [isFullScreenPreviewOpen, setIsFullScreenPreviewOpen] = useState(false);
+  const [isPasteModalOpen, setIsPasteModalOpen] = useState(false);
+  const [pastedMarkdown, setPastedMarkdown] = useState('');
+  const [copiedTemplate, setCopiedTemplate] = useState(false);
+  const [copiedPrompt, setCopiedPrompt] = useState(false);
 
   // Series List
   const [availableSeries, setAvailableSeries] = useState<Array<{ id: string; titleId: string; titleEn?: string | null; slug: string; category: string; badge?: string }>>([]);
@@ -239,6 +248,64 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
     }
   };
 
+  const handleApplyPastedMarkdown = () => {
+    if (!pastedMarkdown.trim()) {
+      setToast({
+        message: 'Silakan tempel (paste) teks Markdown terlebih dahulu.',
+        type: 'error',
+      });
+      return;
+    }
+
+    const parsed = parseMarkdownArticle(pastedMarkdown, activeLangTab);
+
+    setFormData((prev) => ({
+      ...prev,
+      titleId: parsed.titleId !== undefined && parsed.titleId !== '' ? parsed.titleId : prev.titleId,
+      excerptId: parsed.excerptId !== undefined && parsed.excerptId !== '' ? parsed.excerptId : prev.excerptId,
+      contentId: parsed.contentId !== undefined && parsed.contentId !== '' ? parsed.contentId : prev.contentId,
+      titleEn: parsed.titleEn !== undefined && parsed.titleEn !== '' ? parsed.titleEn : prev.titleEn,
+      excerptEn: parsed.excerptEn !== undefined && parsed.excerptEn !== '' ? parsed.excerptEn : prev.excerptEn,
+      contentEn: parsed.contentEn !== undefined && parsed.contentEn !== '' ? parsed.contentEn : prev.contentEn,
+      tags: parsed.tags || prev.tags,
+      slug: parsed.slug || prev.slug,
+      category: !prev.seriesId && parsed.category ? parsed.category : prev.category,
+      readTimeMinutes: parsed.readTimeMinutes || prev.readTimeMinutes,
+    }));
+
+    setIsPasteModalOpen(false);
+    setPastedMarkdown('');
+    setToast({
+      message: parsed.isBilingual
+        ? 'Berhasil mapping artikel (ID & EN) ke editor.'
+        : `Berhasil mapping konten ${activeLangTab === 'id' ? 'Bahasa Indonesia' : 'English'} ke editor.`,
+      type: 'success',
+    });
+  };
+
+  const handleCopyTemplate = async () => {
+    try {
+      await navigator.clipboard.writeText(MARKDOWN_BILINGUAL_TEMPLATE);
+      setCopiedTemplate(true);
+      setTimeout(() => setCopiedTemplate(false), 2000);
+    } catch {
+      setPastedMarkdown(MARKDOWN_BILINGUAL_TEMPLATE);
+    }
+  };
+
+  const handleCopyPrompt = async () => {
+    try {
+      await navigator.clipboard.writeText(ARTICLE_WRITING_PROMPT);
+      setCopiedPrompt(true);
+      setTimeout(() => setCopiedPrompt(false), 2000);
+    } catch {
+      setToast({
+        message: 'Gagal menyalin prompt ke clipboard.',
+        type: 'error',
+      });
+    }
+  };
+
   const currentContent = activeLangTab === 'id' ? formData.contentId : formData.contentEn;
 
   const activeSeriesObj = availableSeries.find((s) => s.id === formData.seriesId);
@@ -372,17 +439,17 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
       {/* ========================================================================= */}
       {mainTab === 'content' && (
         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200/80 shadow-xs space-y-6">
-          {/* Subheader Controls: Language & Layout Switchers */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-            {/* Language Switcher */}
-            <div className="flex items-center gap-2">
+          {/* Subheader Controls: Language, Import .md & Layout Switchers */}
+          <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3 border-b border-slate-100 pb-4">
+            {/* Language Switcher + Markdown Import */}
+            <div className="flex flex-wrap items-center gap-2">
               <span className="text-xs font-mono font-bold uppercase text-slate-400 mr-1">Bahasa:</span>
               <button
                 type="button"
                 onClick={() => setActiveLangTab('id')}
-                className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${
                   activeLangTab === 'id'
-                    ? 'bg-blue-600 text-white shadow-sm'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
@@ -391,13 +458,25 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
               <button
                 type="button"
                 onClick={() => setActiveLangTab('en')}
-                className={`px-4 py-1.5 rounded-xl text-xs font-bold transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${
                   activeLangTab === 'en'
-                    ? 'bg-blue-600 text-white shadow-sm'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                 }`}
               >
                 EN · English Version (Opsional)
+              </button>
+
+              <div className="hidden sm:block w-[1px] h-5 bg-slate-200 mx-1" />
+
+              <button
+                type="button"
+                onClick={() => setIsPasteModalOpen(true)}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-900 hover:bg-slate-800 text-white transition-colors whitespace-nowrap cursor-pointer"
+                title="Tempel teks Markdown untuk mengisi Judul, Ringkasan, dan Isi Artikel otomatis"
+              >
+                <ClipboardPaste className="w-3.5 h-3.5 shrink-0" />
+                <span>Paste Markdown</span>
               </button>
             </div>
 
@@ -1306,6 +1385,135 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
           </div>
         </div>
       )}
+
+      {/* Paste Markdown Modal */}
+      <Modal
+        isOpen={isPasteModalOpen}
+        onClose={() => setIsPasteModalOpen(false)}
+        maxWidth="2xl"
+        title="Paste Markdown Artikel"
+        subtitle="Tempel teks Markdown untuk mengisi Judul, Ringkasan, dan Isi Artikel secara otomatis."
+      >
+        <div className="space-y-4">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <span className="text-xs font-semibold text-slate-600">
+              Mode saat ini:{' '}
+              <strong className="text-slate-900">
+                {activeLangTab === 'id' ? 'Bahasa Indonesia (ID)' : 'English (EN)'}
+              </strong>{' '}
+              atau gunakan pemisah bilingual
+            </span>
+            <button
+              type="button"
+              onClick={handleCopyTemplate}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors cursor-pointer"
+            >
+              {copiedTemplate ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+                  <span className="text-emerald-700">Template Disalin</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Salin Contoh Template</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          <textarea
+            value={pastedMarkdown}
+            onChange={(e) => setPastedMarkdown(e.target.value)}
+            rows={11}
+            placeholder={`---\ntitleId: Judul Artikel\nexcerptId: Ringkasan singkat artikel...\ntitleEn: English Title\nexcerptEn: Short English summary...\ntags: TypeScript, Backend\n---\n\n## 1. Isi Artikel Indonesia\n\n<!-- lang:en -->\n\n## 1. English Content`}
+            className="w-full px-4 py-3 rounded-2xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 font-mono text-xs leading-relaxed text-slate-800 bg-white resize-y"
+          />
+
+          {/* Hint Aturan Template */}
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs text-slate-600">
+            <p className="font-bold text-slate-800">Aturan Format Template:</p>
+            <ul className="list-disc list-outside ml-4 space-y-1.5 leading-relaxed">
+              <li>
+                <strong>Blok Frontmatter (<code className="px-1 py-0.5 rounded bg-white border border-slate-200 text-slate-800 font-mono text-[11px]">---</code>) di baris paling atas</strong>: mendukung{' '}
+                <code className="px-1 py-0.5 rounded bg-white border border-slate-200 text-slate-800 font-mono text-[11px]">titleId</code>,{' '}
+                <code className="px-1 py-0.5 rounded bg-white border border-slate-200 text-slate-800 font-mono text-[11px]">excerptId</code>,{' '}
+                <code className="px-1 py-0.5 rounded bg-white border border-slate-200 text-slate-800 font-mono text-[11px]">titleEn</code>,{' '}
+                <code className="px-1 py-0.5 rounded bg-white border border-slate-200 text-slate-800 font-mono text-[11px]">excerptEn</code>,{' '}
+                <code className="px-1 py-0.5 rounded bg-white border border-slate-200 text-slate-800 font-mono text-[11px]">tags</code> (atau{' '}
+                <code className="px-1 py-0.5 rounded bg-white border border-slate-200 text-slate-800 font-mono text-[11px]">title</code> &amp;{' '}
+                <code className="px-1 py-0.5 rounded bg-white border border-slate-200 text-slate-800 font-mono text-[11px]">excerpt</code> untuk 1 bahasa).
+              </li>
+              <li>
+                <strong>1x Paste untuk 2 Bahasa</strong>: tambahkan{' '}
+                <code className="px-1 py-0.5 rounded bg-white border border-slate-200 text-slate-800 font-mono text-[11px]">&lt;!-- lang:en --&gt;</code>{' '}
+                pada satu baris tersendiri untuk memisahkan konten Indonesia (atas) dan English (bawah). Tanpa penanda ini, teks akan masuk ke tab bahasa yang sedang aktif.
+              </li>
+              <li>
+                <strong>Tanpa Frontmatter</strong>: baris pertama{' '}
+                <code className="px-1 py-0.5 rounded bg-white border border-slate-200 text-slate-800 font-mono text-[11px]"># Judul</code>{' '}
+                otomatis menjadi Judul, dan paragraf pertama otomatis menjadi Ringkasan.
+              </li>
+              <li>
+                <strong>Subjudul Daftar Isi</strong>: gunakan{' '}
+                <code className="px-1 py-0.5 rounded bg-white border border-slate-200 text-slate-800 font-mono text-[11px]">##</code> /{' '}
+                <code className="px-1 py-0.5 rounded bg-white border border-slate-200 text-slate-800 font-mono text-[11px]">###</code>{' '}
+                agar otomatis muncul di Daftar Isi halaman baca.
+              </li>
+            </ul>
+          </div>
+
+          {/* Prompt Penulisan Artikel Profesional */}
+          <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-200/70 space-y-2.5 text-xs">
+            <div className="flex items-center justify-between gap-2">
+              <div>
+                <p className="font-bold text-slate-900">
+                  Prompt Artikel Profesional (Bilingual + Backlink + Struktur)
+                </p>
+                <p className="text-[11px] text-slate-500">
+                  Salin prompt ini ke AI writer Anda agar hasil artikelnya sesuai format &amp; standar SEO/teknis.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={handleCopyPrompt}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold bg-white hover:bg-slate-50 text-[#2C5098] border border-blue-200 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              >
+                {copiedPrompt ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-600" />
+                    <span className="text-emerald-700">Prompt Disalin</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy className="w-3.5 h-3.5" />
+                    <span>Salin Prompt</span>
+                  </>
+                )}
+              </button>
+            </div>
+            <pre className="p-3 rounded-xl bg-white border border-slate-200/80 text-[11px] font-mono text-slate-700 whitespace-pre-wrap leading-relaxed max-h-40 overflow-y-auto">
+              {ARTICLE_WRITING_PROMPT}
+            </pre>
+          </div>
+
+          <div className="pt-2 flex items-center justify-end gap-2.5 border-t border-slate-100">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setIsPasteModalOpen(false)}
+            >
+              Batal
+            </Button>
+            <Button
+              type="button"
+              onClick={handleApplyPastedMarkdown}
+            >
+              Terapkan ke Editor
+            </Button>
+          </div>
+        </div>
+      </Modal>
 
       {/* Toast Feedback */}
       <Toast
