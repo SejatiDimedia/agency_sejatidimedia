@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getProjects, getProjectBySlug, isProfessionalProject, sanitizeProjectForNda } from "../../../lib/api/glio-projects";
+import { getProjects, getProjectBySlug, isProfessionalProject, sanitizeProjectForNda, shouldHideKeyOutcomes } from "../../../lib/api/glio-projects";
 import { getGlobalNdaBlur, getGlobalNdaProjectSlugs } from "../../../lib/server-template";
 import ProjectDetailClient from "../../../components/ProjectDetailClient";
 
@@ -29,7 +29,7 @@ export default async function ProjectDetailPage({
   // Perform true server-side redaction (strips proprietary text & real screenshot URLs before SSR)
   const safeProject = sanitizeProjectForNda(project, isNdaActive);
 
-  if (slug?.toLowerCase().trim() === 'flash-sale--event-ticketing-platform') {
+  if (shouldHideKeyOutcomes(slug)) {
     safeProject.keyOutcomes = null;
     safeProject.keyOutcomesId = null;
     safeProject.keyOutcomesEn = null;

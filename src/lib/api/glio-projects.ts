@@ -183,6 +183,19 @@ export function sanitizeProjectForNda(project: Project, isNdaActive: boolean): P
 }
 
 /**
+ * Project slugs whose "Hasil & Dampak Utama Sistem" section should be hidden on the detail route.
+ */
+export const HIDDEN_KEY_OUTCOMES_SLUGS = new Set([
+  "flash-sale--event-ticketing-platform",
+  "harmonix---ai-agent-data-analyst",
+]);
+
+export function shouldHideKeyOutcomes(slug?: string | null): boolean {
+  if (!slug) return false;
+  return HIDDEN_KEY_OUTCOMES_SLUGS.has(slug.toLowerCase().trim());
+}
+
+/**
  * Curated showcase sequences for specific projects (e.g. ticketing user journey flow).
  */
 export const PROJECT_SHOWCASE_ORDER_MAP: Record<string, string[]> = {

@@ -10,7 +10,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import ShowcaseGallery from "./ShowcaseGallery";
 import { MermaidDiagram } from "./ui/MermaidDiagram";
-import { Project, isProfessionalProject, sortShowcaseImages } from "../lib/api/glio-projects";
+import { Project, isProfessionalProject, sortShowcaseImages, shouldHideKeyOutcomes } from "../lib/api/glio-projects";
 import { useLanguage } from "../lib/i18n/LanguageContext";
 import { TECH_ICONS } from "../lib/constants";
 
@@ -84,7 +84,7 @@ export default function ProjectDetailClient({
     ? (project.clientSummaryEn || project.clientSummaryId || "")
     : (project.clientSummaryId || project.clientSummaryEn || "");
 
-  const isKeyOutcomesHidden = project.slug?.toLowerCase().trim() === 'flash-sale--event-ticketing-platform';
+  const isKeyOutcomesHidden = shouldHideKeyOutcomes(project.slug);
 
   const displayKeyOutcomes = isKeyOutcomesHidden
     ? ""
