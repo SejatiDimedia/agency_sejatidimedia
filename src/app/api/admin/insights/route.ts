@@ -94,6 +94,17 @@ export async function POST(req: Request) {
       slug = `${slug}-${Math.floor(1000 + Math.random() * 9000)}`;
     }
 
+    let resolvedCategory = category;
+    if (seriesId) {
+      const parentSeries = await prisma.insightSeries.findUnique({
+        where: { id: seriesId },
+        select: { category: true },
+      });
+      if (parentSeries?.category) {
+        resolvedCategory = parentSeries.category;
+      }
+    }
+
     const newInsight = await prisma.insight.create({
       data: {
         slug,
@@ -103,7 +114,7 @@ export async function POST(req: Request) {
         excerptEn: excerptEn || null,
         contentId,
         contentEn: contentEn || null,
-        category,
+        category: resolvedCategory,
         tags: Array.isArray(tags) ? tags : tags.split(',').map((t: string) => t.trim()).filter(Boolean),
         coverImage: finalCoverImage,
         readTimeMinutes: Number(readTimeMinutes) || 5,

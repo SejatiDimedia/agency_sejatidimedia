@@ -66,7 +66,7 @@ export function InsightsManagementView() {
   const [isLoading, setIsLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('ALL');
-  const [statusFilter, setStatusFilter] = useState<'ALL' | 'PUBLISHED' | 'DRAFT'>('ALL');
+  const [statusFilter, setStatusFilter] = useState<'ALL' | 'PUBLISHED' | 'DRAFT' | 'FEATURED'>('ALL');
 
   // Series State
   const [seriesList, setSeriesList] = useState<SeriesItem[]>([]);
@@ -367,7 +367,8 @@ export function InsightsManagementView() {
     const matchesStatus =
       statusFilter === 'ALL' ||
       (statusFilter === 'PUBLISHED' && item.isPublished) ||
-      (statusFilter === 'DRAFT' && !item.isPublished);
+      (statusFilter === 'DRAFT' && !item.isPublished) ||
+      (statusFilter === 'FEATURED' && item.featured);
 
     return matchesSearch && matchesCat && matchesStatus;
   });
@@ -375,6 +376,7 @@ export function InsightsManagementView() {
   const totalCount = insights.length;
   const publishedCount = insights.filter((i) => i.isPublished).length;
   const draftCount = totalCount - publishedCount;
+  const featuredCount = insights.filter((i) => i.featured).length;
 
   // Multiple Selection & Bulk Status Update
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -473,39 +475,87 @@ export function InsightsManagementView() {
     }
   };
 
+  const handleToggleFeatured = async (item: InsightItem) => {
+    const nextFeatured = !item.featured;
+    try {
+      const res = await fetch(`/api/admin/insights/${item.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          featured: nextFeatured,
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setToast({
+          message: nextFeatured
+            ? `"${item.titleId}" diizinkan tampil di Beranda`
+            : `"${item.titleId}" dihapus dari Beranda`,
+          type: 'success',
+        });
+        fetchInsights();
+      } else {
+        setToast({
+          message: data.error || 'Gagal memperbarui status beranda',
+          type: 'error',
+        });
+      }
+    } catch (err) {
+      console.error(err);
+      setToast({
+        message: 'Gagal memperbarui status beranda',
+        type: 'error',
+      });
+    }
+  };
+
   return (
-    <div className="space-y-6 pb-12 text-slate-800">
-      {/* 1. Header & Metrics Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-3xl border border-slate-200/80 shadow-xs">
-        <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-mono font-bold uppercase tracking-wider bg-blue-50 text-blue-700 border border-blue-200/60 mb-2">
-            <BookOpen className="w-3.5 h-3.5" />
-            <span>Content Management System</span>
+    <div className="space-y-5 pb-12 text-slate-800">
+      {/* 1. Header & Compact Summary */}
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 bg-white p-5 sm:p-6 rounded-2xl border border-slate-200/80 shadow-xs">
+        <div className="space-y-1">
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-mono text-slate-500">
+            <span>{totalCount} Total</span>
+            <span aria-hidden="true">·</span>
+            <span className="text-emerald-700 font-semibold">{publishedCount} Published</span>
+            <span aria-hidden="true">·</span>
+            <span className="text-amber-700 font-semibold">{draftCount} Draft</span>
+            <span aria-hidden="true">·</span>
+            <span className="text-blue-700 font-semibold">{featuredCount} Beranda</span>
           </div>
-          <h1 className="text-2xl font-sans font-black text-slate-900 tracking-tight">
-            Insights & Technical Articles CMS
+          <h1 className="text-xl sm:text-2xl font-sans font-extrabold text-slate-900 tracking-tight">
+            Insights &amp; Artikel Teknis
           </h1>
-          <p className="text-sm text-slate-500 font-sans mt-0.5">
-            Kelola publikasi artikel teknis, rekayasa arsitektur, dan tutorial tanpa perlu ubah source code.
+          <p className="text-xs sm:text-sm text-slate-500 font-sans">
+            Kelola publikasi artikel, kurikulum seri, dan pilih artikel yang tampil di halaman beranda.
           </p>
         </div>
 
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0">
+          <Link
+            href="/insights"
+            target="_blank"
+            className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200/80 text-slate-700 font-semibold text-xs transition-colors cursor-pointer"
+          >
+            <ExternalLink className="w-3.5 h-3.5" />
+            <span>Lihat /insights</span>
+          </Link>
+
           <button
             type="button"
             onClick={() => {
               setSeriesModalView('list');
               setIsSeriesModalOpen(true);
             }}
-            className="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-2xl bg-white hover:bg-slate-50 text-slate-700 hover:text-blue-700 font-bold text-sm border border-slate-200 shadow-xs transition-colors cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 hover:text-blue-700 font-semibold text-xs border border-slate-200 transition-colors cursor-pointer"
           >
-            <Layers className="w-4 h-4 text-blue-600" />
+            <Layers className="w-3.5 h-3.5 text-blue-600" />
             <span>Kelola Seri ({seriesList.length})</span>
           </button>
 
           <Link
             href="/portal/insights/new"
-            className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md hover:shadow-lg transition-all hover:scale-[1.02] cursor-pointer"
+            className="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span>Tulis Artikel Baru</span>
@@ -513,43 +563,16 @@ export function InsightsManagementView() {
         </div>
       </div>
 
-      {/* 2. Quick Stat Counters */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
-          <p className="text-xs font-mono uppercase tracking-wider text-slate-400 font-bold">Total Artikel</p>
-          <p className="text-2xl font-sans font-black text-slate-900 mt-1">{totalCount}</p>
-        </div>
-        <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
-          <p className="text-xs font-mono uppercase tracking-wider text-emerald-600 font-bold">Terpublikasi</p>
-          <p className="text-2xl font-sans font-black text-emerald-600 mt-1">{publishedCount}</p>
-        </div>
-        <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
-          <p className="text-xs font-mono uppercase tracking-wider text-amber-600 font-bold">Draf / Disimpan</p>
-          <p className="text-2xl font-sans font-black text-amber-600 mt-1">{draftCount}</p>
-        </div>
-        <div className="p-5 rounded-2xl bg-white border border-slate-200/80 shadow-xs">
-          <p className="text-xs font-mono uppercase tracking-wider text-blue-600 font-bold">Live Portal Link</p>
-          <Link
-            href="/insights"
-            target="_blank"
-            className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:underline mt-2"
-          >
-            <span>Buka /insights</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </Link>
-        </div>
-      </div>
-
-      {/* 3. Controls: Search, Category, Status Filter */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
-        <div className="relative w-full md:w-80">
+      {/* 2. Controls: Search, Category, Status Filter */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="relative w-full md:max-w-sm">
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Cari artikel atau tag..."
-            className="w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 bg-slate-50 focus:bg-white transition-all"
+            className="w-full pl-10 pr-4 py-2 text-xs sm:text-sm rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 bg-white transition-colors"
           />
         </div>
 
@@ -563,6 +586,7 @@ export function InsightsManagementView() {
             <option value="ALL">Semua Status</option>
             <option value="PUBLISHED">Published Saja</option>
             <option value="DRAFT">Draft Saja</option>
+            <option value="FEATURED">Tampil di Beranda</option>
           </select>
 
           {/* Category Filter */}
@@ -581,17 +605,17 @@ export function InsightsManagementView() {
         </div>
       </div>
 
-      {/* 4. Articles Table / List */}
-      <div className="bg-white rounded-3xl border border-slate-200/80 shadow-xs overflow-hidden">
+      {/* 3. Articles Table / List */}
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
         {/* Bulk Action Toolbar */}
         {selectedIds.length > 0 && (
-          <div className="bg-gradient-to-r from-blue-50 via-indigo-50/60 to-blue-50 border-b border-blue-100 px-6 py-3 flex flex-wrap items-center justify-between gap-3 animate-in fade-in duration-200">
-            <div className="flex items-center gap-3">
-              <span className="inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-mono font-bold bg-blue-600 text-white shadow-xs">
-                {selectedIds.length} artikel dipilih
+          <div className="bg-slate-50 border-b border-slate-200 px-5 py-3 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2.5">
+              <span className="inline-flex items-center justify-center px-2.5 py-0.5 rounded-lg text-xs font-mono font-bold bg-slate-900 text-white">
+                {selectedIds.length} dipilih
               </span>
               <span className="text-xs text-slate-600 font-medium hidden sm:inline">
-                Pilih tindakan status massal:
+                Ubah status massal:
               </span>
             </div>
 
@@ -707,8 +731,9 @@ export function InsightsManagementView() {
                   <th className="py-3.5 px-4">Artikel</th>
                   <th className="py-3.5 px-4">Kategori</th>
                   <th className="py-3.5 px-4">Status</th>
-                  <th className="py-3.5 px-4">Waktu Baca</th>
-                  <th className="py-3.5 px-4">Tanggal Rilis</th>
+                  <th className="py-3.5 px-4">Beranda</th>
+                  <th className="py-3.5 px-4 hidden lg:table-cell">Waktu Baca</th>
+                  <th className="py-3.5 px-4 hidden lg:table-cell">Tanggal Rilis</th>
                   <th className="py-3.5 px-6 text-right">Aksi</th>
                 </tr>
               </thead>
@@ -780,7 +805,7 @@ export function InsightsManagementView() {
                           type="button"
                           onClick={() => handleSingleStatusToggle(item)}
                           title={`Klik untuk cepat ubah status ke ${item.isPublished ? 'Draft' : 'Published'}`}
-                          className="cursor-pointer transition-transform hover:scale-105 active:scale-95 text-left"
+                          className="cursor-pointer transition-colors text-left"
                         >
                           {item.isPublished ? (
                             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200/80 hover:bg-emerald-100/80 transition-colors">
@@ -796,8 +821,33 @@ export function InsightsManagementView() {
                         </button>
                       </td>
 
+                      {/* Tampil di Beranda */}
+                      <td className="py-4 px-4 whitespace-nowrap">
+                        <button
+                          type="button"
+                          onClick={() => handleToggleFeatured(item)}
+                          title={
+                            item.featured
+                              ? 'Klik untuk menyembunyikan dari halaman Beranda'
+                              : 'Klik untuk menampilkan artikel ini di halaman Beranda'
+                          }
+                          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold border transition-colors cursor-pointer ${
+                            item.featured
+                              ? 'bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100'
+                              : 'bg-slate-50 text-slate-500 border-slate-200 hover:bg-slate-100 hover:text-slate-700'
+                          }`}
+                        >
+                          <Star
+                            className={`w-3 h-3 ${
+                              item.featured ? 'fill-blue-600 text-blue-600' : 'text-slate-400'
+                            }`}
+                          />
+                          <span>{item.featured ? 'Tampil' : 'Tidak'}</span>
+                        </button>
+                      </td>
+
                     {/* Waktu Baca */}
-                    <td className="py-4 px-4 whitespace-nowrap text-xs text-slate-500">
+                    <td className="py-4 px-4 whitespace-nowrap text-xs text-slate-500 hidden lg:table-cell">
                       <span className="inline-flex items-center gap-1 font-mono">
                         <Clock className="w-3.5 h-3.5 text-slate-400" />
                         {item.readTimeMinutes} min
@@ -805,7 +855,7 @@ export function InsightsManagementView() {
                     </td>
 
                     {/* Tanggal Rilis */}
-                    <td className="py-4 px-4 whitespace-nowrap text-xs text-slate-500">
+                    <td className="py-4 px-4 whitespace-nowrap text-xs text-slate-500 hidden lg:table-cell">
                       {new Date(item.publishedAt).toLocaleDateString('id-ID', {
                         day: 'numeric',
                         month: 'short',

@@ -269,96 +269,101 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
   return (
     <form onSubmit={handleSubmit} className="space-y-6 pb-24 text-slate-800">
       {/* 1. Sticky Top Control Bar */}
-      <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md px-6 py-4 rounded-3xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
-        {/* Left: Back & Title Info */}
-        <div className="flex items-center gap-3">
-          <Link
-            href="/portal/insights"
-            className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors shrink-0"
-            title="Kembali ke Insights CMS"
-          >
-            <ArrowLeft className="w-5 h-5" />
-          </Link>
-          <div className="min-w-0">
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200/60">
-                {mode === 'create' ? 'Tulis Baru' : 'Edit Mode'}
-              </span>
-              <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${formData.isPublished ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}`}>
-                {formData.isPublished ? '● Published' : '○ Draft'}
-              </span>
-              <span className="text-xs text-slate-400 hidden sm:inline">•</span>
-              <span className="text-xs font-mono text-slate-500 hidden sm:inline font-bold">
-                {formData.category}
-              </span>
+      <div className="sticky top-0 z-30 bg-white/95 backdrop-blur-md px-5 py-3.5 rounded-2xl border border-slate-200/80 shadow-xs space-y-3">
+        {/* Top Row: Back + Title + Primary Actions */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          {/* Left: Back & Title Info */}
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <Link
+              href="/portal/insights"
+              className="p-2 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors shrink-0"
+              title="Kembali ke Insights CMS"
+            >
+              <ArrowLeft className="w-5 h-5" />
+            </Link>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200/60 whitespace-nowrap">
+                  {mode === 'create' ? 'Tulis Baru' : 'Edit Mode'}
+                </span>
+                <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap ${formData.isPublished ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'}`}>
+                  {formData.isPublished ? '● Published' : '○ Draft'}
+                </span>
+                <span className="text-xs text-slate-400 hidden sm:inline">•</span>
+                <span className="text-xs font-mono text-slate-500 hidden sm:inline font-bold truncate">
+                  {formData.category}
+                </span>
+              </div>
+              <h1 className="text-base sm:text-lg font-sans font-extrabold text-slate-900 tracking-tight truncate mt-0.5">
+                {formData.titleId || 'Artikel Tanpa Judul'}
+              </h1>
             </div>
-            <h1 className="text-lg sm:text-xl font-sans font-black text-slate-900 tracking-tight truncate mt-0.5 max-w-md sm:max-w-xl">
-              {formData.titleId || 'Artikel Tanpa Judul'}
-            </h1>
+          </div>
+
+          {/* Right: Actions */}
+          <div className="flex items-center gap-2 shrink-0 flex-wrap sm:flex-nowrap justify-end">
+            {mode === 'edit' && initialData?.slug && (
+              <Link
+                href={`/insights/${initialData.slug}`}
+                target="_blank"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-xs transition-colors whitespace-nowrap shrink-0"
+                title="Lihat halaman publik artikel ini"
+              >
+                <ExternalLink className="w-3.5 h-3.5 shrink-0" />
+                <span>Buka Halaman</span>
+              </Link>
+            )}
+
+            <Link
+              href="/portal/insights"
+              className="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-xs transition-colors whitespace-nowrap shrink-0"
+            >
+              Batal
+            </Link>
+
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="inline-flex items-center gap-2 px-5 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-colors cursor-pointer disabled:opacity-50 whitespace-nowrap shrink-0"
+            >
+              {isSubmitting ? (
+                <Loader2 className="w-4 h-4 animate-spin shrink-0" />
+              ) : (
+                <Save className="w-4 h-4 shrink-0" />
+              )}
+              <span>{mode === 'edit' ? 'Simpan Perubahan' : 'Terbitkan Artikel'}</span>
+            </button>
           </div>
         </div>
 
-        {/* Center: Main Navigation Tabs (Content vs Settings) */}
-        <div className="flex items-center bg-slate-100 p-1 rounded-2xl border border-slate-200/60 self-center md:self-auto shadow-inner">
-          <button
-            type="button"
-            onClick={() => setMainTab('content')}
-            className={`flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-bold transition-all ${
-              mainTab === 'content'
-                ? 'bg-white text-blue-700 shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <FileText className="w-4 h-4" />
-            <span>1. Konten & Editor</span>
-          </button>
-          <button
-            type="button"
-            onClick={() => setMainTab('settings')}
-            className={`flex items-center gap-2 px-5 py-2 rounded-xl text-xs font-bold transition-all ${
-              mainTab === 'settings'
-                ? 'bg-white text-blue-700 shadow-sm'
-                : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            <Settings2 className="w-4 h-4" />
-            <span>2. Pengaturan & Publikasi</span>
-          </button>
-        </div>
-
-        {/* Right: Actions */}
-        <div className="flex items-center gap-2 self-end md:self-auto">
-          {mode === 'edit' && initialData?.slug && (
-            <Link
-              href={`/insights/${initialData.slug}`}
-              target="_blank"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-xs transition-all"
-              title="Lihat halaman publik artikel ini"
+        {/* Bottom Row: Main Navigation Tabs (Content vs Settings) */}
+        <div className="pt-2.5 border-t border-slate-100 flex items-center justify-between gap-3">
+          <div className="inline-flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200/70">
+            <button
+              type="button"
+              onClick={() => setMainTab('content')}
+              className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${
+                mainTab === 'content'
+                  ? 'bg-white text-blue-700 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
-              <ExternalLink className="w-3.5 h-3.5" />
-              <span className="hidden lg:inline">Buka Halaman</span>
-            </Link>
-          )}
-
-          <Link
-            href="/portal/insights"
-            className="px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-600 font-bold text-xs transition-all"
-          >
-            Batal
-          </Link>
-
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-md transition-all hover:scale-[1.02] cursor-pointer disabled:opacity-50"
-          >
-            {isSubmitting ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <Save className="w-4 h-4" />
-            )}
-            <span>{mode === 'edit' ? 'Simpan Perubahan' : 'Terbitkan Artikel'}</span>
-          </button>
+              <FileText className="w-3.5 h-3.5 shrink-0" />
+              <span>1. Konten &amp; Editor</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setMainTab('settings')}
+              className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-bold transition-colors whitespace-nowrap cursor-pointer ${
+                mainTab === 'settings'
+                  ? 'bg-white text-blue-700 shadow-2xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Settings2 className="w-3.5 h-3.5 shrink-0" />
+              <span>2. Pengaturan &amp; Publikasi</span>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -789,16 +794,25 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
                       Kategori Artikel *
                     </label>
                     <select
-                      value={formData.category}
+                      value={activeSeriesObj ? activeSeriesObj.category : formData.category}
+                      disabled={Boolean(activeSeriesObj)}
                       onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-bold bg-white"
+                      className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-bold bg-white disabled:bg-slate-100 disabled:text-slate-500 disabled:cursor-not-allowed"
                     >
+                      {activeSeriesObj && !CATEGORIES.includes(activeSeriesObj.category) && (
+                        <option value={activeSeriesObj.category}>{activeSeriesObj.category}</option>
+                      )}
                       {CATEGORIES.map((cat) => (
                         <option key={cat} value={cat}>
                           {cat}
                         </option>
                       ))}
                     </select>
+                    {activeSeriesObj && (
+                      <p className="text-[11px] text-blue-600 font-medium mt-1">
+                        Otomatis mengikuti kategori seri ({activeSeriesObj.category}).
+                      </p>
+                    )}
                   </div>
 
                   <div>
@@ -879,10 +893,12 @@ export function InsightEditorView({ mode, initialData, insightId }: InsightEdito
                       value={formData.seriesId}
                       onChange={(e) => {
                         const sId = e.target.value;
+                        const matchedSeries = availableSeries.find((s) => s.id === sId);
                         setFormData((prev) => ({
                           ...prev,
                           seriesId: sId,
                           seriesPart: sId && !prev.seriesPart ? '1' : prev.seriesPart,
+                          category: matchedSeries ? matchedSeries.category : prev.category,
                         }));
                       }}
                       className="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-blue-600 text-sm font-bold bg-white"

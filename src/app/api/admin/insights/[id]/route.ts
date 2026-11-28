@@ -106,6 +106,18 @@ export async function PUT(
       }
     }
 
+    const targetSeriesId = seriesId !== undefined ? (seriesId ? seriesId : null) : existing.seriesId;
+    let resolvedCategory = category ?? existing.category;
+    if (targetSeriesId) {
+      const parentSeries = await prisma.insightSeries.findUnique({
+        where: { id: targetSeriesId },
+        select: { category: true },
+      });
+      if (parentSeries?.category) {
+        resolvedCategory = parentSeries.category;
+      }
+    }
+
     const updated = await prisma.insight.update({
       where: { id: existing.id },
       data: {
@@ -116,7 +128,7 @@ export async function PUT(
         excerptEn: excerptEn !== undefined ? excerptEn : existing.excerptEn,
         contentId: contentId ?? existing.contentId,
         contentEn: contentEn !== undefined ? contentEn : existing.contentEn,
-        category: category ?? existing.category,
+        category: resolvedCategory,
         tags: tags ? (Array.isArray(tags) ? tags : tags.split(',').map((t: string) => t.trim()).filter(Boolean)) : existing.tags,
         coverImage: coverImage ?? existing.coverImage,
         readTimeMinutes: readTimeMinutes !== undefined ? Number(readTimeMinutes) : existing.readTimeMinutes,

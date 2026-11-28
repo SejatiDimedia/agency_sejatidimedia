@@ -526,7 +526,7 @@ export function mapDbInsightToArticle(
     excerptEn: item.excerptEn || item.excerptId,
     contentId: item.contentId,
     contentEn: item.contentEn || item.contentId,
-    category: item.category as any,
+    category: (item.series?.category || item.category) as any,
     tags: item.tags || [],
     publishedAt: item.publishedAt ? new Date(item.publishedAt).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
     readTimeMinutes: item.readTimeMinutes || 5,

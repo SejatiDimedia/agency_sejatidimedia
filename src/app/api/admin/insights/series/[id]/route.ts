@@ -128,6 +128,14 @@ export async function PUT(
       },
     });
 
+    // Keep child articles' category synchronized with their parent series
+    if (category !== undefined) {
+      await prisma.insight.updateMany({
+        where: { seriesId: existing.id },
+        data: { category: updated.category },
+      });
+    }
+
     revalidatePath('/insights');
     revalidatePath(`/insights/series/${existing.slug}`);
     revalidatePath(`/insights/series/${updated.slug}`);

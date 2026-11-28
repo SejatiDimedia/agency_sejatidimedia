@@ -14,7 +14,10 @@ export default async function HomePage() {
     getInsights().catch(() => []),
   ]);
 
-  const recentInsights = (allInsights || []).slice(0, 3);
+  const featuredInsights = (allInsights || []).filter((article) => article.featured);
+  const recentInsights = (
+    featuredInsights.length > 0 ? featuredInsights : allInsights || []
+  ).slice(0, 3);
 
   return (
     <AgencyLanding
